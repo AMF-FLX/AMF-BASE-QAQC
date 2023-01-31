@@ -1,0 +1,2665 @@
+{
+    "SITE_ID": "US-MOz",
+    "datetime": "2018-08-15T17:26:41.7784463",
+    "uploader": "SiteTeamMember4",
+    "uploader_id": "siteteammember4",
+    "uploader_email": "siteteammember4@email.edu",
+    "zip_file": null,
+    "upload_comment": "Re-upload of all data",
+    "reports": {
+        "26761": {
+            "upload_file": "US-MOz_HH_20050101000000_20060101000000.csv",
+            "start_time": "20050101",
+            "end_time": "20060101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26761_20180815172714.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:27 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. AutoRepair of issues found was attempted and repaired file was uploaded: US-MOz_HH_200501010000_200601010000.csv. See Format QA/QC report for repaired file below.",
+                    "status_code": "ERROR"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_20050101000000_20060101000000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_20050101000000_20060101000000-2018081517264177.csv"
+                },
+                "check_summary": "critical(0), error(1), warning(4), ok(15)",
+                "checks": [
+                    {
+                        "check_name": "Is Filename Format valid?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These filename components are not in the standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "ts-start (start time), ts-end (end time)"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Do filename time components match file time period?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "ERROR"
+                        ],
+                        "status_msg": {
+                            "ERROR": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "TIMESTAMP_START 200501010000 does not match filename ts-start time 20050101000000, TIMESTAMP_END 200601010000 does not match filename ts-end time 20060101000000"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: P_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "FC_1_1_1, LE_1_1_1, H_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "AutoRepair Fixes and/or Error Messages",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Filename components fixed: ts-start (start time); ts-end (end time)",
+                                    "File was AutoRepaired and repaired file uploaded."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [],
+                                "emphasize_body": [
+                                    0,
+                                    0
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-MOz_HH_20050101000000_20060101000000.csv"
+            },
+            "autorepair_qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26775_20180815173024.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:30 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. In most cases, data will be queued for further data processing. See Format QA/QC report email for additional details.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_200501010000_200601010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_200501010000_200601010000-2018081517272600.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(2), ok(16)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: P_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "FC_1_1_1, LE_1_1_1, H_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "AutoRepaired file: US-MOz_HH_200501010000_200601010000.csv"
+            }
+        },
+        "26762": {
+            "upload_file": "US-MOz_HH_20040101000000_20050101000000.csv",
+            "start_time": "20040101",
+            "end_time": "20050101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26762_20180815172727.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:27 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. AutoRepair of issues found was attempted and repaired file was uploaded: US-MOz_HH_200401010000_200501010000.csv. See Format QA/QC report for repaired file below.",
+                    "status_code": "ERROR"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_20040101000000_20050101000000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_20040101000000_20050101000000-2018081517264177.csv"
+                },
+                "check_summary": "critical(0), error(1), warning(3), ok(16)",
+                "checks": [
+                    {
+                        "check_name": "Is Filename Format valid?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These filename components are not in the standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "ts-start (start time), ts-end (end time)"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Do filename time components match file time period?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "ERROR"
+                        ],
+                        "status_msg": {
+                            "ERROR": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "TIMESTAMP_START 200401010000 does not match filename ts-start time 20040101000000, TIMESTAMP_END 200501010000 does not match filename ts-end time 20050101000000"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "FC_1_1_1, LE_1_1_1, H_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "AutoRepair Fixes and/or Error Messages",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Filename components fixed: ts-start (start time); ts-end (end time)",
+                                    "File was AutoRepaired and repaired file uploaded."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [],
+                                "emphasize_body": [
+                                    0,
+                                    0
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-MOz_HH_20040101000000_20050101000000.csv"
+            },
+            "autorepair_qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26776_20180815173035.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:30 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. In most cases, data will be queued for further data processing. See Format QA/QC report email for additional details.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_200401010000_200501010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_200401010000_200501010000-2018081517273873.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "FC_1_1_1, LE_1_1_1, H_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "AutoRepaired file: US-MOz_HH_200401010000_200501010000.csv"
+            }
+        },
+        "26763": {
+            "upload_file": "US-MOz_HH_20090101000000_20100101000000.csv",
+            "start_time": "20090101",
+            "end_time": "20100101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26763_20180815172740.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:27 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. AutoRepair of issues found was attempted and repaired file was uploaded: US-MOz_HH_200901010000_201001010000.csv. See Format QA/QC report for repaired file below.",
+                    "status_code": "ERROR"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_20090101000000_20100101000000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_20090101000000_20100101000000-2018081517264177.csv"
+                },
+                "check_summary": "critical(0), error(1), warning(3), ok(16)",
+                "checks": [
+                    {
+                        "check_name": "Is Filename Format valid?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These filename components are not in the standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "ts-start (start time), ts-end (end time)"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Do filename time components match file time period?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "ERROR"
+                        ],
+                        "status_msg": {
+                            "ERROR": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "TIMESTAMP_START 200901010000 does not match filename ts-start time 20090101000000, TIMESTAMP_END 201001010000 does not match filename ts-end time 20100101000000"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, TA_1_1_1, RH_1_1_1, WS_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "AutoRepair Fixes and/or Error Messages",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Filename components fixed: ts-start (start time); ts-end (end time)",
+                                    "File was AutoRepaired and repaired file uploaded."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [],
+                                "emphasize_body": [
+                                    0,
+                                    0
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-MOz_HH_20090101000000_20100101000000.csv"
+            },
+            "autorepair_qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26777_20180815173044.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:30 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. In most cases, data will be queued for further data processing. See Format QA/QC report email for additional details.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_200901010000_201001010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_200901010000_201001010000-2018081517275191.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, TA_1_1_1, RH_1_1_1, WS_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "AutoRepaired file: US-MOz_HH_200901010000_201001010000.csv"
+            }
+        },
+        "26764": {
+            "upload_file": "US-MOz_HH_20070101000000_20080101000000.csv",
+            "start_time": "20070101",
+            "end_time": "20080101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26764_20180815172753.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:27 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. AutoRepair of issues found was attempted and repaired file was uploaded: US-MOz_HH_200701010000_200801010000.csv. See Format QA/QC report for repaired file below.",
+                    "status_code": "ERROR"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_20070101000000_20080101000000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_20070101000000_20080101000000-2018081517264177.csv"
+                },
+                "check_summary": "critical(0), error(1), warning(3), ok(16)",
+                "checks": [
+                    {
+                        "check_name": "Is Filename Format valid?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These filename components are not in the standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "ts-start (start time), ts-end (end time)"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Do filename time components match file time period?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "ERROR"
+                        ],
+                        "status_msg": {
+                            "ERROR": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "TIMESTAMP_START 200701010000 does not match filename ts-start time 20070101000000, TIMESTAMP_END 200801010000 does not match filename ts-end time 20080101000000"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: TS_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "AutoRepair Fixes and/or Error Messages",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Filename components fixed: ts-start (start time); ts-end (end time)",
+                                    "File was AutoRepaired and repaired file uploaded."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [],
+                                "emphasize_body": [
+                                    0,
+                                    0
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-MOz_HH_20070101000000_20080101000000.csv"
+            },
+            "autorepair_qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26778_20180815173055.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:30 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. In most cases, data will be queued for further data processing. See Format QA/QC report email for additional details.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_200701010000_200801010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_200701010000_200801010000-2018081517280505.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: TS_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "AutoRepaired file: US-MOz_HH_200701010000_200801010000.csv"
+            }
+        },
+        "26765": {
+            "upload_file": "US-MOz_HH_20060101000000_20070101000000.csv",
+            "start_time": "20060101",
+            "end_time": "20070101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26765_20180815172806.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:28 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. AutoRepair of issues found was attempted and repaired file was uploaded: US-MOz_HH_200601010000_200701010000.csv. See Format QA/QC report for repaired file below.",
+                    "status_code": "ERROR"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_20060101000000_20070101000000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_20060101000000_20070101000000-2018081517264177.csv"
+                },
+                "check_summary": "critical(0), error(1), warning(3), ok(16)",
+                "checks": [
+                    {
+                        "check_name": "Is Filename Format valid?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These filename components are not in the standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "ts-start (start time), ts-end (end time)"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Do filename time components match file time period?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "ERROR"
+                        ],
+                        "status_msg": {
+                            "ERROR": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "TIMESTAMP_START 200601010000 does not match filename ts-start time 20060101000000, TIMESTAMP_END 200701010000 does not match filename ts-end time 20070101000000"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, TA_1_1_1, RH_1_1_1, WS_1_1_1, TS_1_1_1, PA_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "AutoRepair Fixes and/or Error Messages",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Filename components fixed: ts-start (start time); ts-end (end time)",
+                                    "File was AutoRepaired and repaired file uploaded."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [],
+                                "emphasize_body": [
+                                    0,
+                                    0
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-MOz_HH_20060101000000_20070101000000.csv"
+            },
+            "autorepair_qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26779_20180815173105.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:31 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. In most cases, data will be queued for further data processing. See Format QA/QC report email for additional details.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_200601010000_200701010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_200601010000_200701010000-2018081517281819.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, TA_1_1_1, RH_1_1_1, WS_1_1_1, TS_1_1_1, PA_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "AutoRepaired file: US-MOz_HH_200601010000_200701010000.csv"
+            }
+        },
+        "26766": {
+            "upload_file": "US-MOz_HH_20100101000000_20110101000000.csv",
+            "start_time": "20100101",
+            "end_time": "20110101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26766_20180815172819.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:28 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. AutoRepair of issues found was attempted and repaired file was uploaded: US-MOz_HH_201001010000_201101010000.csv. See Format QA/QC report for repaired file below.",
+                    "status_code": "ERROR"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_20100101000000_20110101000000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_20100101000000_20110101000000-2018081517264177.csv"
+                },
+                "check_summary": "critical(0), error(1), warning(3), ok(16)",
+                "checks": [
+                    {
+                        "check_name": "Is Filename Format valid?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These filename components are not in the standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "ts-start (start time), ts-end (end time)"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Do filename time components match file time period?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "ERROR"
+                        ],
+                        "status_msg": {
+                            "ERROR": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "TIMESTAMP_START 201001010000 does not match filename ts-start time 20100101000000, TIMESTAMP_END 201101010000 does not match filename ts-end time 20110101000000"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: P_1_1_1, TS_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "AutoRepair Fixes and/or Error Messages",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Filename components fixed: ts-start (start time); ts-end (end time)",
+                                    "File was AutoRepaired and repaired file uploaded."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [],
+                                "emphasize_body": [
+                                    0,
+                                    0
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-MOz_HH_20100101000000_20110101000000.csv"
+            },
+            "autorepair_qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26780_20180815173116.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:31 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. In most cases, data will be queued for further data processing. See Format QA/QC report email for additional details.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_201001010000_201101010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_201001010000_201101010000-2018081517283142.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: P_1_1_1, TS_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "AutoRepaired file: US-MOz_HH_201001010000_201101010000.csv"
+            }
+        },
+        "26767": {
+            "upload_file": "US-MOz_HH_20130101000000_20140101000000.csv",
+            "start_time": "20130101",
+            "end_time": "20140101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26767_20180815172833.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:28 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. AutoRepair of issues found was attempted and repaired file was uploaded: US-MOz_HH_201301010000_201401010000.csv. See Format QA/QC report for repaired file below.",
+                    "status_code": "ERROR"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_20130101000000_20140101000000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_20130101000000_20140101000000-2018081517264177.csv"
+                },
+                "check_summary": "critical(0), error(1), warning(2), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Is Filename Format valid?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These filename components are not in the standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "ts-start (start time), ts-end (end time)"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Do filename time components match file time period?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "ERROR"
+                        ],
+                        "status_msg": {
+                            "ERROR": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "TIMESTAMP_START 201301010000 does not match filename ts-start time 20130101000000, TIMESTAMP_END 201401010000 does not match filename ts-end time 20140101000000"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "AutoRepair Fixes and/or Error Messages",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Filename components fixed: ts-start (start time); ts-end (end time)",
+                                    "File was AutoRepaired and repaired file uploaded."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [],
+                                "emphasize_body": [
+                                    0,
+                                    0
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-MOz_HH_20130101000000_20140101000000.csv"
+            },
+            "autorepair_qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26781_20180815173126.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:31 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. No issues were encountered. Data will be queued for further data processing.",
+                    "status_code": "OK"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_201301010000_201401010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_201301010000_201401010000-2018081517284918.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(0), ok(18)",
+                "checks": [],
+                "report_title": "AutoRepaired file: US-MOz_HH_201301010000_201401010000.csv"
+            }
+        },
+        "26768": {
+            "upload_file": "US-MOz_HH_20120101000000_20130101000000.csv",
+            "start_time": "20120101",
+            "end_time": "20130101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26768_20180815172851.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:28 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. AutoRepair of issues found was attempted and repaired file was uploaded: US-MOz_HH_201201010000_201301010000.csv. See Format QA/QC report for repaired file below.",
+                    "status_code": "ERROR"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_20120101000000_20130101000000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_20120101000000_20130101000000-2018081517264177.csv"
+                },
+                "check_summary": "critical(0), error(1), warning(2), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Is Filename Format valid?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These filename components are not in the standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "ts-start (start time), ts-end (end time)"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Do filename time components match file time period?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "ERROR"
+                        ],
+                        "status_msg": {
+                            "ERROR": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "TIMESTAMP_START 201201010000 does not match filename ts-start time 20120101000000, TIMESTAMP_END 201301010000 does not match filename ts-end time 20130101000000"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "AutoRepair Fixes and/or Error Messages",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Filename components fixed: ts-start (start time); ts-end (end time)",
+                                    "File was AutoRepaired and repaired file uploaded."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [],
+                                "emphasize_body": [
+                                    0,
+                                    0
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-MOz_HH_20120101000000_20130101000000.csv"
+            },
+            "autorepair_qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26782_20180815173137.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:31 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. No issues were encountered. Data will be queued for further data processing.",
+                    "status_code": "OK"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_201201010000_201301010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_201201010000_201301010000-2018081517290299.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(0), ok(18)",
+                "checks": [],
+                "report_title": "AutoRepaired file: US-MOz_HH_201201010000_201301010000.csv"
+            }
+        },
+        "26769": {
+            "upload_file": "US-MOz_HH_20080101000000_20090101000000.csv",
+            "start_time": "20080101",
+            "end_time": "20090101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26769_20180815172904.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:29 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. AutoRepair of issues found was attempted and repaired file was uploaded: US-MOz_HH_200801010000_200901010000.csv. See Format QA/QC report for repaired file below.",
+                    "status_code": "ERROR"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_20080101000000_20090101000000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_20080101000000_20090101000000-2018081517264177.csv"
+                },
+                "check_summary": "critical(0), error(1), warning(2), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Is Filename Format valid?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These filename components are not in the standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "ts-start (start time), ts-end (end time)"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Do filename time components match file time period?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "ERROR"
+                        ],
+                        "status_msg": {
+                            "ERROR": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "TIMESTAMP_START 200801010000 does not match filename ts-start time 20080101000000, TIMESTAMP_END 200901010000 does not match filename ts-end time 20090101000000"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "AutoRepair Fixes and/or Error Messages",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Filename components fixed: ts-start (start time); ts-end (end time)",
+                                    "File was AutoRepaired and repaired file uploaded."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [],
+                                "emphasize_body": [
+                                    0,
+                                    0
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-MOz_HH_20080101000000_20090101000000.csv"
+            },
+            "autorepair_qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26783_20180815173147.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:31 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. No issues were encountered. Data will be queued for further data processing.",
+                    "status_code": "OK"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_200801010000_200901010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_200801010000_200901010000-2018081517291622.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(0), ok(18)",
+                "checks": [],
+                "report_title": "AutoRepaired file: US-MOz_HH_200801010000_200901010000.csv"
+            }
+        },
+        "26770": {
+            "upload_file": "US-MOz_HH_20160101000000_20170101000000.csv",
+            "start_time": "20160101",
+            "end_time": "20170101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26770_20180815172917.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:29 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. AutoRepair of issues found was attempted and repaired file was uploaded: US-MOz_HH_201601010000_201701010000.csv. See Format QA/QC report for repaired file below.",
+                    "status_code": "ERROR"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_20160101000000_20170101000000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_20160101000000_20170101000000-2018081517264177.csv"
+                },
+                "check_summary": "critical(0), error(1), warning(3), ok(16)",
+                "checks": [
+                    {
+                        "check_name": "Is Filename Format valid?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These filename components are not in the standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "ts-start (start time), ts-end (end time)"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Do filename time components match file time period?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "ERROR"
+                        ],
+                        "status_msg": {
+                            "ERROR": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "TIMESTAMP_START 201601010000 does not match filename ts-start time 20160101000000, TIMESTAMP_END 201701010000 does not match filename ts-end time 20170101000000"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: P_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "AutoRepair Fixes and/or Error Messages",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Filename components fixed: ts-start (start time); ts-end (end time)",
+                                    "File was AutoRepaired and repaired file uploaded."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [],
+                                "emphasize_body": [
+                                    0,
+                                    0
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-MOz_HH_20160101000000_20170101000000.csv"
+            },
+            "autorepair_qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26784_20180815173158.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:31 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. In most cases, data will be queued for further data processing. See Format QA/QC report email for additional details.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_201601010000_201701010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_201601010000_201701010000-2018081517292972.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: P_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "AutoRepaired file: US-MOz_HH_201601010000_201701010000.csv"
+            }
+        },
+        "26771": {
+            "upload_file": "US-MOz_HH_20110101000000_20120101000000.csv",
+            "start_time": "20110101",
+            "end_time": "20120101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26771_20180815172931.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:29 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. AutoRepair of issues found was attempted and repaired file was uploaded: US-MOz_HH_201101010000_201201010000.csv. See Format QA/QC report for repaired file below.",
+                    "status_code": "ERROR"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_20110101000000_20120101000000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_20110101000000_20120101000000-2018081517264177.csv"
+                },
+                "check_summary": "critical(0), error(1), warning(2), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Is Filename Format valid?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These filename components are not in the standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "ts-start (start time), ts-end (end time)"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Do filename time components match file time period?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "ERROR"
+                        ],
+                        "status_msg": {
+                            "ERROR": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "TIMESTAMP_START 201101010000 does not match filename ts-start time 20110101000000, TIMESTAMP_END 201201010000 does not match filename ts-end time 20120101000000"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "AutoRepair Fixes and/or Error Messages",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Filename components fixed: ts-start (start time); ts-end (end time)",
+                                    "File was AutoRepaired and repaired file uploaded."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [],
+                                "emphasize_body": [
+                                    0,
+                                    0
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-MOz_HH_20110101000000_20120101000000.csv"
+            },
+            "autorepair_qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26785_20180815173208.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:32 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. No issues were encountered. Data will be queued for further data processing.",
+                    "status_code": "OK"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_201101010000_201201010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_201101010000_201201010000-2018081517294266.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(0), ok(18)",
+                "checks": [],
+                "report_title": "AutoRepaired file: US-MOz_HH_201101010000_201201010000.csv"
+            }
+        },
+        "26772": {
+            "upload_file": "US-MOz_HH_20150101000000_20160101000000.csv",
+            "start_time": "20150101",
+            "end_time": "20160101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26772_20180815172944.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:29 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. AutoRepair of issues found was attempted and repaired file was uploaded: US-MOz_HH_201501010000_201601010000.csv. See Format QA/QC report for repaired file below.",
+                    "status_code": "ERROR"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_20150101000000_20160101000000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_20150101000000_20160101000000-2018081517264177.csv"
+                },
+                "check_summary": "critical(0), error(1), warning(3), ok(16)",
+                "checks": [
+                    {
+                        "check_name": "Is Filename Format valid?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These filename components are not in the standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "ts-start (start time), ts-end (end time)"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Do filename time components match file time period?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "ERROR"
+                        ],
+                        "status_msg": {
+                            "ERROR": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "TIMESTAMP_START 201501010000 does not match filename ts-start time 20150101000000, TIMESTAMP_END 201601010000 does not match filename ts-end time 20160101000000"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "AutoRepair Fixes and/or Error Messages",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Filename components fixed: ts-start (start time); ts-end (end time)",
+                                    "File was AutoRepaired and repaired file uploaded."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [],
+                                "emphasize_body": [
+                                    0,
+                                    0
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-MOz_HH_20150101000000_20160101000000.csv"
+            },
+            "autorepair_qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26786_20180815173218.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:32 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. In most cases, data will be queued for further data processing. See Format QA/QC report email for additional details.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_201501010000_201601010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_201501010000_201601010000-2018081517295613.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "AutoRepaired file: US-MOz_HH_201501010000_201601010000.csv"
+            }
+        },
+        "26773": {
+            "upload_file": "US-MOz_HH_20170101000000_20180101000000.csv",
+            "start_time": "20170101",
+            "end_time": "20180101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26773_20180815172957.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:29 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. AutoRepair of issues found was attempted and repaired file was uploaded: US-MOz_HH_201701010000_201801010000.csv. See Format QA/QC report for repaired file below.",
+                    "status_code": "ERROR"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_20170101000000_20180101000000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_20170101000000_20180101000000-2018081517264177.csv"
+                },
+                "check_summary": "critical(0), error(1), warning(3), ok(16)",
+                "checks": [
+                    {
+                        "check_name": "Is Filename Format valid?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These filename components are not in the standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "ts-start (start time), ts-end (end time)"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Do filename time components match file time period?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "ERROR"
+                        ],
+                        "status_msg": {
+                            "ERROR": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "TIMESTAMP_START 201701010000 does not match filename ts-start time 20170101000000, TIMESTAMP_END 201801010000 does not match filename ts-end time 20180101000000"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: SWC_1_1_1, G_1_1_1, PA_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "AutoRepair Fixes and/or Error Messages",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Filename components fixed: ts-start (start time); ts-end (end time)",
+                                    "File was AutoRepaired and repaired file uploaded."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [],
+                                "emphasize_body": [
+                                    0,
+                                    0
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-MOz_HH_20170101000000_20180101000000.csv"
+            },
+            "autorepair_qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26787_20180815173229.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:32 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. In most cases, data will be queued for further data processing. See Format QA/QC report email for additional details.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_201701010000_201801010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_201701010000_201801010000-2018081517300948.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: SWC_1_1_1, G_1_1_1, PA_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "AutoRepaired file: US-MOz_HH_201701010000_201801010000.csv"
+            }
+        },
+        "26774": {
+            "upload_file": "US-MOz_HH_20140101000000_20150101000000.csv",
+            "start_time": "20140101",
+            "end_time": "20150101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26774_20180815173011.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:30 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. AutoRepair of issues found was attempted and repaired file was uploaded: US-MOz_HH_201401010000_201501010000.csv. See Format QA/QC report for repaired file below.",
+                    "status_code": "ERROR"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_20140101000000_20150101000000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_20140101000000_20150101000000-2018081517264177.csv"
+                },
+                "check_summary": "critical(0), error(1), warning(3), ok(16)",
+                "checks": [
+                    {
+                        "check_name": "Is Filename Format valid?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These filename components are not in the standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "ts-start (start time), ts-end (end time)"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Do filename time components match file time period?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "ERROR"
+                        ],
+                        "status_msg": {
+                            "ERROR": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "TIMESTAMP_START 201401010000 does not match filename ts-start time 20140101000000, TIMESTAMP_END 201501010000 does not match filename ts-end time 20150101000000"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: P_1_1_1, SWC_1_1_1, G_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "AutoRepair Fixes and/or Error Messages",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Filename components fixed: ts-start (start time); ts-end (end time)",
+                                    "File was AutoRepaired and repaired file uploaded."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [],
+                                "emphasize_body": [
+                                    0,
+                                    0
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-MOz_HH_20140101000000_20150101000000.csv"
+            },
+            "autorepair_qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-MOz_26788_20180815173240.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Aug-15 17:32 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. In most cases, data will be queued for further data processing. See Format QA/QC report email for additional details.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-MOz_HH_201401010000_201501010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, P_1_1_1, PPFD_IN_1_1_1, PPFD_OUT_1_1_1, SW_IN_1_1_1, SW_OUT_1_1_1, LW_IN_1_1_1, LW_OUT_1_1_1, NETRAD_1_1_1, TA_1_1_1, RH_1_1_1, CO2_1_1_1, H2O_1_1_1, WS_1_1_1, WD_1_1_1, USTAR_1_1_1, TS_1_1_1, SWC_1_1_1, G_1_1_1, PA_1_1_1, FC_1_1_1, SC_1_1_1, LE_1_1_1, SLE_1_1_1, H_1_1_1, SH_1_1_1, NEE, NEE_F",
+                    "upload_filename": "US-MOz_HH_201401010000_201501010000-2018081517302303.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: P_1_1_1, SWC_1_1_1, G_1_1_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "AutoRepaired file: US-MOz_HH_201401010000_201501010000.csv"
+            }
+        }
+    }
+}

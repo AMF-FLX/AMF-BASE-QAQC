@@ -1,0 +1,249 @@
+{
+    "input_variables": [
+        "filename",
+        "site_id",
+        "expected_results"
+    ],
+    "tests": [
+        {
+            "id": "outlier_warning",
+            "variables": {
+                "site_id": "US-CRT",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestMultivarite000004.csv",
+                "expected_results": {
+                    "logs": [
+                        "[INFO] multivariate-TA:T_SONIC-cross_check - TA and T_SONIC variables are not present. TA-T_SONIC comparison not performed.",
+                        "[INFO] multivariate-WC:USTAR-cross_check - USTAR and WS variables are not present. USTAR-WS comparison not performed.",
+                        "[WARNING] multivariate-all_data-PPFD_IN:SW_IN-outlier_check - 239 / 17520 (1.36%) are outliers",
+                        "[INFO] multivariate-all_data-PPFD_IN:SW_IN-r2_check - Calculated R2 is 0.987",
+                        "[WARNING] multivariate-2011-PPFD_IN:SW_IN-outlier_check - 239 / 17520 (1.36%) are outliers",
+                        "[INFO] multivariate-2011-PPFD_IN:SW_IN-r2_check - Calculated R2 is 0.987",
+                        "[INFO] multivariate-all_data-PPFD_IN:SW_IN-slope_check - Not enough years with valid r2 values to calculate slope deviation.",
+                        "[INFO] multivariate-all_data-PPFD_IN:SW_IN-slope_check - Slope: 0.434; slope deviation: NA - slope for all_data is the slope mean",
+                        "[INFO] multivariate-2011-PPFD_IN:SW_IN-slope_check - Slope: 0.434; slope deviation: not calculated - insufficient data.",
+                        "[INFO] multivariate-TA-cross_level - No TA variables are present. Cross level variable comparison not performed.",
+                        "[INFO] multivariate-TA-cross_replicate - No TA variables are present. Cross replicate variable comparison not performed."
+                    ],
+                    "status_list": [
+                        {
+                            "status_code": 0,
+                            "qaqc_check": "multivariate-TA:T_SONIC-cross_check",
+                            "src_logger_name": "multivariate-TA:T_SONIC-cross_check",
+                            "n_warning": 0,
+                            "n_error": 0,
+                            "status_msg": "TA and T_SONIC variables are not present. TA-T_SONIC comparison not performed.",
+                            "plot_paths": null,
+                            "sub_status": null,
+                            "report_type": "single_msg",
+                            "report_section": "table",
+                            "summary_stats": null
+                        },
+                        {
+                            "status_code": 0,
+                            "qaqc_check": "multivariate-WC:USTAR-cross_check",
+                            "src_logger_name": "multivariate-WC:USTAR-cross_check",
+                            "n_warning": 0,
+                            "n_error": 0,
+                            "status_msg": "USTAR and WS variables are not present. USTAR-WS comparison not performed.",
+                            "plot_paths": null,
+                            "sub_status": null,
+                            "report_type": "single_msg",
+                            "report_section": "table",
+                            "summary_stats": null
+                        },
+                        {
+                            "status_code": -1,
+                            "qaqc_check": "multivariate-PPFD_IN:SW_IN",
+                            "src_logger_name": "multivariate-PPFD_IN:SW_IN",
+                            "n_warning": 2,
+                            "n_error": 0,
+                            "status_msg": null,
+                            "plot_paths": [
+                                "composite_plot-all_data",
+                                "composite_plot-2011",
+                                "fit_plot"
+                            ],
+                            "sub_status": {
+                                "multivariate-all_data-PPFD_IN:SW_IN": {
+                                    "status_code": -1,
+                                    "qaqc_check": "multivariate-all_data-PPFD_IN:SW_IN",
+                                    "src_logger_name": "multivariate-all_data-PPFD_IN:SW_IN",
+                                    "n_warning": 1,
+                                    "n_error": 0,
+                                    "status_msg": null,
+                                    "plot_paths": [
+                                        "composite_plot-all_data",
+                                        "fit_plot"
+                                    ],
+                                    "sub_status": {
+                                        "multivariate-all_data-PPFD_IN:SW_IN-outlier_check": {
+                                            "status_code": -1,
+                                            "qaqc_check": "multivariate-all_data-PPFD_IN:SW_IN-outlier_check",
+                                            "src_logger_name": "multivariate-all_data-PPFD_IN:SW_IN-outlier_check",
+                                            "n_warning": 1,
+                                            "n_error": 0,
+                                            "status_msg": "239 / 17520 (1.36%) are outliers",
+                                            "plot_paths": [
+                                                "composite_plot-all_data"
+                                            ],
+                                            "sub_status": null,
+                                            "report_type": "single_msg",
+                                            "report_section": "table",
+                                            "summary_stats": {
+                                                "outlier": 1.36
+                                            }
+                                        },
+                                        "multivariate-all_data-PPFD_IN:SW_IN-r2_check": {
+                                            "status_code": 0,
+                                            "qaqc_check": "multivariate-all_data-PPFD_IN:SW_IN-r2_check",
+                                            "src_logger_name": "multivariate-all_data-PPFD_IN:SW_IN-r2_check",
+                                            "n_warning": 0,
+                                            "n_error": 0,
+                                            "status_msg": "Calculated R2 is 0.987",
+                                            "plot_paths": [
+                                                "composite_plot-all_data"
+                                            ],
+                                            "sub_status": null,
+                                            "report_type": "single_msg",
+                                            "report_section": "table",
+                                            "summary_stats": {
+                                                "r2": 0.987
+                                            }
+                                        },
+                                        "multivariate-all_data-PPFD_IN:SW_IN-slope_check": {
+                                            "status_code": 0,
+                                            "qaqc_check": "multivariate-all_data-PPFD_IN:SW_IN-slope_check",
+                                            "src_logger_name": "multivariate-all_data-PPFD_IN:SW_IN-slope_check",
+                                            "n_warning": 0,
+                                            "n_error": 0,
+                                            "status_msg": "Slope: 0.434; slope deviation: NA - slope for all_data is the slope mean",
+                                            "plot_paths": [
+                                                "fit_plot"
+                                            ],
+                                            "sub_status": null,
+                                            "report_type": "single_msg",
+                                            "report_section": "table",
+                                            "summary_stats": {
+                                                "slope": 0.434,
+                                                "delta_s": "NA"
+                                            }
+                                        }
+                                    },
+                                    "report_type": "single_msg",
+                                    "report_section": "table",
+                                    "summary_stats": {
+                                        "result": -1
+                                    }
+                                },
+                                "multivariate-2011-PPFD_IN:SW_IN": {
+                                    "status_code": -1,
+                                    "qaqc_check": "multivariate-2011-PPFD_IN:SW_IN",
+                                    "src_logger_name": "multivariate-2011-PPFD_IN:SW_IN",
+                                    "n_warning": 1,
+                                    "n_error": 0,
+                                    "status_msg": null,
+                                    "plot_paths": [
+                                        "composite_plot-2011",
+                                        "fit_plot"
+                                    ],
+                                    "sub_status": {
+                                        "multivariate-2011-PPFD_IN:SW_IN-outlier_check": {
+                                            "status_code": -1,
+                                            "qaqc_check": "multivariate-2011-PPFD_IN:SW_IN-outlier_check",
+                                            "src_logger_name": "multivariate-2011-PPFD_IN:SW_IN-outlier_check",
+                                            "n_warning": 1,
+                                            "n_error": 0,
+                                            "status_msg": "239 / 17520 (1.36%) are outliers",
+                                            "plot_paths": [
+                                                "composite_plot-2011"
+                                            ],
+                                            "sub_status": null,
+                                            "report_type": "single_msg",
+                                            "report_section": "table",
+                                            "summary_stats": {
+                                                "outlier": 1.36
+                                            }
+                                        },
+                                        "multivariate-2011-PPFD_IN:SW_IN-r2_check": {
+                                            "status_code": 0,
+                                            "qaqc_check": "multivariate-2011-PPFD_IN:SW_IN-r2_check",
+                                            "src_logger_name": "multivariate-2011-PPFD_IN:SW_IN-r2_check",
+                                            "n_warning": 0,
+                                            "n_error": 0,
+                                            "status_msg": "Calculated R2 is 0.987",
+                                            "plot_paths": [
+                                                "composite_plot-2011"
+                                            ],
+                                            "sub_status": null,
+                                            "report_type": "single_msg",
+                                            "report_section": "table",
+                                            "summary_stats": {
+                                                "r2": 0.987
+                                            }
+                                        },
+                                        "multivariate-2011-PPFD_IN:SW_IN-slope_check": {
+                                            "status_code": 0,
+                                            "qaqc_check": "multivariate-2011-PPFD_IN:SW_IN-slope_check",
+                                            "src_logger_name": "multivariate-2011-PPFD_IN:SW_IN-slope_check",
+                                            "n_warning": 0,
+                                            "n_error": 0,
+                                            "status_msg": "Slope: 0.434; slope deviation: not calculated - insufficient data.",
+                                            "plot_paths": [
+                                                "fit_plot"
+                                            ],
+                                            "sub_status": null,
+                                            "report_type": "single_msg",
+                                            "report_section": "table",
+                                            "summary_stats": {
+                                                "slope": 0.434,
+                                                "delta_s": "not_calculated"
+                                            }
+                                        }
+                                    },
+                                    "report_type": "single_msg",
+                                    "report_section": "table",
+                                    "summary_stats": {
+                                        "result": -1
+                                    }
+                                }
+                            },
+                            "report_type": "sub_status_row",
+                            "report_section": "table",
+                            "summary_stats": null
+                        },
+                        {
+                            "status_code": 0,
+                            "qaqc_check": "multivariate-TA-cross_level",
+                            "src_logger_name": "multivariate-TA-cross_level",
+                            "n_warning": 0,
+                            "n_error": 0,
+                            "status_msg": "No TA variables are present. Cross level variable comparison not performed.",
+                            "plot_paths": null,
+                            "sub_status": null,
+                            "report_type": "single_msg",
+                            "report_section": "table",
+                            "summary_stats": null
+                        },
+                        {
+                            "status_code": 0,
+                            "qaqc_check": "multivariate-TA-cross_replicate",
+                            "src_logger_name": "multivariate-TA-cross_replicate",
+                            "n_warning": 0,
+                            "n_error": 0,
+                            "status_msg": "No TA variables are present. Cross replicate variable comparison not performed.",
+                            "plot_paths": null,
+                            "sub_status": null,
+                            "report_type": "single_msg",
+                            "report_section": "table",
+                            "summary_stats": null
+                        }
+                    ],
+                    "csv_summary": [
+                        "Period,Variable 1,Variable 2,Result,Regression slope,Regression R2,Slope deviation (%),Outliers (%),Figure 1,Figure 2",
+                        "all_data,PPFD_IN,SW_IN,WARNING,0.434,0.987,NA,1.36,fit_plot,composite_plot-all_data",
+                        "2011,PPFD_IN,SW_IN,WARNING,0.434,0.987,not_calculated,1.36,composite_plot-2011,fit_plot"                   ]
+                }
+            }
+        }
+    ]
+}

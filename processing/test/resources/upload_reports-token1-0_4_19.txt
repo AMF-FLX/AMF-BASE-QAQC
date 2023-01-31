@@ -1,0 +1,38 @@
+{
+    "SITE_ID": "US-PFa",
+    "datetime": "2018-07-16T11:43:53.2805828",
+    "uploader": "SiteTeamMember1",
+    "uploader_id": "siteteammember1",
+    "uploader_email": "siteteammember1@mail.edu",
+    "zip_file": null,
+    "upload_comment": "Quarterly update PFA Jul 2018",
+    "reports": {
+        "14696": {
+            "upload_file": "US-PFa_HR_201801010000_201901010000.csv",
+            "start_time": "20180101",
+            "end_time": "20190101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_14696_20180716114418.log",
+                "processor": "WILE$",
+                "process_datetime": "2018-Jul-16 11:44 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. No issues were encountered. Data will be queued for further data processing.",
+                    "status_code": "OK"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_201801010000_201901010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_1_1_1, SC_1_2_1, SC_1_3_1, SCH4_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_1_1_1, SH_1_2_1, SH_1_3_1, SLE_1_1_1, SLE_1_2_1, SLE_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_1_1_1, P, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_201801010000_201901010000-2018071611435328.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(0), ok(18)",
+                "checks": [],
+                "report_title": "US-PFa_HR_201801010000_201901010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        }
+    }
+}

@@ -1,0 +1,62 @@
+# Python CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+#
+# Author: You-Wei Cheah
+# Email: ycheah@lbl.gov
+
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
+      - image: circleci/python:3.6.5
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    parallelism: 16
+
+    steps:
+      - checkout
+
+      # Install freetds (PyMSSQL req)
+      - run:
+          name: Install Linux system dependencies
+          command: |
+             sudo apt-get install freetds-dev
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1.1-dependencies-{{ checksum "requirements.txt" }}
+          # Use latest cache if no exact match found
+          - v1-dependencies-
+      - run:
+          name: Setup Python Environment
+          command: |
+             python -m venv venv
+             . venv/bin/activate
+             python -m pip install pip --upgrade
+             pip install -r requirements.txt
+             pip install junit-xml
+      - save_cache:
+          paths:
+             - ./venv
+          key: v1.1-dependencies-{{ checksum "requirements.txt" }}
+      - run:
+          name: Run Pytests
+          command: |
+             . venv/bin/activate
+             # Mock creation of qaqc.cfg
+             cd processing
+             cp qaqc_template.cfg qaqc.cfg
+             TEST_FILES=$(circleci tests glob "./**/test_*.py" | circleci tests split --split-by=timings --timings-type=classname)
+             python -m pytest -v --cov=./ --cov-report=xml --cov-report=term --flake8 --junitxml=test_results/junit.xml $TEST_FILES
+
+      - store_test_results:
+          path: processing/test_results
+      - store_artifacts:
+          path: processing/test_results

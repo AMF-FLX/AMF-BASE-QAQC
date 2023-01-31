@@ -1,0 +1,262 @@
+{
+    "SITE_ID": "CA-DBB",
+    "datetime": "2019-05-29T14:16:33.2748485",
+    "uploader": "SiteTeamMember5",
+    "uploader_id": "siteteammember5",
+    "uploader_email": "siteteammember5@email.edu",
+    "zip_file": null,
+    "upload_comment": "We have uploaded a revised version to correct the issues raised during the initial data QC/QA process.",
+    "reports": {
+        "36915": {
+            "upload_file": "CA-DBB_HH_201406010000_201808312330_Version3-noCH4-noPAR-QC.csv",
+            "start_time": "None",
+            "end_time": "None",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_CA-DBB_36915_20190529141650.log",
+                "processor": "WILE$",
+                "process_datetime": "2019-May-29 14:16 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "Problem while loading data file; QA/QC INCOMPLETE. AutoRepair of issues found was attempted and repaired file was uploaded: CA-DBB_HH_201406010000_201808312330.csv. See Format QA/QC report for repaired file below.",
+                    "status_code": "CRITICAL"
+                },
+                "files": {
+                    "new": [
+                        "CA-DBB_HH_201406010000_201808312330_Version3-noCH4-noPAR-QC.csv"
+                    ],
+                    "headers": ", ï..TIMESTAMP_START, TIMESTAMP_END, CO2, FC, G, H, LE, WD, WS, USTAR, PA, RH, TA, NETRAD, SW_IN, SW_OUT, LW_IN, LW_OUT, P, T_SONIC, TS_1_1_1, TS_1_2_1, TS_1_3_1, WTD, FC_PI_F, H_PI_F, LE_PI_F",
+                    "upload_filename": "CA-DBB_HH_201406010000_201808312330_Version3-noCH4-noPAR-QC-2019052914163327.csv"
+                },
+                "check_summary": "critical(1), error(1), warning(3), ok(6)",
+                "checks": [
+                    {
+                        "check_name": "Is Filename Format valid?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These filename components are not in the standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "unexpected optional parameter"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Any problems reading file?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "CRITICAL"
+                        ],
+                        "status_msg": {
+                            "CRITICAL": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Error reading data from the file. ."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Are Timestamp variables as expected?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "ERROR"
+                        ],
+                        "status_msg": {
+                            "ERROR": {
+                                "status_prefix": [
+                                    " These unexpected variables were found in columns 1 & 2 instead of TIMESTAMP_START and TIMESTAMP_END: "
+                                ],
+                                "status_body": [
+                                    ", ï..TIMESTAMP_START"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Are Data Variable names in correct format?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variable names are not in standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    ", ï..TIMESTAMP_START, FC_PI_F, H_PI_F, LE_PI_F"
+                                ],
+                                "status_suffix": [
+                                    ". They will not be included in the standard AmeriFlux data products. Non-standard variables will be saved for a non-standard data product that will be available in future."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "AutoRepair Fixes and/or Error Messages",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Fixed invalid variable name FC_PI_F with FC_F: removed _PI qualifier; re-ordered qualifiers",
+                                    "Fixed invalid variable name H_PI_F with H_F: removed _PI qualifier; re-ordered qualifiers",
+                                    "Fixed invalid variable name LE_PI_F with LE_F: removed _PI qualifier; re-ordered qualifiers",
+                                    "NOTE un-fixable variable names: ; ï..TIMESTAMP_START",
+                                    "Changed 15347 missing values to -9999 from 15347 instances of #VALUE!.",
+                                    "Generated TIMESTAMP_START from TIMESTAMP_END variable.",
+                                    "Filename component fixed: optional parameter (Version3-noCH4-noPAR-QC) removed from filename",
+                                    "File was AutoRepaired and repaired file uploaded."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [],
+                                "emphasize_body": [
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "CA-DBB_HH_201406010000_201808312330_Version3-noCH4-noPAR-QC.csv"
+            },
+            "autorepair_qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_CA-DBB_36916_20190529141705.log",
+                "processor": "WILE$",
+                "process_datetime": "2019-May-29 14:17 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "Format QA/QC INCOMPLETE. Additional input is needed to further process the data. See Format QA/QC report email for next steps.",
+                    "status_code": "CRITICAL"
+                },
+                "files": {
+                    "new": [
+                        "CA-DBB_HH_201406010000_201808312330.csv"
+                    ],
+                    "headers": "Unable to extract headers from file",
+                    "upload_filename": "CA-DBB_HH_201406010000_201808312330-2019052914170357.csv"
+                },
+                "check_summary": "critical(1), error(0), warning(0), ok(1)",
+                "checks": [
+                    {
+                        "check_name": "Did Format QA/QC complete successfully?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "CRITICAL"
+                        ],
+                        "status_msg": {
+                            "CRITICAL": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Format QA/QC INCOMPLETE."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "AutoRepaired file: CA-DBB_HH_201406010000_201808312330.csv"
+            }
+        }
+    }
+}

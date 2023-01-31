@@ -1,0 +1,403 @@
+{
+    "SITE_ID": "US-Ton",
+    "datetime": "2017-01-19T12:06:50.589225",
+    "uploader": "SiteTeamMember6",
+    "uploader_id": "siteteammember6",
+    "uploader_email": "siteteammember6@email.edu",
+    "zip_file": null,
+    "upload_comment": "no gap filled, 2016 flux and met data from the tower below tree canopy, named as \"understory\", at Tonzi Ranch",
+    "reports": {
+        "8052": {
+            "upload_file": "Tonzi-understory-2016.dat",
+            "start_time": "None",
+            "end_time": "None",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-Ton_8052_20170817090130.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Aug-17 09:01 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. AutoRepair of issues found was attempted and FAILED. See Format QA/QC report email for next steps.",
+                    "status_code": "CRITICAL"
+                },
+                "files": {
+                    "new": [
+                        "Tonzi-understory-2016.dat"
+                    ],
+                    "headers": "yr, day, endhour, endmin, DOY, FC_WPL_2D, fc_flag, WC_2D, CO2_LI7500, RHOC, CO2_var, CO2_skewness, CO2_kurtosis, LE, RHOQ, q_var, q_skewness, q_kurtosis, H, Tsonic, Tsonic_var, Tsonic_skewness, Tsonic_kurtosis, Wind_Direction, Wind_Velocity, Friction_Velocity, stdw, wbar, w_var, w_kurtosis, u2D_var, v2D_var, Tair, absolute_humidity, Vapor_pressure_deficit, Relhumidity, Pressure, TSOIL2, TSOIL4, TSOIL8, TSOIL16, TSOIL32, soil_moisture_00cm, soil_moisture_20cm, soil_moisture_50cm, precipitation, ZL",
+                    "upload_filename": "Tonzi-understory-2016-2017011912065058.dat"
+                },
+                "check_summary": "critical(3), error(2), warning(3), ok(10)",
+                "checks": [
+                    {
+                        "check_name": "Is Filename Format valid?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING",
+                            "ERROR"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These filename components are not in the standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "incorrect number of components (expect timestamp errors)"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            },
+                            "ERROR": {
+                                "status_prefix": [
+                                    "These filename components are not in the standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "extension is not csv"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Are Timestamp variables as expected?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "ERROR"
+                        ],
+                        "status_msg": {
+                            "ERROR": {
+                                "status_prefix": [
+                                    " These unexpected variables were found in columns 1 & 2 instead of TIMESTAMP_START and TIMESTAMP_END: "
+                                ],
+                                "status_body": [
+                                    "yr, day"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Are Data Variable names in correct format?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variable names are not in standard AmeriFlux format: "
+                                ],
+                                "status_body": [
+                                    "yr, day, endhour, endmin, DOY, FC_WPL_2D, fc_flag, WC_2D, CO2_LI7500, RHOC, CO2_var, CO2_skewness, CO2_kurtosis, RHOQ, q_var, q_skewness, q_kurtosis, Tsonic, Tsonic_var, Tsonic_skewness, Tsonic_kurtosis, Wind_Direction, Wind_Velocity, Friction_Velocity, stdw, wbar, w_var, w_kurtosis, u2D_var, v2D_var, Tair, absolute_humidity, Vapor_pressure_deficit, Relhumidity, Pressure, TSOIL2, TSOIL4, TSOIL8, TSOIL16, TSOIL32, soil_moisture_00cm, soil_moisture_20cm, soil_moisture_50cm, precipitation"
+                                ],
+                                "status_suffix": [
+                                    ". They will not be included in the standard AmeriFlux data products."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Are Timestamp variables present?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "CRITICAL"
+                        ],
+                        "status_msg": {
+                            "CRITICAL": {
+                                "status_prefix": [
+                                    "Expected timestamp variable(s) "
+                                ],
+                                "status_body": [
+                                    "TIMESTAMP_START, TIMESTAMP_END"
+                                ],
+                                "status_suffix": [
+                                    " is / are missing."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Incomplete Timestamp Checks",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "CRITICAL"
+                        ],
+                        "status_msg": {
+                            "CRITICAL": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Filename Matches File Contents, Timestamp Column Resolution, Timestamp Row Resolution, Timestamp Duplicates"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: yr, day, endhour, endmin, DOY, fc_flag, precipitation"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "RHOQ, w_kurtosis"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "AutoRepair Fixes and/or Error Messages",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING",
+                            "CRITICAL"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Changed dat extension to CSV.",
+                                    "Tried to fix invalid variable name yr with YR",
+                                    "Tried to fix invalid variable name day with DAY",
+                                    "Tried to fix invalid variable name endhour with ENDHOUR",
+                                    "Tried to fix invalid variable name endmin with ENDMIN",
+                                    "Tried to fix invalid variable name fc_flag with FC_FLAG",
+                                    "Tried to fix invalid variable name CO2_var with CO2_VAR",
+                                    "Tried to fix invalid variable name CO2_skewness with CO2_SKEWNESS",
+                                    "Tried to fix invalid variable name CO2_kurtosis with CO2_KURTOSIS",
+                                    "Tried to fix invalid variable name q_var with Q_VAR",
+                                    "Tried to fix invalid variable name q_skewness with Q_SKEWNESS",
+                                    "Tried to fix invalid variable name q_kurtosis with Q_KURTOSIS",
+                                    "Tried to fix invalid variable name Tsonic with TSONIC",
+                                    "Tried to fix invalid variable name Tsonic_var with TSONIC_VAR",
+                                    "Tried to fix invalid variable name Tsonic_skewness with TSONIC_SKEWNESS",
+                                    "Tried to fix invalid variable name Tsonic_kurtosis with TSONIC_KURTOSIS",
+                                    "Tried to fix invalid variable name Wind_Direction with WIND_DIRECTION",
+                                    "Tried to fix invalid variable name Wind_Velocity with WIND_VELOCITY",
+                                    "Tried to fix invalid variable name Friction_Velocity with FRICTION_VELOCITY",
+                                    "Tried to fix invalid variable name stdw with STDW",
+                                    "Tried to fix invalid variable name wbar with WBAR",
+                                    "Tried to fix invalid variable name w_var with W_VAR",
+                                    "Tried to fix invalid variable name w_kurtosis with W_KURTOSIS",
+                                    "Tried to fix invalid variable name u2D_var with U2D_VAR",
+                                    "Tried to fix invalid variable name v2D_var with V2D_VAR",
+                                    "Tried to fix invalid variable name Tair with TAIR",
+                                    "Tried to fix invalid variable name absolute_humidity with ABSOLUTE_HUMIDITY",
+                                    "Tried to fix invalid variable name Vapor_pressure_deficit with VAPOR_PRESSURE_DEFICIT",
+                                    "Tried to fix invalid variable name Relhumidity with RELHUMIDITY",
+                                    "Tried to fix invalid variable name Pressure with PRESSURE",
+                                    "Tried to fix invalid variable name soil_moisture_00cm with SOIL_MOISTURE_00CM",
+                                    "Tried to fix invalid variable name soil_moisture_20cm with SOIL_MOISTURE_20CM",
+                                    "Tried to fix invalid variable name soil_moisture_50cm with SOIL_MOISTURE_50CM",
+                                    "Tried to fix invalid variable name precipitation with PRECIPITATION",
+                                    "NOTE un-fixable variable names: yr; day; endhour; endmin; DOY; FC_WPL_2D; fc_flag; WC_2D; CO2_LI7500; RHOC; CO2_var; CO2_skewness; CO2_kurtosis; RHOQ; q_var; q_skewness; q_kurtosis; Tsonic; Tsonic_var; Tsonic_skewness; Tsonic_kurtosis; Wind_Direction; Wind_Velocity; Friction_Velocity; stdw; wbar; w_var; w_kurtosis; u2D_var; v2D_var; Tair; absolute_humidity; Vapor_pressure_deficit; Relhumidity; Pressure; TSOIL2; TSOIL4; TSOIL8; TSOIL16; TSOIL32; soil_moisture_00cm; soil_moisture_20cm; soil_moisture_50cm; precipitation"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [],
+                                "emphasize_body": [
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            },
+                            "CRITICAL": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "Unable to repair timestamps. AutoRepair FAILED."
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "Tonzi-understory-2016.dat"
+            },
+            "autorepair_qaqc_checks": null
+        }
+    }
+}

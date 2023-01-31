@@ -1,0 +1,14 @@
+codecov
+# To avoid https://github.com/tholo/pytest-flake8/issues/87
+flake8<5.0.0
+future
+matplotlib
+numpy
+pandas
+psycopg2-binary
+pymssql-linux
+pytest
+pytest-cov
+pytest-flake8
+scipy
+xlrd

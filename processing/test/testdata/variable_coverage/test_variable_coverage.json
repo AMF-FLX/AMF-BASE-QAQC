@@ -1,0 +1,404 @@
+{
+    "input_variables": [
+        "required_vars",
+        "required_min",
+        "encouraged_vars",
+        "encouraged_min",
+        "suggested_vars",
+        "expected_results"
+    ],
+    "tests": [
+        {
+            "id": "all_good",
+            "variables": {
+                "required_vars": ["A"],
+                "required_min": 0.50,
+                "encouraged_vars": ["B", "C"],
+                "encouraged_min": 0.50,
+                "suggested_vars": [["E1", "E2"]],
+                "expected_results": {
+                    "logs": [],
+                    "statuses": {}
+                }
+            }
+        },
+        {
+            "id": "all_wrong",
+            "variables": {
+                "required_vars": ["X", "Y", ["Z", "W"], "E1"],
+                "required_min": 0.50,
+                "encouraged_vars": ["M", "N", ["L", "O"], "E2"],
+                "encouraged_min": 0.50,
+                "suggested_vars": ["H", "I"],
+                "expected_results": {
+                    "logs": [
+                        "[WARNING] variable_coverage-required_variables_missing - X",
+                        "[WARNING] variable_coverage-required_variables_missing - Y",
+                        "[WARNING] variable_coverage-required_variables_missing - Z/W",
+                        "[WARNING] variable_coverage-required_below_threshold-E1 - 2011, 2012",
+                        "[WARNING] variable_coverage-encouraged_variables_missing - M",
+                        "[WARNING] variable_coverage-encouraged_variables_missing - N",
+                        "[WARNING] variable_coverage-encouraged_variables_missing - L/O",
+                        "[WARNING] variable_coverage-encouraged_below_threshold-E2 - 2011, 2012",
+                        "[WARNING] variable_coverage-suggested_variables_missing - H",
+                        "[WARNING] variable_coverage-suggested_variables_missing - I"
+                    ],
+                    "statuses": {
+                        "required_missing": {
+                            "n_warning": 3,
+                            "status_msg": "X, Y, (Z, W)"
+                        },
+                        "required_below_threshold": {
+                            "n_warning": 2,
+                            "sub_status": {
+                                "E1": {
+                                    "n_warning": 2,
+                                    "status_msg": "2011, 2012"
+                                }
+                            }
+                        },
+                        "encouraged_missing": {
+                            "n_warning": 3,
+                            "status_msg": "M, N, (L, O)"
+                        },
+                        "encouraged_below_threshold": {
+                            "n_warning": 2,
+                            "sub_status": {
+                                "E2": {
+                                    "n_warning": 2,
+                                    "status_msg": "2011, 2012"
+                                }
+                            }
+                        },
+                        "suggested_missing": {
+                            "n_warning": 2,
+                            "status_msg": "H, I"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "missing_1_required_var",
+            "variables": {
+                "required_vars": ["A", "B", "X"],
+                "required_min": 0.50,
+                "expected_results": {
+                    "logs": [
+                        "[WARNING] variable_coverage-required_variables_missing - X"
+                    ],
+                    "statuses": {
+                        "required_missing": {
+                            "status_code": -1,
+                            "n_warning": 1,
+                            "status_msg": "X"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "missing_2_required_vars",
+            "variables": {
+                "required_vars": ["A", "B", "X", "Y"],
+                "required_min": 0.50,
+                "expected_results": {
+                    "logs": [
+                        "[WARNING] variable_coverage-required_variables_missing - X",
+                        "[WARNING] variable_coverage-required_variables_missing - Y"
+                    ],
+                    "statuses": {
+                        "required_missing": {
+                            "status_code": -1,
+                            "n_warning": 2,
+                            "status_msg":"X, Y"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "missing_required_tuple_var",
+            "variables": {
+                "required_vars": ["A", "B", ["X", "Y"], "Z"],
+                "required_min": 0.50,
+                "expected_results": {
+                    "logs": [
+                        "[WARNING] variable_coverage-required_variables_missing - X/Y"
+                    ],
+                    "statuses": {
+                        "required_missing": {
+                            "status_code": -1,
+                            "n_warning": 2,
+                            "status_msg":"(X, Y), Z"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "1_required_var_below_threshold",
+            "variables": {
+                "required_vars": ["A", "E1"],
+                "required_min": 0.50,
+                "expected_results": {
+                    "logs": [
+                        "[WARNING] variable_coverage-required_below_threshold-E1 - 2011, 2012"
+                    ],
+                    "statuses": {
+                        "required_below_threshold": {
+                            "n_warning": 2,
+                            "sub_status": {
+                                "E1": {
+                                    "n_warning": 2,
+                                    "status_msg": "2011, 2012"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "2_required_vars_below_threshold",
+            "variables": {
+                "required_vars": ["A", "E1", "E2"],
+                "required_min": 0.50,
+                "expected_results": {
+                    "logs": [
+                        "[WARNING] variable_coverage-required_below_threshold-E1 - 2011, 2012",
+                        "[WARNING] variable_coverage-required_below_threshold-E2 - 2011, 2012"
+                    ],
+                    "statuses": {
+                        "required_below_threshold": {
+                            "n_warning": 4,
+                            "sub_status": {
+                                "E1": {
+                                    "n_warning": 2,
+                                    "status_msg": "2011, 2012"
+                                },
+                                "E2": {
+                                    "n_warning": 2,
+                                    "status_msg": "2011, 2012"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "tuple_required_var_below_threshold",
+            "variables": {
+                "required_vars": ["A", ["E1", "E2"]],
+                "required_min": 0.50,
+                "expected_results": {
+                    "logs": [
+                        "[WARNING] variable_coverage-required_below_threshold-E1/E2 - 2011, 2012",
+                        "[WARNING] variable_coverage-required_below_threshold-E1/E2 - 2011, 2012"
+                    ],
+                    "statuses": {
+                        "required_below_threshold": {
+                            "n_warning": 2,
+                            "sub_status": {
+                                "E1/E2": {
+                                    "n_warning": 2,
+                                    "status_msg": "2011, 2012"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "missing_1_encouraged_var",
+            "variables": {
+                "encouraged_vars": ["A", "B", "X"],
+                "encouraged_min": 0.50,
+                "expected_results": {
+                    "logs": [
+                        "[WARNING] variable_coverage-encouraged_variables_missing - X"
+                    ],
+                    "statuses": {
+                        "encouraged_missing": {
+                            "status_code": -1,
+                            "n_warning": 1,
+                            "status_msg": "X"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "missing_2_encouraged_vars",
+            "variables": {
+                "encouraged_vars": ["A", "B", "X", "Y"],
+                "encouraged_min": 0.50,
+                "expected_results": {
+                    "logs": [
+                        "[WARNING] variable_coverage-encouraged_variables_missing - X",
+                        "[WARNING] variable_coverage-encouraged_variables_missing - Y"
+                    ],
+                    "statuses": {
+                        "encouraged_missing": {
+                            "status_code": -1,
+                            "n_warning": 2,
+                            "status_msg": "X, Y"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "missing_encouraged_tuple_var",
+            "variables": {
+                "encouraged_vars": ["A", "B", ["X", "Y"], "Z"],
+                "encouraged_min": 0.50,
+                "expected_results": {
+                    "logs": [
+                        "[WARNING] variable_coverage-encouraged_variables_missing - X/Y",
+                        "[WARNING] variable_coverage-encouraged_variables_missing - Z"
+                    ],
+                    "statuses": {
+                        "encouraged_missing": {
+                            "status_code": -1,
+                            "n_warning": 2,
+                            "status_msg":"(X, Y), Z"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "1_encouraged_var_below_threshold",
+            "variables": {
+                "encouraged_vars": ["A", "E1"],
+                "encouraged_min": 0.50,
+                "expected_results": {
+                    "logs": [
+                        "[WARNING] variable_coverage-encouraged_below_threshold-E1 - 2011, 2012"
+                    ],
+                    "statuses": {
+                        "encouraged_below_threshold": {
+                            "n_warning": 2,
+                            "sub_status": {
+                                "E1": {
+                                    "n_warning": 2,
+                                    "status_msg": "2011, 2012"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "2_encouraged_vars_below_threshold",
+            "variables": {
+                "encouraged_vars": ["A", "E1", "E2"],
+                "encouraged_min": 0.50,
+                "expected_results": {
+                    "logs": [
+                        "[WARNING] variable_coverage-encouraged_below_threshold-E1 - 2011, 2012",
+                        "[WARNING] variable_coverage-encouraged_below_threshold-E2 - 2011, 2012"
+                    ],
+                    "statuses": {
+                        "encouraged_below_threshold": {
+                            "n_warning": 4,
+                            "sub_status": {
+                                "E1": {
+                                    "n_warning": 2,
+                                    "status_msg": "2011, 2012"
+                                },
+                                "E2": {
+                                    "n_warning": 2,
+                                    "status_msg": "2011, 2012"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "tuple_encouraged_var_below_threshold",
+            "variables": {
+                "encouraged_vars": ["A", ["E1", "E2"]],
+                "encouraged_min": 0.50,
+                "expected_results": {
+                    "logs": [
+                        "[WARNING] variable_coverage-encouraged_below_threshold-E1/E2 - 2011, 2012"
+                    ],
+                    "statuses": {
+                        "encouraged_below_threshold": {
+                            "n_warning": 2,
+                            "sub_status": {
+                                "E1/E2": {
+                                    "n_warning": 2,
+                                    "status_msg": "2011, 2012"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "missing_1_suggested_var",
+            "variables": {
+                "suggested_vars": ["A", "B", "X"],
+                "expected_results": {
+                    "logs": [
+                        "[WARNING] variable_coverage-suggested_variables_missing - X"
+                    ],
+                    "statuses": {
+                        "suggested_missing": {
+                            "status_code": -1,
+                            "n_warning": 1,
+                            "status_msg": "X"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "missing_2_suggested_vars",
+            "variables": {
+                "suggested_vars": ["A", "B", "X", "Y"],
+                "expected_results": {
+                    "logs": [
+                        "[WARNING] variable_coverage-suggested_variables_missing - X",
+                        "[WARNING] variable_coverage-suggested_variables_missing - Y"
+                    ],
+                    "statuses": {
+                        "suggested_missing": {
+                            "status_code": -1,
+                            "n_warning": 2,
+                            "status_msg": "X, Y"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "id": "missing_suggested_tuple_var",
+            "variables": {
+                "suggested_vars": ["A", "B", ["X", "Y"], "Z"],
+                "expected_results": {
+                    "logs": [
+                        "[WARNING] variable_coverage-suggested_variables_missing - X/Y",
+                        "[WARNING] variable_coverage-suggested_variables_missing - Z"
+                    ],
+                    "statuses": {
+                        "suggested_missing": {
+                            "status_code": -1,
+                            "n_warning": 2,
+                            "status_msg":"(X, Y), Z"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

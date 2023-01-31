@@ -1,0 +1,1347 @@
+{
+    "SITE_ID": "US-PFa",
+    "datetime": "2017-09-11T07:54:37.3781108",
+    "uploader": "SiteTeamMember3",
+    "uploader_id": "siteteammember3",
+    "uploader_email": "siteteammember3@email.edu",
+    "zip_file": "US-PFa-19952017-09102017.zip",
+    "upload_comment": "1995 to 2017 fluxes, corrections based on AMP QA/QC report, plus data update to Sep 2017.",
+    "reports": {
+        "9424": {
+            "upload_file": "US-PFa_HR_199501010000_199601010000.csv",
+            "start_time": "19950101",
+            "end_time": "19960101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9424_20170911075521.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:55 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_199501010000_199601010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_199501010000_199601010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, SWC_1_1_1, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_199501010000_199601010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9425": {
+            "upload_file": "US-PFa_HR_199601010000_199701010000.csv",
+            "start_time": "19960101",
+            "end_time": "19970101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9425_20170911075535.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:55 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_199601010000_199701010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_199601010000_199701010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FCH4_1_1_1, SCH4_F_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_199601010000_199701010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9426": {
+            "upload_file": "US-PFa_HR_199701010000_199801010000.csv",
+            "start_time": "19970101",
+            "end_time": "19980101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9426_20170911075546.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:55 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_199701010000_199801010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_199701010000_199801010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FCH4_1_1_1, SCH4_F_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_199701010000_199801010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9427": {
+            "upload_file": "US-PFa_HR_199801010000_199901010000.csv",
+            "start_time": "19980101",
+            "end_time": "19990101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9427_20170911075557.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:55 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_199801010000_199901010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_199801010000_199901010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FCH4_1_1_1, SCH4_F_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_199801010000_199901010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9428": {
+            "upload_file": "US-PFa_HR_199901010000_200001010000.csv",
+            "start_time": "19990101",
+            "end_time": "20000101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9428_20170911075608.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:56 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_199901010000_200001010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_199901010000_200001010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FCH4_1_1_1, SCH4_F_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_199901010000_200001010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9429": {
+            "upload_file": "US-PFa_HR_200001010000_200101010000.csv",
+            "start_time": "20000101",
+            "end_time": "20010101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9429_20170911075619.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:56 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_200001010000_200101010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_200001010000_200101010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FCH4_1_1_1, SCH4_F_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_200001010000_200101010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9430": {
+            "upload_file": "US-PFa_HR_200101010000_200201010000.csv",
+            "start_time": "20010101",
+            "end_time": "20020101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9430_20170911075630.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:56 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_200101010000_200201010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_200101010000_200201010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FCH4_1_1_1, SCH4_F_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_200101010000_200201010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9431": {
+            "upload_file": "US-PFa_HR_200201010000_200301010000.csv",
+            "start_time": "20020101",
+            "end_time": "20030101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9431_20170911075641.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:56 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_200201010000_200301010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_200201010000_200301010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FCH4_1_1_1, SCH4_F_1_1_1, SWC_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_200201010000_200301010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9432": {
+            "upload_file": "US-PFa_HR_200301010000_200401010000.csv",
+            "start_time": "20030101",
+            "end_time": "20040101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9432_20170911075652.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:56 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_200301010000_200401010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_200301010000_200401010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FCH4_1_1_1, SCH4_F_1_1_1, SWC_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_200301010000_200401010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9433": {
+            "upload_file": "US-PFa_HR_200401010000_200501010000.csv",
+            "start_time": "20040101",
+            "end_time": "20050101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9433_20170911075702.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:57 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_200401010000_200501010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_200401010000_200501010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FCH4_1_1_1, SCH4_F_1_1_1, SWC_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_200401010000_200501010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9434": {
+            "upload_file": "US-PFa_HR_200501010000_200601010000.csv",
+            "start_time": "20050101",
+            "end_time": "20060101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9434_20170911075713.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:57 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_200501010000_200601010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_200501010000_200601010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "H2O_1_1_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FCH4_1_1_1, SCH4_F_1_1_1, LE_1_1_1, WD_1_2_1, WD_1_3_1, TA_1_1_1, SWC_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_200501010000_200601010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9435": {
+            "upload_file": "US-PFa_HR_200601010000_200701010000.csv",
+            "start_time": "20060101",
+            "end_time": "20070101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9435_20170911075723.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:57 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_200601010000_200701010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_200601010000_200701010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FCH4_1_1_1, SCH4_F_1_1_1, SWC_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_200601010000_200701010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9436": {
+            "upload_file": "US-PFa_HR_200701010000_200801010000.csv",
+            "start_time": "20070101",
+            "end_time": "20080101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9436_20170911075735.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:57 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_200701010000_200801010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_200701010000_200801010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FCH4_1_1_1, SCH4_F_1_1_1, SWC_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_200701010000_200801010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9437": {
+            "upload_file": "US-PFa_HR_200801010000_200901010000.csv",
+            "start_time": "20080101",
+            "end_time": "20090101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9437_20170911075746.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:57 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_200801010000_200901010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_200801010000_200901010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FCH4_1_1_1, SCH4_F_1_1_1, SWC_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_200801010000_200901010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9438": {
+            "upload_file": "US-PFa_HR_200901010000_201001010000.csv",
+            "start_time": "20090101",
+            "end_time": "20100101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9438_20170911075757.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:57 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_200901010000_201001010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_200901010000_201001010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FCH4_1_1_1, SCH4_F_1_1_1, SWC_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_200901010000_201001010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9439": {
+            "upload_file": "US-PFa_HR_201001010000_201101010000.csv",
+            "start_time": "20100101",
+            "end_time": "20110101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9439_20170911075808.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:58 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_201001010000_201101010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_201001010000_201101010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "SWC_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_201001010000_201101010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9440": {
+            "upload_file": "US-PFa_HR_201101010000_201201010000.csv",
+            "start_time": "20110101",
+            "end_time": "20120101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9440_20170911075819.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:58 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. No issues were encountered. Data will be queued for further data processing.",
+                    "status_code": "OK"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_201101010000_201201010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_201101010000_201201010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(0), ok(18)",
+                "checks": [],
+                "report_title": "US-PFa_HR_201101010000_201201010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9441": {
+            "upload_file": "US-PFa_HR_201201010000_201301010000.csv",
+            "start_time": "20120101",
+            "end_time": "20130101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9441_20170911075830.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:58 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_201201010000_201301010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_201201010000_201301010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "WD_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_201201010000_201301010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9442": {
+            "upload_file": "US-PFa_HR_201301010000_201401010000.csv",
+            "start_time": "20130101",
+            "end_time": "20140101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9442_20170911075841.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:58 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. No issues were encountered. Data will be queued for further data processing.",
+                    "status_code": "OK"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_201301010000_201401010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_201301010000_201401010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(0), ok(18)",
+                "checks": [],
+                "report_title": "US-PFa_HR_201301010000_201401010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9443": {
+            "upload_file": "US-PFa_HR_201401010000_201501010000.csv",
+            "start_time": "20140101",
+            "end_time": "20150101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9443_20170911075852.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:58 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. No issues were encountered. Data will be queued for further data processing.",
+                    "status_code": "OK"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_201401010000_201501010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_201401010000_201501010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(0), ok(18)",
+                "checks": [],
+                "report_title": "US-PFa_HR_201401010000_201501010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9444": {
+            "upload_file": "US-PFa_HR_201501010000_201601010000.csv",
+            "start_time": "20150101",
+            "end_time": "20160101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9444_20170911075903.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:59 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_201501010000_201601010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_201501010000_201601010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(2), ok(16)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables suspected gap-fill?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [],
+                                "status_body": [
+                                    "These variables are suspected to be gap-filled because they have no missing values: H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, TA_1_1_1, TA_1_2_1, TA_1_3_1"
+                                ],
+                                "status_suffix": [],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    0
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    },
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "WS_F_1_3_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_201501010000_201601010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9445": {
+            "upload_file": "US-PFa_HR_201601010000_201701010000.csv",
+            "start_time": "20160101",
+            "end_time": "20170101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9445_20170911075915.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:59 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted.",
+                    "status_code": "WARNING"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_201601010000_201701010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_201601010000_201701010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(1), ok(17)",
+                "checks": [
+                    {
+                        "check_name": "Any Variables with ALL Data Missing?",
+                        "general_code": null,
+                        "general_msg": null,
+                        "status_code": [
+                            "WARNING"
+                        ],
+                        "status_msg": {
+                            "WARNING": {
+                                "status_prefix": [
+                                    "These variables have all data missing: "
+                                ],
+                                "status_body": [
+                                    "FC_1_1_1, H_1_1_1, LE_1_1_1, WD_1_1_1, WS_1_1_1, USTAR_1_1_1, NEE_1_1_1"
+                                ],
+                                "status_suffix": [
+                                    ". Previously uploaded data with the same time period will be overwritten."
+                                ],
+                                "emphasize_prefix": [
+                                    0
+                                ],
+                                "emphasize_body": [
+                                    1
+                                ],
+                                "emphasize_suffix": [
+                                    0
+                                ],
+                                "one_plot": null,
+                                "all_plots": [],
+                                "targeted_plots": [],
+                                "plot_dir_path": null
+                            }
+                        },
+                        "sub_status": []
+                    }
+                ],
+                "report_title": "US-PFa_HR_201601010000_201701010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        },
+        "9446": {
+            "upload_file": "US-PFa_HR_201701010000_201801010000.csv",
+            "start_time": "20170101",
+            "end_time": "20180101",
+            "qaqc_checks": {
+                "process_type": "File Format",
+                "process_log_file": "url/QAQCLogs/QAQC_report_US-PFa_9446_20170911075926.log",
+                "processor": "WILE$",
+                "process_datetime": "2017-Sep-11 07:59 ",
+                "process_confirmation": {
+                    "status_start_msg": null,
+                    "status_end_msg": "All format QA/QC checks attempted. No issues were encountered. Data will be queued for further data processing.",
+                    "status_code": "OK"
+                },
+                "files": {
+                    "new": [
+                        "US-PFa_HR_201701010000_201801010000.csv"
+                    ],
+                    "headers": "TIMESTAMP_START, TIMESTAMP_END, CO2_1_1_1, CO2_1_2_1, CO2_1_3_1, H2O_1_1_1, H2O_1_2_1, H2O_1_3_1, H2O_F_1_3_1, CH4_1_1_1, CH4_1_2_1, CH4_1_3_1, FC_1_1_1, FC_1_2_1, FC_1_3_1, FCH4_1_1_1, SC_F_1_1_1, SC_F_1_2_1, SC_F_1_3_1, SCH4_F_1_1_1, H, H_1_1_1, H_1_2_1, H_1_3_1, LE, LE_1_1_1, LE_1_2_1, LE_1_3_1, SH_F_1_1_1, SH_F_1_2_1, SH_F_1_3_1, SLE_F_1_1_1, SLE_F_1_2_1, SLE_F_1_3_1, WD_1_1_1, WD_1_2_1, WD_1_3_1, WD_F_1_3_1, WS_1_1_1, WS_1_2_1, WS_1_3_1, WS_F_1_3_1, USTAR_1_1_1, USTAR_1_2_1, USTAR_1_3_1, USTAR_F_1_3_1, PA_1_1_1, TA_1_1_1, TA_1_2_1, TA_1_3_1, TA_F_1_3_1, VPD_F_1_3_1, SWC_1_1_1, PPFD_IN_F_1_1_1, P_F, NEE, NEE_F, NEE_1_1_1, NEE_1_2_1, NEE_1_3_1, RECO_F, GPP_F",
+                    "upload_filename": "US-PFa_HR_201701010000_201801010000-2017091107550803.csv"
+                },
+                "check_summary": "critical(0), error(0), warning(0), ok(18)",
+                "checks": [],
+                "report_title": "US-PFa_HR_201701010000_201801010000.csv"
+            },
+            "autorepair_qaqc_checks": null
+        }
+    }
+}
