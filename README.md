@@ -1,11 +1,13 @@
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/AMF-FLX/AMF-BASE-QAQC/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/AMF-FLX/AMF-BASE-QAQC/tree/main)
+
 # AMF-BASE-QAQC
 ## AmeriFlux BASE Flux/Met Data QA/QC and Processing
 
-The AmeriFlux BASE Flux/Met Data QA/QC and Processing (AMF-BASE-QAQC) code provides tools to review and prepare continuous flux/met data submitted to the AmeriFlux Management Project (AMP) for publication as the AmeriFlux BASE data product. 
+The AmeriFlux BASE Flux/Met Data QA/QC and Processing (AMF-BASE-QAQC) code provides tools to review and prepare continuous flux/met data submitted to the AmeriFlux Management Project (AMP) for publication as the AmeriFlux BASE data product.
 
-The code provides 3 core functionalities: 
-1. Format QA/QC assesses submitted data files for compliance with the required submission format; 
-2. Data QA/QC assesses the data quality; 
+The code provides 3 core functionalities:
+1. Format QA/QC assesses submitted data files for compliance with the required submission format;
+2. Data QA/QC assesses the data quality;
 3. BASE Publish prepares the data for publication.
 
 Find more details about the AmeriFlux BASE data product and AmeriFlux processing pipelines at [AmeriFlux Flux Data Products](https://ameriflux.lbl.gov/data/flux-data-products/).
@@ -16,7 +18,7 @@ Find more details about the AmeriFlux BASE data product and AmeriFlux processing
 
 Python version 3.6.5 or greater is required. See requirements.txt for required packages.
 
-Notes: 
+Notes:
 * Some modules do not yet work on python versions greater than 3.6.5.
 * psycopg2 and pymssql packages are only required for Publish BASE module.
 * codecov, flake8, pytest-cov, and pytest-flake8 packages are required for AMP testing.
@@ -66,8 +68,8 @@ Our preferred channels of communication are public. Please check out existing or
 
 ## Copyright
 
-AmeriFlux BASE Flux/Met Data QA/QC and Processing (AMF-BASE-QAQC) Copyright (c) 2023, 
-The Regents of the University of California, through Lawrence Berkeley National Laboratory 
+AmeriFlux BASE Flux/Met Data QA/QC and Processing (AMF-BASE-QAQC) Copyright (c) 2023,
+The Regents of the University of California, through Lawrence Berkeley National Laboratory
 (subject to receipt of any required approvals from the U.S. Dept. of Energy). All rights reserved.
 
 If you have questions about your rights to use or distribute this software,
