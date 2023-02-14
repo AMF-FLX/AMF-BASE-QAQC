@@ -16,7 +16,7 @@ from sw_in_pot_gen import SW_IN_POT_Generator
 from status import StatusCode
 from timestamp_checks import TimestampChecks
 from plot_config import PlotConfig
-from timeshift import TimeShift
+from timestamp_alignment import TimestampAlignment
 from diurnal_seasonal import DiurnalSeasonal
 # from spike_detection import SpikeDetection
 from process_status import ProcessStatus
@@ -236,7 +236,7 @@ def main():
         # _log.info('Running SSITC fetch filter check')
         # status_list.extend(SSITC_FF_check().driver(d))
 
-        # Get rem_sw_in_data for use in Timeshift checks below
+        # Get rem_sw_in_data for use in Timestamp Alignment checks below
         _log.info('Running SW_IN_POT generator')
         gen = SW_IN_POT_Generator()
         rem_sw_in_pot_data = gen.gen_rem_sw_in_pot_data(
@@ -255,10 +255,10 @@ def main():
         ).driver(d)
         status_list['USTAR Filter'] = check_status
 
-        # Timeshift checks
-        qaqc_check = 'Radiation Timeshift'
+        # Timestamp Alignment checks
+        qaqc_check = 'Timestamp Alignment'
         _log.info('Running ' + qaqc_check)
-        check_status, test_plot_dir = TimeShift().driver(
+        check_status, test_plot_dir = TimestampAlignment().driver(
             data_reader=d, rem_sw_in_data=rem_sw_in_pot_data,
             site_id=site_id, resolution=resolution,
             output_dir=plot_dir, ftp_plot_dir=ftp_plot_dir)

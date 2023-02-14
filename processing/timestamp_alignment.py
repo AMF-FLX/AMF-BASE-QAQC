@@ -33,12 +33,12 @@ matplotlib.rcParams['path.simplify'] = False
 _log = Logger().getLogger(__name__)
 
 
-class TimeshiftError(Exception):
-    """ Base error/exception class for timeshift """
+class TimestampAlignmentError(Exception):
+    """ Base error/exception class for timestamp_alignment """
     pass
 
 
-class TimeShift(object):
+class TimestampAlignment(object):
     """
     Plot measured / calculated radiations
     """
@@ -69,7 +69,7 @@ class TimeShift(object):
         cwd = os.getcwd()
         with open(os.path.join(cwd, 'qaqc.cfg')) as cfg:
             config.read_file(cfg)
-            cfg_section = 'TIMESHIFT'
+            cfg_section = 'TIMESTAMP_ALIGNMENT'
             if config.has_section(cfg_section):
                 ppfd_unit_convert = config.getfloat(
                     cfg_section, 'ppfd_unit_convert')
@@ -130,7 +130,7 @@ class TimeShift(object):
             self, data_reader, rem_sw_in_data, resolution,
             radiation_variables=['SW_IN', 'PPFD_IN'],
             output_dir='.', base_output_dir='.',
-            output_fname_template='CC-SSS_timestamp_shift_radiation',
+            output_fname_template='CC-SSS_timestamp_alignment',
             show=False, ftp_plot_dir=None):
         """
         Plots potential and measured radiations to look for shifts.
@@ -241,9 +241,9 @@ class TimeShift(object):
                     top_level_rad_vars.append(top_level_var)
 
         if top_level_rad_vars == []:
-            log_obj = Logger().getLogger('timeshift')
+            log_obj = Logger().getLogger('timestamp_alignment')
             status_msg = ('No top level rad vars selected. '
-                          'Skipping timeshift checks.')
+                          'Skipping timestamp_alignment checks.')
             log_obj.info(status_msg)
 
             return [self.stat_gen.status_generator(
@@ -278,7 +278,7 @@ class TimeShift(object):
         for year in range(first_year, last_year + 1):
             daytime_comps = {}
             nighttime_comps = {}
-            yr_log = Logger().getLogger(f'timeshift-{year}')
+            yr_log = Logger().getLogger(f'timestamp_alignment-{year}')
             yr_log.resetStats()
             if year != start_ts.year:
                 start_ts = _c_dt(self.ts_util.get_ISO_str_timestamp(str(year)))
@@ -293,7 +293,7 @@ class TimeShift(object):
             fig_filename = os.path.join(
                 output_dir, output_fname_template + '_' + str(year) + '.png')
             figure = plt.figure()
-            suptitle = f'Radiation Timeshift Analysis for year {year}'
+            suptitle = f'Timestamp Alignment Analysis for year {year}'
             figure.suptitle(suptitle,
                             fontsize=self.plot_config.plot_title_fontsize)
             figure.text(
@@ -721,7 +721,7 @@ class TimeShift(object):
                 check_statuses[stat.get_qaqc_check()] = stat
 
                 # Create a summary status for the overall variable
-                log_obj = Logger().getLogger(f'timeshift-{year}-{var}')
+                log_obj = Logger().getLogger(f'timestamp_alignment-{year}-{var}')
                 var_status = self.stat_gen.composite_status_generator(
                     logger=log_obj,
                     qaqc_check=log_obj.getName(),
@@ -770,7 +770,7 @@ class TimeShift(object):
     def driver(self, data_reader, rem_sw_in_data, site_id, resolution,
                radiation_vars=['SW_IN', 'PPFD_IN'], output_dir='.',
                ftp_plot_dir=None):
-        output_fname_template = f'{site_id}_timestamp_shift_radiation'
+        output_fname_template = f'{site_id}_timestamp_alignment'
         base_output_dir = output_dir
         output_dir = self.plot_config.get_plot_dir_for_check(
             output_dir, __name__)
@@ -848,7 +848,7 @@ class TimeShift(object):
     def write_summary(self, status_objects, base_output_dir):
         # Set the path and filename for where to write csv summary
         summary_dir = os.path.join(base_output_dir, 'summary')
-        filename = os.path.join(summary_dir, 'timeshift_summary.csv')
+        filename = os.path.join(summary_dir, 'timestamp_alignment_summary.csv')
 
         # Map internal summary_stats keys to desired CSV headers
         csv_headers = {

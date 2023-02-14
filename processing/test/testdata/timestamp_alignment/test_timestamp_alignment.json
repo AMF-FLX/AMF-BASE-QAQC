@@ -14,7 +14,7 @@
             "variables": {
                 "site_id": "US-CRT",
                 "resolution": "HH",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestDataTimeshift000001.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestDataTimestampAlignment000001.csv",
                 "rad_vars": [
                     "SW_IN"
                 ],
@@ -22,50 +22,50 @@
                 "ts_end": "201201010000",
                 "expected_results": {
                     "created_files": [
-                        "US-CRT_timestamp_shift_radiation_2011.png"
+                        "US-CRT_timestamp_alignment_2011.png"
                     ],
                     "logs": [
-                        "[INFO] timeshift - Top level variables ['SW_IN']",
-                        "[INFO] timeshift-2011-SW_IN-ccorr - Max correlation 0.995 at lag 0",
-                        "[INFO] timeshift-2011-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
-                        "[INFO] timeshift-2011-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%"
+                        "[INFO] timestamp_alignment - Top level variables ['SW_IN']",
+                        "[INFO] timestamp_alignment-2011-SW_IN-ccorr - Max correlation 0.995 at lag 0",
+                        "[INFO] timestamp_alignment-2011-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
+                        "[INFO] timestamp_alignment-2011-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%"
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross correlation,Excessive daytime radiation (%),Excessive nighttime radiation (%),Figure link",
-                        "2011,SW_IN,OK,0,0.995,0,0,/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                        "2011,SW_IN,OK,0,0.995,0,0,/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                     ],
                     "status_list": [
                         {
                             "status_code": 0,
-                            "qaqc_check": "timeshift-2011",
-                            "src_logger_name": "timeshift-2011",
+                            "qaqc_check": "timestamp_alignment-2011",
+                            "src_logger_name": "timestamp_alignment-2011",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
                             "plot_paths": [
-                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                             ],
                             "sub_status": {
-                                "timeshift-2011-SW_IN": {
+                                "timestamp_alignment-2011-SW_IN": {
                                     "status_code": 0,
-                                    "qaqc_check": "timeshift-2011-SW_IN",
-                                    "src_logger_name": "timeshift-2011-SW_IN",
+                                    "qaqc_check": "timestamp_alignment-2011-SW_IN",
+                                    "src_logger_name": "timestamp_alignment-2011-SW_IN",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                        "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                     ],
                                     "sub_status": {
-                                        "timeshift-2011-SW_IN-ccorr": {
+                                        "timestamp_alignment-2011-SW_IN-ccorr": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-SW_IN-ccorr",
-                                            "src_logger_name": "timeshift-2011-SW_IN-ccorr",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-ccorr",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-ccorr",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -75,15 +75,15 @@
                                                 "corr": 0.995
                                             }
                                         },
-                                        "timeshift-2011-SW_IN-daystats": {
+                                        "timestamp_alignment-2011-SW_IN-daystats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-SW_IN-daystats",
-                                            "src_logger_name": "timeshift-2011-SW_IN-daystats",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-daystats",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-daystats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -92,15 +92,15 @@
                                                 "day_rad": 0.0
                                             }
                                         },
-                                        "timeshift-2011-SW_IN-nightstats": {
+                                        "timestamp_alignment-2011-SW_IN-nightstats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-SW_IN-nightstats",
-                                            "src_logger_name": "timeshift-2011-SW_IN-nightstats",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-nightstats",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-nightstats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -130,7 +130,7 @@
             "variables": {
                 "site_id": "US-CRT",
                 "resolution": "HH",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestDataTimeshift000002.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestDataTimestampAlignment000002.csv",
                 "rad_vars": [
                     "SW_IN",
                     "PPFD_IN"
@@ -139,54 +139,54 @@
                 "ts_end": "201201010000",
                 "expected_results": {
                     "created_files": [
-                        "US-CRT_timestamp_shift_radiation_2011.png"
+                        "US-CRT_timestamp_alignment_2011.png"
                     ],
                     "logs": [
-                        "[INFO] timeshift - Top level variables ['SW_IN', 'PPFD_IN']",
-                        "[WARNING] timeshift-2011-SW_IN-ccorr - Max correlation 0.994 at lag 2",
-                        "[ERROR] timeshift-2011-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 8.812%",
-                        "[WARNING] timeshift-2011-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 1.440%",
-                        "[WARNING] timeshift-2011-PPFD_IN-ccorr - Max correlation 0.992 at lag 2",
-                        "[ERROR] timeshift-2011-PPFD_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 16.475%",
-                        "[WARNING] timeshift-2011-PPFD_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 1.440%"
+                        "[INFO] timestamp_alignment - Top level variables ['SW_IN', 'PPFD_IN']",
+                        "[WARNING] timestamp_alignment-2011-SW_IN-ccorr - Max correlation 0.994 at lag 2",
+                        "[ERROR] timestamp_alignment-2011-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 8.812%",
+                        "[WARNING] timestamp_alignment-2011-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 1.440%",
+                        "[WARNING] timestamp_alignment-2011-PPFD_IN-ccorr - Max correlation 0.992 at lag 2",
+                        "[ERROR] timestamp_alignment-2011-PPFD_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 16.475%",
+                        "[WARNING] timestamp_alignment-2011-PPFD_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 1.440%"
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross correlation,Excessive daytime radiation (%),Excessive nighttime radiation (%),Figure link",
-                        "2011,PPFD_IN,FAIL,2,0.992,16.475,1.44,/timeshift/US-CRT_timestamp_shift_radiation_2011.png",
-                        "2011,SW_IN,FAIL,2,0.994,8.812,1.44,/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                        "2011,PPFD_IN,FAIL,2,0.992,16.475,1.44,/timestamp_alignment/US-CRT_timestamp_alignment_2011.png",
+                        "2011,SW_IN,FAIL,2,0.994,8.812,1.44,/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                     ],
                     "status_list": [
                         {
                             "status_code": -2,
-                            "qaqc_check": "timeshift-2011",
-                            "src_logger_name": "timeshift-2011",
+                            "qaqc_check": "timestamp_alignment-2011",
+                            "src_logger_name": "timestamp_alignment-2011",
                             "n_warning": 4,
                             "n_error": 2,
                             "status_msg": null,
                             "plot_paths": [
-                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                             ],
                             "sub_status": {
-                                "timeshift-2011-SW_IN": {
+                                "timestamp_alignment-2011-SW_IN": {
                                     "status_code": -2,
-                                    "qaqc_check": "timeshift-2011-SW_IN",
-                                    "src_logger_name": "timeshift-2011-SW_IN",
+                                    "qaqc_check": "timestamp_alignment-2011-SW_IN",
+                                    "src_logger_name": "timestamp_alignment-2011-SW_IN",
                                     "n_warning": 2,
                                     "n_error": 1,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                        "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                     ],
                                     "sub_status": {
-                                        "timeshift-2011-SW_IN-ccorr": {
+                                        "timestamp_alignment-2011-SW_IN-ccorr": {
                                             "status_code": -1,
-                                            "qaqc_check": "timeshift-2011-SW_IN-ccorr",
-                                            "src_logger_name": "timeshift-2011-SW_IN-ccorr",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-ccorr",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-ccorr",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Max correlation 0.994 at lag 2",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -196,15 +196,15 @@
                                                 "corr": 0.994
                                             }
                                         },
-                                        "timeshift-2011-SW_IN-daystats": {
+                                        "timestamp_alignment-2011-SW_IN-daystats": {
                                             "status_code": -2,
-                                            "qaqc_check": "timeshift-2011-SW_IN-daystats",
-                                            "src_logger_name": "timeshift-2011-SW_IN-daystats",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-daystats",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-daystats",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "Percent of daytime timestamps exceeding SW_IN_POT 8.812%",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -213,15 +213,15 @@
                                                 "day_rad": 8.812
                                             }
                                         },
-                                        "timeshift-2011-SW_IN-nightstats": {
+                                        "timestamp_alignment-2011-SW_IN-nightstats": {
                                             "status_code": -1,
-                                            "qaqc_check": "timeshift-2011-SW_IN-nightstats",
-                                            "src_logger_name": "timeshift-2011-SW_IN-nightstats",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-nightstats",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-nightstats",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Percent of nighttime timestamps exceeding SW_IN_POT 1.440%",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -237,26 +237,26 @@
                                         "result": -2
                                     }
                                 },
-                                "timeshift-2011-PPFD_IN": {
+                                "timestamp_alignment-2011-PPFD_IN": {
                                     "status_code": -2,
-                                    "qaqc_check": "timeshift-2011-PPFD_IN",
-                                    "src_logger_name": "timeshift-2011-PPFD_IN",
+                                    "qaqc_check": "timestamp_alignment-2011-PPFD_IN",
+                                    "src_logger_name": "timestamp_alignment-2011-PPFD_IN",
                                     "n_warning": 2,
                                     "n_error": 1,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                        "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                     ],
                                     "sub_status": {
-                                        "timeshift-2011-PPFD_IN-ccorr": {
+                                        "timestamp_alignment-2011-PPFD_IN-ccorr": {
                                             "status_code": -1,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-ccorr",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-ccorr",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-ccorr",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-ccorr",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Max correlation 0.992 at lag 2",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -266,15 +266,15 @@
                                                 "corr": 0.992
                                             }
                                         },
-                                        "timeshift-2011-PPFD_IN-daystats": {
+                                        "timestamp_alignment-2011-PPFD_IN-daystats": {
                                             "status_code": -2,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-daystats",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-daystats",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-daystats",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-daystats",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "Percent of daytime timestamps exceeding SW_IN_POT 16.475%",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -283,15 +283,15 @@
                                                 "day_rad": 16.475
                                             }
                                         },
-                                        "timeshift-2011-PPFD_IN-nightstats": {
+                                        "timestamp_alignment-2011-PPFD_IN-nightstats": {
                                             "status_code": -1,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-nightstats",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-nightstats",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-nightstats",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-nightstats",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Percent of nighttime timestamps exceeding SW_IN_POT 1.440%",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -321,7 +321,7 @@
             "variables": {
                 "site_id": "US-CRT",
                 "resolution": "HH",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestDataTimeshift000004.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestDataTimestampAlignment000004.csv",
                 "rad_vars": [
                     "SW_IN",
                     "PPFD_IN"
@@ -330,54 +330,54 @@
                 "ts_end": "201201010000",
                 "expected_results": {
                     "created_files": [
-                        "US-CRT_timestamp_shift_radiation_2011.png"
+                        "US-CRT_timestamp_alignment_2011.png"
                     ],
                     "logs": [
-                        "[INFO] timeshift - Top level variables ['SW_IN', 'PPFD_IN']",
-                        "[INFO] timeshift-2011-SW_IN-ccorr - No significant cross correlation was found",
-                        "[ERROR] timeshift-2011-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 46.935%",
-                        "[ERROR] timeshift-2011-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 100.000%",
-                        "[INFO] timeshift-2011-PPFD_IN-ccorr - No significant cross correlation was found",
-                        "[ERROR] timeshift-2011-PPFD_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 55.172%",
-                        "[ERROR] timeshift-2011-PPFD_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 100.000%"
+                        "[INFO] timestamp_alignment - Top level variables ['SW_IN', 'PPFD_IN']",
+                        "[INFO] timestamp_alignment-2011-SW_IN-ccorr - No significant cross correlation was found",
+                        "[ERROR] timestamp_alignment-2011-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 46.935%",
+                        "[ERROR] timestamp_alignment-2011-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 100.000%",
+                        "[INFO] timestamp_alignment-2011-PPFD_IN-ccorr - No significant cross correlation was found",
+                        "[ERROR] timestamp_alignment-2011-PPFD_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 55.172%",
+                        "[ERROR] timestamp_alignment-2011-PPFD_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 100.000%"
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross correlation,Excessive daytime radiation (%),Excessive nighttime radiation (%),Figure link",
-                        "2011,PPFD_IN,FAIL,-12,not_found,55.172,100.0,/timeshift/US-CRT_timestamp_shift_radiation_2011.png",
-                        "2011,SW_IN,FAIL,-12,not_found,46.935,100.0,/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                        "2011,PPFD_IN,FAIL,-12,not_found,55.172,100.0,/timestamp_alignment/US-CRT_timestamp_alignment_2011.png",
+                        "2011,SW_IN,FAIL,-12,not_found,46.935,100.0,/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                     ],
                     "status_list": [
                         {
                             "status_code": -2,
-                            "qaqc_check": "timeshift-2011",
-                            "src_logger_name": "timeshift-2011",
+                            "qaqc_check": "timestamp_alignment-2011",
+                            "src_logger_name": "timestamp_alignment-2011",
                             "n_warning": 0,
                             "n_error": 4,
                             "status_msg": null,
                             "plot_paths": [
-                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                             ],
                             "sub_status": {
-                                "timeshift-2011-SW_IN": {
+                                "timestamp_alignment-2011-SW_IN": {
                                     "status_code": -2,
-                                    "qaqc_check": "timeshift-2011-SW_IN",
-                                    "src_logger_name": "timeshift-2011-SW_IN",
+                                    "qaqc_check": "timestamp_alignment-2011-SW_IN",
+                                    "src_logger_name": "timestamp_alignment-2011-SW_IN",
                                     "n_warning": 0,
                                     "n_error": 2,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                        "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                     ],
                                     "sub_status": {
-                                        "timeshift-2011-SW_IN-ccorr": {
+                                        "timestamp_alignment-2011-SW_IN-ccorr": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-SW_IN-ccorr",
-                                            "src_logger_name": "timeshift-2011-SW_IN-ccorr",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-ccorr",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-ccorr",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "No significant cross correlation was found",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -387,15 +387,15 @@
                                                 "corr": "not_found"
                                             }
                                         },
-                                        "timeshift-2011-SW_IN-daystats": {
+                                        "timestamp_alignment-2011-SW_IN-daystats": {
                                             "status_code": -2,
-                                            "qaqc_check": "timeshift-2011-SW_IN-daystats",
-                                            "src_logger_name": "timeshift-2011-SW_IN-daystats",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-daystats",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-daystats",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "Percent of daytime timestamps exceeding SW_IN_POT 46.935%",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -404,15 +404,15 @@
                                                 "day_rad": 46.935
                                             }
                                         },
-                                        "timeshift-2011-SW_IN-nightstats": {
+                                        "timestamp_alignment-2011-SW_IN-nightstats": {
                                             "status_code": -2,
-                                            "qaqc_check": "timeshift-2011-SW_IN-nightstats",
-                                            "src_logger_name": "timeshift-2011-SW_IN-nightstats",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-nightstats",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-nightstats",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "Percent of nighttime timestamps exceeding SW_IN_POT 100.000%",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -428,26 +428,26 @@
                                         "result": -2
                                     }
                                 },
-                                "timeshift-2011-PPFD_IN": {
+                                "timestamp_alignment-2011-PPFD_IN": {
                                     "status_code": -2,
-                                    "qaqc_check": "timeshift-2011-PPFD_IN",
-                                    "src_logger_name": "timeshift-2011-PPFD_IN",
+                                    "qaqc_check": "timestamp_alignment-2011-PPFD_IN",
+                                    "src_logger_name": "timestamp_alignment-2011-PPFD_IN",
                                     "n_warning": 0,
                                     "n_error": 2,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                        "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                     ],
                                     "sub_status": {
-                                        "timeshift-2011-PPFD_IN-ccorr": {
+                                        "timestamp_alignment-2011-PPFD_IN-ccorr": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-ccorr",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-ccorr",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-ccorr",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-ccorr",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "No significant cross correlation was found",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -457,15 +457,15 @@
                                                 "corr": "not_found"
                                             }
                                         },
-                                        "timeshift-2011-PPFD_IN-daystats": {
+                                        "timestamp_alignment-2011-PPFD_IN-daystats": {
                                             "status_code": -2,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-daystats",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-daystats",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-daystats",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-daystats",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "Percent of daytime timestamps exceeding SW_IN_POT 55.172%",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -474,15 +474,15 @@
                                                 "day_rad": 55.172
                                             }
                                         },
-                                        "timeshift-2011-PPFD_IN-nightstats": {
+                                        "timestamp_alignment-2011-PPFD_IN-nightstats": {
                                             "status_code": -2,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-nightstats",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-nightstats",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-nightstats",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-nightstats",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "Percent of nighttime timestamps exceeding SW_IN_POT 100.000%",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -512,7 +512,7 @@
             "variables": {
                 "site_id": "US-CRT",
                 "resolution": "HH",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestDataTimeshift000005.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestDataTimestampAlignment000005.csv",
                 "rad_vars": [
                     "SW_IN",
                     "PPFD_IN"
@@ -521,54 +521,54 @@
                 "ts_end": "201201010000",
                 "expected_results": {
                     "created_files": [
-                        "US-CRT_timestamp_shift_radiation_2011.png"
+                        "US-CRT_timestamp_alignment_2011.png"
                     ],
                     "logs": [
-                        "[INFO] timeshift - Top level variables ['SW_IN', 'PPFD_IN']",
-                        "[INFO] timeshift-2011-SW_IN-ccorr - No significant cross correlation was found",
-                        "[INFO] timeshift-2011-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
-                        "[ERROR] timeshift-2011-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 100.000%",
-                        "[INFO] timeshift-2011-PPFD_IN-ccorr - No significant cross correlation was found",
-                        "[INFO] timeshift-2011-PPFD_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
-                        "[ERROR] timeshift-2011-PPFD_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 100.000%"
+                        "[INFO] timestamp_alignment - Top level variables ['SW_IN', 'PPFD_IN']",
+                        "[INFO] timestamp_alignment-2011-SW_IN-ccorr - No significant cross correlation was found",
+                        "[INFO] timestamp_alignment-2011-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
+                        "[ERROR] timestamp_alignment-2011-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 100.000%",
+                        "[INFO] timestamp_alignment-2011-PPFD_IN-ccorr - No significant cross correlation was found",
+                        "[INFO] timestamp_alignment-2011-PPFD_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
+                        "[ERROR] timestamp_alignment-2011-PPFD_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 100.000%"
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross correlation,Excessive daytime radiation (%),Excessive nighttime radiation (%),Figure link",
-                        "2011,PPFD_IN,FAIL,-12,not_found,0,100.0,/timeshift/US-CRT_timestamp_shift_radiation_2011.png",
-                        "2011,SW_IN,FAIL,-12,not_found,0,100.0,/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                        "2011,PPFD_IN,FAIL,-12,not_found,0,100.0,/timestamp_alignment/US-CRT_timestamp_alignment_2011.png",
+                        "2011,SW_IN,FAIL,-12,not_found,0,100.0,/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                     ],
                     "status_list": [
                         {
                             "status_code": -2,
-                            "qaqc_check": "timeshift-2011",
-                            "src_logger_name": "timeshift-2011",
+                            "qaqc_check": "timestamp_alignment-2011",
+                            "src_logger_name": "timestamp_alignment-2011",
                             "n_warning": 0,
                             "n_error": 2,
                             "status_msg": null,
                             "plot_paths": [
-                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                             ],
                             "sub_status": {
-                                "timeshift-2011-SW_IN": {
+                                "timestamp_alignment-2011-SW_IN": {
                                     "status_code": -2,
-                                    "qaqc_check": "timeshift-2011-SW_IN",
-                                    "src_logger_name": "timeshift-2011-SW_IN",
+                                    "qaqc_check": "timestamp_alignment-2011-SW_IN",
+                                    "src_logger_name": "timestamp_alignment-2011-SW_IN",
                                     "n_warning": 0,
                                     "n_error": 1,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                        "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                     ],
                                     "sub_status": {
-                                        "timeshift-2011-SW_IN-ccorr": {
+                                        "timestamp_alignment-2011-SW_IN-ccorr": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-SW_IN-ccorr",
-                                            "src_logger_name": "timeshift-2011-SW_IN-ccorr",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-ccorr",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-ccorr",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "No significant cross correlation was found",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -578,15 +578,15 @@
                                                 "corr": "not_found"
                                             }
                                         },
-                                        "timeshift-2011-SW_IN-daystats": {
+                                        "timestamp_alignment-2011-SW_IN-daystats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-SW_IN-daystats",
-                                            "src_logger_name": "timeshift-2011-SW_IN-daystats",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-daystats",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-daystats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -595,15 +595,15 @@
                                                 "day_rad": 0.0
                                             }
                                         },
-                                        "timeshift-2011-SW_IN-nightstats": {
+                                        "timestamp_alignment-2011-SW_IN-nightstats": {
                                             "status_code": -2,
-                                            "qaqc_check": "timeshift-2011-SW_IN-nightstats",
-                                            "src_logger_name": "timeshift-2011-SW_IN-nightstats",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-nightstats",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-nightstats",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "Percent of nighttime timestamps exceeding SW_IN_POT 100.000%",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -619,26 +619,26 @@
                                         "result": -2
                                     }
                                 },
-                                "timeshift-2011-PPFD_IN": {
+                                "timestamp_alignment-2011-PPFD_IN": {
                                     "status_code": -2,
-                                    "qaqc_check": "timeshift-2011-PPFD_IN",
-                                    "src_logger_name": "timeshift-2011-PPFD_IN",
+                                    "qaqc_check": "timestamp_alignment-2011-PPFD_IN",
+                                    "src_logger_name": "timestamp_alignment-2011-PPFD_IN",
                                     "n_warning": 0,
                                     "n_error": 1,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                        "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                     ],
                                     "sub_status": {
-                                        "timeshift-2011-PPFD_IN-ccorr": {
+                                        "timestamp_alignment-2011-PPFD_IN-ccorr": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-ccorr",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-ccorr",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-ccorr",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-ccorr",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "No significant cross correlation was found",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -648,15 +648,15 @@
                                                 "corr": "not_found"
                                             }
                                         },
-                                        "timeshift-2011-PPFD_IN-daystats": {
+                                        "timestamp_alignment-2011-PPFD_IN-daystats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-daystats",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-daystats",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-daystats",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-daystats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -665,15 +665,15 @@
                                                 "day_rad": 0.0
                                             }
                                         },
-                                        "timeshift-2011-PPFD_IN-nightstats": {
+                                        "timestamp_alignment-2011-PPFD_IN-nightstats": {
                                             "status_code": -2,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-nightstats",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-nightstats",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-nightstats",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-nightstats",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "Percent of nighttime timestamps exceeding SW_IN_POT 100.000%",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -703,7 +703,7 @@
             "variables": {
                 "site_id": "US-CRT",
                 "resolution": "HH",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestDataTimeshift000006.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestDataTimestampAlignment000006.csv",
                 "rad_vars": [
                     "SW_IN",
                     "PPFD_IN"
@@ -712,54 +712,54 @@
                 "ts_end": "201201010000",
                 "expected_results": {
                     "created_files": [
-                        "US-CRT_timestamp_shift_radiation_2011.png"
+                        "US-CRT_timestamp_alignment_2011.png"
                     ],
                     "logs": [
-                        "[INFO] timeshift - Top level variables ['SW_IN', 'PPFD_IN']",
-                        "[INFO] timeshift-2011-SW_IN-ccorr - Insufficient data for calculating cross correlation",
-                        "[INFO] timeshift-2011-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
-                        "[INFO] timeshift-2011-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%",
-                        "[INFO] timeshift-2011-PPFD_IN-ccorr - Insufficient data for calculating cross correlation",
-                        "[INFO] timeshift-2011-PPFD_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
-                        "[INFO] timeshift-2011-PPFD_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%"
+                        "[INFO] timestamp_alignment - Top level variables ['SW_IN', 'PPFD_IN']",
+                        "[INFO] timestamp_alignment-2011-SW_IN-ccorr - Insufficient data for calculating cross correlation",
+                        "[INFO] timestamp_alignment-2011-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
+                        "[INFO] timestamp_alignment-2011-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%",
+                        "[INFO] timestamp_alignment-2011-PPFD_IN-ccorr - Insufficient data for calculating cross correlation",
+                        "[INFO] timestamp_alignment-2011-PPFD_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
+                        "[INFO] timestamp_alignment-2011-PPFD_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%"
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross correlation,Excessive daytime radiation (%),Excessive nighttime radiation (%),Figure link",
-                        "2011,PPFD_IN,OK,not_calculated,not_calculated,0,0,/timeshift/US-CRT_timestamp_shift_radiation_2011.png",
-                        "2011,SW_IN,OK,not_calculated,not_calculated,0,0,/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                        "2011,PPFD_IN,OK,not_calculated,not_calculated,0,0,/timestamp_alignment/US-CRT_timestamp_alignment_2011.png",
+                        "2011,SW_IN,OK,not_calculated,not_calculated,0,0,/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                     ],
                     "status_list": [
                         {
                             "status_code": 0,
-                            "qaqc_check": "timeshift-2011",
-                            "src_logger_name": "timeshift-2011",
+                            "qaqc_check": "timestamp_alignment-2011",
+                            "src_logger_name": "timestamp_alignment-2011",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
                             "plot_paths": [
-                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                             ],
                             "sub_status": {
-                                "timeshift-2011-SW_IN": {
+                                "timestamp_alignment-2011-SW_IN": {
                                     "status_code": 0,
-                                    "qaqc_check": "timeshift-2011-SW_IN",
-                                    "src_logger_name": "timeshift-2011-SW_IN",
+                                    "qaqc_check": "timestamp_alignment-2011-SW_IN",
+                                    "src_logger_name": "timestamp_alignment-2011-SW_IN",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                        "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                     ],
                                     "sub_status": {
-                                        "timeshift-2011-SW_IN-ccorr": {
+                                        "timestamp_alignment-2011-SW_IN-ccorr": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-SW_IN-ccorr",
-                                            "src_logger_name": "timeshift-2011-SW_IN-ccorr",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-ccorr",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-ccorr",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Insufficient data for calculating cross correlation (Number of nans = 288).",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -769,15 +769,15 @@
                                                 "time_lag": "not_calculated"
                                             }
                                         },
-                                        "timeshift-2011-SW_IN-daystats": {
+                                        "timestamp_alignment-2011-SW_IN-daystats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-SW_IN-daystats",
-                                            "src_logger_name": "timeshift-2011-SW_IN-daystats",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-daystats",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-daystats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -786,15 +786,15 @@
                                                 "day_rad": 0.0
                                             }
                                         },
-                                        "timeshift-2011-SW_IN-nightstats": {
+                                        "timestamp_alignment-2011-SW_IN-nightstats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-SW_IN-nightstats",
-                                            "src_logger_name": "timeshift-2011-SW_IN-nightstats",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-nightstats",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-nightstats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -810,26 +810,26 @@
                                         "result": 0
                                     }
                                 },
-                                "timeshift-2011-PPFD_IN": {
+                                "timestamp_alignment-2011-PPFD_IN": {
                                     "status_code": 0,
-                                    "qaqc_check": "timeshift-2011-PPFD_IN",
-                                    "src_logger_name": "timeshift-2011-PPFD_IN",
+                                    "qaqc_check": "timestamp_alignment-2011-PPFD_IN",
+                                    "src_logger_name": "timestamp_alignment-2011-PPFD_IN",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                        "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                     ],
                                     "sub_status": {
-                                        "timeshift-2011-PPFD_IN-ccorr": {
+                                        "timestamp_alignment-2011-PPFD_IN-ccorr": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-ccorr",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-ccorr",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-ccorr",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-ccorr",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Insufficient data for calculating cross correlation (Number of nans = 288).",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -839,15 +839,15 @@
                                                 "time_lag": "not_calculated"
                                             }
                                         },
-                                        "timeshift-2011-PPFD_IN-daystats": {
+                                        "timestamp_alignment-2011-PPFD_IN-daystats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-daystats",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-daystats",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-daystats",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-daystats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -856,15 +856,15 @@
                                                 "day_rad": 0.0
                                             }
                                         },
-                                        "timeshift-2011-PPFD_IN-nightstats": {
+                                        "timestamp_alignment-2011-PPFD_IN-nightstats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-nightstats",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-nightstats",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-nightstats",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-nightstats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -894,7 +894,7 @@
             "variables": {
                 "site_id": "US-CRT",
                 "resolution": "HH",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestDataTimeshift000003.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestDataTimestampAlignment000003.csv",
                 "rad_vars": [
                     "SW_IN",
                     "PPFD_IN"
@@ -903,54 +903,54 @@
                 "ts_end": "201201010000",
                 "expected_results": {
                     "created_files": [
-                        "US-CRT_timestamp_shift_radiation_2011.png"
+                        "US-CRT_timestamp_alignment_2011.png"
                     ],
                     "logs": [
-                        "[INFO] timeshift - Top level variables ['SW_IN', 'PPFD_IN']",
-                        "[INFO] timeshift-2011-SW_IN-ccorr - Max correlation 0.991 at lag 0",
-                        "[WARNING] timeshift-2011-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.383%",
-                        "[INFO] timeshift-2011-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%",
-                        "[INFO] timeshift-2011-PPFD_IN-ccorr - Max correlation 0.989 at lag 0",
-                        "[WARNING] timeshift-2011-PPFD_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 3.257%",
-                        "[INFO] timeshift-2011-PPFD_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%"
+                        "[INFO] timestamp_alignment - Top level variables ['SW_IN', 'PPFD_IN']",
+                        "[INFO] timestamp_alignment-2011-SW_IN-ccorr - Max correlation 0.991 at lag 0",
+                        "[WARNING] timestamp_alignment-2011-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.383%",
+                        "[INFO] timestamp_alignment-2011-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%",
+                        "[INFO] timestamp_alignment-2011-PPFD_IN-ccorr - Max correlation 0.989 at lag 0",
+                        "[WARNING] timestamp_alignment-2011-PPFD_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 3.257%",
+                        "[INFO] timestamp_alignment-2011-PPFD_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%"
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross correlation,Excessive daytime radiation (%),Excessive nighttime radiation (%),Figure link",
-                        "2011,PPFD_IN,WARNING,0,0.989,3.257,0,/timeshift/US-CRT_timestamp_shift_radiation_2011.png",
-                        "2011,SW_IN,WARNING,0,0.991,0.383,0,/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                        "2011,PPFD_IN,WARNING,0,0.989,3.257,0,/timestamp_alignment/US-CRT_timestamp_alignment_2011.png",
+                        "2011,SW_IN,WARNING,0,0.991,0.383,0,/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                     ],
                     "status_list": [
                         {
                             "status_code": -1,
-                            "qaqc_check": "timeshift-2011",
-                            "src_logger_name": "timeshift-2011",
+                            "qaqc_check": "timestamp_alignment-2011",
+                            "src_logger_name": "timestamp_alignment-2011",
                             "n_warning": 2,
                             "n_error": 0,
                             "status_msg": null,
                             "plot_paths": [
-                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                             ],
                             "sub_status": {
-                                "timeshift-2011-SW_IN": {
+                                "timestamp_alignment-2011-SW_IN": {
                                     "status_code": -1,
-                                    "qaqc_check": "timeshift-2011-SW_IN",
-                                    "src_logger_name": "timeshift-2011-SW_IN",
+                                    "qaqc_check": "timestamp_alignment-2011-SW_IN",
+                                    "src_logger_name": "timestamp_alignment-2011-SW_IN",
                                     "n_warning": 1,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                        "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                     ],
                                     "sub_status": {
-                                        "timeshift-2011-SW_IN-ccorr": {
+                                        "timestamp_alignment-2011-SW_IN-ccorr": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-SW_IN-ccorr",
-                                            "src_logger_name": "timeshift-2011-SW_IN-ccorr",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-ccorr",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-ccorr",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -960,15 +960,15 @@
                                                 "corr": 0.991
                                             }
                                         },
-                                        "timeshift-2011-SW_IN-daystats": {
+                                        "timestamp_alignment-2011-SW_IN-daystats": {
                                             "status_code": -1,
-                                            "qaqc_check": "timeshift-2011-SW_IN-daystats",
-                                            "src_logger_name": "timeshift-2011-SW_IN-daystats",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-daystats",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-daystats",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Percent of daytime timestamps exceeding SW_IN_POT 0.383%",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -977,15 +977,15 @@
                                                 "day_rad": 0.383
                                             }
                                         },
-                                        "timeshift-2011-SW_IN-nightstats": {
+                                        "timestamp_alignment-2011-SW_IN-nightstats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-SW_IN-nightstats",
-                                            "src_logger_name": "timeshift-2011-SW_IN-nightstats",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-nightstats",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-nightstats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1001,26 +1001,26 @@
                                         "result": -1
                                     }
                                 },
-                                "timeshift-2011-PPFD_IN": {
+                                "timestamp_alignment-2011-PPFD_IN": {
                                     "status_code": -1,
-                                    "qaqc_check": "timeshift-2011-PPFD_IN",
-                                    "src_logger_name": "timeshift-2011-PPFD_IN",
+                                    "qaqc_check": "timestamp_alignment-2011-PPFD_IN",
+                                    "src_logger_name": "timestamp_alignment-2011-PPFD_IN",
                                     "n_warning": 1,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                        "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                     ],
                                     "sub_status": {
-                                        "timeshift-2011-PPFD_IN-ccorr": {
+                                        "timestamp_alignment-2011-PPFD_IN-ccorr": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-ccorr",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-ccorr",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-ccorr",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-ccorr",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1030,15 +1030,15 @@
                                                 "corr": 0.989
                                             }
                                         },
-                                        "timeshift-2011-PPFD_IN-daystats": {
+                                        "timestamp_alignment-2011-PPFD_IN-daystats": {
                                             "status_code": -1,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-daystats",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-daystats",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-daystats",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-daystats",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Percent of daytime timestamps exceeding SW_IN_POT 3.257%",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1047,15 +1047,15 @@
                                                 "day_rad": 3.257
                                             }
                                         },
-                                        "timeshift-2011-PPFD_IN-nightstats": {
+                                        "timestamp_alignment-2011-PPFD_IN-nightstats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-nightstats",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-nightstats",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-nightstats",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-nightstats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1085,14 +1085,14 @@
             "variables": {
                 "site_id": "US-CRT",
                 "resolution": "HH",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestDataTimeshift000007.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestDataTimestampAlignment000007.csv",
                 "rad_vars": [],
                 "ts_start": "201101010000",
                 "ts_end": "201201010000",
                 "expected_results": {
                     "created_files": [],
                     "logs": [
-                        "[INFO] timeshift - No top level rad vars selected. Skipping timeshift checks."
+                        "[INFO] timestamp_alignment - No top level rad vars selected. Skipping timestamp_alignment checks."
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross correlation,Excessive daytime radiation (%),Excessive nighttime radiation (%),Figure link"
@@ -1100,11 +1100,11 @@
                     "status_list": [
                         {
                             "status_code": 0,
-                            "qaqc_check": "timeshift",
-                            "src_logger_name": "timeshift",
+                            "qaqc_check": "timestamp_alignment",
+                            "src_logger_name": "timestamp_alignment",
                             "n_warning": 0,
                             "n_error": 0,
-                            "status_msg": "No top level rad vars selected. Skipping timeshift checks.",
+                            "status_msg": "No top level rad vars selected. Skipping timestamp_alignment checks.",
                             "plot_paths": null,
                             "sub_status": null,
                             "report_type": "single_msg",
@@ -1120,7 +1120,7 @@
             "variables": {
                 "site_id": "US-CRT",
                 "resolution": "HH",
-                "filename": "US-CRT_HH_201101010000_201101260000_TestDataTimeshift000008.csv",
+                "filename": "US-CRT_HH_201101010000_201101260000_TestDataTimestampAlignment000008.csv",
                 "rad_vars": [
                     "SW_IN"
                 ],
@@ -1129,7 +1129,7 @@
                 "expected_results": {
                     "created_files": [],
                     "logs": [
-                        "[INFO] timeshift - Insufficient data (24 days, 23:30:00 days from 2011-01-01 00:00:00 to 2011-01-25 23:30:00). At least one month is required. timeshift not performed."
+                        "[INFO] timestamp_alignment - Insufficient data (24 days, 23:30:00 days from 2011-01-01 00:00:00 to 2011-01-25 23:30:00). At least one month is required. timestamp_alignment not performed."
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross correlation,Excessive daytime radiation (%),Excessive nighttime radiation (%),Figure link"
@@ -1137,11 +1137,11 @@
                     "status_list": [
                         {
                             "status_code": 0,
-                            "qaqc_check": "timeshift",
-                            "src_logger_name": "timeshift",
+                            "qaqc_check": "timestamp_alignment",
+                            "src_logger_name": "timestamp_alignment",
                             "n_warning": 0,
                             "n_error": 0,
-                            "status_msg": "Insufficient data (24 days, 23:30:00 days from 2011-01-01 00:00:00 to 2011-01-25 23:30:00). At least one month is required. timeshift not performed.",
+                            "status_msg": "Insufficient data (24 days, 23:30:00 days from 2011-01-01 00:00:00 to 2011-01-25 23:30:00). At least one month is required. timestamp_alignment not performed.",
                             "plot_paths": null,
                             "sub_status": null,
                             "report_type": "single_msg",
@@ -1166,72 +1166,72 @@
                 "ts_end": "201401010000",
                 "expected_results": {
                     "created_files": [
-                        "US-CRT_timestamp_shift_radiation_2011.png",
-                        "US-CRT_timestamp_shift_radiation_2012.png",
-                        "US-CRT_timestamp_shift_radiation_2013.png"
+                        "US-CRT_timestamp_alignment_2011.png",
+                        "US-CRT_timestamp_alignment_2012.png",
+                        "US-CRT_timestamp_alignment_2013.png"
                     ],
                     "logs": [
-                        "[INFO] timeshift - Top level variables ['SW_IN', 'PPFD_IN']",
-                        "[INFO] timeshift-2011-SW_IN-ccorr - Max correlation 0.995 at lag 0",
-                        "[INFO] timeshift-2011-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
-                        "[INFO] timeshift-2011-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%",
-                        "[INFO] timeshift-2011-PPFD_IN-ccorr - Max correlation 0.992 at lag 0",
-                        "[WARNING] timeshift-2011-PPFD_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.383%",
-                        "[INFO] timeshift-2011-PPFD_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%",
-                        "[INFO] timeshift-2012-SW_IN-ccorr - Max correlation 0.996 at lag 0",
-                        "[INFO] timeshift-2012-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
-                        "[INFO] timeshift-2012-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%",
-                        "[INFO] timeshift-2012-PPFD_IN-ccorr - Max correlation 0.993 at lag 0",
-                        "[WARNING] timeshift-2012-PPFD_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.192%",
-                        "[INFO] timeshift-2012-PPFD_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%",
-                        "[INFO] timeshift-2013-SW_IN-ccorr - Max correlation 0.995 at lag 0",
-                        "[INFO] timeshift-2013-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
-                        "[INFO] timeshift-2013-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%",
-                        "[INFO] timeshift-2013-PPFD_IN-ccorr - Max correlation 0.992 at lag 0",
-                        "[INFO] timeshift-2013-PPFD_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
-                        "[INFO] timeshift-2013-PPFD_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%"
+                        "[INFO] timestamp_alignment - Top level variables ['SW_IN', 'PPFD_IN']",
+                        "[INFO] timestamp_alignment-2011-SW_IN-ccorr - Max correlation 0.995 at lag 0",
+                        "[INFO] timestamp_alignment-2011-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
+                        "[INFO] timestamp_alignment-2011-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%",
+                        "[INFO] timestamp_alignment-2011-PPFD_IN-ccorr - Max correlation 0.992 at lag 0",
+                        "[WARNING] timestamp_alignment-2011-PPFD_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.383%",
+                        "[INFO] timestamp_alignment-2011-PPFD_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%",
+                        "[INFO] timestamp_alignment-2012-SW_IN-ccorr - Max correlation 0.996 at lag 0",
+                        "[INFO] timestamp_alignment-2012-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
+                        "[INFO] timestamp_alignment-2012-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%",
+                        "[INFO] timestamp_alignment-2012-PPFD_IN-ccorr - Max correlation 0.993 at lag 0",
+                        "[WARNING] timestamp_alignment-2012-PPFD_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.192%",
+                        "[INFO] timestamp_alignment-2012-PPFD_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%",
+                        "[INFO] timestamp_alignment-2013-SW_IN-ccorr - Max correlation 0.995 at lag 0",
+                        "[INFO] timestamp_alignment-2013-SW_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
+                        "[INFO] timestamp_alignment-2013-SW_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%",
+                        "[INFO] timestamp_alignment-2013-PPFD_IN-ccorr - Max correlation 0.992 at lag 0",
+                        "[INFO] timestamp_alignment-2013-PPFD_IN-daystats - Percent of daytime timestamps exceeding SW_IN_POT 0.000%",
+                        "[INFO] timestamp_alignment-2013-PPFD_IN-nightstats - Percent of nighttime timestamps exceeding SW_IN_POT 0.000%"
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross correlation,Excessive daytime radiation (%),Excessive nighttime radiation (%),Figure link",
-                        "2011,PPFD_IN,WARNING,0,0.992,0.383,0,/timeshift/US-CRT_timestamp_shift_radiation_2011.png",
-                        "2012,PPFD_IN,WARNING,0,0.993,0.192,0,/timeshift/US-CRT_timestamp_shift_radiation_2012.png",
-                        "2013,PPFD_IN,OK,0,0.992,0,0,/timeshift/US-CRT_timestamp_shift_radiation_2013.png",
-                        "2011,SW_IN,OK,0,0.995,0,0,/timeshift/US-CRT_timestamp_shift_radiation_2011.png",
-                        "2012,SW_IN,OK,0,0.996,0,0,/timeshift/US-CRT_timestamp_shift_radiation_2012.png",
-                        "2013,SW_IN,OK,0,0.995,0,0,/timeshift/US-CRT_timestamp_shift_radiation_2013.png"
+                        "2011,PPFD_IN,WARNING,0,0.992,0.383,0,/timestamp_alignment/US-CRT_timestamp_alignment_2011.png",
+                        "2012,PPFD_IN,WARNING,0,0.993,0.192,0,/timestamp_alignment/US-CRT_timestamp_alignment_2012.png",
+                        "2013,PPFD_IN,OK,0,0.992,0,0,/timestamp_alignment/US-CRT_timestamp_alignment_2013.png",
+                        "2011,SW_IN,OK,0,0.995,0,0,/timestamp_alignment/US-CRT_timestamp_alignment_2011.png",
+                        "2012,SW_IN,OK,0,0.996,0,0,/timestamp_alignment/US-CRT_timestamp_alignment_2012.png",
+                        "2013,SW_IN,OK,0,0.995,0,0,/timestamp_alignment/US-CRT_timestamp_alignment_2013.png"
                     ],
                     "status_list": [
                         {
                             "status_code": -1,
-                            "qaqc_check": "timeshift-2011",
-                            "src_logger_name": "timeshift-2011",
+                            "qaqc_check": "timestamp_alignment-2011",
+                            "src_logger_name": "timestamp_alignment-2011",
                             "n_warning": 1,
                             "n_error": 0,
                             "status_msg": null,
                             "plot_paths": [
-                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                             ],
                             "sub_status": {
-                                "timeshift-2011-SW_IN": {
+                                "timestamp_alignment-2011-SW_IN": {
                                     "status_code": 0,
-                                    "qaqc_check": "timeshift-2011-SW_IN",
-                                    "src_logger_name": "timeshift-2011-SW_IN",
+                                    "qaqc_check": "timestamp_alignment-2011-SW_IN",
+                                    "src_logger_name": "timestamp_alignment-2011-SW_IN",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                        "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                     ],
                                     "sub_status": {
-                                        "timeshift-2011-SW_IN-ccorr": {
+                                        "timestamp_alignment-2011-SW_IN-ccorr": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-SW_IN-ccorr",
-                                            "src_logger_name": "timeshift-2011-SW_IN-ccorr",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-ccorr",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-ccorr",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1241,15 +1241,15 @@
                                                 "corr": 0.995
                                             }
                                         },
-                                        "timeshift-2011-SW_IN-daystats": {
+                                        "timestamp_alignment-2011-SW_IN-daystats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-SW_IN-daystats",
-                                            "src_logger_name": "timeshift-2011-SW_IN-daystats",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-daystats",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-daystats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1258,15 +1258,15 @@
                                                 "day_rad": 0.0
                                             }
                                         },
-                                        "timeshift-2011-SW_IN-nightstats": {
+                                        "timestamp_alignment-2011-SW_IN-nightstats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-SW_IN-nightstats",
-                                            "src_logger_name": "timeshift-2011-SW_IN-nightstats",
+                                            "qaqc_check": "timestamp_alignment-2011-SW_IN-nightstats",
+                                            "src_logger_name": "timestamp_alignment-2011-SW_IN-nightstats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1282,26 +1282,26 @@
                                         "result": 0
                                     }
                                 },
-                                "timeshift-2011-PPFD_IN": {
+                                "timestamp_alignment-2011-PPFD_IN": {
                                     "status_code": -1,
-                                    "qaqc_check": "timeshift-2011-PPFD_IN",
-                                    "src_logger_name": "timeshift-2011-PPFD_IN",
+                                    "qaqc_check": "timestamp_alignment-2011-PPFD_IN",
+                                    "src_logger_name": "timestamp_alignment-2011-PPFD_IN",
                                     "n_warning": 1,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                        "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                     ],
                                     "sub_status": {
-                                        "timeshift-2011-PPFD_IN-ccorr": {
+                                        "timestamp_alignment-2011-PPFD_IN-ccorr": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-ccorr",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-ccorr",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-ccorr",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-ccorr",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1311,15 +1311,15 @@
                                                 "corr": 0.992
                                             }
                                         },
-                                        "timeshift-2011-PPFD_IN-daystats": {
+                                        "timestamp_alignment-2011-PPFD_IN-daystats": {
                                             "status_code": -1,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-daystats",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-daystats",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-daystats",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-daystats",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Percent of daytime timestamps exceeding SW_IN_POT 0.383%",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1328,15 +1328,15 @@
                                                 "day_rad": 0.383
                                             }
                                         },
-                                        "timeshift-2011-PPFD_IN-nightstats": {
+                                        "timestamp_alignment-2011-PPFD_IN-nightstats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2011-PPFD_IN-nightstats",
-                                            "src_logger_name": "timeshift-2011-PPFD_IN-nightstats",
+                                            "qaqc_check": "timestamp_alignment-2011-PPFD_IN-nightstats",
+                                            "src_logger_name": "timestamp_alignment-2011-PPFD_IN-nightstats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2011.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1359,35 +1359,35 @@
                         },
                         {
                             "status_code": -1,
-                            "qaqc_check": "timeshift-2012",
-                            "src_logger_name": "timeshift-2012",
+                            "qaqc_check": "timestamp_alignment-2012",
+                            "src_logger_name": "timestamp_alignment-2012",
                             "n_warning": 1,
                             "n_error": 0,
                             "status_msg": null,
                             "plot_paths": [
-                                "/timeshift/US-CRT_timestamp_shift_radiation_2012.png"
+                                "/timestamp_alignment/US-CRT_timestamp_alignment_2012.png"
                             ],
                             "sub_status": {
-                                "timeshift-2012-SW_IN": {
+                                "timestamp_alignment-2012-SW_IN": {
                                     "status_code": 0,
-                                    "qaqc_check": "timeshift-2012-SW_IN",
-                                    "src_logger_name": "timeshift-2012-SW_IN",
+                                    "qaqc_check": "timestamp_alignment-2012-SW_IN",
+                                    "src_logger_name": "timestamp_alignment-2012-SW_IN",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/timeshift/US-CRT_timestamp_shift_radiation_2012.png"
+                                        "/timestamp_alignment/US-CRT_timestamp_alignment_2012.png"
                                     ],
                                     "sub_status": {
-                                        "timeshift-2012-SW_IN-ccorr": {
+                                        "timestamp_alignment-2012-SW_IN-ccorr": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2012-SW_IN-ccorr",
-                                            "src_logger_name": "timeshift-2012-SW_IN-ccorr",
+                                            "qaqc_check": "timestamp_alignment-2012-SW_IN-ccorr",
+                                            "src_logger_name": "timestamp_alignment-2012-SW_IN-ccorr",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2012.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1397,15 +1397,15 @@
                                                 "corr": 0.996
                                             }
                                         },
-                                        "timeshift-2012-SW_IN-daystats": {
+                                        "timestamp_alignment-2012-SW_IN-daystats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2012-SW_IN-daystats",
-                                            "src_logger_name": "timeshift-2012-SW_IN-daystats",
+                                            "qaqc_check": "timestamp_alignment-2012-SW_IN-daystats",
+                                            "src_logger_name": "timestamp_alignment-2012-SW_IN-daystats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2012.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1414,15 +1414,15 @@
                                                 "day_rad": 0.0
                                             }
                                         },
-                                        "timeshift-2012-SW_IN-nightstats": {
+                                        "timestamp_alignment-2012-SW_IN-nightstats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2012-SW_IN-nightstats",
-                                            "src_logger_name": "timeshift-2012-SW_IN-nightstats",
+                                            "qaqc_check": "timestamp_alignment-2012-SW_IN-nightstats",
+                                            "src_logger_name": "timestamp_alignment-2012-SW_IN-nightstats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2012.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1438,26 +1438,26 @@
                                         "result": 0
                                     }
                                 },
-                                "timeshift-2012-PPFD_IN": {
+                                "timestamp_alignment-2012-PPFD_IN": {
                                     "status_code": -1,
-                                    "qaqc_check": "timeshift-2012-PPFD_IN",
-                                    "src_logger_name": "timeshift-2012-PPFD_IN",
+                                    "qaqc_check": "timestamp_alignment-2012-PPFD_IN",
+                                    "src_logger_name": "timestamp_alignment-2012-PPFD_IN",
                                     "n_warning": 1,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/timeshift/US-CRT_timestamp_shift_radiation_2012.png"
+                                        "/timestamp_alignment/US-CRT_timestamp_alignment_2012.png"
                                     ],
                                     "sub_status": {
-                                        "timeshift-2012-PPFD_IN-ccorr": {
+                                        "timestamp_alignment-2012-PPFD_IN-ccorr": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2012-PPFD_IN-ccorr",
-                                            "src_logger_name": "timeshift-2012-PPFD_IN-ccorr",
+                                            "qaqc_check": "timestamp_alignment-2012-PPFD_IN-ccorr",
+                                            "src_logger_name": "timestamp_alignment-2012-PPFD_IN-ccorr",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2012.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1467,15 +1467,15 @@
                                                 "corr": 0.993
                                             }
                                         },
-                                        "timeshift-2012-PPFD_IN-daystats": {
+                                        "timestamp_alignment-2012-PPFD_IN-daystats": {
                                             "status_code": -1,
-                                            "qaqc_check": "timeshift-2012-PPFD_IN-daystats",
-                                            "src_logger_name": "timeshift-2012-PPFD_IN-daystats",
+                                            "qaqc_check": "timestamp_alignment-2012-PPFD_IN-daystats",
+                                            "src_logger_name": "timestamp_alignment-2012-PPFD_IN-daystats",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Percent of daytime timestamps exceeding SW_IN_POT 0.192%",
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2012.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1484,15 +1484,15 @@
                                                 "day_rad": 0.192
                                             }
                                         },
-                                        "timeshift-2012-PPFD_IN-nightstats": {
+                                        "timestamp_alignment-2012-PPFD_IN-nightstats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2012-PPFD_IN-nightstats",
-                                            "src_logger_name": "timeshift-2012-PPFD_IN-nightstats",
+                                            "qaqc_check": "timestamp_alignment-2012-PPFD_IN-nightstats",
+                                            "src_logger_name": "timestamp_alignment-2012-PPFD_IN-nightstats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2012.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1515,35 +1515,35 @@
                         },
                         {
                             "status_code": 0,
-                            "qaqc_check": "timeshift-2013",
-                            "src_logger_name": "timeshift-2013",
+                            "qaqc_check": "timestamp_alignment-2013",
+                            "src_logger_name": "timestamp_alignment-2013",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
                             "plot_paths": [
-                                "/timeshift/US-CRT_timestamp_shift_radiation_2013.png"
+                                "/timestamp_alignment/US-CRT_timestamp_alignment_2013.png"
                             ],
                             "sub_status": {
-                                "timeshift-2013-SW_IN": {
+                                "timestamp_alignment-2013-SW_IN": {
                                     "status_code": 0,
-                                    "qaqc_check": "timeshift-2013-SW_IN",
-                                    "src_logger_name": "timeshift-2013-SW_IN",
+                                    "qaqc_check": "timestamp_alignment-2013-SW_IN",
+                                    "src_logger_name": "timestamp_alignment-2013-SW_IN",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/timeshift/US-CRT_timestamp_shift_radiation_2013.png"
+                                        "/timestamp_alignment/US-CRT_timestamp_alignment_2013.png"
                                     ],
                                     "sub_status": {
-                                        "timeshift-2013-SW_IN-ccorr": {
+                                        "timestamp_alignment-2013-SW_IN-ccorr": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2013-SW_IN-ccorr",
-                                            "src_logger_name": "timeshift-2013-SW_IN-ccorr",
+                                            "qaqc_check": "timestamp_alignment-2013-SW_IN-ccorr",
+                                            "src_logger_name": "timestamp_alignment-2013-SW_IN-ccorr",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2013.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2013.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1553,15 +1553,15 @@
                                                 "corr": 0.995
                                             }
                                         },
-                                        "timeshift-2013-SW_IN-daystats": {
+                                        "timestamp_alignment-2013-SW_IN-daystats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2013-SW_IN-daystats",
-                                            "src_logger_name": "timeshift-2013-SW_IN-daystats",
+                                            "qaqc_check": "timestamp_alignment-2013-SW_IN-daystats",
+                                            "src_logger_name": "timestamp_alignment-2013-SW_IN-daystats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2013.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2013.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1570,15 +1570,15 @@
                                                 "day_rad": 0.0
                                             }
                                         },
-                                        "timeshift-2013-SW_IN-nightstats": {
+                                        "timestamp_alignment-2013-SW_IN-nightstats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2013-SW_IN-nightstats",
-                                            "src_logger_name": "timeshift-2013-SW_IN-nightstats",
+                                            "qaqc_check": "timestamp_alignment-2013-SW_IN-nightstats",
+                                            "src_logger_name": "timestamp_alignment-2013-SW_IN-nightstats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2013.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2013.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1594,26 +1594,26 @@
                                         "result": 0
                                     }
                                 },
-                                "timeshift-2013-PPFD_IN": {
+                                "timestamp_alignment-2013-PPFD_IN": {
                                     "status_code": 0,
-                                    "qaqc_check": "timeshift-2013-PPFD_IN",
-                                    "src_logger_name": "timeshift-2013-PPFD_IN",
+                                    "qaqc_check": "timestamp_alignment-2013-PPFD_IN",
+                                    "src_logger_name": "timestamp_alignment-2013-PPFD_IN",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/timeshift/US-CRT_timestamp_shift_radiation_2013.png"
+                                        "/timestamp_alignment/US-CRT_timestamp_alignment_2013.png"
                                     ],
                                     "sub_status": {
-                                        "timeshift-2013-PPFD_IN-ccorr": {
+                                        "timestamp_alignment-2013-PPFD_IN-ccorr": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2013-PPFD_IN-ccorr",
-                                            "src_logger_name": "timeshift-2013-PPFD_IN-ccorr",
+                                            "qaqc_check": "timestamp_alignment-2013-PPFD_IN-ccorr",
+                                            "src_logger_name": "timestamp_alignment-2013-PPFD_IN-ccorr",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2013.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2013.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1623,15 +1623,15 @@
                                                 "corr": 0.992
                                             }
                                         },
-                                        "timeshift-2013-PPFD_IN-daystats": {
+                                        "timestamp_alignment-2013-PPFD_IN-daystats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2013-PPFD_IN-daystats",
-                                            "src_logger_name": "timeshift-2013-PPFD_IN-daystats",
+                                            "qaqc_check": "timestamp_alignment-2013-PPFD_IN-daystats",
+                                            "src_logger_name": "timestamp_alignment-2013-PPFD_IN-daystats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2013.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2013.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1640,15 +1640,15 @@
                                                 "day_rad": 0.0
                                             }
                                         },
-                                        "timeshift-2013-PPFD_IN-nightstats": {
+                                        "timestamp_alignment-2013-PPFD_IN-nightstats": {
                                             "status_code": 0,
-                                            "qaqc_check": "timeshift-2013-PPFD_IN-nightstats",
-                                            "src_logger_name": "timeshift-2013-PPFD_IN-nightstats",
+                                            "qaqc_check": "timestamp_alignment-2013-PPFD_IN-nightstats",
+                                            "src_logger_name": "timestamp_alignment-2013-PPFD_IN-nightstats",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": null,
                                             "plot_paths": [
-                                                "/timeshift/US-CRT_timestamp_shift_radiation_2013.png"
+                                                "/timestamp_alignment/US-CRT_timestamp_alignment_2013.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",

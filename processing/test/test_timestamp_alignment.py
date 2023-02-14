@@ -11,7 +11,7 @@ from fp_vars import FPVariables
 from logger import Logger
 from status import Status, StatusCode, StatusGenerator
 from sw_in_pot_gen import SW_IN_POT_Generator
-from timeshift import TimeShift
+from timestamp_alignment import TimestampAlignment
 from typing import Tuple
 
 
@@ -20,7 +20,8 @@ __email__ = 'joshgeden10@gmail.com'
 
 # Relative path to json file with test inputs & expected values
 json_file_path = os.path.join(
-    '.', 'test', 'testdata', 'timeshift', 'test_timeshift.json')
+    '.', 'test', 'testdata', 'timestamp_alignment',
+    'test_timestamp_alignment.json')
 
 # Map used to index the Status._status field
 # See status.py for how the Status._status field is created & indexed
@@ -57,7 +58,7 @@ def test_add_result_summary_stat(monkeypatch):
 
     monkeypatch.setattr(FPVariables, '__init__',
                         mock_FPVariables_init)
-    ts = TimeShift()
+    ts = TimestampAlignment()
 
     # All good
     year_status, var_status = create_test_stats(
@@ -127,7 +128,7 @@ def create_test_stats(corr_code, day_code, night_code):
     """ Builds nested Status objects for use in
         test_add_result_summary_stat """
 
-    qaqc_check = 'timeshift-2011-SW_IN-ccorr'
+    qaqc_check = 'timestamp_alignment-2011-SW_IN-ccorr'
     corr_status = Status(
         status_code=corr_code,
         qaqc_check=qaqc_check,
@@ -136,7 +137,7 @@ def create_test_stats(corr_code, day_code, night_code):
         n_error=1 if corr_code == StatusCode.ERROR else 0
     )
 
-    qaqc_check = 'timeshift-2011-SW_IN-daystats'
+    qaqc_check = 'timestamp_alignment-2011-SW_IN-daystats'
     day_status = Status(
         status_code=day_code,
         qaqc_check=qaqc_check,
@@ -145,7 +146,7 @@ def create_test_stats(corr_code, day_code, night_code):
         n_error=1 if day_code == StatusCode.ERROR else 0
     )
 
-    qaqc_check = 'timeshift-2011-SW_IN-nightstats'
+    qaqc_check = 'timestamp_alignment-2011-SW_IN-nightstats'
     night_status = Status(
         status_code=night_code,
         qaqc_check=qaqc_check,
@@ -154,7 +155,7 @@ def create_test_stats(corr_code, day_code, night_code):
         n_error=1 if night_code == StatusCode.ERROR else 0
     )
 
-    qaqc_check = 'timeshift-2011-SW_IN'
+    qaqc_check = 'timestamp_alignment-2011-SW_IN'
     log_obj = Logger().getLogger(qaqc_check)
     var_status = StatusGenerator().composite_status_generator(
         logger=log_obj, qaqc_check=qaqc_check,
@@ -165,7 +166,7 @@ def create_test_stats(corr_code, day_code, night_code):
         }
     )
 
-    qaqc_check = 'timeshift-2011'
+    qaqc_check = 'timestamp_alignment-2011'
     log_obj = Logger().getLogger(qaqc_check)
     year_status = StatusGenerator().composite_status_generator(
         logger=log_obj, qaqc_check=qaqc_check,
@@ -183,7 +184,8 @@ def parse_json(json_file_path: str) -> Tuple[str, list, list]:
     with open(json_file_path) as f:
         data = json.load(f)
 
-    # Obtains the arguments that are required to call test_timeshift()
+    # Obtains the arguments that are required to call
+    #    test_timestamp_alignment()
     input_vars = data['input_variables']
 
     vars = []  # Holds the argument values for each test id
@@ -209,7 +211,7 @@ input_vars, vars, ids = parse_json(json_file_path)
 
 # Executes this test function for each test id assigned above
 @pytest.mark.parametrize(input_vars, vars, ids=ids)
-def test_timeshift(
+def test_timestamp_alignment(
         monkeypatch,
         filename: str,
         site_id: str,
@@ -219,7 +221,7 @@ def test_timeshift(
         ts_end: str,
         expected_results: dict) -> None:
 
-    """ Runs the timeshift module using the file specified
+    """ Runs the timestamp_alignment module using the file specified
         and asserts that it calculates the expected results  """
 
     monkeypatch.setattr(FPVariables, '__init__',
@@ -229,10 +231,12 @@ def test_timeshift(
     monkeypatch.setattr(SW_IN_POT_Generator, 'get_site_attrs',
                         mock_SW_IN_POT_Generator_get_site_attrs)
 
-    filepath = os.path.join('.', 'test', 'testdata', 'timeshift', filename)
-    testdata_path = os.path.join('.', 'test', 'testdata', 'timeshift')
+    filepath = os.path.join('.', 'test', 'testdata',
+                            'timestamp_alignment', filename)
+    testdata_path = os.path.join('.', 'test', 'testdata',
+                                 'timestamp_alignment')
     process_type = 'BASE Generation'
-    process_id = 'TestProcess_Timeshift_###'
+    process_id = 'TestProcess_TimestampAlignment_###'
 
     # Get the output_dir based on the config file
     cwd = os.getcwd()
@@ -253,7 +257,7 @@ def test_timeshift(
         'BASE Generation')
     _log.get_log_dir()
 
-    # Create necessary objects and vars to run the timeshift driver
+    # Create necessary objects and vars to run the timestamp_alignment driver
     d = DataReader()
 
     # Attempt to read data from file rather than computing
@@ -305,8 +309,8 @@ def test_timeshift(
     else:
         rem_sw_in_pot_data = None
 
-    # Executes the timeshift driver and store the statuses returned
-    statuses, _ = TimeShift().driver(
+    # Executes the timestamp_alignment driver and store the statuses returned
+    statuses, _ = TimestampAlignment().driver(
         data_reader=d,
         rem_sw_in_data=rem_sw_in_pot_data,
         site_id=site_id,
@@ -329,7 +333,8 @@ def test_timeshift(
             # Ensure log file contains log_text
             assert stream.find(str.encode(log_text)) != -1
 
-    # Ensure the timeshift driver generated the expected # of Status objects
+    # Ensure the timestamp_alignment driver generated
+    #    the expected # of Status objects
     expected_statuses = expected_results['status_list']
     assert len(statuses) == len(expected_statuses)
 
@@ -339,14 +344,14 @@ def test_timeshift(
 
     # Ensure the expected figures were generated
     for filename in expected_results['created_files']:
-        path = os.path.join(output_dir, 'timeshift', filename)
+        path = os.path.join(output_dir, 'timestamp_alignment', filename)
         assert os.path.exists(path)
 
     # Ensure the summary folder generated
     summary_dir = os.path.join(output_dir, 'summary')
     assert os.path.exists(summary_dir)
 
-    csv_file = 'timeshift_summary.csv'
+    csv_file = 'timestamp_alignment_summary.csv'
     csv_file_path = os.path.join(summary_dir, csv_file)
     assert os.path.exists(csv_file_path)
 
