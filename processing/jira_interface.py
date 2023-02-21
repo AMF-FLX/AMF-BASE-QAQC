@@ -365,7 +365,7 @@ class JIRAInterface:
     def update_org_members(self, site_id):
         rs = ReportStatus()
         site_members = rs.get_site_users(site_id)
-        ad_users = 'AD_users',
+        ad_users = 'AD_users'
         other_users = 'other_users'
         org_members = self.get_org_members(site_id)
         new_members = []
