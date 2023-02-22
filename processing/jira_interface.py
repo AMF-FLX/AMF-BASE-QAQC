@@ -338,15 +338,15 @@ class JIRAInterface:
         self.org_dict[site_id] = self.create_org(site_id)
         rs = ReportStatus()
         site_members = rs.get_site_users(site_id)
-        # set the keys for the endpoint
-        ad_users = 'AD_users'
-        other_users = 'other_users'
-        if ad_users in site_members.keys():
+        # get the different types of members based on registration
+        ad_users = site_members.get('AD_users')
+        other_users = site_members.get('other_users')
+        if ad_users:
             self.add_users_to_organization(
-                self.org_dict[site_id], site_members[ad_users])
-        if other_users in site_members.keys():
+                self.org_dict[site_id], ad_users)
+        if other_users:
             non_users = []
-            for name, email in site_members[other_users].items():
+            for name, email in other_users.items():
                 user = self.create_non_ad_user(name, email)
                 if user is not None:
                     non_users.append(user)
@@ -369,37 +369,39 @@ class JIRAInterface:
     def update_org_members(self, site_id):
         rs = ReportStatus()
         site_members = rs.get_site_users(site_id)
-        # set the keys for the endpoint
-        ad_users = 'AD_users'
-        other_users = 'other_users'
+        # get the different types of members based on registration
+        ad_users = site_members.get('AD_users', [])
+        other_users = site_members.get('other_users', {})
         org_members = self.get_org_members(site_id)
+
+        # initialize a few lists
         new_members = []
-        if ad_users in site_members.keys():
-            for m in site_members[ad_users]:
-                if m not in org_members:
-                    new_members.append(m)
-        if other_users in site_members.keys():
-            for n in site_members[other_users]:
-                # site_members[other_users] is a dict with
-                #   key = site_team_member_name, value = site_team_member_email
-                # We use the site_team_member_email to create non-ad users in JIRA
-                #   when we automatically create the user, JIRA converts the email
-                #   to all lowercase for the username
-                other_user_username = site_members[other_users][n]
-                if other_user_username.lower() not in org_members:
-                    user = self.create_non_ad_user(n, other_user_username)
-                    if user is not None:
-                        new_members.append(user)
+        other_users_email = []
+        remove_members = []
+
+        for m in ad_users:
+            if m not in org_members:
+                new_members.append(m)
+        for name, email in other_users.items():
+            # site_members[other_users] is a dict with
+            #   key = site_team_member_name, value = site_team_member_email
+            # We use the site_team_member_email to create non-ad users in JIRA
+            #   when we automatically create the user, JIRA converts the email
+            #   to all lowercase for the username
+            if email.lower() not in org_members:
+                user = self.create_non_ad_user(name, email)
+                if user is not None:
+                    new_members.append(user)
+            # See comment above for why we check lowercase site_team_member_email
+            #   for organization users
+            other_users_email.append(email.lower())
         if len(new_members) > 0:
             self.add_users_to_organization(self.org_dict[site_id], new_members)
-        remove_members = []
-        # See comment above for why we check lowercase site_team_member_email
-        #   for organization users
-        site_members_email = [email.lower() for email
-                              in site_members[other_users].values()]
+        # Check existing organization members. If they are no longer in ad_users
+        #    or other_users (see above for why lowercase emails are used),
+        #    gather the username for removal.
         for m in org_members:
-            if (m not in site_members[ad_users] and
-                    m not in site_members_email):
+            if m not in ad_users and m not in other_users_email:
                 remove_members.append(m)
         if len(remove_members) > 0:
             self.remove_users_from_organization(
