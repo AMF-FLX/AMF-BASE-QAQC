@@ -338,15 +338,19 @@ class JIRAInterface:
         self.org_dict[site_id] = self.create_org(site_id)
         rs = ReportStatus()
         site_members = rs.get_site_users(site_id)
-        self.add_users_to_organization(
-            self.org_dict[site_id], site_members['AD_users'])
-        non_users = []
-        for name in site_members['other_users']:
-            user = self.create_non_ad_user(
-                name, site_members['other_users'][name])
-            if user is not None:
-                non_users.append(user)
-        self.add_users_to_organization(self.org_dict[site_id], non_users)
+        # set the keys for the endpoint
+        ad_users = 'AD_users'
+        other_users = 'other_users'
+        if ad_users in site_members.keys():
+            self.add_users_to_organization(
+                self.org_dict[site_id], site_members[ad_users])
+        if other_users in site_members.keys():
+            non_users = []
+            for name, email in site_members[other_users].items():
+                user = self.create_non_ad_user(name, email)
+                if user is not None:
+                    non_users.append(user)
+            self.add_users_to_organization(self.org_dict[site_id], non_users)
 
     def create_non_ad_user(self, name, email):
         url = f'{self.jira_host}/rest/servicedeskapi/customer'
@@ -365,24 +369,27 @@ class JIRAInterface:
     def update_org_members(self, site_id):
         rs = ReportStatus()
         site_members = rs.get_site_users(site_id)
+        # set the keys for the endpoint
         ad_users = 'AD_users'
         other_users = 'other_users'
         org_members = self.get_org_members(site_id)
         new_members = []
-        for m in site_members[ad_users]:
-            if m not in org_members:
-                new_members.append(m)
-        for n in site_members[other_users]:
-            # site_members[other_users] is a dict with
-            #   key = site_team_member_name, value = site_team_member_email
-            # We use the site_team_member_email to create non-ad users in JIRA
-            #   when we automatically create the user, JIRA converts the email
-            #   to all lowercase for the username
-            other_user_username = site_members[other_users][n]
-            if other_user_username.lower() not in org_members:
-                user = self.create_non_ad_user(n, other_user_username)
-                if user is not None:
-                    new_members.append(user)
+        if ad_users in site_members.keys():
+            for m in site_members[ad_users]:
+                if m not in org_members:
+                    new_members.append(m)
+        if other_users in site_members.keys():
+            for n in site_members[other_users]:
+                # site_members[other_users] is a dict with
+                #   key = site_team_member_name, value = site_team_member_email
+                # We use the site_team_member_email to create non-ad users in JIRA
+                #   when we automatically create the user, JIRA converts the email
+                #   to all lowercase for the username
+                other_user_username = site_members[other_users][n]
+                if other_user_username.lower() not in org_members:
+                    user = self.create_non_ad_user(n, other_user_username)
+                    if user is not None:
+                        new_members.append(user)
         if len(new_members) > 0:
             self.add_users_to_organization(self.org_dict[site_id], new_members)
         remove_members = []
