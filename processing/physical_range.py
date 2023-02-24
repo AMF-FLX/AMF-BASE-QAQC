@@ -40,14 +40,14 @@ class Var:
         self.error_min = self.min_lim - self.error
 
 
-class Thresholds:
+class PhysicalRange:
     def __init__(
             self, site_id, process_id, plot_dir=None,
             ftp_plot_dir=None, margin=0.05):
         self.margin = margin
         self.site_id = site_id
         self.process_id = process_id
-        self.fig_name_fmt = '{s}-{p}-PhysLimTS-{y}-{year}.png'
+        self.fig_name_fmt = '{s}-{p}-physical_range-{y}-{year}.png'
         self.plot_config = PlotConfig()
         self.ts_util = TimestampUtil()
         config = ConfigParser()
@@ -74,15 +74,15 @@ class Thresholds:
             else:
                 self._range_fname = None
                 _log.critical('Cannot find web services from config.')
-            if config.has_section('PHYSICAL_LIMITS'):
+            if config.has_section('PHYSICAL_RANGE'):
                 self.soft_flag_threshold = config.getfloat(
-                    'PHYSICAL_LIMITS', 'soft_flag_threshold')
+                    'PHYSICAL_RANGE', 'soft_flag_threshold')
                 self.hard_flag_threshold = config.getfloat(
-                    'PHYSICAL_LIMITS', 'hard_flag_threshold')
+                    'PHYSICAL_RANGE', 'hard_flag_threshold')
             else:
                 self.soft_flag_threshold = 0.01
                 self.hard_flag_threshold = 0.001
-                _log.info('Cannot find phyiscal limit threshold values from '
+                _log.info('Cannot find physical range threshold values from '
                           'config. Using default values of '
                           f'soft_flag_threshold = {self.soft_flag_threshold} '
                           'and hard_flag_threshold = '
@@ -136,7 +136,7 @@ class Thresholds:
         # list to hold all the variable status objects
         status_objects = []  # set first element to dummy that is replaced
         for variable in variables[2:]:
-            var_log = Logger().getLogger(f'threshold-{variable}')
+            var_log = Logger().getLogger(f'physical_range-{variable}')
             var_log.resetStats()
             var_sub_dict = {}  # dictionary to hold annual substatus objects
             all_plots = []
@@ -151,14 +151,14 @@ class Thresholds:
                 CHECK FOR EXCEPTIONAL CASES
                 """
 
-                yr_log = Logger().getLogger(f'threshold-{year}-{var_obj.name}')
+                yr_log = Logger().getLogger(f'physical_range-{year}-{var_obj.name}')
                 yr_log.resetStats()
 
                 percent_max = 1 + var_obj.margin
                 percent_min = 0 - var_obj.margin
                 if annual_data.all() is np.ma.masked:
                     status_msg = ('All values missing; '
-                                  'physical limits not tested.')
+                                  'physical range not tested.')
                     yr_log.info(status_msg)
                     var_sub_dict[yr_log.getName()] = \
                         stat_gen.status_generator(
@@ -170,7 +170,7 @@ class Thresholds:
 
                     # Create is_ratio status object
                     check_log = Logger().getLogger(
-                        f'threshold-{year}-{var_obj.name}-unit_check')
+                        f'physical_range-{year}-{var_obj.name}-unit_check')
                     check_log.resetStats()
                     plot_path = self.plot(var_obj, year)
                     status_msg = (f'{var_obj.name}\'s units look like a '
@@ -184,7 +184,7 @@ class Thresholds:
 
                     # Create outlier status object
                     check_log = Logger().getLogger(
-                        f'threshold-{year}-{var_obj.name}-outlier_check')
+                        f'physical_range-{year}-{var_obj.name}-outlier_check')
                     status_msg = 'Outlier check not performed'
                     check_log.info(status_msg)
 
@@ -214,7 +214,7 @@ class Thresholds:
                     # Create is_ratio status if unit is %
                     if var_obj.units == '%':
                         check_log = Logger().getLogger(
-                            f'threshold-{year}-{var_obj.name}-unit_check')
+                            f'physical_range-{year}-{var_obj.name}-unit_check')
                         ratio_stat = StatusGenerator().status_generator(
                             logger=check_log, qaqc_check=check_log.getName())
                         ratio_stat.add_summary_stat('is_ratio', False)
@@ -236,7 +236,7 @@ class Thresholds:
 
                     # Create outlier status
                     check_log = Logger().getLogger(
-                        f'threshold-{year}-{var_obj.name}-outlier_check')
+                        f'physical_range-{year}-{var_obj.name}-outlier_check')
                     outlier_stat, plot_paths = self.get_status(
                         var_obj=var_obj, year=year, n_warnings=n_warning,
                         n_errors=n_error, log_obj=check_log,
@@ -496,7 +496,7 @@ class Thresholds:
             'is_ratio': 'Is ratio',
             'figure': 'Figure link'
         }
-        filename = os.path.join(summary_dir, 'thresholds_ratio_summary.csv')
+        filename = os.path.join(summary_dir, 'physical_range_percent_ratio_summary.csv')
         table.write_to_csv(filename, csv_headers)
 
         csv_headers = {
@@ -507,5 +507,5 @@ class Thresholds:
             'soft_flag': 'Soft flag (%)',
             'figure': 'Figure link'
         }
-        filename = os.path.join(summary_dir, 'thresholds_limit_summary.csv')
+        filename = os.path.join(summary_dir, 'physical_range_summary.csv')
         table.write_to_csv(filename, csv_headers)

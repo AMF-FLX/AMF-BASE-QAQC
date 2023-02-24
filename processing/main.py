@@ -9,7 +9,7 @@ from data_reader import DataReader
 from file_name_verifier import FileNameVerifier
 from gap_fill import GapFilled
 # from shadows import Shadows
-from thresholds import Thresholds
+from physical_range import PhysicalRange
 from multivariate_intercomparison import MultivariateIntercomparison
 from sw_in_pot_gen import SW_IN_POT_Generator
 # from SSITC_fetch_filter import SSITC_FF_check
@@ -179,10 +179,10 @@ def main():
 
         # To Do: split off variables with no values
 
-        # Threshold test
-        qaqc_check = 'Physical Limits'
+        # Physical Range test
+        qaqc_check = 'Physical Range'
         _log.info('Running ' + qaqc_check)
-        check_status, test_plot_dir = Thresholds(
+        check_status, test_plot_dir = PhysicalRange(
             site_id=site_id,
             process_id=process_id,
             plot_dir=plot_dir,

@@ -11,7 +11,7 @@ from fp_vars import FPVariables
 from logger import Logger
 from plot_config import PlotConfig
 from status import Status, StatusCode, StatusGenerator
-from thresholds import Thresholds, Var
+from physical_range import PhysicalRange, Var
 from utils import VarUtil, WSUtil
 
 
@@ -21,7 +21,7 @@ __email__ = 'joshgeden10@gmail.com'
 
 # Relative path to json file with test inputs & expected values
 json_file_path = os.path.join(
-     'test', 'testdata', 'thresholds', 'test_thresholds.json')
+     'test', 'testdata', 'physical_range', 'test_physical_range.json')
 
 # Stash the get_content function in case we need to regenerate the limits.json
 # file
@@ -29,7 +29,7 @@ _log = Logger().getLogger(__name__)
 _get_content = WSUtil(_log).get_content
 
 
-def mock_thresholds_init(self):
+def mock_physical_range_init(self):
     self._range_link = ''
     self.margin = 0.05
     self.var_util = VarUtil()
@@ -37,7 +37,7 @@ def mock_thresholds_init(self):
     self.hard_flag_threshold = 0.001
 
 
-def mock_thresholds_plot(self, var_obj, year):
+def mock_physical_range_plot(self, var_obj, year):
     try:
         return self.fig_name_fmt.format(
                 y=var_obj.name, year=year, s=self.site_id, p=self.process_id)
@@ -123,12 +123,12 @@ def get_test_limit_dict():
 
 
 def generate_data_file():
-    outfile = os.path.join('test', 'testdata', 'thresholds',
+    outfile = os.path.join('test', 'testdata', 'physical_range',
                            'test_data_for_plot.npy')
 
-    infile = os.path.join('test', 'testdata', 'thresholds',
+    infile = os.path.join('test', 'testdata', 'physical_range',
                           'US-Rws_HH_201601010000_201710010000-'
-                          'TestDataThresholds0000005.csv')
+                          'TestDataPhysicalRange0000005.csv')
 
     d = DataReader()
 
@@ -144,7 +144,8 @@ def mock_get_content(dummy_self, dummy_url):
     """ Returns correctly formmatted var dict that would come from web service
     """
 
-    testfile = os.path.join('test', 'testdata', 'thresholds', 'limits.json')
+    testfile = os.path.join(
+        'test', 'testdata', 'physical_range', 'limits.json')
 
     # Try to read cached limits
     if os.path.exists(testfile):
@@ -187,7 +188,7 @@ def test_var_init(monkeypatch, variable, expected_error):
     monkeypatch.setattr(DataReader, '__init__', mock_datareader_init)
     monkeypatch.setattr(FPVariables, '__init__',
                         mock_FPVariables_init)
-    monkeypatch.setattr(Thresholds, '__init__', mock_thresholds_init)
+    monkeypatch.setattr(PhysicalRange, '__init__', mock_physical_range_init)
 
     d = DataReader()
     base_name = d.get_base_header(variable)
@@ -207,10 +208,10 @@ def test_var_init(monkeypatch, variable, expected_error):
 def test_set_limit_dict(monkeypatch):
     """ Tests that Thresholds can generate a correctly formatted limit_dict """
     monkeypatch.setattr(FPVariables, '__init__', mock_FPVariables_init)
-    monkeypatch.setattr(Thresholds, '__init__', mock_thresholds_init)
+    monkeypatch.setattr(PhysicalRange, '__init__', mock_physical_range_init)
     monkeypatch.setattr(WSUtil, 'get_content', mock_get_content)
 
-    limit_dict = Thresholds().set_limit_dict()
+    limit_dict = PhysicalRange().set_limit_dict()
     expected_limit_dict = get_test_limit_dict()
     for key in expected_limit_dict:
         assert limit_dict[key] == expected_limit_dict[key]
@@ -219,7 +220,7 @@ def test_set_limit_dict(monkeypatch):
 def test_get_start_end_idx(monkeypatch):
     """ Tests that Thresholds can get start and end idx from an np.array """
     monkeypatch.setattr(FPVariables, '__init__', mock_FPVariables_init)
-    monkeypatch.setattr(Thresholds, '__init__', mock_thresholds_init)
+    monkeypatch.setattr(PhysicalRange, '__init__', mock_physical_range_init)
 
     expected_result = {
         '2011': {
@@ -252,7 +253,7 @@ def test_get_start_end_idx(monkeypatch):
         dtype=[('TIMESTAMP_START', 'S25'), ('TIMESTAMP_END', 'S25')]
     )
 
-    actual_result = Thresholds()._get_start_end_idx(data)
+    actual_result = PhysicalRange()._get_start_end_idx(data)
     assert actual_result == expected_result
 
 
@@ -260,7 +261,7 @@ def test_outliers(monkeypatch):
     """ Ensure Thresholds can correctly identify errors/warnings outliers """
 
     monkeypatch.setattr(FPVariables, '__init__', mock_FPVariables_init)
-    monkeypatch.setattr(Thresholds, '__init__', mock_thresholds_init)
+    monkeypatch.setattr(PhysicalRange, '__init__', mock_physical_range_init)
     monkeypatch.setattr(Var, '__init__', mock_Var_init)
 
     var_obj = Var()
@@ -272,7 +273,7 @@ def test_outliers(monkeypatch):
 
     x_data = y_data = [x for x in range(11)]
 
-    out_error, out_warning = Thresholds().identify_outliers(
+    out_error, out_warning = PhysicalRange().identify_outliers(
         x_data, y_data, var_obj)
 
     assert out_error[0] == out_error[1] == [0, 1, 9, 10]
@@ -337,8 +338,8 @@ def test_get_status(monkeypatch, var_name, n_warnings, n_errors,
     object """
 
     monkeypatch.setattr(FPVariables, '__init__', mock_FPVariables_init)
-    monkeypatch.setattr(Thresholds, '__init__', mock_thresholds_init)
-    monkeypatch.setattr(Thresholds, 'plot', mock_thresholds_plot)
+    monkeypatch.setattr(PhysicalRange, '__init__', mock_physical_range_init)
+    monkeypatch.setattr(PhysicalRange, 'plot', mock_physical_range_plot)
 
     limit_dict = get_test_limit_dict()
     var_obj = Var(var_name, var_name, limit_dict)
@@ -358,7 +359,7 @@ def test_get_status(monkeypatch, var_name, n_warnings, n_errors,
         def error(self, msg):
             self.error_count += 1
 
-    status, _ = Thresholds().get_status(
+    status, _ = PhysicalRange().get_status(
         var_obj,
         year='2011',
         n_warnings=n_warnings,
@@ -379,7 +380,7 @@ def test_plot():
     ftp_plot_dir = p.get_ftp_plot_dir_for_run(
         site_id, process_id, site_id)
 
-    t = Thresholds(
+    t = PhysicalRange(
         site_id=site_id,
         process_id=process_id,
         plot_dir=plot_dir,
@@ -387,7 +388,7 @@ def test_plot():
     )
 
     data_path = os.path.join(
-        'test', 'testdata', 'thresholds', 'test_data_for_plot.npy')
+        'test', 'testdata', 'physical_range', 'test_data_for_plot.npy')
 
     if not os.path.exists(data_path):
         generate_data_file()
@@ -411,11 +412,11 @@ def test_plot():
 
     plot_path = os.path.join(
         output_dir, 'output', 'physical_range',
-        'US-Rws-TestProcess_###-PhysLimTS-RH-2016.png'
+        'US-Rws-TestProcess_###-physical_range-RH-2016.png'
     )
 
     test_plot_path = os.path.join(
-        cwd, 'test', 'testdata', 'thresholds', 'test_plot_RH_2016.png'
+        cwd, 'test', 'testdata', 'physical_range', 'test_plot_RH_2016.png'
     )
 
     with open(plot_path, 'rb') as f:
@@ -429,11 +430,11 @@ def test_add_result_summary_stat(monkeypatch):
     """ Tests the result code generated for summary_stats """
 
     monkeypatch.setattr(FPVariables, '__init__', mock_FPVariables_init)
-    monkeypatch.setattr(Thresholds, '__init__', mock_thresholds_init)
+    monkeypatch.setattr(PhysicalRange, '__init__', mock_physical_range_init)
     monkeypatch.setattr(DataReader, '__init__', mock_datareader_init)
     monkeypatch.setattr(DataReader, 'get_base_header', mock_get_base_header)
 
-    t = Thresholds()
+    t = PhysicalRange()
     d = DataReader()
 
     # All good
@@ -507,7 +508,7 @@ def create_test_stats(var, is_ratio_code, soft_flag_code, hard_flag_code):
     """ Builds nested Status objects for use in
         test_add_result_summary_stat """
 
-    qaqc_check = f'threshold-2011-{var}-unit_check'
+    qaqc_check = f'physical_range-2011-{var}-unit_check'
     unit_status = Status(
         status_code=is_ratio_code,
         qaqc_check=qaqc_check,
@@ -515,7 +516,7 @@ def create_test_stats(var, is_ratio_code, soft_flag_code, hard_flag_code):
         n_error=1 if is_ratio_code == StatusCode.ERROR else 0
     )
 
-    qaqc_check = f'threshold-2011-{var}-outlier_check'
+    qaqc_check = f'physical_range-2011-{var}-outlier_check'
     outlier_status = Status(
         status_code=min(soft_flag_code, hard_flag_code),
         qaqc_check=qaqc_check,
@@ -532,13 +533,13 @@ def create_test_stats(var, is_ratio_code, soft_flag_code, hard_flag_code):
     if unit_status.get_status_code() == StatusCode.OK:
         statuses[outlier_status.get_qaqc_check()] = outlier_status
 
-    qaqc_check = f'threshold-2015-{var}'
+    qaqc_check = f'physical_range-2015-{var}'
     year_status = StatusGenerator().composite_status_generator(
         logger=Logger().getLogger(qaqc_check), qaqc_check=qaqc_check,
         statuses=statuses
     )
 
-    qaqc_check = f'threshold-{var}'
+    qaqc_check = f'physical_range-{var}'
     var_status = StatusGenerator().composite_status_generator(
         logger=Logger().getLogger(qaqc_check), qaqc_check=qaqc_check,
         statuses={
@@ -585,10 +586,10 @@ input_vars, vars, ids = parse_json(json_file_path)
 def test_e2e(monkeypatch, filename, site_id, expected_results):
     monkeypatch.setattr(FPVariables, '__init__',
                         mock_FPVariables_init)
-    monkeypatch.setattr(Thresholds, 'plot', mock_thresholds_plot)
+    monkeypatch.setattr(PhysicalRange, 'plot', mock_physical_range_plot)
     monkeypatch.setattr(WSUtil, 'get_content', mock_get_content)
 
-    process_id = 'TestThresholdsProcess'
+    process_id = 'TestPhysicalRangeProcess'
 
     # Get the output_dir based on the config file
     cwd = os.getcwd()
@@ -616,9 +617,10 @@ def test_e2e(monkeypatch, filename, site_id, expected_results):
     ftp_plot_dir = p.get_ftp_plot_dir_for_run(
         site_id, process_id, site_id)
 
-    testdata_path = os.path.join('.', 'test', 'testdata', 'thresholds')
+    testdata_path = os.path.join('.', 'test', 'testdata', 'physical_range')
     pickle_path = os.path.join(testdata_path, filename.replace('.csv', '.npy'))
-    filepath = os.path.join('.', 'test', 'testdata', 'thresholds', filename)
+    filepath = os.path.join(
+        '.', 'test', 'testdata', 'physical_range', filename)
 
     # Create necessary objects and vars to run the timeshift driver
     d = DataReader()
@@ -647,7 +649,7 @@ def test_e2e(monkeypatch, filename, site_id, expected_results):
     _log_test.resetStats()
     d._check_data_header(d.header_as_is, _log_test)
 
-    status_list, _ = Thresholds(
+    status_list, _ = PhysicalRange(
         site_id=site_id,
         process_id=process_id,
         plot_dir=plot_dir,
@@ -680,16 +682,16 @@ def test_e2e(monkeypatch, filename, site_id, expected_results):
     summary_dir = os.path.join(plot_dir, 'summary')
     assert os.path.exists(summary_dir)
 
-    for summary_type in ['limit', 'ratio']:
+    for summary_type in ['', 'percent_ratio_']:
         # Ensure the limit/ratio summary file generated
-        csv_file = f'thresholds_{summary_type}_summary.csv'
+        csv_file = f'physical_range_{summary_type}summary.csv'
         csv_file_path = os.path.join(summary_dir, csv_file)
         assert os.path.exists(csv_file_path)
 
         # Loop through the expected lines and ensure they exist in the csv file
         with open(csv_file_path) as f:
             stream = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
-            for csv_line in expected_results[f'{summary_type}_csv_summary']:
+            for csv_line in expected_results[f'{summary_type}csv_summary']:
                 # Ensure log file contains log_text
                 assert stream.find(str.encode(csv_line)) != -1
 
