@@ -5,9 +5,9 @@ import pytest
 from data_reader import DataReader
 from fp_vars import FPVariables
 from logger import Logger
-from multivariate_intercomparison import MultivariateIntercomparison
+from multivariate_comparison import MultivariateComparison
 
-original_composite_plotter = MultivariateIntercomparison.composite_plotter
+original_composite_plotter = MultivariateComparison.composite_plotter
 
 
 def do_nothing(*args, **kwargs):
@@ -55,27 +55,27 @@ def generate_data_file(filepath):
 @pytest.fixture
 def mc(monkeypatch):
     monkeypatch.setattr(FPVariables, '__init__', mock_FPVariables_init)
-    return MultivariateIntercomparison('', '')
+    return MultivariateComparison('', '')
 
 
 def test_plots(mc, monkeypatch):
     monkeypatch.setattr(
-        MultivariateIntercomparison, 'ws_ustar_cross_check', do_nothing)
+        MultivariateComparison, 'ws_ustar_cross_check', do_nothing)
     monkeypatch.setattr(
-        MultivariateIntercomparison, 'ppfd_in_sw_in_cross_check', do_nothing)
+        MultivariateComparison, 'ppfd_in_sw_in_cross_check', do_nothing)
     monkeypatch.setattr(
-        MultivariateIntercomparison, 'ta_cross_level_check', do_nothing)
+        MultivariateComparison, 'ta_cross_level_check', do_nothing)
     monkeypatch.setattr(
-        MultivariateIntercomparison, 'ta_cross_replicate_check', do_nothing)
+        MultivariateComparison, 'ta_cross_replicate_check', do_nothing)
     monkeypatch.setattr(
-        MultivariateIntercomparison, 'write_summary', do_nothing)
+        MultivariateComparison, 'write_summary', do_nothing)
 
-    monkeypatch.setattr(MultivariateIntercomparison, 'composite_plotter',
+    monkeypatch.setattr(MultivariateComparison, 'composite_plotter',
                         mock_composite_plotter)
 
     mc.can_plot = True
     mc.plot_dir = os.path.join('output', 'US-CRT', 'TestProcess_###', 'output',
-                               'multivariate_intercomparison')
+                               'multivariate_comparison')
     if not os.path.exists(mc.plot_dir):
         os.makedirs(mc.plot_dir)
     mc.base_plot_dir = mc.plot_dir
@@ -83,9 +83,10 @@ def test_plots(mc, monkeypatch):
     mc.site_id = 'US-CRT'
     mc.process_id = 'TestProcess_###'
 
-    filename = 'US-CRT_HH_201101010000_201401010000_TestMultivarite000002.csv'
+    filename = ('US-CRT_HH_201101010000_201401010000_'
+                'TestMultivariateComparison000002.csv')
     testdata_path = os.path.join(
-        'test', 'testdata', 'multivariate', 'input_files')
+        'test', 'testdata', 'multivariate_comparison', 'input_files')
 
     filepath = os.path.join(testdata_path, filename)
     pickle_path = os.path.join(testdata_path, filename.replace('.csv', '.npy'))
@@ -103,11 +104,12 @@ def test_plots(mc, monkeypatch):
 
     plot_path = os.path.join(
         mc.plot_dir,
-        'US-CRT-TestProcess_###-MultivarIntercomp-TA-T_SONIC-2011.png')
+        'US-CRT-TestProcess_###-multivariate_comparison-TA-T_SONIC-2011.png')
     assert os.path.exists(plot_path)
 
     test_plot_path = os.path.join(
-        'test', 'testdata', 'multivariate', 'test_plot_analysis.png')
+        'test', 'testdata', 'multivariate_comparison',
+        'test_plot_analysis.png')
     assert os.path.exists(test_plot_path)
 
     with open(plot_path, 'rb') as f:

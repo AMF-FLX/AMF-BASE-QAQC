@@ -10,7 +10,7 @@ from file_name_verifier import FileNameVerifier
 from gap_fill import GapFilled
 # from shadows import Shadows
 from physical_range import PhysicalRange
-from multivariate_intercomparison import MultivariateIntercomparison
+from multivariate_comparison import MultivariateComparison
 from sw_in_pot_gen import SW_IN_POT_Generator
 # from SSITC_fetch_filter import SSITC_FF_check
 from status import StatusCode
@@ -195,10 +195,10 @@ def main():
         report_statuses[qaqc_check] = test_report
         process_status_codes.append(process_status_code)
 
-        # Multivariate intercomparison
-        qaqc_check = 'Pairwise Variable Comparison'
+        # Multivariate Comparison
+        qaqc_check = 'Multivariate Comparison'
         _log.info('Running ' + qaqc_check)
-        check_status, test_plot_dir = MultivariateIntercomparison(
+        check_status, test_plot_dir = MultivariateComparison(
             site_id, process_id, plot_dir, ftp_plot_dir).driver(d)
         status_list[qaqc_check] = check_status
         test_report, process_status_code = select_report(

@@ -9,21 +9,21 @@
             "id": "missing_PPFD_IN",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestMultivarite000003.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestMultivariateComparison000003.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] multivariate-TA:T_SONIC-cross_check - TA and T_SONIC variables are not present. TA-T_SONIC comparison not performed.",
-                        "[INFO] multivariate-WC:USTAR-cross_check - USTAR and WS variables are not present. USTAR-WS comparison not performed.",
-                        "[INFO] multivariate-all_data-PPFD_IN:SW_IN - All PPFD_IN values are missing for all_data (timestamps: 201101010000 to 201201010000).",
-                        "[INFO] multivariate-all_data-PPFD_IN:SW_IN - Skipping individual year analysis",
-                        "[INFO] multivariate-TA-cross_level - No TA variables are present. Cross level variable comparison not performed.",
-                        "[INFO] multivariate-TA-cross_replicate - No TA variables are present. Cross replicate variable comparison not performed."
+                        "[INFO] multivariate_comparison-TA:T_SONIC-cross_check - TA and T_SONIC variables are not present. TA-T_SONIC comparison not performed.",
+                        "[INFO] multivariate_comparison-WC:USTAR-cross_check - USTAR and WS variables are not present. USTAR-WS comparison not performed.",
+                        "[INFO] multivariate_comparison-all_data-PPFD_IN:SW_IN - All PPFD_IN values are missing for all_data (timestamps: 201101010000 to 201201010000).",
+                        "[INFO] multivariate_comparison-all_data-PPFD_IN:SW_IN - Skipping individual year analysis",
+                        "[INFO] multivariate_comparison-TA-cross_level - No TA variables are present. Cross level variable comparison not performed.",
+                        "[INFO] multivariate_comparison-TA-cross_replicate - No TA variables are present. Cross replicate variable comparison not performed."
                     ],
                     "status_list": [
                         {
                             "status_code": 0,
-                            "qaqc_check": "multivariate-TA:T_SONIC-cross_check",
-                            "src_logger_name": "multivariate-TA:T_SONIC-cross_check",
+                            "qaqc_check": "multivariate_comparison-TA:T_SONIC-cross_check",
+                            "src_logger_name": "multivariate_comparison-TA:T_SONIC-cross_check",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": "TA and T_SONIC variables are not present. TA-T_SONIC comparison not performed.",
@@ -35,8 +35,8 @@
                         },
                         {
                             "status_code": 0,
-                            "qaqc_check": "multivariate-WC:USTAR-cross_check",
-                            "src_logger_name": "multivariate-WC:USTAR-cross_check",
+                            "qaqc_check": "multivariate_comparison-WC:USTAR-cross_check",
+                            "src_logger_name": "multivariate_comparison-WC:USTAR-cross_check",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": "USTAR and WS variables are not present. USTAR-WS comparison not performed.",
@@ -48,17 +48,17 @@
                         },
                         {
                             "status_code": 0,
-                            "qaqc_check": "multivariate-PPFD_IN:SW_IN",
-                            "src_logger_name": "multivariate-PPFD_IN:SW_IN",
+                            "qaqc_check": "multivariate_comparison-PPFD_IN:SW_IN",
+                            "src_logger_name": "multivariate_comparison-PPFD_IN:SW_IN",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
                             "plot_paths": null,
                             "sub_status": {
-                                "multivariate-all_data-PPFD_IN:SW_IN": {
+                                "multivariate_comparison-all_data-PPFD_IN:SW_IN": {
                                     "status_code": 0,
-                                    "qaqc_check": "multivariate-all_data-PPFD_IN:SW_IN",
-                                    "src_logger_name": "multivariate-all_data-PPFD_IN:SW_IN",
+                                    "qaqc_check": "multivariate_comparison-all_data-PPFD_IN:SW_IN",
+                                    "src_logger_name": "multivariate_comparison-all_data-PPFD_IN:SW_IN",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": "All PPFD_IN values are missing for all_data (timestamps: 201101010000 to 201201010000).",
@@ -81,8 +81,8 @@
                         },
                         {
                             "status_code": 0,
-                            "qaqc_check": "multivariate-TA-cross_level",
-                            "src_logger_name": "multivariate-TA-cross_level",
+                            "qaqc_check": "multivariate_comparison-TA-cross_level",
+                            "src_logger_name": "multivariate_comparison-TA-cross_level",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": "No TA variables are present. Cross level variable comparison not performed.",
@@ -94,8 +94,8 @@
                         },
                         {
                             "status_code": 0,
-                            "qaqc_check": "multivariate-TA-cross_replicate",
-                            "src_logger_name": "multivariate-TA-cross_replicate",
+                            "qaqc_check": "multivariate_comparison-TA-cross_replicate",
+                            "src_logger_name": "multivariate_comparison-TA-cross_replicate",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": "No TA variables are present. Cross replicate variable comparison not performed.",

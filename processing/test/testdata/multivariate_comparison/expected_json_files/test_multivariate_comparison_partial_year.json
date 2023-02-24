@@ -9,38 +9,38 @@
             "id": "partial_year",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201101010000_201101290000_TestMultivarite000009.csv",
+                "filename": "US-CRT_HH_201101010000_201101290000_TestMultivariateComparison000009.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] multivariate-all_data-TA:T_SONIC-outlier_check - 0 / 1344 (0.0%) are outliers",
-                        "[INFO] multivariate-all_data-TA:T_SONIC-r2_check - Calculated R2 is 0.998",
-                        "[INFO] multivariate-2011-TA:T_SONIC-outlier_check - 0 / 1344 (0.0%) are outliers",
-                        "[INFO] multivariate-2011-TA:T_SONIC-r2_check - Calculated R2 is 0.998",
-                        "[INFO] multivariate-all_data-TA:T_SONIC-slope_check - Not enough years with valid r2 values to calculate slope deviation.",
-                        "[INFO] multivariate-all_data-TA:T_SONIC-slope_check - Slope: 0.999; slope deviation: NA - slope for all_data is the slope mean",
-                        "[INFO] multivariate-2011-TA:T_SONIC-slope_check - Slope: 0.999; slope deviation: not calculated - insufficient data.",
-                        "[INFO] multivariate-all_data-WS:USTAR-outlier_check - 0 / 1344 (0.0%) are outliers",
-                        "[INFO] multivariate-all_data-WS:USTAR-r2_check - Calculated R2 is 0.991",
-                        "[INFO] multivariate-2011-WS:USTAR-outlier_check - 0 / 1344 (0.0%) are outliers",
-                        "[INFO] multivariate-2011-WS:USTAR-r2_check - Calculated R2 is 0.991",
-                        "[INFO] multivariate-all_data-WS:USTAR-slope_check - Not enough years with valid r2 values to calculate slope deviation.",
-                        "[INFO] multivariate-all_data-WS:USTAR-slope_check - Slope: 0.199; slope deviation: NA - slope for all_data is the slope mean",
-                        "[INFO] multivariate-2011-WS:USTAR-slope_check - Slope: 0.199; slope deviation: not calculated - insufficient data.",
-                        "[INFO] multivariate-all_data-PPFD_IN:SW_IN-outlier_check - 0 / 1344 (0.0%) are outliers",
-                        "[INFO] multivariate-all_data-PPFD_IN:SW_IN-r2_check - Calculated R2 is 0.996",
-                        "[INFO] multivariate-2011-PPFD_IN:SW_IN-outlier_check - 0 / 1344 (0.0%) are outliers",
-                        "[INFO] multivariate-2011-PPFD_IN:SW_IN-r2_check - Calculated R2 is 0.996",
-                        "[INFO] multivariate-all_data-PPFD_IN:SW_IN-slope_check - Not enough years with valid r2 values to calculate slope deviation.",
-                        "[INFO] multivariate-all_data-PPFD_IN:SW_IN-slope_check - Slope: 0.448; slope deviation: NA - slope for all_data is the slope mean",
-                        "[INFO] multivariate-2011-PPFD_IN:SW_IN-slope_check - Slope: 0.448; slope deviation: not calculated - insufficient data.",
-                        "[INFO] multivariate-TA-cross_level - Multiple TA variables are not present. Cross level variable comparison not performed.",
-                        "[INFO] multivariate-TA-cross_replicate - Multiple TA variables are not present. Cross replicate variable comparison not performed."
+                        "[INFO] multivariate_comparison-all_data-TA:T_SONIC-outlier_check - 0 / 1344 (0.0%) are outliers",
+                        "[INFO] multivariate_comparison-all_data-TA:T_SONIC-r2_check - Calculated R2 is 0.998",
+                        "[INFO] multivariate_comparison-2011-TA:T_SONIC-outlier_check - 0 / 1344 (0.0%) are outliers",
+                        "[INFO] multivariate_comparison-2011-TA:T_SONIC-r2_check - Calculated R2 is 0.998",
+                        "[INFO] multivariate_comparison-all_data-TA:T_SONIC-slope_check - Not enough years with valid r2 values to calculate slope deviation.",
+                        "[INFO] multivariate_comparison-all_data-TA:T_SONIC-slope_check - Slope: 0.999; slope deviation: NA - slope for all_data is the slope mean",
+                        "[INFO] multivariate_comparison-2011-TA:T_SONIC-slope_check - Slope: 0.999; slope deviation: not calculated - insufficient data.",
+                        "[INFO] multivariate_comparison-all_data-WS:USTAR-outlier_check - 0 / 1344 (0.0%) are outliers",
+                        "[INFO] multivariate_comparison-all_data-WS:USTAR-r2_check - Calculated R2 is 0.991",
+                        "[INFO] multivariate_comparison-2011-WS:USTAR-outlier_check - 0 / 1344 (0.0%) are outliers",
+                        "[INFO] multivariate_comparison-2011-WS:USTAR-r2_check - Calculated R2 is 0.991",
+                        "[INFO] multivariate_comparison-all_data-WS:USTAR-slope_check - Not enough years with valid r2 values to calculate slope deviation.",
+                        "[INFO] multivariate_comparison-all_data-WS:USTAR-slope_check - Slope: 0.199; slope deviation: NA - slope for all_data is the slope mean",
+                        "[INFO] multivariate_comparison-2011-WS:USTAR-slope_check - Slope: 0.199; slope deviation: not calculated - insufficient data.",
+                        "[INFO] multivariate_comparison-all_data-PPFD_IN:SW_IN-outlier_check - 0 / 1344 (0.0%) are outliers",
+                        "[INFO] multivariate_comparison-all_data-PPFD_IN:SW_IN-r2_check - Calculated R2 is 0.996",
+                        "[INFO] multivariate_comparison-2011-PPFD_IN:SW_IN-outlier_check - 0 / 1344 (0.0%) are outliers",
+                        "[INFO] multivariate_comparison-2011-PPFD_IN:SW_IN-r2_check - Calculated R2 is 0.996",
+                        "[INFO] multivariate_comparison-all_data-PPFD_IN:SW_IN-slope_check - Not enough years with valid r2 values to calculate slope deviation.",
+                        "[INFO] multivariate_comparison-all_data-PPFD_IN:SW_IN-slope_check - Slope: 0.448; slope deviation: NA - slope for all_data is the slope mean",
+                        "[INFO] multivariate_comparison-2011-PPFD_IN:SW_IN-slope_check - Slope: 0.448; slope deviation: not calculated - insufficient data.",
+                        "[INFO] multivariate_comparison-TA-cross_level - Multiple TA variables are not present. Cross level variable comparison not performed.",
+                        "[INFO] multivariate_comparison-TA-cross_replicate - Multiple TA variables are not present. Cross replicate variable comparison not performed."
                     ],
                     "status_list": [
                         {
                             "status_code": 0,
-                            "qaqc_check": "multivariate-TA:T_SONIC",
-                            "src_logger_name": "multivariate-TA:T_SONIC",
+                            "qaqc_check": "multivariate_comparison-TA:T_SONIC",
+                            "src_logger_name": "multivariate_comparison-TA:T_SONIC",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
@@ -50,10 +50,10 @@
                                 "composite_plot-2011"
                             ],
                             "sub_status": {
-                                "multivariate-all_data-TA:T_SONIC": {
+                                "multivariate_comparison-all_data-TA:T_SONIC": {
                                     "status_code": 0,
-                                    "qaqc_check": "multivariate-all_data-TA:T_SONIC",
-                                    "src_logger_name": "multivariate-all_data-TA:T_SONIC",
+                                    "qaqc_check": "multivariate_comparison-all_data-TA:T_SONIC",
+                                    "src_logger_name": "multivariate_comparison-all_data-TA:T_SONIC",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
@@ -62,10 +62,10 @@
                                         "composite_plot-all_data"
                                     ],
                                     "sub_status": {
-                                        "multivariate-all_data-TA:T_SONIC-outlier_check": {
+                                        "multivariate_comparison-all_data-TA:T_SONIC-outlier_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-all_data-TA:T_SONIC-outlier_check",
-                                            "src_logger_name": "multivariate-all_data-TA:T_SONIC-outlier_check",
+                                            "qaqc_check": "multivariate_comparison-all_data-TA:T_SONIC-outlier_check",
+                                            "src_logger_name": "multivariate_comparison-all_data-TA:T_SONIC-outlier_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "0 / 1344 (0.0%) are outliers",
@@ -79,10 +79,10 @@
                                                 "outlier": 0.0
                                             }
                                         },
-                                        "multivariate-all_data-TA:T_SONIC-r2_check": {
+                                        "multivariate_comparison-all_data-TA:T_SONIC-r2_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-all_data-TA:T_SONIC-r2_check",
-                                            "src_logger_name": "multivariate-all_data-TA:T_SONIC-r2_check",
+                                            "qaqc_check": "multivariate_comparison-all_data-TA:T_SONIC-r2_check",
+                                            "src_logger_name": "multivariate_comparison-all_data-TA:T_SONIC-r2_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Calculated R2 is 0.998",
@@ -96,10 +96,10 @@
                                                 "r2": 0.998
                                             }
                                         },
-                                        "multivariate-all_data-TA:T_SONIC-slope_check": {
+                                        "multivariate_comparison-all_data-TA:T_SONIC-slope_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-all_data-TA:T_SONIC-slope_check",
-                                            "src_logger_name": "multivariate-all_data-TA:T_SONIC-slope_check",
+                                            "qaqc_check": "multivariate_comparison-all_data-TA:T_SONIC-slope_check",
+                                            "src_logger_name": "multivariate_comparison-all_data-TA:T_SONIC-slope_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Slope: 0.999; slope deviation: NA - slope for all_data is the slope mean",
@@ -121,10 +121,10 @@
                                         "result": 0
                                     }
                                 },
-                                "multivariate-2011-TA:T_SONIC": {
+                                "multivariate_comparison-2011-TA:T_SONIC": {
                                     "status_code": 0,
-                                    "qaqc_check": "multivariate-2011-TA:T_SONIC",
-                                    "src_logger_name": "multivariate-2011-TA:T_SONIC",
+                                    "qaqc_check": "multivariate_comparison-2011-TA:T_SONIC",
+                                    "src_logger_name": "multivariate_comparison-2011-TA:T_SONIC",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
@@ -133,10 +133,10 @@
                                         "composite_plot-2011"
                                     ],
                                     "sub_status": {
-                                        "multivariate-2011-TA:T_SONIC-outlier_check": {
+                                        "multivariate_comparison-2011-TA:T_SONIC-outlier_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-2011-TA:T_SONIC-outlier_check",
-                                            "src_logger_name": "multivariate-2011-TA:T_SONIC-outlier_check",
+                                            "qaqc_check": "multivariate_comparison-2011-TA:T_SONIC-outlier_check",
+                                            "src_logger_name": "multivariate_comparison-2011-TA:T_SONIC-outlier_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "0 / 1344 (0.0%) are outliers",
@@ -150,10 +150,10 @@
                                                 "outlier": 0.0
                                             }
                                         },
-                                        "multivariate-2011-TA:T_SONIC-r2_check": {
+                                        "multivariate_comparison-2011-TA:T_SONIC-r2_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-2011-TA:T_SONIC-r2_check",
-                                            "src_logger_name": "multivariate-2011-TA:T_SONIC-r2_check",
+                                            "qaqc_check": "multivariate_comparison-2011-TA:T_SONIC-r2_check",
+                                            "src_logger_name": "multivariate_comparison-2011-TA:T_SONIC-r2_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Calculated R2 is 0.998",
@@ -167,10 +167,10 @@
                                                 "r2": 0.998
                                             }
                                         },
-                                        "multivariate-2011-TA:T_SONIC-slope_check": {
+                                        "multivariate_comparison-2011-TA:T_SONIC-slope_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-2011-TA:T_SONIC-slope_check",
-                                            "src_logger_name": "multivariate-2011-TA:T_SONIC-slope_check",
+                                            "qaqc_check": "multivariate_comparison-2011-TA:T_SONIC-slope_check",
+                                            "src_logger_name": "multivariate_comparison-2011-TA:T_SONIC-slope_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Slope: 0.999; slope deviation: not calculated - insufficient data.",
@@ -199,8 +199,8 @@
                         },
                         {
                             "status_code": 0,
-                            "qaqc_check": "multivariate-WS:USTAR",
-                            "src_logger_name": "multivariate-WS:USTAR",
+                            "qaqc_check": "multivariate_comparison-WS:USTAR",
+                            "src_logger_name": "multivariate_comparison-WS:USTAR",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
@@ -210,10 +210,10 @@
                                 "composite_plot-2011"
                             ],
                             "sub_status": {
-                                "multivariate-all_data-WS:USTAR": {
+                                "multivariate_comparison-all_data-WS:USTAR": {
                                     "status_code": 0,
-                                    "qaqc_check": "multivariate-all_data-WS:USTAR",
-                                    "src_logger_name": "multivariate-all_data-WS:USTAR",
+                                    "qaqc_check": "multivariate_comparison-all_data-WS:USTAR",
+                                    "src_logger_name": "multivariate_comparison-all_data-WS:USTAR",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
@@ -222,10 +222,10 @@
                                         "composite_plot-all_data"
                                     ],
                                     "sub_status": {
-                                        "multivariate-all_data-WS:USTAR-outlier_check": {
+                                        "multivariate_comparison-all_data-WS:USTAR-outlier_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-all_data-WS:USTAR-outlier_check",
-                                            "src_logger_name": "multivariate-all_data-WS:USTAR-outlier_check",
+                                            "qaqc_check": "multivariate_comparison-all_data-WS:USTAR-outlier_check",
+                                            "src_logger_name": "multivariate_comparison-all_data-WS:USTAR-outlier_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "0 / 1344 (0.0%) are outliers",
@@ -239,10 +239,10 @@
                                                 "outlier": 0.0
                                             }
                                         },
-                                        "multivariate-all_data-WS:USTAR-r2_check": {
+                                        "multivariate_comparison-all_data-WS:USTAR-r2_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-all_data-WS:USTAR-r2_check",
-                                            "src_logger_name": "multivariate-all_data-WS:USTAR-r2_check",
+                                            "qaqc_check": "multivariate_comparison-all_data-WS:USTAR-r2_check",
+                                            "src_logger_name": "multivariate_comparison-all_data-WS:USTAR-r2_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Calculated R2 is 0.991",
@@ -256,10 +256,10 @@
                                                 "r2": 0.991
                                             }
                                         },
-                                        "multivariate-all_data-WS:USTAR-slope_check": {
+                                        "multivariate_comparison-all_data-WS:USTAR-slope_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-all_data-WS:USTAR-slope_check",
-                                            "src_logger_name": "multivariate-all_data-WS:USTAR-slope_check",
+                                            "qaqc_check": "multivariate_comparison-all_data-WS:USTAR-slope_check",
+                                            "src_logger_name": "multivariate_comparison-all_data-WS:USTAR-slope_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Slope: 0.199; slope deviation: NA - slope for all_data is the slope mean",
@@ -281,10 +281,10 @@
                                         "result": 0
                                     }
                                 },
-                                "multivariate-2011-WS:USTAR": {
+                                "multivariate_comparison-2011-WS:USTAR": {
                                     "status_code": 0,
-                                    "qaqc_check": "multivariate-2011-WS:USTAR",
-                                    "src_logger_name": "multivariate-2011-WS:USTAR",
+                                    "qaqc_check": "multivariate_comparison-2011-WS:USTAR",
+                                    "src_logger_name": "multivariate_comparison-2011-WS:USTAR",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
@@ -293,10 +293,10 @@
                                         "composite_plot-2011"
                                     ],
                                     "sub_status": {
-                                        "multivariate-2011-WS:USTAR-outlier_check": {
+                                        "multivariate_comparison-2011-WS:USTAR-outlier_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-2011-WS:USTAR-outlier_check",
-                                            "src_logger_name": "multivariate-2011-WS:USTAR-outlier_check",
+                                            "qaqc_check": "multivariate_comparison-2011-WS:USTAR-outlier_check",
+                                            "src_logger_name": "multivariate_comparison-2011-WS:USTAR-outlier_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "0 / 1344 (0.0%) are outliers",
@@ -310,10 +310,10 @@
                                                 "outlier": 0.0
                                             }
                                         },
-                                        "multivariate-2011-WS:USTAR-r2_check": {
+                                        "multivariate_comparison-2011-WS:USTAR-r2_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-2011-WS:USTAR-r2_check",
-                                            "src_logger_name": "multivariate-2011-WS:USTAR-r2_check",
+                                            "qaqc_check": "multivariate_comparison-2011-WS:USTAR-r2_check",
+                                            "src_logger_name": "multivariate_comparison-2011-WS:USTAR-r2_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Calculated R2 is 0.991",
@@ -327,10 +327,10 @@
                                                 "r2": 0.991
                                             }
                                         },
-                                        "multivariate-2011-WS:USTAR-slope_check": {
+                                        "multivariate_comparison-2011-WS:USTAR-slope_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-2011-WS:USTAR-slope_check",
-                                            "src_logger_name": "multivariate-2011-WS:USTAR-slope_check",
+                                            "qaqc_check": "multivariate_comparison-2011-WS:USTAR-slope_check",
+                                            "src_logger_name": "multivariate_comparison-2011-WS:USTAR-slope_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Slope: 0.199; slope deviation: not calculated - insufficient data.",
@@ -359,8 +359,8 @@
                         },
                         {
                             "status_code": 0,
-                            "qaqc_check": "multivariate-PPFD_IN:SW_IN",
-                            "src_logger_name": "multivariate-PPFD_IN:SW_IN",
+                            "qaqc_check": "multivariate_comparison-PPFD_IN:SW_IN",
+                            "src_logger_name": "multivariate_comparison-PPFD_IN:SW_IN",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
@@ -370,10 +370,10 @@
                                 "composite_plot-2011"
                             ],
                             "sub_status": {
-                                "multivariate-all_data-PPFD_IN:SW_IN": {
+                                "multivariate_comparison-all_data-PPFD_IN:SW_IN": {
                                     "status_code": 0,
-                                    "qaqc_check": "multivariate-all_data-PPFD_IN:SW_IN",
-                                    "src_logger_name": "multivariate-all_data-PPFD_IN:SW_IN",
+                                    "qaqc_check": "multivariate_comparison-all_data-PPFD_IN:SW_IN",
+                                    "src_logger_name": "multivariate_comparison-all_data-PPFD_IN:SW_IN",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
@@ -382,10 +382,10 @@
                                         "fit_plot"
                                     ],
                                     "sub_status": {
-                                        "multivariate-all_data-PPFD_IN:SW_IN-outlier_check": {
+                                        "multivariate_comparison-all_data-PPFD_IN:SW_IN-outlier_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-all_data-PPFD_IN:SW_IN-outlier_check",
-                                            "src_logger_name": "multivariate-all_data-PPFD_IN:SW_IN-outlier_check",
+                                            "qaqc_check": "multivariate_comparison-all_data-PPFD_IN:SW_IN-outlier_check",
+                                            "src_logger_name": "multivariate_comparison-all_data-PPFD_IN:SW_IN-outlier_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "0 / 1344 (0.0%) are outliers",
@@ -399,10 +399,10 @@
                                                 "outlier": 0.0
                                             }
                                         },
-                                        "multivariate-all_data-PPFD_IN:SW_IN-r2_check": {
+                                        "multivariate_comparison-all_data-PPFD_IN:SW_IN-r2_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-all_data-PPFD_IN:SW_IN-r2_check",
-                                            "src_logger_name": "multivariate-all_data-PPFD_IN:SW_IN-r2_check",
+                                            "qaqc_check": "multivariate_comparison-all_data-PPFD_IN:SW_IN-r2_check",
+                                            "src_logger_name": "multivariate_comparison-all_data-PPFD_IN:SW_IN-r2_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Calculated R2 is 0.996",
@@ -416,10 +416,10 @@
                                                 "r2": 0.996
                                             }
                                         },
-                                        "multivariate-all_data-PPFD_IN:SW_IN-slope_check": {
+                                        "multivariate_comparison-all_data-PPFD_IN:SW_IN-slope_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-all_data-PPFD_IN:SW_IN-slope_check",
-                                            "src_logger_name": "multivariate-all_data-PPFD_IN:SW_IN-slope_check",
+                                            "qaqc_check": "multivariate_comparison-all_data-PPFD_IN:SW_IN-slope_check",
+                                            "src_logger_name": "multivariate_comparison-all_data-PPFD_IN:SW_IN-slope_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Slope: 0.448; slope deviation: NA - slope for all_data is the slope mean",
@@ -441,10 +441,10 @@
                                         "result": 0
                                     }
                                 },
-                                "multivariate-2011-PPFD_IN:SW_IN": {
+                                "multivariate_comparison-2011-PPFD_IN:SW_IN": {
                                     "status_code": 0,
-                                    "qaqc_check": "multivariate-2011-PPFD_IN:SW_IN",
-                                    "src_logger_name": "multivariate-2011-PPFD_IN:SW_IN",
+                                    "qaqc_check": "multivariate_comparison-2011-PPFD_IN:SW_IN",
+                                    "src_logger_name": "multivariate_comparison-2011-PPFD_IN:SW_IN",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
@@ -453,10 +453,10 @@
                                         "composite_plot-2011"
                                     ],
                                     "sub_status": {
-                                        "multivariate-2011-PPFD_IN:SW_IN-outlier_check": {
+                                        "multivariate_comparison-2011-PPFD_IN:SW_IN-outlier_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-2011-PPFD_IN:SW_IN-outlier_check",
-                                            "src_logger_name": "multivariate-2011-PPFD_IN:SW_IN-outlier_check",
+                                            "qaqc_check": "multivariate_comparison-2011-PPFD_IN:SW_IN-outlier_check",
+                                            "src_logger_name": "multivariate_comparison-2011-PPFD_IN:SW_IN-outlier_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "0 / 1344 (0.0%) are outliers",
@@ -470,10 +470,10 @@
                                                 "outlier": 0.0
                                             }
                                         },
-                                        "multivariate-2011-PPFD_IN:SW_IN-r2_check": {
+                                        "multivariate_comparison-2011-PPFD_IN:SW_IN-r2_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-2011-PPFD_IN:SW_IN-r2_check",
-                                            "src_logger_name": "multivariate-2011-PPFD_IN:SW_IN-r2_check",
+                                            "qaqc_check": "multivariate_comparison-2011-PPFD_IN:SW_IN-r2_check",
+                                            "src_logger_name": "multivariate_comparison-2011-PPFD_IN:SW_IN-r2_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Calculated R2 is 0.996",
@@ -487,10 +487,10 @@
                                                 "r2": 0.996
                                             }
                                         },
-                                        "multivariate-2011-PPFD_IN:SW_IN-slope_check": {
+                                        "multivariate_comparison-2011-PPFD_IN:SW_IN-slope_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "multivariate-2011-PPFD_IN:SW_IN-slope_check",
-                                            "src_logger_name": "multivariate-2011-PPFD_IN:SW_IN-slope_check",
+                                            "qaqc_check": "multivariate_comparison-2011-PPFD_IN:SW_IN-slope_check",
+                                            "src_logger_name": "multivariate_comparison-2011-PPFD_IN:SW_IN-slope_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Slope: 0.448; slope deviation: not calculated - insufficient data.",
@@ -519,8 +519,8 @@
                         },
                         {
                             "status_code": 0,
-                            "qaqc_check": "multivariate-TA-cross_level",
-                            "src_logger_name": "multivariate-TA-cross_level",
+                            "qaqc_check": "multivariate_comparison-TA-cross_level",
+                            "src_logger_name": "multivariate_comparison-TA-cross_level",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": "Multiple TA variables are not present. Cross level variable comparison not performed.",
@@ -532,8 +532,8 @@
                         },
                         {
                             "status_code": 0,
-                            "qaqc_check": "multivariate-TA-cross_replicate",
-                            "src_logger_name": "multivariate-TA-cross_replicate",
+                            "qaqc_check": "multivariate_comparison-TA-cross_replicate",
+                            "src_logger_name": "multivariate_comparison-TA-cross_replicate",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": "Multiple TA variables are not present. Cross replicate variable comparison not performed.",

@@ -12,7 +12,7 @@ from configparser import ConfigParser
 from data_reader import DataReader
 from fp_vars import FPVariables
 from logger import Logger
-from multivariate_intercomparison import MultivariateIntercomparison
+from multivariate_comparison import MultivariateComparison
 from plot_config import PlotConfig
 from status import Status, StatusCode, StatusGenerator
 
@@ -47,13 +47,13 @@ def mock_FPVariables_init(self):
 @pytest.fixture
 def mc(monkeypatch):
     monkeypatch.setattr(FPVariables, '__init__', mock_FPVariables_init)
-    return MultivariateIntercomparison('', '')
+    return MultivariateComparison('', '')
 
 
 def test_init(monkeypatch):
     monkeypatch.setattr(FPVariables, '__init__', mock_FPVariables_init)
 
-    m = MultivariateIntercomparison('US-CRT', 'TestProcess_###')
+    m = MultivariateComparison('US-CRT', 'TestProcess_###')
     assert m.can_plot is False
     assert m.plot_dir is None
     assert m.url_path is None
@@ -62,10 +62,10 @@ def test_init(monkeypatch):
     # temporary config file and test that the init fails as expected
     shutil.copy('qaqc.cfg', '_temp_qaqc.cfg')
     test_cfg = os.path.join(
-        'test', 'testdata', 'multivariate', 'test_qaqc.cfg')
+        'test', 'testdata', 'multivariate_comparison', 'test_qaqc.cfg')
     shutil.copy(test_cfg, 'qaqc.cfg')
 
-    m = MultivariateIntercomparison(
+    m = MultivariateComparison(
         'US-CRT', 'TestProcess_###',
         plot_dir='output/US-CRT/TestProcess_###/output',
         ftp_plot_dir='/US-CRT/TestProcess_###/')
@@ -73,7 +73,7 @@ def test_init(monkeypatch):
     assert m.process_id == 'TestProcess_###'
     assert m.can_plot is True
     assert m.plot_dir == ('output/US-CRT/TestProcess_###/output/'
-                          'multivariate_intercomparison')
+                          'multivariate_comparison')
     assert m.base_plot_dir == 'output/US-CRT/TestProcess_###/output'
     assert m.plot_path == 'output'
 
@@ -303,9 +303,9 @@ def test_find_initial_year_indices(mc):
 
 def test_create_outlier_status(mc, monkeypatch):
     monkeypatch.setattr(
-        MultivariateIntercomparison, 'composite_plotter', mock_composite_plot)
+        MultivariateComparison, 'composite_plotter', mock_composite_plot)
     monkeypatch.setattr(
-        MultivariateIntercomparison, 'outlier_analysis', mock_outlier_analysis)
+        MultivariateComparison, 'outlier_analysis', mock_outlier_analysis)
 
     mc.base_plot_dir = 'output'
     mc.url_path = 'output'
@@ -317,7 +317,7 @@ def test_create_outlier_status(mc, monkeypatch):
 
     assert status.get_status_code() == StatusCode.WARNING
     assert status.get_src_logger_name() == status.get_qaqc_check() == \
-        'multivariate-2011-TA:T_SONIC-outlier_check'
+        'multivariate_comparison-2011-TA:T_SONIC-outlier_check'
     assert status.get_status_msg() == '1 / 3 (33.33%) are outliers'
 
     status, _, _ = mc.create_outlier_status(
@@ -328,7 +328,7 @@ def test_create_outlier_status(mc, monkeypatch):
 
     assert status.get_status_code() == StatusCode.OK
     assert status.get_src_logger_name() == status.get_qaqc_check() == \
-        'multivariate-2011-TA:T_SONIC-outlier_check'
+        'multivariate_comparison-2011-TA:T_SONIC-outlier_check'
     assert status.get_status_msg() == '1 / 100 (1.0%) are outliers'
 
 
@@ -344,7 +344,7 @@ def test_create_r2_status(mc, monkeypatch):
 
     assert status.get_status_code() == StatusCode.ERROR
     assert status.get_src_logger_name() == status.get_qaqc_check() == \
-        'multivariate-2011-TA:T_SONIC-r2_check'
+        'multivariate_comparison-2011-TA:T_SONIC-r2_check'
     assert status.get_status_msg() == 'Calculated R2 1.0 has perfect fit of 1.'
 
     fit.sum_square = 1
@@ -354,7 +354,7 @@ def test_create_r2_status(mc, monkeypatch):
 
     assert status.get_status_code() == StatusCode.WARNING
     assert status.get_src_logger_name() == status.get_qaqc_check() == \
-        'multivariate-2011-TA:T_SONIC-r2_check'
+        'multivariate_comparison-2011-TA:T_SONIC-r2_check'
     assert status.get_status_msg() == 'Calculated R2 0.5 is less than 0.7'
 
     fit.sum_square = -1
@@ -364,7 +364,7 @@ def test_create_r2_status(mc, monkeypatch):
 
     assert status.get_status_code() == StatusCode.WARNING
     assert status.get_src_logger_name() == status.get_qaqc_check() == \
-        'multivariate-2011-TA:T_SONIC-r2_check'
+        'multivariate_comparison-2011-TA:T_SONIC-r2_check'
     assert status.get_status_msg() == \
         'Calculated R2 1.5 is greater or equal to 1.0'
 
@@ -488,14 +488,14 @@ def create_test_stats(outlier_status, r2_status, slope_status):
     """ Builds nested Status objects for use in
         test_add_result_summary_stat """
 
-    qaqc_check = 'multivariate-2011-TA:T_SONIC-outlier_check'
+    qaqc_check = 'multivariate_comparison-2011-TA:T_SONIC-outlier_check'
     outlier_status = Status(
         status_code=outlier_status,
         qaqc_check=qaqc_check,
         src_logger_name=qaqc_check,
         n_warning=1 if outlier_status == StatusCode.WARNING else 0)
 
-    qaqc_check = 'multivariate-2011-TA:T_SONIC-r2_check'
+    qaqc_check = 'multivariate_comparison-2011-TA:T_SONIC-r2_check'
     r2_status = Status(
         status_code=r2_status,
         qaqc_check=qaqc_check,
@@ -503,7 +503,7 @@ def create_test_stats(outlier_status, r2_status, slope_status):
         n_warning=1 if r2_status == StatusCode.WARNING else 0,
         n_error=1 if r2_status == StatusCode.ERROR else 0)
 
-    qaqc_check = 'multivariate-2011-TA:T_SONIC-slope_check'
+    qaqc_check = 'multivariate_comparison-2011-TA:T_SONIC-slope_check'
     slope_status = Status(
         status_code=slope_status,
         qaqc_check=qaqc_check,
@@ -511,7 +511,7 @@ def create_test_stats(outlier_status, r2_status, slope_status):
         n_warning=1 if slope_status == StatusCode.WARNING else 0,
         n_error=1 if slope_status == StatusCode.ERROR else 0)
 
-    qaqc_check = 'multivariate-2011-TA:T_SONIC'
+    qaqc_check = 'multivariate_comparison-2011-TA:T_SONIC'
     log_obj = Logger().getLogger(qaqc_check)
     year_status = StatusGenerator().composite_status_generator(
         logger=log_obj, qaqc_check=qaqc_check,
@@ -522,7 +522,7 @@ def create_test_stats(outlier_status, r2_status, slope_status):
         }
     )
 
-    qaqc_check = 'multivariate-TA:T_SONIC'
+    qaqc_check = 'multivariate_comparison-TA:T_SONIC'
     log_obj = Logger().getLogger(qaqc_check)
     var_status = StatusGenerator().composite_status_generator(
         logger=log_obj, qaqc_check=qaqc_check,
@@ -571,8 +571,8 @@ def parse_json(json_file_path: str):
 def e2e(monkeypatch, test_id):
     # Path to json file with test inputs & expected values for e2e tests
     json_file_path = os.path.join(
-        'test', 'testdata', 'multivariate', 'expected_json_files',
-        f'test_multivariate_{test_id}.json')
+        'test', 'testdata', 'multivariate_comparison', 'expected_json_files',
+        f'test_multivariate_comparison_{test_id}.json')
 
     # Obtain the inputs for each test from the json file
     _, vars, _ = parse_json(json_file_path)
@@ -581,9 +581,9 @@ def e2e(monkeypatch, test_id):
     # Disable web service calls and plotting
     monkeypatch.setattr(FPVariables, '__init__', mock_FPVariables_init)
     monkeypatch.setattr(
-        MultivariateIntercomparison, 'composite_plotter', mock_composite_plot)
+        MultivariateComparison, 'composite_plotter', mock_composite_plot)
     monkeypatch.setattr(
-        MultivariateIntercomparison, 'fit_plotter', mock_fit_plot)
+        MultivariateComparison, 'fit_plotter', mock_fit_plot)
     monkeypatch.setattr(
         plt, 'savefig', do_nothing)
 
@@ -611,7 +611,7 @@ def e2e(monkeypatch, test_id):
 
     # Setup data file paths
     testdata_path = os.path.join(
-        'test', 'testdata', 'multivariate', 'input_files')
+        'test', 'testdata', 'multivariate_comparison', 'input_files')
     filepath = os.path.join(testdata_path, filename)
     pickle_path = os.path.join(testdata_path, filename.replace('.csv', '.npy'))
 
@@ -646,7 +646,7 @@ def e2e(monkeypatch, test_id):
     ftp_plot_dir = p.get_ftp_plot_dir_for_run(
         site_id, process_id, site_id)
 
-    statuses, _ = MultivariateIntercomparison(
+    statuses, _ = MultivariateComparison(
             site_id, process_id, plot_dir, ftp_plot_dir).driver(d)
 
     # Parse the json for expected statuses
@@ -679,7 +679,7 @@ def e2e(monkeypatch, test_id):
     summary_dir = os.path.join(output_dir, 'output', 'summary')
     assert os.path.exists(summary_dir)
 
-    csv_file = 'multivariate_intercomparison_summary.csv'
+    csv_file = 'multivariate_comparison_summary.csv'
     csv_file_path = os.path.join(summary_dir, csv_file)
     assert os.path.exists(csv_file_path)
 

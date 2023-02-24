@@ -26,8 +26,8 @@ __email__ = ('ycheah@lbl.gov, hchu@berkeley.edu, flobrien@lbl.gov'
 _log = Logger().getLogger(__name__)
 
 
-class MultivariateIntercomparison():
-    """This is a class that handles multivariate intercomparison checks.
+class MultivariateComparison():
+    """This is a class that handles multivariate comparison checks.
     Checks that are implemented here are biological and meteorological
     inter-relationship (e.g., PPFD_IN & SW_IN, TA & TS, WS & USTAR),
     check for short term mismatch, long term consistency, modeled data.
@@ -82,7 +82,7 @@ class MultivariateIntercomparison():
         cwd = os.getcwd()
         with open(os.path.join(cwd, 'qaqc.cfg')) as cfg:
             config.read_file(cfg)
-            cfg_section = 'MULTIVARIATE_INTERCOMPARISON'
+            cfg_section = 'MULTIVARIATE_COMPARISON'
             if config.has_section(cfg_section):
                 self.ta_t_sonic_threshold = config.getfloat(
                     cfg_section, 'ta_t_sonic_threshold')
@@ -208,7 +208,7 @@ class MultivariateIntercomparison():
     def ta_tsonic_cross_check(self):
         init_statuses_len = len(self.statuses)
         # starting a sub logger to handle all info form this test
-        logger_name = 'multivariate-TA:T_SONIC-cross_check'
+        logger_name = 'multivariate_comparison-TA:T_SONIC-cross_check'
         check_log = Logger().getLogger(logger_name)
         check_log.resetStats()
         check_log.info('Analyzing TA, T_SONIC')
@@ -236,7 +236,7 @@ class MultivariateIntercomparison():
 
     def ppfd_in_sw_in_cross_check(self):
         init_statuses_len = len(self.statuses)
-        logger_name = 'multivariate-PPFD_IN:SW_IN-cross_check'
+        logger_name = 'multivariate_comparison-PPFD_IN:SW_IN-cross_check'
         check_log = Logger().getLogger(logger_name)
         check_log.resetStats()
         _log.info('Analyzing PPFD_IN, SW_IN')
@@ -282,7 +282,7 @@ class MultivariateIntercomparison():
 
     def ws_ustar_cross_check(self):
         init_statuses_len = len(self.statuses)
-        logger_name = 'multivariate-WC:USTAR-cross_check'
+        logger_name = 'multivariate_comparison-WC:USTAR-cross_check'
         check_log = Logger().getLogger(logger_name)
         check_log.resetStats()
         _log.info('Analyzing WS, USTAR')
@@ -362,7 +362,7 @@ class MultivariateIntercomparison():
 
     def _cross_level_check(self, base_var, threshold):
         init_statuses_len = len(self.statuses)
-        logger_name = f'multivariate-{base_var}-cross_level'
+        logger_name = f'multivariate_comparison-{base_var}-cross_level'
         check_log = Logger().getLogger(logger_name)
         check_log.resetStats()
         _log.info(f'Cross-level check for {base_var}')
@@ -405,7 +405,7 @@ class MultivariateIntercomparison():
 
     def _cross_replicate_check(self, base_var, threshold):
         init_statuses_len = len(self.statuses)
-        logger_name = f'multivariate-{base_var}-cross_replicate'
+        logger_name = f'multivariate_comparison-{base_var}-cross_replicate'
         check_log = Logger().getLogger(logger_name)
         check_log.resetStats()
         _log.info(f'Cross-replicate check for {base_var}')
@@ -521,7 +521,7 @@ class MultivariateIntercomparison():
             Performs outlier analysis, generates outlier plots, and appends
             status objects to self.statuses. """
 
-        sub_log_name = f'multivariate-{x}:{y}'
+        sub_log_name = f'multivariate_comparison-{x}:{y}'
         sub_log = Logger().getLogger(sub_log_name)
         sub_log.resetStats()
 
@@ -536,7 +536,7 @@ class MultivariateIntercomparison():
         yearly_sub_statuses = {}
         yearly_slopes = {}
 
-        yr_log_name = f'multivariate-all_data-{x}:{y}'
+        yr_log_name = f'multivariate_comparison-all_data-{x}:{y}'
         yr_log = Logger().getLogger(yr_log_name)
         yr_log.resetStats()
 
@@ -680,7 +680,7 @@ class MultivariateIntercomparison():
                     valid_years += 1
 
         # Calculate the deviation from mean slope if there is enough data
-        log_name = f'multivariate-all_data-{x}:{y}-slope_check'
+        log_name = f'multivariate_comparison-all_data-{x}:{y}-slope_check'
         log_obj = Logger().getLogger(log_name)
         log_obj.resetStats()
 
@@ -712,7 +712,7 @@ class MultivariateIntercomparison():
         statuses = {}
         for year, sub_statuses in yearly_sub_statuses.items():
 
-            yr_log_name = f'multivariate-{year}-{x}:{y}'
+            yr_log_name = f'multivariate_comparison-{year}-{x}:{y}'
             yr_log = Logger().getLogger(yr_log_name)
             yr_log.resetStats()
             status_msg = None
@@ -795,7 +795,7 @@ class MultivariateIntercomparison():
             logs a message. Returns (Status, outlier_count, fig_loc) """
 
         # Create logger for outlier analysis
-        log_name = f'multivariate-{year}-{x}:{y}-outlier_check'
+        log_name = f'multivariate_comparison-{year}-{x}:{y}-outlier_check'
         log_obj = Logger().getLogger(log_name)
         log_obj.resetStats()
 
@@ -846,7 +846,7 @@ class MultivariateIntercomparison():
             (Status, r2) """
 
         # Calculate R2
-        log_name = f'multivariate-{year}-{x}:{y}-r2_check'
+        log_name = f'multivariate_comparison-{year}-{x}:{y}-r2_check'
         log_obj = Logger().getLogger(log_name)
         log_obj.resetStats()
 
@@ -901,7 +901,7 @@ class MultivariateIntercomparison():
         """
 
         # Create a slope logger
-        log_name = f'multivariate-{year}-{x}:{y}-slope_check'
+        log_name = f'multivariate_comparison-{year}-{x}:{y}-slope_check'
         log_obj = Logger().getLogger(log_name)
         log_obj.resetStats()
 
@@ -1130,7 +1130,8 @@ class MultivariateIntercomparison():
         # rename x and y to variable name
         fig_name = self.fig_name_fmt.format(
             s=self.site_id, p=self.process_id,
-            t='SlopeOfFit', x=x_label, y=y_label, yr='all_data')
+            t='multivariate_comparison_SlopeOfFit',
+            x=x_label, y=y_label, yr='all_data')
         fig_loc = os.path.join(self.plot_dir, fig_name)
         plt.savefig(fig_loc, dpi=self.plot_config.plot_default_dpi)
         plt.close()
@@ -1220,7 +1221,7 @@ class MultivariateIntercomparison():
         plt.figlegend(handles, labels, loc='lower center', ncol=3)
 
         fig_name = self.fig_name_fmt.format(
-            s=self.site_id, p=self.process_id, t='MultivarIntercomp',
+            s=self.site_id, p=self.process_id, t='multivariate_comparison',
             x=x_label, y=y_label, yr=yr)
         fig_loc = os.path.join(self.plot_dir, fig_name)
         plt.savefig(fig_loc, dpi=self.plot_config.plot_default_dpi)
@@ -1256,7 +1257,7 @@ class MultivariateIntercomparison():
             self.stat_gen.check_for_empty_status(
                 init_status_len=init_status_len,
                 current_status_len=len(self.statuses),
-                warning_msg='Multivariate intercomparison check for {c} '
+                warning_msg='Multivariate Comparison check for {c} '
                 'was not performed. This may be expected if variables '
                 'at multiple levels or with multiple replicates '
                 'are not present in the data.'
@@ -1316,7 +1317,7 @@ class MultivariateIntercomparison():
         """ This is a driver to test and run QAQC Algorithm
         specific to this class
         """
-        _log.info('Starting multivariate intercomparison')
+        _log.info('Starting multivariate comparison')
         self.d = data_reader
         self.input_data = self.d.get_data()  # Get data object
 
