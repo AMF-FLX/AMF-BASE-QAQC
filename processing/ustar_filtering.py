@@ -20,7 +20,7 @@ __email__ = 'norm.beekwilder@gmail.com, joshgeden10@gmail.com'
 _log = Logger().getLogger(__name__)
 
 
-class USTARFilter:
+class USTARFiltering:
     def __init__(
           self,
           site_id: str,
@@ -34,7 +34,7 @@ class USTARFilter:
         self.site_id = site_id
         self.process_id = process_id
         self.rad_in_var = None
-        self.qaqc_name = 'ustar_filter'
+        self.qaqc_name = 'ustar_filtering'
 
         # Helper objects
         self.plot_config = PlotConfig()
@@ -57,7 +57,7 @@ class USTARFilter:
         config = ConfigParser()
         with open('qaqc.cfg') as cfg:
             config.read_file(cfg)
-            section = 'USTAR_CONFIG'
+            section = 'USTAR_FILTERING'
             if config.has_section(section):
                 self.lower_bound_warn = config.getfloat(
                     section, 'lower_bound_warn')
@@ -80,8 +80,8 @@ class USTARFilter:
                 self.sw_day_night_cutoff = 5
                 self.ppfd_day_night_cutoff = 10
 
-                _log.warning(
-                    'Cannot find USTAR config values; using defaults.')
+                _log.warning('Cannot find USTAR Filtering values; '
+                             'using defaults.')
 
     def _select_rad_var(self, header_map, rad_vars):
         """ Selects which radiation variable to use from rad_vars """
@@ -336,7 +336,7 @@ class USTARFilter:
                 # If all values are masked return a fatal Status
                 if all(ma.getmask(var_data)):
                     qaqc_check = \
-                        f'ustar_filter-all_data-{base_var}-masked_check'
+                        f'{self.qaqc_name}-all_data-{base_var}-masked_check'
                     status_msg = ('Data is masked for the entire record for '
                                   f'required variable {base_var}')
 
@@ -353,7 +353,7 @@ class USTARFilter:
     def _create_missing_year_status(self, year, ustar_var, fc_var,
                                     period) -> Status:
 
-        qaqc_check = (f'ustar_filter-{year}-{ustar_var}:{fc_var}-'
+        qaqc_check = (f'{self.qaqc_name}-{year}-{ustar_var}:{fc_var}-'
                       f'valid_min_{period}')
         log_obj = Logger().getLogger(qaqc_check)
         if fc_var == 'base':
@@ -605,7 +605,7 @@ class USTARFilter:
         # Determine where to save the figure
         fig_loc = os.path.join(
             self.plot_dir, f'{self.site_id}-{self.process_id}-'
-            f'UstarFilter-{ustar_var}-{fc_var}-{year}.png'
+            f'{self.qaqc_name}-{ustar_var}-{fc_var}-{year}.png'
         )
 
         # Save the figure to a file
@@ -748,7 +748,8 @@ class USTARFilter:
             rad_vars=('SW_IN_POT', 'SW_IN', 'PPFD_IN'))
 
         if self.rad_in_var is None:
-            qaqc_check = 'ustar_filter-all_data-all_vars-select_rad_var'
+            qaqc_check = (f'{self.qaqc_name}-'
+                          f'all_data-all_vars-select_rad_var')
             status_msg = 'No valid radiation variable was found'
 
             log_obj = Logger().getLogger(qaqc_check)
@@ -802,7 +803,7 @@ class USTARFilter:
                 yearly_statuses[year][var] = {}
 
             if fc_var_min == float('inf'):
-                key = f'ustar_filter-{year}-{var}-valid_min_{period}'
+                key = f'{self.qaqc_name}-{year}-{var}-valid_min_{period}'
                 yearly_statuses[year][var][key] = \
                     self._create_missing_year_status(
                         year, ustar_var, fc_var, period)

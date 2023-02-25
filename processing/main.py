@@ -25,7 +25,7 @@ from process_actions import ProcessActions
 from report_status import ReportStatus
 from data_report_gen import DataReportGen
 from site_attrs import SiteAttributes
-from ustar_filter import USTARFilter
+from ustar_filtering import USTARFiltering
 from variable_coverage import VariableCoverage
 
 
@@ -247,13 +247,13 @@ def main():
         # Add SW_IN_POT as a valid data header
         d.base_headers['SW_IN_POT'] = ['SW_IN_POT']
 
-        # USTAR Filter
-        _log.info('Running USTAR filter')
-        check_status = USTARFilter(
+        # USTAR Filtering
+        _log.info('Running USTAR Filtering')
+        check_status = USTARFiltering(
             site_id, process_id, plot_dir=plot_dir,
             ftp_plot_dir=ftp_plot_dir
         ).driver(d)
-        status_list['USTAR Filter'] = check_status
+        status_list['USTAR Filtering'] = check_status
 
         # Timestamp Alignment checks
         qaqc_check = 'Timestamp Alignment'

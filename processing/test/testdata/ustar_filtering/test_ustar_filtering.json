@@ -9,25 +9,25 @@
             "id": "all_good",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTAR000001.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTARFiltering000001.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] ustar_filter-2011-USTAR:base-filter_check_day - Minimum USTAR value is 0.01069",
-                        "[INFO] ustar_filter-2011-USTAR:base-filter_check_night - Minimum USTAR value is 0.01344",
-                        "[INFO] ustar_filter-2011-USTAR:FC-filter_check_day - Minimum USTAR value with respect to FC is 0.01757",
-                        "[INFO] ustar_filter-2011-USTAR:FC-diff_check_day - day time difference in lower bounds with respect to FC is 0.0069",
-                        "[INFO] ustar_filter-2011-USTAR:FC-filter_check_night - Minimum USTAR value with respect to FC is 0.01477",
-                        "[INFO] ustar_filter-2011-USTAR:FC-diff_check_night - night time difference in lower bounds with respect to FC is 0.0013"
+                        "[INFO] ustar_filtering-2011-USTAR:base-filter_check_day - Minimum USTAR value is 0.01069",
+                        "[INFO] ustar_filtering-2011-USTAR:base-filter_check_night - Minimum USTAR value is 0.01344",
+                        "[INFO] ustar_filtering-2011-USTAR:FC-filter_check_day - Minimum USTAR value with respect to FC is 0.01757",
+                        "[INFO] ustar_filtering-2011-USTAR:FC-diff_check_day - day time difference in lower bounds with respect to FC is 0.0069",
+                        "[INFO] ustar_filtering-2011-USTAR:FC-filter_check_night - Minimum USTAR value with respect to FC is 0.01477",
+                        "[INFO] ustar_filtering-2011-USTAR:FC-diff_check_night - night time difference in lower bounds with respect to FC is 0.0013"
                     ],
-                    "ustar_filter_summary": [
+                    "ustar_filtering_summary": [
                         "Period,USTAR Variable,FC Variable,Result,Daytime min USTAR,Daytime min USTAR with FC,Nighttime min USTAR,Nighttime min USTAR with FC,Figure link",
-                        "2011,USTAR,FC,OK,0.01069,0.01757,0.01344,0.01477,US-CRT-TestProcess_###-UstarFilter-USTAR-FC-2011.png"
+                        "2011,USTAR,FC,OK,0.01069,0.01757,0.01344,0.01477,US-CRT-TestProcess_###-ustar_filtering-USTAR-FC-2011.png"
                     ],
                     "status_list": [
                         {
                             "status_code": 0,
-                            "qaqc_check": "ustar_filter-2011",
-                            "src_logger_name": "ustar_filter-2011",
+                            "qaqc_check": "ustar_filtering-2011",
+                            "src_logger_name": "ustar_filtering-2011",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
@@ -35,10 +35,10 @@
                                 "plot_path-2011-USTAR:FC"
                             ],
                             "sub_status": {
-                                "ustar_filter-2011-USTAR:FC": {
+                                "ustar_filtering-2011-USTAR:FC": {
                                     "status_code": 0,
-                                    "qaqc_check": "ustar_filter-2011-USTAR:FC",
-                                    "src_logger_name": "ustar_filter-2011-USTAR:FC",
+                                    "qaqc_check": "ustar_filtering-2011-USTAR:FC",
+                                    "src_logger_name": "ustar_filtering-2011-USTAR:FC",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
@@ -46,10 +46,10 @@
                                         "plot_path-2011-USTAR:FC"
                                     ],
                                     "sub_status": {
-                                        "ustar_filter-2011-USTAR:FC-filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value with respect to FC is 0.01757",
@@ -61,10 +61,10 @@
                                                 "min_USTAR:FC_day": 0.01757
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "day time difference in lower bounds with respect to FC is 0.0069",
@@ -78,10 +78,10 @@
                                                 "diff": 0.007
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value with respect to FC is 0.01477",
@@ -93,10 +93,10 @@
                                                 "min_USTAR:FC_night": 0.01477
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "night time difference in lower bounds with respect to FC is 0.0013",
@@ -110,10 +110,10 @@
                                                 "diff": 0.001
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01069",
@@ -125,10 +125,10 @@
                                                 "min_USTAR_day": 0.01069
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01344",
@@ -160,19 +160,19 @@
             "id": "ustar_missing",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTAR000002.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTARFiltering000002.csv",
                 "expected_results": {
                     "logs": [
-                        "[CRITICAL] ustar_filter-all_data-USTAR-var_present - Data file does not contain required variable: USTAR"
+                        "[CRITICAL] ustar_filtering-all_data-USTAR-var_present - Data file does not contain required variable: USTAR"
                     ],
-                    "ustar_filter_summary": [
+                    "ustar_filtering_summary": [
                         "Period,USTAR Variable,FC Variable,Result,Daytime min USTAR,Daytime min USTAR with FC,Nighttime min USTAR,Nighttime min USTAR with FC,Figure link"
                     ],
                     "status_list": [
                         {
                             "status_code": -3,
                             "qaqc_check": "ustar_filter",
-                            "src_logger_name": "ustar_filter-all_data-USTAR-var_present",
+                            "src_logger_name": "ustar_filtering-all_data-USTAR-var_present",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": "Data file does not contain required variable: USTAR",
@@ -189,19 +189,19 @@
             "id": "fc_missing",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTAR000003.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTARFiltering000003.csv",
                 "expected_results": {
                     "logs": [
-                        "[CRITICAL] ustar_filter-all_data-FC-var_present - Data file does not contain required variable: FC"
+                        "[CRITICAL] ustar_filtering-all_data-FC-var_present - Data file does not contain required variable: FC"
                     ],
-                    "ustar_filter_summary": [
+                    "ustar_filtering_summary": [
                         "Period,USTAR Variable,FC Variable,Result,Daytime min USTAR,Daytime min USTAR with FC,Nighttime min USTAR,Nighttime min USTAR with FC,Figure link"
                     ],
                     "status_list": [
                         {
                             "status_code": -3,
                             "qaqc_check": "ustar_filter",
-                            "src_logger_name": "ustar_filter-all_data-FC-var_present",
+                            "src_logger_name": "ustar_filtering-all_data-FC-var_present",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": "Data file does not contain required variable: FC",
@@ -218,19 +218,19 @@
             "id": "ustar_all_masked",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTAR000005.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTARFiltering000005.csv",
                 "expected_results": {
                     "logs": [
-                        "[CRITICAL] ustar_filter-all_data-USTAR-masked_check - Data is masked for the entire record for required variable USTAR"
+                        "[CRITICAL] ustar_filtering-all_data-USTAR-masked_check - Data is masked for the entire record for required variable USTAR"
                     ],
-                    "ustar_filter_summary": [
+                    "ustar_filtering_summary": [
                         "Period,USTAR Variable,FC Variable,Result,Daytime min USTAR,Daytime min USTAR with FC,Nighttime min USTAR,Nighttime min USTAR with FC,Figure link"
                     ],
                     "status_list": [
                         {
                             "status_code": -3,
-                            "qaqc_check": "ustar_filter-all_data-USTAR-masked_check",
-                            "src_logger_name": "ustar_filter-all_data-USTAR-masked_check",
+                            "qaqc_check": "ustar_filtering-all_data-USTAR-masked_check",
+                            "src_logger_name": "ustar_filtering-all_data-USTAR-masked_check",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": "Data is masked for the entire record for required variable USTAR",
@@ -244,28 +244,28 @@
             }
         },
         {
-            "id": "ustar_filter_error",
+            "id": "ustar_filtering_error",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTAR000006.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTARFiltering000006.csv",
                 "expected_results": {
                     "logs": [
-                        "[ERROR] ustar_filter-2011-USTAR:base-filter_check_day - Possible USTAR filtering detected; minimum USTAR value is 0.20005",
-                        "[ERROR] ustar_filter-2011-USTAR:base-filter_check_night - Possible USTAR filtering detected; minimum USTAR value is 0.2",
-                        "[ERROR] ustar_filter-2011-USTAR:FC-filter_check_day - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.20006",
-                        "[INFO] ustar_filter-2011-USTAR:FC-diff_check_day - day time difference in lower bounds with respect to FC is 0.0",
-                        "[ERROR] ustar_filter-2011-USTAR:FC-filter_check_night - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.2",
-                        "[INFO] ustar_filter-2011-USTAR:FC-diff_check_night - night time difference in lower bounds with respect to FC is 0.0"
+                        "[ERROR] ustar_filtering-2011-USTAR:base-filter_check_day - Possible USTAR filtering detected; minimum USTAR value is 0.20005",
+                        "[ERROR] ustar_filtering-2011-USTAR:base-filter_check_night - Possible USTAR filtering detected; minimum USTAR value is 0.2",
+                        "[ERROR] ustar_filtering-2011-USTAR:FC-filter_check_day - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.20006",
+                        "[INFO] ustar_filtering-2011-USTAR:FC-diff_check_day - day time difference in lower bounds with respect to FC is 0.0",
+                        "[ERROR] ustar_filtering-2011-USTAR:FC-filter_check_night - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.2",
+                        "[INFO] ustar_filtering-2011-USTAR:FC-diff_check_night - night time difference in lower bounds with respect to FC is 0.0"
                     ],
-                    "ustar_filter_summary": [
+                    "ustar_filtering_summary": [
                         "Period,USTAR Variable,FC Variable,Result,Daytime min USTAR,Daytime min USTAR with FC,Nighttime min USTAR,Nighttime min USTAR with FC,Figure link",
-                        "2011,USTAR,FC,FAIL,0.20005,0.20006,0.2,0.2,US-CRT-TestProcess_###-UstarFilter-USTAR-FC-2011.png"
+                        "2011,USTAR,FC,FAIL,0.20005,0.20006,0.2,0.2,US-CRT-TestProcess_###-ustar_filtering-USTAR-FC-2011.png"
                     ],
                     "status_list": [
                         {
                             "status_code": -2,
-                            "qaqc_check": "ustar_filter-2011",
-                            "src_logger_name": "ustar_filter-2011",
+                            "qaqc_check": "ustar_filtering-2011",
+                            "src_logger_name": "ustar_filtering-2011",
                             "n_warning": 0,
                             "n_error": 4,
                             "status_msg": null,
@@ -273,10 +273,10 @@
                                 "plot_path-2011-USTAR:FC"
                             ],
                             "sub_status": {
-                                "ustar_filter-2011-USTAR:FC": {
+                                "ustar_filtering-2011-USTAR:FC": {
                                     "status_code": -2,
-                                    "qaqc_check": "ustar_filter-2011-USTAR:FC",
-                                    "src_logger_name": "ustar_filter-2011-USTAR:FC",
+                                    "qaqc_check": "ustar_filtering-2011-USTAR:FC",
+                                    "src_logger_name": "ustar_filtering-2011-USTAR:FC",
                                     "n_warning": 0,
                                     "n_error": 4,
                                     "status_msg": null,
@@ -284,10 +284,10 @@
                                         "plot_path-2011-USTAR:FC"
                                     ],
                                     "sub_status": {
-                                        "ustar_filter-2011-USTAR:FC-filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_day": {
                                             "status_code": -2,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.20006",
@@ -299,10 +299,10 @@
                                                 "min_USTAR:FC_day": 0.20006
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "day time difference in lower bounds with respect to FC is 0.0",
@@ -316,10 +316,10 @@
                                                 "diff": 0.0
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_night": {
                                             "status_code": -2,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.2",
@@ -331,10 +331,10 @@
                                                 "min_USTAR:FC_night": 0.2
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "night time difference in lower bounds with respect to FC is 0.0",
@@ -348,10 +348,10 @@
                                                 "diff": 0.0
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_day": {
                                             "status_code": -2,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "Possible USTAR filtering detected; minimum USTAR value is 0.20005",
@@ -363,10 +363,10 @@
                                                 "min_USTAR_day": 0.20005
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_night": {
                                             "status_code": -2,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "Possible USTAR filtering detected; minimum USTAR value is 0.2",
@@ -395,28 +395,28 @@
             }
         },
         {
-            "id": "ustar_filter_warning",
+            "id": "ustar_filtering_warning",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTAR000007.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTARFiltering000007.csv",
                 "expected_results": {
                     "logs": [
-                        "[WARNING] ustar_filter-2011-USTAR:base-filter_check_day - Possible USTAR filtering detected; minimum USTAR value is 0.05012",
-                        "[WARNING] ustar_filter-2011-USTAR:base-filter_check_night - Possible USTAR filtering detected; minimum USTAR value is 0.05009",
-                        "[WARNING] ustar_filter-2011-USTAR:FC-filter_check_day - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.05012",
-                        "[INFO] ustar_filter-2011-USTAR:FC-diff_check_day - day time difference in lower bounds with respect to FC is 0.0",
-                        "[WARNING] ustar_filter-2011-USTAR:FC-filter_check_night - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.05013",
-                        "[INFO] ustar_filter-2011-USTAR:FC-diff_check_night - night time difference in lower bounds with respect to FC is 0.0"
+                        "[WARNING] ustar_filtering-2011-USTAR:base-filter_check_day - Possible USTAR filtering detected; minimum USTAR value is 0.05012",
+                        "[WARNING] ustar_filtering-2011-USTAR:base-filter_check_night - Possible USTAR filtering detected; minimum USTAR value is 0.05009",
+                        "[WARNING] ustar_filtering-2011-USTAR:FC-filter_check_day - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.05012",
+                        "[INFO] ustar_filtering-2011-USTAR:FC-diff_check_day - day time difference in lower bounds with respect to FC is 0.0",
+                        "[WARNING] ustar_filtering-2011-USTAR:FC-filter_check_night - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.05013",
+                        "[INFO] ustar_filtering-2011-USTAR:FC-diff_check_night - night time difference in lower bounds with respect to FC is 0.0"
                     ],
-                    "ustar_filter_summary": [
+                    "ustar_filtering_summary": [
                         "Period,USTAR Variable,FC Variable,Result,Daytime min USTAR,Daytime min USTAR with FC,Nighttime min USTAR,Nighttime min USTAR with FC,Figure link",
-                        "2011,USTAR,FC,WARNING,0.05012,0.05012,0.05009,0.05013,US-CRT-TestProcess_###-UstarFilter-USTAR-FC-2011.png"
+                        "2011,USTAR,FC,WARNING,0.05012,0.05012,0.05009,0.05013,US-CRT-TestProcess_###-ustar_filtering-USTAR-FC-2011.png"
                     ],
                     "status_list": [
                         {
                             "status_code": -1,
-                            "qaqc_check": "ustar_filter-2011",
-                            "src_logger_name": "ustar_filter-2011",
+                            "qaqc_check": "ustar_filtering-2011",
+                            "src_logger_name": "ustar_filtering-2011",
                             "n_warning": 4,
                             "n_error": 0,
                             "status_msg": null,
@@ -424,10 +424,10 @@
                                 "plot_path-2011-USTAR:FC"
                             ],
                             "sub_status": {
-                                "ustar_filter-2011-USTAR:FC": {
+                                "ustar_filtering-2011-USTAR:FC": {
                                     "status_code": -1,
-                                    "qaqc_check": "ustar_filter-2011-USTAR:FC",
-                                    "src_logger_name": "ustar_filter-2011-USTAR:FC",
+                                    "qaqc_check": "ustar_filtering-2011-USTAR:FC",
+                                    "src_logger_name": "ustar_filtering-2011-USTAR:FC",
                                     "n_warning": 4,
                                     "n_error": 0,
                                     "status_msg": null,
@@ -435,10 +435,10 @@
                                         "plot_path-2011-USTAR:FC"
                                     ],
                                     "sub_status": {
-                                        "ustar_filter-2011-USTAR:FC-filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_day": {
                                             "status_code": -1,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_day",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.05012",
@@ -450,10 +450,10 @@
                                                 "min_USTAR:FC_day": 0.05012
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "day time difference in lower bounds with respect to FC is 0.0",
@@ -467,10 +467,10 @@
                                                 "diff": 0.0
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_night": {
                                             "status_code": -1,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_night",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.05013",
@@ -482,10 +482,10 @@
                                                 "min_USTAR:FC_night": 0.05013
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "night time difference in lower bounds with respect to FC is 0.0",
@@ -499,10 +499,10 @@
                                                 "diff": 0.0
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_day": {
                                             "status_code": -1,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_day",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Possible USTAR filtering detected; minimum USTAR value is 0.05012",
@@ -514,10 +514,10 @@
                                                 "min_USTAR_day": 0.05012
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_night": {
                                             "status_code": -1,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_night",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Possible USTAR filtering detected; minimum USTAR value is 0.05009",
@@ -549,25 +549,25 @@
             "id": "fc_filter_error",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTAR000008.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTARFiltering000008.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] ustar_filter-2011-USTAR:base-filter_check_day - Minimum USTAR value is 0.01069",
-                        "[INFO] ustar_filter-2011-USTAR:base-filter_check_night - Minimum USTAR value is 0.01344",
-                        "[ERROR] ustar_filter-2011-USTAR:FC-filter_check_day - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.20006",
-                        "[ERROR] ustar_filter-2011-USTAR:FC-diff_check_day - day time difference in lower bounds exceeds limits with respect to FC; difference is 0.1894",
-                        "[ERROR] ustar_filter-2011-USTAR:FC-filter_check_night - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.2",
-                        "[ERROR] ustar_filter-2011-USTAR:FC-diff_check_night - night time difference in lower bounds exceeds limits with respect to FC; difference is 0.1866"
+                        "[INFO] ustar_filtering-2011-USTAR:base-filter_check_day - Minimum USTAR value is 0.01069",
+                        "[INFO] ustar_filtering-2011-USTAR:base-filter_check_night - Minimum USTAR value is 0.01344",
+                        "[ERROR] ustar_filtering-2011-USTAR:FC-filter_check_day - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.20006",
+                        "[ERROR] ustar_filtering-2011-USTAR:FC-diff_check_day - day time difference in lower bounds exceeds limits with respect to FC; difference is 0.1894",
+                        "[ERROR] ustar_filtering-2011-USTAR:FC-filter_check_night - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.2",
+                        "[ERROR] ustar_filtering-2011-USTAR:FC-diff_check_night - night time difference in lower bounds exceeds limits with respect to FC; difference is 0.1866"
                     ],
-                    "ustar_filter_summary": [
+                    "ustar_filtering_summary": [
                         "Period,USTAR Variable,FC Variable,Result,Daytime min USTAR,Daytime min USTAR with FC,Nighttime min USTAR,Nighttime min USTAR with FC,Figure link",
-                        "2011,USTAR,FC,FAIL,0.01069,0.20006,0.01344,0.2,US-CRT-TestProcess_###-UstarFilter-USTAR-FC-2011.png"
+                        "2011,USTAR,FC,FAIL,0.01069,0.20006,0.01344,0.2,US-CRT-TestProcess_###-ustar_filtering-USTAR-FC-2011.png"
                     ],
                     "status_list": [
                         {
                             "status_code": -2,
-                            "qaqc_check": "ustar_filter-2011",
-                            "src_logger_name": "ustar_filter-2011",
+                            "qaqc_check": "ustar_filtering-2011",
+                            "src_logger_name": "ustar_filtering-2011",
                             "n_warning": 0,
                             "n_error": 4,
                             "status_msg": null,
@@ -575,10 +575,10 @@
                                 "plot_path-2011-USTAR:FC"
                             ],
                             "sub_status": {
-                                "ustar_filter-2011-USTAR:FC": {
+                                "ustar_filtering-2011-USTAR:FC": {
                                     "status_code": -2,
-                                    "qaqc_check": "ustar_filter-2011-USTAR:FC",
-                                    "src_logger_name": "ustar_filter-2011-USTAR:FC",
+                                    "qaqc_check": "ustar_filtering-2011-USTAR:FC",
+                                    "src_logger_name": "ustar_filtering-2011-USTAR:FC",
                                     "n_warning": 0,
                                     "n_error": 4,
                                     "status_msg": null,
@@ -586,10 +586,10 @@
                                         "plot_path-2011-USTAR:FC"
                                     ],
                                     "sub_status": {
-                                        "ustar_filter-2011-USTAR:FC-filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_day": {
                                             "status_code": -2,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.20006",
@@ -601,10 +601,10 @@
                                                 "min_USTAR:FC_day": 0.20006
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_day": {
                                             "status_code": -2,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_day",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "day time difference in lower bounds exceeds limits with respect to FC; difference is 0.1894",
@@ -618,10 +618,10 @@
                                                 "diff": 0.189
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_night": {
                                             "status_code": -2,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.2",
@@ -633,10 +633,10 @@
                                                 "min_USTAR:FC_night": 0.2
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_night": {
                                             "status_code": -2,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_night",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "night time difference in lower bounds exceeds limits with respect to FC; difference is 0.1866",
@@ -650,10 +650,10 @@
                                                 "diff": 0.187
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01069",
@@ -665,10 +665,10 @@
                                                 "min_USTAR_day": 0.01069
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01344",
@@ -700,25 +700,25 @@
             "id": "fc_filter_warning",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTAR000009.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTARFiltering000009.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] ustar_filter-2011-USTAR:base-filter_check_day - Minimum USTAR value is 0.01069",
-                        "[INFO] ustar_filter-2011-USTAR:base-filter_check_night - Minimum USTAR value is 0.01344",
-                        "[WARNING] ustar_filter-2011-USTAR:FC-filter_check_day - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.05012",
-                        "[WARNING] ustar_filter-2011-USTAR:FC-diff_check_day - day time difference in lower bounds exceeds limits with respect to FC; difference is 0.0394",
-                        "[WARNING] ustar_filter-2011-USTAR:FC-filter_check_night - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.05013",
-                        "[WARNING] ustar_filter-2011-USTAR:FC-diff_check_night - night time difference in lower bounds exceeds limits with respect to FC; difference is 0.0367"
+                        "[INFO] ustar_filtering-2011-USTAR:base-filter_check_day - Minimum USTAR value is 0.01069",
+                        "[INFO] ustar_filtering-2011-USTAR:base-filter_check_night - Minimum USTAR value is 0.01344",
+                        "[WARNING] ustar_filtering-2011-USTAR:FC-filter_check_day - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.05012",
+                        "[WARNING] ustar_filtering-2011-USTAR:FC-diff_check_day - day time difference in lower bounds exceeds limits with respect to FC; difference is 0.0394",
+                        "[WARNING] ustar_filtering-2011-USTAR:FC-filter_check_night - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.05013",
+                        "[WARNING] ustar_filtering-2011-USTAR:FC-diff_check_night - night time difference in lower bounds exceeds limits with respect to FC; difference is 0.0367"
                     ],
-                    "ustar_filter_summary": [
+                    "ustar_filtering_summary": [
                         "Period,USTAR Variable,FC Variable,Result,Daytime min USTAR,Daytime min USTAR with FC,Nighttime min USTAR,Nighttime min USTAR with FC,Figure link",
-                        "2011,USTAR,FC,WARNING,0.01069,0.05012,0.01344,0.05013,US-CRT-TestProcess_###-UstarFilter-USTAR-FC-2011.png"
+                        "2011,USTAR,FC,WARNING,0.01069,0.05012,0.01344,0.05013,US-CRT-TestProcess_###-ustar_filtering-USTAR-FC-2011.png"
                     ],
                     "status_list": [
                         {
                             "status_code": -1,
-                            "qaqc_check": "ustar_filter-2011",
-                            "src_logger_name": "ustar_filter-2011",
+                            "qaqc_check": "ustar_filtering-2011",
+                            "src_logger_name": "ustar_filtering-2011",
                             "n_warning": 4,
                             "n_error": 0,
                             "status_msg": null,
@@ -726,10 +726,10 @@
                                 "plot_path-2011-USTAR:FC"
                             ],
                             "sub_status": {
-                                "ustar_filter-2011-USTAR:FC": {
+                                "ustar_filtering-2011-USTAR:FC": {
                                     "status_code": -1,
-                                    "qaqc_check": "ustar_filter-2011-USTAR:FC",
-                                    "src_logger_name": "ustar_filter-2011-USTAR:FC",
+                                    "qaqc_check": "ustar_filtering-2011-USTAR:FC",
+                                    "src_logger_name": "ustar_filtering-2011-USTAR:FC",
                                     "n_warning": 4,
                                     "n_error": 0,
                                     "status_msg": null,
@@ -737,10 +737,10 @@
                                         "plot_path-2011-USTAR:FC"
                                     ],
                                     "sub_status": {
-                                        "ustar_filter-2011-USTAR:FC-filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_day": {
                                             "status_code": -1,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_day",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.05012",
@@ -752,10 +752,10 @@
                                                 "min_USTAR:FC_day": 0.05012
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_day": {
                                             "status_code": -1,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_day",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "day time difference in lower bounds exceeds limits with respect to FC; difference is 0.0394",
@@ -769,10 +769,10 @@
                                                 "diff": 0.039
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_night": {
                                             "status_code": -1,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_night",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.05013",
@@ -784,10 +784,10 @@
                                                 "min_USTAR:FC_night": 0.05013
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_night": {
                                             "status_code": -1,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_night",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "night time difference in lower bounds exceeds limits with respect to FC; difference is 0.0367",
@@ -801,10 +801,10 @@
                                                 "diff": 0.037
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01069",
@@ -816,10 +816,10 @@
                                                 "min_USTAR_day": 0.01069
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01344",
@@ -851,25 +851,25 @@
             "id": "diff_error",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTAR000010.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTARFiltering000010.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] ustar_filter-2011-USTAR:base-filter_check_day - Minimum USTAR value is 0.01069",
-                        "[INFO] ustar_filter-2011-USTAR:base-filter_check_night - Minimum USTAR value is 0.01344",
-                        "[ERROR] ustar_filter-2011-USTAR:FC-filter_check_day - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.15002",
-                        "[ERROR] ustar_filter-2011-USTAR:FC-diff_check_day - day time difference in lower bounds exceeds limits with respect to FC; difference is 0.1393",
-                        "[ERROR] ustar_filter-2011-USTAR:FC-filter_check_night - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.15",
-                        "[ERROR] ustar_filter-2011-USTAR:FC-diff_check_night - night time difference in lower bounds exceeds limits with respect to FC; difference is 0.1366"
+                        "[INFO] ustar_filtering-2011-USTAR:base-filter_check_day - Minimum USTAR value is 0.01069",
+                        "[INFO] ustar_filtering-2011-USTAR:base-filter_check_night - Minimum USTAR value is 0.01344",
+                        "[ERROR] ustar_filtering-2011-USTAR:FC-filter_check_day - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.15002",
+                        "[ERROR] ustar_filtering-2011-USTAR:FC-diff_check_day - day time difference in lower bounds exceeds limits with respect to FC; difference is 0.1393",
+                        "[ERROR] ustar_filtering-2011-USTAR:FC-filter_check_night - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.15",
+                        "[ERROR] ustar_filtering-2011-USTAR:FC-diff_check_night - night time difference in lower bounds exceeds limits with respect to FC; difference is 0.1366"
                     ],
-                    "ustar_filter_summary": [
+                    "ustar_filtering_summary": [
                         "Period,USTAR Variable,FC Variable,Result,Daytime min USTAR,Daytime min USTAR with FC,Nighttime min USTAR,Nighttime min USTAR with FC,Figure link",
-                        "2011,USTAR,FC,FAIL,0.01069,0.15002,0.01344,0.15,US-CRT-TestProcess_###-UstarFilter-USTAR-FC-2011.png"
+                        "2011,USTAR,FC,FAIL,0.01069,0.15002,0.01344,0.15,US-CRT-TestProcess_###-ustar_filtering-USTAR-FC-2011.png"
                     ],
                     "status_list": [
                         {
                             "status_code": -2,
-                            "qaqc_check": "ustar_filter-2011",
-                            "src_logger_name": "ustar_filter-2011",
+                            "qaqc_check": "ustar_filtering-2011",
+                            "src_logger_name": "ustar_filtering-2011",
                             "n_warning": 0,
                             "n_error": 4,
                             "status_msg": null,
@@ -877,10 +877,10 @@
                                 "plot_path-2011-USTAR:FC"
                             ],
                             "sub_status": {
-                                "ustar_filter-2011-USTAR:FC": {
+                                "ustar_filtering-2011-USTAR:FC": {
                                     "status_code": -2,
-                                    "qaqc_check": "ustar_filter-2011-USTAR:FC",
-                                    "src_logger_name": "ustar_filter-2011-USTAR:FC",
+                                    "qaqc_check": "ustar_filtering-2011-USTAR:FC",
+                                    "src_logger_name": "ustar_filtering-2011-USTAR:FC",
                                     "n_warning": 0,
                                     "n_error": 4,
                                     "status_msg": null,
@@ -888,10 +888,10 @@
                                         "plot_path-2011-USTAR:FC"
                                     ],
                                     "sub_status": {
-                                        "ustar_filter-2011-USTAR:FC-filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_day": {
                                             "status_code": -2,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.15002",
@@ -903,10 +903,10 @@
                                                 "min_USTAR:FC_day": 0.15002
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_day": {
                                             "status_code": -2,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_day",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "day time difference in lower bounds exceeds limits with respect to FC; difference is 0.1393",
@@ -920,10 +920,10 @@
                                                 "diff": 0.139
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_night": {
                                             "status_code": -2,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.15",
@@ -935,10 +935,10 @@
                                                 "min_USTAR:FC_night": 0.15
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_night": {
                                             "status_code": -2,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_night",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "night time difference in lower bounds exceeds limits with respect to FC; difference is 0.1366",
@@ -952,10 +952,10 @@
                                                 "diff": 0.137
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01069",
@@ -967,10 +967,10 @@
                                                 "min_USTAR_day": 0.01069
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01344",
@@ -1002,25 +1002,25 @@
             "id": "diff_warning",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTAR000011.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTARFiltering000011.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] ustar_filter-2011-USTAR:base-filter_check_day - Minimum USTAR value is 0.01069",
-                        "[INFO] ustar_filter-2011-USTAR:base-filter_check_night - Minimum USTAR value is 0.01344",
-                        "[WARNING] ustar_filter-2011-USTAR:FC-filter_check_day - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.04021",
-                        "[WARNING] ustar_filter-2011-USTAR:FC-diff_check_day - day time difference in lower bounds exceeds limits with respect to FC; difference is 0.0295",
-                        "[WARNING] ustar_filter-2011-USTAR:FC-filter_check_night - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.04024",
-                        "[WARNING] ustar_filter-2011-USTAR:FC-diff_check_night - night time difference in lower bounds exceeds limits with respect to FC; difference is 0.0268"
+                        "[INFO] ustar_filtering-2011-USTAR:base-filter_check_day - Minimum USTAR value is 0.01069",
+                        "[INFO] ustar_filtering-2011-USTAR:base-filter_check_night - Minimum USTAR value is 0.01344",
+                        "[WARNING] ustar_filtering-2011-USTAR:FC-filter_check_day - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.04021",
+                        "[WARNING] ustar_filtering-2011-USTAR:FC-diff_check_day - day time difference in lower bounds exceeds limits with respect to FC; difference is 0.0295",
+                        "[WARNING] ustar_filtering-2011-USTAR:FC-filter_check_night - Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.04024",
+                        "[WARNING] ustar_filtering-2011-USTAR:FC-diff_check_night - night time difference in lower bounds exceeds limits with respect to FC; difference is 0.0268"
                     ],
-                    "ustar_filter_summary": [
+                    "ustar_filtering_summary": [
                         "Period,USTAR Variable,FC Variable,Result,Daytime min USTAR,Daytime min USTAR with FC,Nighttime min USTAR,Nighttime min USTAR with FC,Figure link",
-                        "2011,USTAR,FC,WARNING,0.01069,0.04021,0.01344,0.04024,US-CRT-TestProcess_###-UstarFilter-USTAR-FC-2011.png"
+                        "2011,USTAR,FC,WARNING,0.01069,0.04021,0.01344,0.04024,US-CRT-TestProcess_###-ustar_filtering-USTAR-FC-2011.png"
                     ],
                     "status_list": [
                         {
                             "status_code": -1,
-                            "qaqc_check": "ustar_filter-2011",
-                            "src_logger_name": "ustar_filter-2011",
+                            "qaqc_check": "ustar_filtering-2011",
+                            "src_logger_name": "ustar_filtering-2011",
                             "n_warning": 4,
                             "n_error": 0,
                             "status_msg": null,
@@ -1028,10 +1028,10 @@
                                 "plot_path-2011-USTAR:FC"
                             ],
                             "sub_status": {
-                                "ustar_filter-2011-USTAR:FC": {
+                                "ustar_filtering-2011-USTAR:FC": {
                                     "status_code": -1,
-                                    "qaqc_check": "ustar_filter-2011-USTAR:FC",
-                                    "src_logger_name": "ustar_filter-2011-USTAR:FC",
+                                    "qaqc_check": "ustar_filtering-2011-USTAR:FC",
+                                    "src_logger_name": "ustar_filtering-2011-USTAR:FC",
                                     "n_warning": 4,
                                     "n_error": 0,
                                     "status_msg": null,
@@ -1039,10 +1039,10 @@
                                         "plot_path-2011-USTAR:FC"
                                     ],
                                     "sub_status": {
-                                        "ustar_filter-2011-USTAR:FC-filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_day": {
                                             "status_code": -1,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_day",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.04021",
@@ -1054,10 +1054,10 @@
                                                 "min_USTAR:FC_day": 0.04021
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_day": {
                                             "status_code": -1,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_day",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "day time difference in lower bounds exceeds limits with respect to FC; difference is 0.0295",
@@ -1071,10 +1071,10 @@
                                                 "diff": 0.03
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_night": {
                                             "status_code": -1,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_night",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Possible USTAR filtering detected with respect to FC; minimum USTAR value is 0.04024",
@@ -1086,10 +1086,10 @@
                                                 "min_USTAR:FC_night": 0.04024
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_night": {
                                             "status_code": -1,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_night",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "night time difference in lower bounds exceeds limits with respect to FC; difference is 0.0268",
@@ -1103,10 +1103,10 @@
                                                 "diff": 0.027
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01069",
@@ -1118,10 +1118,10 @@
                                                 "min_USTAR_day": 0.01069
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01344",
@@ -1153,32 +1153,32 @@
             "id": "multi_year",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201101010000_201301010000_TestUSTAR000012.csv",
+                "filename": "US-CRT_HH_201101010000_201301010000_TestUSTARFiltering000012.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] ustar_filter-2011-USTAR:base-filter_check_day - Minimum USTAR value is 0.01069",
-                        "[INFO] ustar_filter-2011-USTAR:base-filter_check_night - Minimum USTAR value is 0.01344",
-                        "[INFO] ustar_filter-2011-USTAR:FC-filter_check_day - Minimum USTAR value with respect to FC is 0.01757",
-                        "[INFO] ustar_filter-2011-USTAR:FC-diff_check_day - day time difference in lower bounds with respect to FC is 0.0069",
-                        "[INFO] ustar_filter-2011-USTAR:FC-filter_check_night - Minimum USTAR value with respect to FC is 0.01477",
-                        "[INFO] ustar_filter-2011-USTAR:FC-diff_check_night - night time difference in lower bounds with respect to FC is 0.0013",
-                        "[INFO] ustar_filter-2012-USTAR:base-filter_check_day - Minimum USTAR value is 0.01412",
-                        "[INFO] ustar_filter-2012-USTAR:base-filter_check_night - Minimum USTAR value is 0.01052",
-                        "[INFO] ustar_filter-2012-USTAR:FC-filter_check_day - Minimum USTAR value with respect to FC is 0.01502",
-                        "[INFO] ustar_filter-2012-USTAR:FC-diff_check_day - day time difference in lower bounds with respect to FC is 0.0009",
-                        "[INFO] ustar_filter-2012-USTAR:FC-filter_check_night - Minimum USTAR value with respect to FC is 0.01407",
-                        "[INFO] ustar_filter-2012-USTAR:FC-diff_check_night - night time difference in lower bounds with respect to FC is 0.0035"
+                        "[INFO] ustar_filtering-2011-USTAR:base-filter_check_day - Minimum USTAR value is 0.01069",
+                        "[INFO] ustar_filtering-2011-USTAR:base-filter_check_night - Minimum USTAR value is 0.01344",
+                        "[INFO] ustar_filtering-2011-USTAR:FC-filter_check_day - Minimum USTAR value with respect to FC is 0.01757",
+                        "[INFO] ustar_filtering-2011-USTAR:FC-diff_check_day - day time difference in lower bounds with respect to FC is 0.0069",
+                        "[INFO] ustar_filtering-2011-USTAR:FC-filter_check_night - Minimum USTAR value with respect to FC is 0.01477",
+                        "[INFO] ustar_filtering-2011-USTAR:FC-diff_check_night - night time difference in lower bounds with respect to FC is 0.0013",
+                        "[INFO] ustar_filtering-2012-USTAR:base-filter_check_day - Minimum USTAR value is 0.01412",
+                        "[INFO] ustar_filtering-2012-USTAR:base-filter_check_night - Minimum USTAR value is 0.01052",
+                        "[INFO] ustar_filtering-2012-USTAR:FC-filter_check_day - Minimum USTAR value with respect to FC is 0.01502",
+                        "[INFO] ustar_filtering-2012-USTAR:FC-diff_check_day - day time difference in lower bounds with respect to FC is 0.0009",
+                        "[INFO] ustar_filtering-2012-USTAR:FC-filter_check_night - Minimum USTAR value with respect to FC is 0.01407",
+                        "[INFO] ustar_filtering-2012-USTAR:FC-diff_check_night - night time difference in lower bounds with respect to FC is 0.0035"
                     ],
-                    "ustar_filter_summary": [
+                    "ustar_filtering_summary": [
                         "Period,USTAR Variable,FC Variable,Result,Daytime min USTAR,Daytime min USTAR with FC,Nighttime min USTAR,Nighttime min USTAR with FC,Figure link",
-                        "2011,USTAR,FC,OK,0.01069,0.01757,0.01344,0.01477,US-CRT-TestProcess_###-UstarFilter-USTAR-FC-2011.png",
-                        "2012,USTAR,FC,OK,0.01412,0.01502,0.01052,0.01407,US-CRT-TestProcess_###-UstarFilter-USTAR-FC-2012.png"
+                        "2011,USTAR,FC,OK,0.01069,0.01757,0.01344,0.01477,US-CRT-TestProcess_###-ustar_filtering-USTAR-FC-2011.png",
+                        "2012,USTAR,FC,OK,0.01412,0.01502,0.01052,0.01407,US-CRT-TestProcess_###-ustar_filtering-USTAR-FC-2012.png"
                     ],
                     "status_list": [
                         {
                             "status_code": 0,
-                            "qaqc_check": "ustar_filter-2011",
-                            "src_logger_name": "ustar_filter-2011",
+                            "qaqc_check": "ustar_filtering-2011",
+                            "src_logger_name": "ustar_filtering-2011",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
@@ -1186,10 +1186,10 @@
                                 "plot_path-2011-USTAR:FC"
                             ],
                             "sub_status": {
-                                "ustar_filter-2011-USTAR:FC": {
+                                "ustar_filtering-2011-USTAR:FC": {
                                     "status_code": 0,
-                                    "qaqc_check": "ustar_filter-2011-USTAR:FC",
-                                    "src_logger_name": "ustar_filter-2011-USTAR:FC",
+                                    "qaqc_check": "ustar_filtering-2011-USTAR:FC",
+                                    "src_logger_name": "ustar_filtering-2011-USTAR:FC",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
@@ -1197,10 +1197,10 @@
                                         "plot_path-2011-USTAR:FC"
                                     ],
                                     "sub_status": {
-                                        "ustar_filter-2011-USTAR:FC-filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value with respect to FC is 0.01757",
@@ -1212,10 +1212,10 @@
                                                 "min_USTAR:FC_day": 0.01757
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "day time difference in lower bounds with respect to FC is 0.0069",
@@ -1229,10 +1229,10 @@
                                                 "diff": 0.007
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value with respect to FC is 0.01477",
@@ -1244,10 +1244,10 @@
                                                 "min_USTAR:FC_night": 0.01477
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "night time difference in lower bounds with respect to FC is 0.0013",
@@ -1261,10 +1261,10 @@
                                                 "diff": 0.001
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01069",
@@ -1276,10 +1276,10 @@
                                                 "min_USTAR_day": 0.01069
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01344",
@@ -1305,8 +1305,8 @@
                         },
                         {
                             "status_code": 0,
-                            "qaqc_check": "ustar_filter-2012",
-                            "src_logger_name": "ustar_filter-2012",
+                            "qaqc_check": "ustar_filtering-2012",
+                            "src_logger_name": "ustar_filtering-2012",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
@@ -1314,10 +1314,10 @@
                                 "plot_path-2012-USTAR:FC"
                             ],
                             "sub_status": {
-                                "ustar_filter-2012-USTAR:FC": {
+                                "ustar_filtering-2012-USTAR:FC": {
                                     "status_code": 0,
-                                    "qaqc_check": "ustar_filter-2012-USTAR:FC",
-                                    "src_logger_name": "ustar_filter-2012-USTAR:FC",
+                                    "qaqc_check": "ustar_filtering-2012-USTAR:FC",
+                                    "src_logger_name": "ustar_filtering-2012-USTAR:FC",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
@@ -1325,10 +1325,10 @@
                                         "plot_path-2012-USTAR:FC"
                                     ],
                                     "sub_status": {
-                                        "ustar_filter-2012-USTAR:FC-filter_check_day": {
+                                        "ustar_filtering-2012-USTAR:FC-filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2012-USTAR:FC-filter_check_day",
-                                            "src_logger_name": "ustar_filter-2012-USTAR:FC-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2012-USTAR:FC-filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2012-USTAR:FC-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value with respect to FC is 0.01502",
@@ -1340,10 +1340,10 @@
                                                 "min_USTAR:FC_day": 0.01502
                                             }
                                         },
-                                        "ustar_filter-2012-USTAR:FC-diff_check_day": {
+                                        "ustar_filtering-2012-USTAR:FC-diff_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2012-USTAR:FC-diff_check_day",
-                                            "src_logger_name": "ustar_filter-2012-USTAR:FC-diff_check_day",
+                                            "qaqc_check": "ustar_filtering-2012-USTAR:FC-diff_check_day",
+                                            "src_logger_name": "ustar_filtering-2012-USTAR:FC-diff_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "day time difference in lower bounds with respect to FC is 0.0009",
@@ -1357,10 +1357,10 @@
                                                 "diff": 0.001
                                             }
                                         },
-                                        "ustar_filter-2012-USTAR:FC-filter_check_night": {
+                                        "ustar_filtering-2012-USTAR:FC-filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2012-USTAR:FC-filter_check_night",
-                                            "src_logger_name": "ustar_filter-2012-USTAR:FC-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2012-USTAR:FC-filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2012-USTAR:FC-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value with respect to FC is 0.01407",
@@ -1372,10 +1372,10 @@
                                                 "min_USTAR:FC_night": 0.01407
                                             }
                                         },
-                                        "ustar_filter-2012-USTAR:FC-diff_check_night": {
+                                        "ustar_filtering-2012-USTAR:FC-diff_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2012-USTAR:FC-diff_check_night",
-                                            "src_logger_name": "ustar_filter-2012-USTAR:FC-diff_check_night",
+                                            "qaqc_check": "ustar_filtering-2012-USTAR:FC-diff_check_night",
+                                            "src_logger_name": "ustar_filtering-2012-USTAR:FC-diff_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "night time difference in lower bounds with respect to FC is 0.0035",
@@ -1389,10 +1389,10 @@
                                                 "diff": 0.004
                                             }
                                         },
-                                        "ustar_filter-2012-USTAR:FC-base_filter_check_day": {
+                                        "ustar_filtering-2012-USTAR:FC-base_filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2012-USTAR:FC-base_filter_check_day",
-                                            "src_logger_name": "ustar_filter-2012-USTAR:base-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2012-USTAR:FC-base_filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2012-USTAR:base-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01412",
@@ -1404,10 +1404,10 @@
                                                 "min_USTAR_day": 0.01412
                                             }
                                         },
-                                        "ustar_filter-2012-USTAR:FC-base_filter_check_night": {
+                                        "ustar_filtering-2012-USTAR:FC-base_filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2012-USTAR:FC-base_filter_check_night",
-                                            "src_logger_name": "ustar_filter-2012-USTAR:base-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2012-USTAR:FC-base_filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2012-USTAR:base-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01052",
@@ -1439,25 +1439,25 @@
             "id": "partial_year",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201101010000_201110231300_TestUSTAR000013.csv",
+                "filename": "US-CRT_HH_201101010000_201110231300_TestUSTARFiltering000013.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] ustar_filter-2011-USTAR:base-filter_check_day - Minimum USTAR value is 0.01069",
-                        "[INFO] ustar_filter-2011-USTAR:base-filter_check_night - Minimum USTAR value is 0.01477",
-                        "[INFO] ustar_filter-2011-USTAR:FC-filter_check_day - Minimum USTAR value with respect to FC is 0.01757",
-                        "[INFO] ustar_filter-2011-USTAR:FC-diff_check_day - day time difference in lower bounds with respect to FC is 0.0069",
-                        "[INFO] ustar_filter-2011-USTAR:FC-filter_check_night - Minimum USTAR value with respect to FC is 0.01477",
-                        "[INFO] ustar_filter-2011-USTAR:FC-diff_check_night - night time difference in lower bounds with respect to FC is 0.0"
+                        "[INFO] ustar_filtering-2011-USTAR:base-filter_check_day - Minimum USTAR value is 0.01069",
+                        "[INFO] ustar_filtering-2011-USTAR:base-filter_check_night - Minimum USTAR value is 0.01477",
+                        "[INFO] ustar_filtering-2011-USTAR:FC-filter_check_day - Minimum USTAR value with respect to FC is 0.01757",
+                        "[INFO] ustar_filtering-2011-USTAR:FC-diff_check_day - day time difference in lower bounds with respect to FC is 0.0069",
+                        "[INFO] ustar_filtering-2011-USTAR:FC-filter_check_night - Minimum USTAR value with respect to FC is 0.01477",
+                        "[INFO] ustar_filtering-2011-USTAR:FC-diff_check_night - night time difference in lower bounds with respect to FC is 0.0"
                     ],
-                    "ustar_filter_summary": [
+                    "ustar_filtering_summary": [
                         "Period,USTAR Variable,FC Variable,Result,Daytime min USTAR,Daytime min USTAR with FC,Nighttime min USTAR,Nighttime min USTAR with FC,Figure link",
-                        "2011,USTAR,FC,OK,0.01069,0.01757,0.01477,0.01477,US-CRT-TestProcess_###-UstarFilter-USTAR-FC-2011.png"
+                        "2011,USTAR,FC,OK,0.01069,0.01757,0.01477,0.01477,US-CRT-TestProcess_###-ustar_filtering-USTAR-FC-2011.png"
                     ],
                     "status_list": [
                         {
                             "status_code": 0,
-                            "qaqc_check": "ustar_filter-2011",
-                            "src_logger_name": "ustar_filter-2011",
+                            "qaqc_check": "ustar_filtering-2011",
+                            "src_logger_name": "ustar_filtering-2011",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
@@ -1465,10 +1465,10 @@
                                 "plot_path-2011-USTAR:FC"
                             ],
                             "sub_status": {
-                                "ustar_filter-2011-USTAR:FC": {
+                                "ustar_filtering-2011-USTAR:FC": {
                                     "status_code": 0,
-                                    "qaqc_check": "ustar_filter-2011-USTAR:FC",
-                                    "src_logger_name": "ustar_filter-2011-USTAR:FC",
+                                    "qaqc_check": "ustar_filtering-2011-USTAR:FC",
+                                    "src_logger_name": "ustar_filtering-2011-USTAR:FC",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
@@ -1476,10 +1476,10 @@
                                         "plot_path-2011-USTAR:FC"
                                     ],
                                     "sub_status": {
-                                        "ustar_filter-2011-USTAR:FC-filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value with respect to FC is 0.01757",
@@ -1491,10 +1491,10 @@
                                                 "min_USTAR:FC_day": 0.01757
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "day time difference in lower bounds with respect to FC is 0.0069",
@@ -1508,10 +1508,10 @@
                                                 "diff": 0.007
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value with respect to FC is 0.01477",
@@ -1523,10 +1523,10 @@
                                                 "min_USTAR:FC_night": 0.01477
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-diff_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-diff_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-diff_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:FC-diff_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-diff_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:FC-diff_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "night time difference in lower bounds with respect to FC is 0.0",
@@ -1540,10 +1540,10 @@
                                                 "diff": 0.0
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_day": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01069",
@@ -1555,10 +1555,10 @@
                                                 "min_USTAR_day": 0.01069
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR:FC-base_filter_check_night": {
+                                        "ustar_filtering-2011-USTAR:FC-base_filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR:FC-base_filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR:base-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR:FC-base_filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR:base-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01477",
@@ -1590,21 +1590,21 @@
             "id": "qualifier_vars",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTAR000014.csv",
+                "filename": "US-CRT_HH_201101010000_201201010000_TestUSTARFiltering000014.csv",
                 "expected_results": {
                     "logs": [],
-                    "ustar_filter_summary": [
+                    "ustar_filtering_summary": [
                         "Period,USTAR Variable,FC Variable,Result,Daytime min USTAR,Daytime min USTAR with FC,Nighttime min USTAR,Nighttime min USTAR with FC,Figure link",
-                        "2011,USTAR_1_1_1,FC_1_1_1,OK,0.01069,0.01757,0.01344,0.01477,US-CRT-TestProcess_###-UstarFilter-USTAR_1_1_1-FC_1_1_1-2011.png",
-                        "2011,USTAR_1_1_1,FC_2_1_1,OK,0.01069,0.01069,0.01344,0.01477,US-CRT-TestProcess_###-UstarFilter-USTAR_1_1_1-FC_2_1_1-2011.png",
-                        "2011,USTAR_2_1_1,FC_1_1_1,OK,0.01412,0.0168,0.01052,0.01052,US-CRT-TestProcess_###-UstarFilter-USTAR_2_1_1-FC_1_1_1-2011.png",
-                        "2011,USTAR_2_1_1,FC_2_1_1,OK,0.01412,0.01502,0.01052,0.01407,US-CRT-TestProcess_###-UstarFilter-USTAR_2_1_1-FC_2_1_1-2011.png"
+                        "2011,USTAR_1_1_1,FC_1_1_1,OK,0.01069,0.01757,0.01344,0.01477,US-CRT-TestProcess_###-ustar_filtering-USTAR_1_1_1-FC_1_1_1-2011.png",
+                        "2011,USTAR_1_1_1,FC_2_1_1,OK,0.01069,0.01069,0.01344,0.01477,US-CRT-TestProcess_###-ustar_filtering-USTAR_1_1_1-FC_2_1_1-2011.png",
+                        "2011,USTAR_2_1_1,FC_1_1_1,OK,0.01412,0.0168,0.01052,0.01052,US-CRT-TestProcess_###-ustar_filtering-USTAR_2_1_1-FC_1_1_1-2011.png",
+                        "2011,USTAR_2_1_1,FC_2_1_1,OK,0.01412,0.01502,0.01052,0.01407,US-CRT-TestProcess_###-ustar_filtering-USTAR_2_1_1-FC_2_1_1-2011.png"
                     ],
                     "status_list": [
                         {
                             "status_code": 0,
-                            "qaqc_check": "ustar_filter-2011",
-                            "src_logger_name": "ustar_filter-2011",
+                            "qaqc_check": "ustar_filtering-2011",
+                            "src_logger_name": "ustar_filtering-2011",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
@@ -1615,10 +1615,10 @@
                                 "plot_path-2011-USTAR_1_1_1:FC_1_1_1"
                             ],
                             "sub_status": {
-                                "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1": {
+                                "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1": {
                                     "status_code": 0,
-                                    "qaqc_check": "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1",
-                                    "src_logger_name": "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1",
+                                    "qaqc_check": "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1",
+                                    "src_logger_name": "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
@@ -1626,10 +1626,10 @@
                                         "plot_path-2011-USTAR_1_1_1:FC_1_1_1"
                                     ],
                                     "sub_status": {
-                                        "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1-filter_check_day": {
+                                        "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1-filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1-filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1-filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value with respect to FC_1_1_1 is 0.01757",
@@ -1641,10 +1641,10 @@
                                                 "min_USTAR:FC_day": 0.01757
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1-diff_check_day": {
+                                        "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1-diff_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1-diff_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1-diff_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1-diff_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1-diff_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "day time difference in lower bounds with respect to FC_1_1_1 is 0.0069",
@@ -1658,10 +1658,10 @@
                                                 "diff": 0.007
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1-filter_check_night": {
+                                        "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1-filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1-filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1-filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value with respect to FC_1_1_1 is 0.01477",
@@ -1673,10 +1673,10 @@
                                                 "min_USTAR:FC_night": 0.01477
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1-diff_check_night": {
+                                        "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1-diff_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1-diff_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1-diff_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1-diff_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1-diff_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "night time difference in lower bounds with respect to FC_1_1_1 is 0.0013",
@@ -1690,10 +1690,10 @@
                                                 "diff": 0.001
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1-base_filter_check_day": {
+                                        "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1-base_filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1-base_filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_1_1_1:base-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1-base_filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_1_1_1:base-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01069",
@@ -1705,10 +1705,10 @@
                                                 "min_USTAR_day": 0.01069
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1-base_filter_check_night": {
+                                        "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1-base_filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_1_1_1:FC_1_1_1-base_filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_1_1_1:base-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_1_1_1:FC_1_1_1-base_filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_1_1_1:base-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01344",
@@ -1727,10 +1727,10 @@
                                         "result": 0
                                     }
                                 },
-                                "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1": {
+                                "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1": {
                                     "status_code": 0,
-                                    "qaqc_check": "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1",
-                                    "src_logger_name": "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1",
+                                    "qaqc_check": "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1",
+                                    "src_logger_name": "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
@@ -1738,10 +1738,10 @@
                                         "plot_path-2011-USTAR_1_1_1:FC_2_1_1"
                                     ],
                                     "sub_status": {
-                                        "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1-filter_check_day": {
+                                        "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1-filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1-filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1-filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value with respect to FC_2_1_1 is 0.01069",
@@ -1753,10 +1753,10 @@
                                                 "min_USTAR:FC_day": 0.01069
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1-diff_check_day": {
+                                        "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1-diff_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1-diff_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1-diff_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1-diff_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1-diff_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "day time difference in lower bounds with respect to FC_2_1_1 is 0.0",
@@ -1770,10 +1770,10 @@
                                                 "diff": 0.0
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1-filter_check_night": {
+                                        "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1-filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1-filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1-filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value with respect to FC_2_1_1 is 0.01477",
@@ -1785,10 +1785,10 @@
                                                 "min_USTAR:FC_night": 0.01477
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1-diff_check_night": {
+                                        "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1-diff_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1-diff_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1-diff_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1-diff_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1-diff_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "night time difference in lower bounds with respect to FC_2_1_1 is 0.0013",
@@ -1802,10 +1802,10 @@
                                                 "diff": 0.001
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1-base_filter_check_day": {
+                                        "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1-base_filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1-base_filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_1_1_1:base-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1-base_filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_1_1_1:base-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01069",
@@ -1817,10 +1817,10 @@
                                                 "min_USTAR_day": 0.01069
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1-base_filter_check_night": {
+                                        "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1-base_filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_1_1_1:FC_2_1_1-base_filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_1_1_1:base-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_1_1_1:FC_2_1_1-base_filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_1_1_1:base-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01344",
@@ -1839,10 +1839,10 @@
                                         "result": 0
                                     }
                                 },
-                                "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1": {
+                                "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1": {
                                     "status_code": 0,
-                                    "qaqc_check": "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1",
-                                    "src_logger_name": "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1",
+                                    "qaqc_check": "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1",
+                                    "src_logger_name": "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
@@ -1850,10 +1850,10 @@
                                         "plot_path-2011-USTAR_2_1_1:FC_1_1_1"
                                     ],
                                     "sub_status": {
-                                        "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1-filter_check_day": {
+                                        "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1-filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1-filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1-filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value with respect to FC_1_1_1 is 0.0168",
@@ -1865,10 +1865,10 @@
                                                 "min_USTAR:FC_day": 0.0168
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1-diff_check_day": {
+                                        "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1-diff_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1-diff_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1-diff_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1-diff_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1-diff_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "day time difference in lower bounds with respect to FC_1_1_1 is 0.0027",
@@ -1882,10 +1882,10 @@
                                                 "diff": 0.003
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1-filter_check_night": {
+                                        "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1-filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1-filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1-filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value with respect to FC_1_1_1 is 0.01052",
@@ -1897,10 +1897,10 @@
                                                 "min_USTAR:FC_night": 0.01052
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1-diff_check_night": {
+                                        "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1-diff_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1-diff_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1-diff_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1-diff_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1-diff_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "night time difference in lower bounds with respect to FC_1_1_1 is 0.0",
@@ -1914,10 +1914,10 @@
                                                 "diff": 0.0
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1-base_filter_check_day": {
+                                        "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1-base_filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1-base_filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_2_1_1:base-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1-base_filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_2_1_1:base-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01412",
@@ -1929,10 +1929,10 @@
                                                 "min_USTAR_day": 0.01412
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1-base_filter_check_night": {
+                                        "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1-base_filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_2_1_1:FC_1_1_1-base_filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_2_1_1:base-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_2_1_1:FC_1_1_1-base_filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_2_1_1:base-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01052",
@@ -1951,10 +1951,10 @@
                                         "result": 0
                                     }
                                 },
-                                "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1": {
+                                "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1": {
                                     "status_code": 0,
-                                    "qaqc_check": "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1",
-                                    "src_logger_name": "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1",
+                                    "qaqc_check": "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1",
+                                    "src_logger_name": "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
@@ -1962,10 +1962,10 @@
                                         "plot_path-2011-USTAR_2_1_1:FC_2_1_1"
                                     ],
                                     "sub_status": {
-                                        "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1-filter_check_day": {
+                                        "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1-filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1-filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1-filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value with respect to FC_2_1_1 is 0.01502",
@@ -1977,10 +1977,10 @@
                                                 "min_USTAR:FC_day": 0.01502
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1-diff_check_day": {
+                                        "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1-diff_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1-diff_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1-diff_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1-diff_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1-diff_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "day time difference in lower bounds with respect to FC_2_1_1 is 0.0009",
@@ -1994,10 +1994,10 @@
                                                 "diff": 0.001
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1-filter_check_night": {
+                                        "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1-filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1-filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1-filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value with respect to FC_2_1_1 is 0.01407",
@@ -2009,10 +2009,10 @@
                                                 "min_USTAR:FC_night": 0.01407
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1-diff_check_night": {
+                                        "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1-diff_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1-diff_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1-diff_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1-diff_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1-diff_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "night time difference in lower bounds with respect to FC_2_1_1 is 0.0035",
@@ -2026,10 +2026,10 @@
                                                 "diff": 0.004
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1-base_filter_check_day": {
+                                        "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1-base_filter_check_day": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1-base_filter_check_day",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_2_1_1:base-filter_check_day",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1-base_filter_check_day",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_2_1_1:base-filter_check_day",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01412",
@@ -2041,10 +2041,10 @@
                                                 "min_USTAR_day": 0.01412
                                             }
                                         },
-                                        "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1-base_filter_check_night": {
+                                        "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1-base_filter_check_night": {
                                             "status_code": 0,
-                                            "qaqc_check": "ustar_filter-2011-USTAR_2_1_1:FC_2_1_1-base_filter_check_night",
-                                            "src_logger_name": "ustar_filter-2011-USTAR_2_1_1:base-filter_check_night",
+                                            "qaqc_check": "ustar_filtering-2011-USTAR_2_1_1:FC_2_1_1-base_filter_check_night",
+                                            "src_logger_name": "ustar_filtering-2011-USTAR_2_1_1:base-filter_check_night",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Minimum USTAR value is 0.01052",

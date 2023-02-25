@@ -17,7 +17,7 @@ from plot_config import PlotConfig
 from status import Status, StatusCode, StatusGenerator
 from sw_in_pot_gen import SW_IN_POT_Generator
 from timestamp_checks import TimestampChecks
-from ustar_filter import USTARFilter
+from ustar_filtering import USTARFiltering
 from utils import VarUtil
 
 __author__ = 'Danielle Christianson', 'Josh Geden'
@@ -26,7 +26,7 @@ __email__ = 'dschristianson@lbl.gov', 'joshgeden10@gmail.com'
 
 # Path to json file with test inputs & expected values for e2e tests
 json_file_path = os.path.join(
-    'test', 'testdata', 'ustar_filter', 'test_ustar_filter.json')
+    'test', 'testdata', 'ustar_filtering', 'test_ustar_filtering.json')
 
 
 @pytest.fixture
@@ -34,7 +34,7 @@ def ustar(monkeypatch):
     ''' Initializes VarUtil '''
     monkeypatch.setattr(FPVariables, '__init__', mock_FPVariables_init)
 
-    uf = USTARFilter(site_id='TestSite', process_id='TestProcess')
+    uf = USTARFiltering(site_id='TestSite', process_id='TestProcess')
     # Mock var dict if unable to get from WS
     if not uf.var_util.var_dict:
         uf.var_util.var_dict = {
@@ -64,7 +64,7 @@ def mock_datareader_init(self):
 def mock_plot(self, year, ustar_var, fc_var, plot_data):
     # Determine where to save the figure
     return os.path.join(f'{self.site_id}-{self.process_id}-'
-                        f'UstarFilter-{ustar_var}-{fc_var}-{year}.png')
+                        f'ustar_filtering-{ustar_var}-{fc_var}-{year}.png')
 
 
 def test_init(monkeypatch):
@@ -72,8 +72,9 @@ def test_init(monkeypatch):
 
     plot_dir = os.path.join('output', 'US-CRT', 'TestProcess_###', 'output')
     ftp_plot_dir = os.path.join('US-CRT', 'TestProcess_###')
-    uf = USTARFilter(site_id='TestSite_###', process_id='TestProcess_###',
-                     plot_dir=plot_dir, ftp_plot_dir=ftp_plot_dir)
+    uf = USTARFiltering(
+        site_id='TestSite_###', process_id='TestProcess_###',
+        plot_dir=plot_dir, ftp_plot_dir=ftp_plot_dir)
 
     # Test instance variables
     assert uf.data is None
@@ -81,7 +82,7 @@ def test_init(monkeypatch):
     assert uf.site_id == 'TestSite_###'
     assert uf.process_id == 'TestProcess_###'
     assert uf.rad_in_var is None
-    assert uf.qaqc_name == 'ustar_filter'
+    assert uf.qaqc_name == 'ustar_filtering'
 
     # Test that util objects were created
     assert hasattr(uf, 'plot_config')
@@ -105,10 +106,10 @@ def test_init(monkeypatch):
     # temporary config file and test that the init fails as expected
     shutil.copy('qaqc.cfg', '_temp_qaqc.cfg')
     test_cfg = os.path.join(
-        'test', 'testdata', 'ustar_filter', 'test_qaqc.cfg')
+        'test', 'testdata', 'ustar_filtering', 'test_qaqc.cfg')
     shutil.copy(test_cfg, 'qaqc.cfg')
 
-    uf = USTARFilter(site_id='TestSite_###', process_id='TestProcess_###')
+    uf = USTARFiltering(site_id='TestSite_###', process_id='TestProcess_###')
     assert uf.can_plot is False
     assert uf.plot_dir is None
     assert uf.base_plot_dir is None
@@ -128,7 +129,7 @@ def test_init(monkeypatch):
 def test_select_rad_var(ustar):
     """
     Test radiation variable selection
-    :param ustar: instance of USTARfiltered
+    :param ustar: instance of USTARFiltering
     :return:
     """
     rad_vars = ('SW_IN', 'PPFD_IN', 'SW_IN_POT')
@@ -384,7 +385,7 @@ def test_calculate_ustar_metrics(monkeypatch, ustar):
 
 def test_get_filtering_status(ustar):
     # Filtering error (fc_var_min > 0.10)
-    src_logger_name = 'ustar_filter-2011-USTAR:FC-filter_check_day'
+    src_logger_name = 'ustar_filtering-2011-USTAR:FC-filter_check_day'
     status_msg = ('Possible USTAR filtering detected with respect to FC; '
                   'minimum USTAR value is 0.5')
     status = ustar._get_ustar_filtering_status(
@@ -396,7 +397,7 @@ def test_get_filtering_status(ustar):
     assert status.get_summary_stat('min_USTAR:FC_day') == 0.5
 
     # Filtering warning (fc_var_min > 0.02)
-    src_logger_name = 'ustar_filter-2011-USTAR:FC-filter_check_night'
+    src_logger_name = 'ustar_filtering-2011-USTAR:FC-filter_check_night'
     status_msg = ('Possible USTAR filtering detected with respect to FC; '
                   'minimum USTAR value is 0.05')
     status = ustar._get_ustar_filtering_status(
@@ -408,7 +409,7 @@ def test_get_filtering_status(ustar):
     assert status.get_summary_stat('min_USTAR:FC_night') == 0.05
 
     # Filtering info (fc_var_min < warning < error)
-    src_logger_name = 'ustar_filter-2011-USTAR:FC-filter_check_day'
+    src_logger_name = 'ustar_filtering-2011-USTAR:FC-filter_check_day'
     status_msg = ('Minimum USTAR value with respect to FC is 0.01')
     status = ustar._get_ustar_filtering_status(
         year='2011', ustar_var='USTAR', fc_var='FC',
@@ -441,7 +442,7 @@ def test_get_filtering_msg(ustar):
 
 def test_get_ustar_diff_status(ustar):
     # diff error (diff > 0.10)
-    src_logger_name = 'ustar_filter-2011-USTAR:FC-diff_check_day'
+    src_logger_name = 'ustar_filtering-2011-USTAR:FC-diff_check_day'
     status_msg = ustar._get_ustar_diff_msg(fc_var='FC', period='day', diff=0.5)
 
     status = ustar._get_ustar_diff_status(
@@ -455,7 +456,7 @@ def test_get_ustar_diff_status(ustar):
     assert status.get_summary_stat('diff') == 0.5
 
     # diff warning (diff > 0.02)
-    src_logger_name = 'ustar_filter-2011-USTAR:FC-diff_check_night'
+    src_logger_name = 'ustar_filtering-2011-USTAR:FC-diff_check_night'
     status_msg = ustar._get_ustar_diff_msg(
         fc_var='FC', period='night', diff=0.05)
     status = ustar._get_ustar_diff_status(
@@ -469,7 +470,8 @@ def test_get_ustar_diff_status(ustar):
     assert status.get_summary_stat('diff') == 0.05
 
     # diff info
-    src_logger_name = 'ustar_filter-2011-USTAR_1_1_1:FC_1_1_1-diff_check_day'
+    src_logger_name = ('ustar_filtering-2011-'
+                       'USTAR_1_1_1:FC_1_1_1-diff_check_day')
     status_msg = ustar._get_ustar_diff_msg(
         fc_var='FC_1_1_1', period='day', diff=0.01)
     status = ustar._get_ustar_diff_status(
@@ -498,8 +500,8 @@ def test_get_ustar_diff_msg(ustar):
 
 def generate_plot_data():
     infile = os.path.join(
-        'test', 'testdata', 'ustar_filter',
-        'US-CRT_HH_201101010000_201201010000_TestUSTAR000001.csv')
+        'test', 'testdata', 'ustar_filtering',
+        'US-CRT_HH_201101010000_201201010000_TestUSTARFiltering000001.csv')
 
     d = DataReader()
 
@@ -513,7 +515,7 @@ def generate_plot_data():
     _log_test.resetStats()
     d._check_data_header(d.header_as_is, _log_test)
 
-    uf = USTARFilter(site_id='US-CRT', process_id='TestProcess_###')
+    uf = USTARFiltering(site_id='US-CRT', process_id='TestProcess_###')
     uf.data = d.get_data()
     uf.rad_in_var = 'SW_IN'
 
@@ -524,13 +526,13 @@ def generate_plot_data():
 
 
 def test_make_plot():
-    uf = USTARFilter(site_id='US-CRT', process_id='TestProcess_###')
+    uf = USTARFiltering(site_id='US-CRT', process_id='TestProcess_###')
     figure_link = uf._make_plot(
         year='2011', ustar_var='USTAR', fc_var='base', plot_data=None)
     assert figure_link is None
 
     plot_data_file = os.path.join(
-        'test', 'testdata', 'ustar_filter',
+        'test', 'testdata', 'ustar_filtering',
         'plot_data.json')
 
     if not os.path.exists(plot_data_file):
@@ -581,7 +583,7 @@ def test_make_plot():
     if not os.path.exists(plot_dir):
         os.makedirs(plot_dir)
 
-    uf = USTARFilter(site_id, process_id, plot_dir, ftp_plot_dir=plot_dir)
+    uf = USTARFiltering(site_id, process_id, plot_dir, ftp_plot_dir=plot_dir)
 
     plot_path = uf._make_plot(
         year='2011', ustar_var='USTAR', fc_var='FC', plot_data=plot_data)
@@ -589,7 +591,7 @@ def test_make_plot():
     assert os.path.exists(plot_path)
 
     test_plot_path = os.path.join(
-        'test', 'testdata', 'ustar_filter',
+        'test', 'testdata', 'ustar_filtering',
         'test_plot.png')
     assert os.path.exists(test_plot_path)
 
@@ -667,7 +669,7 @@ def create_and_test_stats(ustar,
     """ Builds nested Status objects for use in
         test_add_result_summary_stat """
 
-    qaqc_check = 'ustar_filter-2011-USTAR:FC-filter_check_day'
+    qaqc_check = 'ustar_filtering-2011-USTAR:FC-filter_check_day'
     fc_filter_day = Status(
         status_code=fc_filter_day_code,
         qaqc_check=qaqc_check,
@@ -675,7 +677,7 @@ def create_and_test_stats(ustar,
         n_warning=1 if fc_filter_day_code == StatusCode.WARNING else 0,
         n_error=1 if fc_filter_day_code == StatusCode.ERROR else 0)
 
-    qaqc_check = 'ustar_filter-2011-USTAR:FC-filter_check_night'
+    qaqc_check = 'ustar_filtering-2011-USTAR:FC-filter_check_night'
     fc_filter_night = Status(
         status_code=fc_filter_night_code,
         qaqc_check=qaqc_check,
@@ -683,7 +685,7 @@ def create_and_test_stats(ustar,
         n_warning=1 if fc_filter_night_code == StatusCode.WARNING else 0,
         n_error=1 if fc_filter_night_code == StatusCode.ERROR else 0)
 
-    qaqc_check = 'ustar_filter-2011-USTAR:FC-diff_check_day'
+    qaqc_check = 'ustar_filtering-2011-USTAR:FC-diff_check_day'
     fc_diff_day = Status(
         status_code=fc_diff_day_code,
         qaqc_check=qaqc_check,
@@ -691,7 +693,7 @@ def create_and_test_stats(ustar,
         n_warning=1 if fc_diff_day_code == StatusCode.WARNING else 0,
         n_error=1 if fc_diff_day_code == StatusCode.ERROR else 0)
 
-    qaqc_check = 'ustar_filter-2011-USTAR:FC-diff_check_night'
+    qaqc_check = 'ustar_filtering-2011-USTAR:FC-diff_check_night'
     fc_diff_night = Status(
         status_code=fc_diff_night_code,
         qaqc_check=qaqc_check,
@@ -699,7 +701,7 @@ def create_and_test_stats(ustar,
         n_warning=1 if fc_diff_night_code == StatusCode.WARNING else 0,
         n_error=1 if fc_diff_night_code == StatusCode.ERROR else 0)
 
-    qaqc_check = 'ustar_filter-2011-USTAR:FC_base-filter_check_day'
+    qaqc_check = 'ustar_filtering-2011-USTAR:FC_base-filter_check_day'
     base_filter_day = Status(
         status_code=base_filter_day_code,
         qaqc_check=qaqc_check,
@@ -707,7 +709,7 @@ def create_and_test_stats(ustar,
         n_warning=1 if base_filter_day_code == StatusCode.WARNING else 0,
         n_error=1 if base_filter_day_code == StatusCode.ERROR else 0)
 
-    qaqc_check = 'ustar_filter-2011-USTAR:FC_base-filter_check_night'
+    qaqc_check = 'ustar_filtering-2011-USTAR:FC_base-filter_check_night'
     base_filter_night = Status(
         status_code=base_filter_night_code,
         qaqc_check=qaqc_check,
@@ -715,7 +717,7 @@ def create_and_test_stats(ustar,
         n_warning=1 if base_filter_night_code == StatusCode.WARNING else 0,
         n_error=1 if base_filter_night_code == StatusCode.ERROR else 0)
 
-    qaqc_check = 'ustar_filter-2011-USTAR:FC'
+    qaqc_check = 'ustar_filtering-2011-USTAR:FC'
     fc_status = StatusGenerator().composite_status_generator(
         logger=Logger().getLogger(qaqc_check),
         qaqc_check=qaqc_check,
@@ -729,7 +731,7 @@ def create_and_test_stats(ustar,
         }
     )
 
-    qaqc_check = 'ustar_filter-2011'
+    qaqc_check = 'ustar_filtering-2011'
     log_obj = Logger().getLogger(qaqc_check)
     year_status = StatusGenerator().composite_status_generator(
         logger=log_obj, qaqc_check=qaqc_check,
@@ -782,7 +784,7 @@ def test_e2e(monkeypatch, filename, site_id, expected_results):
     # Monkeypatch FP_Variables?
     monkeypatch.setattr(FPVariables, '__init__',
                         mock_FPVariables_init)
-    monkeypatch.setattr(USTARFilter, '_make_plot', mock_plot)
+    monkeypatch.setattr(USTARFiltering, '_make_plot', mock_plot)
 
     process_id = 'TestProcess_###'
     resolution = 'HH'
@@ -808,9 +810,9 @@ def test_e2e(monkeypatch, filename, site_id, expected_results):
     _log.get_log_dir()
 
     # Setup data file paths
-    testdata_path = os.path.join('.', 'test', 'testdata', 'ustar_filter')
+    testdata_path = os.path.join('.', 'test', 'testdata', 'ustar_filtering')
     pickle_path = os.path.join(testdata_path, filename.replace('.csv', '.npy'))
-    filepath = os.path.join('test', 'testdata', 'ustar_filter', filename)
+    filepath = os.path.join('test', 'testdata', 'ustar_filtering', filename)
 
     # Attempt to load from binary .npy file, otherwise re-process data
     d = DataReader()
@@ -859,7 +861,7 @@ def test_e2e(monkeypatch, filename, site_id, expected_results):
 
     # Call the driver function
     # TODO speed up this function (currently takes ~75% of the time per run)
-    statuses = USTARFilter(
+    statuses = USTARFiltering(
         site_id=site_id,
         process_id=process_id,
         plot_dir=plot_dir,
@@ -896,14 +898,14 @@ def test_e2e(monkeypatch, filename, site_id, expected_results):
     summary_dir = os.path.join(output_dir, 'output', 'summary')
     assert os.path.exists(summary_dir)
 
-    csv_file = 'ustar_filter_summary.csv'
+    csv_file = 'ustar_filtering_summary.csv'
     csv_file_path = os.path.join(summary_dir, csv_file)
     assert os.path.exists(csv_file_path)
 
     # Loop through the expected lines and ensure they exist in the csv file
     with open(csv_file_path) as f:
         stream = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
-        for csv_line in expected_results['ustar_filter_summary']:
+        for csv_line in expected_results['ustar_filtering_summary']:
             # Ensure log file contains log_text
             assert stream.find(str.encode(csv_line)) != -1
 
