@@ -151,7 +151,8 @@ class PhysicalRange:
                 CHECK FOR EXCEPTIONAL CASES
                 """
 
-                yr_log = Logger().getLogger(f'physical_range-{year}-{var_obj.name}')
+                yr_log = Logger().getLogger(
+                    f'physical_range-{year}-{var_obj.name}')
                 yr_log.resetStats()
 
                 percent_max = 1 + var_obj.margin
@@ -168,7 +169,7 @@ class PhysicalRange:
                         [(i <= percent_max and i >= percent_min)
                          for i in annual_data if not np.ma.is_masked(i)]):
 
-                    # Create is_ratio status object
+                    # Create is_percent status object
                     check_log = Logger().getLogger(
                         f'physical_range-{year}-{var_obj.name}-unit_check')
                     check_log.resetStats()
@@ -177,10 +178,10 @@ class PhysicalRange:
                                   'fraction; should be a percentage')
                     check_log.error(status_msg)
 
-                    ratio_stat = stat_gen.status_generator(
+                    percent_ratio_stat = stat_gen.status_generator(
                         logger=check_log, qaqc_check=check_log.getName(),
                         status_msg=status_msg, plots=[plot_path])
-                    ratio_stat.add_summary_stat('is_ratio', True)
+                    percent_ratio_stat.add_summary_stat('is_percent', False)
 
                     # Create outlier status object
                     check_log = Logger().getLogger(
@@ -197,7 +198,8 @@ class PhysicalRange:
                         logger=yr_log, qaqc_check=yr_log.getName(),
                         plot_paths=[plot_path],
                         statuses={
-                            ratio_stat.get_qaqc_check(): ratio_stat,
+                            percent_ratio_stat.get_qaqc_check():
+                                percent_ratio_stat,
                             outlier_stat.get_qaqc_check(): outlier_stat
                         }
                     )
@@ -211,17 +213,20 @@ class PhysicalRange:
                     # initiate dict for yearly statuses
                     year_status = {}
 
-                    # Create is_ratio status if unit is %
+                    # Create is_percent status if unit is %
                     if var_obj.units == '%':
                         check_log = Logger().getLogger(
                             f'physical_range-{year}-{var_obj.name}-unit_check')
-                        ratio_stat = StatusGenerator().status_generator(
-                            logger=check_log, qaqc_check=check_log.getName())
-                        ratio_stat.add_summary_stat('is_ratio', False)
-                        year_status.update(
-                            {ratio_stat.get_qaqc_check(): ratio_stat})
+                        percent_ratio_stat = \
+                            StatusGenerator().status_generator(
+                                logger=check_log,
+                                qaqc_check=check_log.getName())
+                        percent_ratio_stat.add_summary_stat('is_percent', True)
+                        year_status.update({
+                            percent_ratio_stat.get_qaqc_check():
+                            percent_ratio_stat})
                     else:
-                        _log.info('Unit is not %. Not creating ratio-percent '
+                        _log.info('Unit is not %. Not creating percent-ratio '
                                   'status object.')
 
                     n_warning = sum(
@@ -469,7 +474,7 @@ class PhysicalRange:
                     result_code = check_stat.get_status_code()
                     if check == 'unit_check':
                         year_status.add_summary_stat(
-                            'ratio_result', result_code)
+                            'percent_ratio_result', result_code)
                     elif check == 'outlier_check':
                         if result_code == StatusCode.ERROR:
                             year_status.add_summary_stat(
@@ -492,11 +497,12 @@ class PhysicalRange:
         csv_headers = {
             'year': 'Period',
             'var': 'Variable',
-            'ratio_result': 'Result',
-            'is_ratio': 'Is ratio',
+            'percent_ratio_result': 'Result',
+            'is_percent': 'Is percent',
             'figure': 'Figure link'
         }
-        filename = os.path.join(summary_dir, 'physical_range_percent_ratio_summary.csv')
+        filename = os.path.join(
+            summary_dir, 'physical_range_percent_ratio_summary.csv')
         table.write_to_csv(filename, csv_headers)
 
         csv_headers = {

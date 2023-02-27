@@ -440,80 +440,86 @@ def test_add_result_summary_stat(monkeypatch):
     # All good
     year_status, var_status = create_test_stats(
         var='FC',
-        is_ratio_code=StatusCode.OK,
+        is_percent_code=StatusCode.OK,
         soft_flag_code=StatusCode.OK,
         hard_flag_code=StatusCode.OK
     )
     t.add_result_summary_stat([year_status], d)
-    assert var_status.get_summary_stat('ratio_result') == StatusCode.OK
+    assert var_status.get_summary_stat(
+        'percent_ratio_result') == StatusCode.OK
     assert var_status.get_summary_stat('outlier_result') == StatusCode.OK
 
     # Unit error
     year_status, var_status = create_test_stats(
         var='FC_1_1_1',
-        is_ratio_code=StatusCode.ERROR,
+        is_percent_code=StatusCode.ERROR,
         soft_flag_code=StatusCode.OK,
         hard_flag_code=StatusCode.OK
     )
     t.add_result_summary_stat([year_status], d)
-    assert var_status.get_summary_stat('ratio_result') == StatusCode.ERROR
+    assert var_status.get_summary_stat(
+        'percent_ratio_result') == StatusCode.ERROR
     assert 'outlier_result' not in var_status.get_summary_stats()
 
     # P_hard_flag > threshold1
     year_status, var_status = create_test_stats(
         var='FC',
-        is_ratio_code=StatusCode.OK,
+        is_percent_code=StatusCode.OK,
         soft_flag_code=StatusCode.OK,
         hard_flag_code=StatusCode.ERROR
     )
     t.add_result_summary_stat([year_status], d)
-    assert var_status.get_summary_stat('ratio_result') == StatusCode.OK
+    assert var_status.get_summary_stat(
+        'percent_ratio_result') == StatusCode.OK
     assert var_status.get_summary_stat('outlier_result') == StatusCode.ERROR
 
     # P_soft_flag > threshold2
     year_status, var_status = create_test_stats(
         var='FC',
-        is_ratio_code=StatusCode.OK,
+        is_percent_code=StatusCode.OK,
         soft_flag_code=StatusCode.WARNING,
         hard_flag_code=StatusCode.OK
     )
     t.add_result_summary_stat([year_status], d)
-    assert var_status.get_summary_stat('ratio_result') == StatusCode.OK
+    assert var_status.get_summary_stat(
+        'percent_ratio_result') == StatusCode.OK
     assert var_status.get_summary_stat('outlier_result') == StatusCode.WARNING
 
     # P_soft_flag > threshold2 but var is one to be ignored
     year_status, var_status = create_test_stats(
         var='PPFD_IN_1_1_1',
-        is_ratio_code=StatusCode.OK,
+        is_percent_code=StatusCode.OK,
         soft_flag_code=StatusCode.WARNING,
         hard_flag_code=StatusCode.OK
     )
     t.add_result_summary_stat([year_status], d)
-    assert var_status.get_summary_stat('ratio_result') == StatusCode.OK
+    assert var_status.get_summary_stat(
+        'percent_ratio_result') == StatusCode.OK
     assert var_status.get_summary_stat('outlier_result') == StatusCode.OK
 
     # P_hard_flag > threshold1 and P_soft_flag > threshold2
     year_status, var_status = create_test_stats(
         var='FC',
-        is_ratio_code=StatusCode.OK,
+        is_percent_code=StatusCode.OK,
         soft_flag_code=StatusCode.WARNING,
         hard_flag_code=StatusCode.ERROR
     )
     t.add_result_summary_stat([year_status], d)
-    assert var_status.get_summary_stat('ratio_result') == StatusCode.OK
+    assert var_status.get_summary_stat(
+        'percent_ratio_result') == StatusCode.OK
     assert var_status.get_summary_stat('outlier_result') == StatusCode.ERROR
 
 
-def create_test_stats(var, is_ratio_code, soft_flag_code, hard_flag_code):
+def create_test_stats(var, is_percent_code, soft_flag_code, hard_flag_code):
     """ Builds nested Status objects for use in
         test_add_result_summary_stat """
 
     qaqc_check = f'physical_range-2011-{var}-unit_check'
     unit_status = Status(
-        status_code=is_ratio_code,
+        status_code=is_percent_code,
         qaqc_check=qaqc_check,
         src_logger_name=qaqc_check,
-        n_error=1 if is_ratio_code == StatusCode.ERROR else 0
+        n_error=1 if is_percent_code == StatusCode.ERROR else 0
     )
 
     qaqc_check = f'physical_range-2011-{var}-outlier_check'

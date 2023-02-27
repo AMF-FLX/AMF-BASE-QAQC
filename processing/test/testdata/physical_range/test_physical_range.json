@@ -22,7 +22,7 @@
                         "all_data,MO_LENGTH,OK,0,0,US-Rws-TestPhysicalRangeProcess-physical_range-MO_LENGTH-all_data.png"
                     ],
                     "percent_ratio_csv_summary": [
-                        "Period,Variable,Result,Is ratio,Figure link"
+                        "Period,Variable,Result,Is percent,Figure link"
                     ],
                     "status_list": [
                         {
@@ -159,7 +159,7 @@
                         
                     ],
                     "percent_ratio_csv_summary": [
-                        "Period,Variable,Result,Is ratio,Figure link"
+                        "Period,Variable,Result,Is percent,Figure link"
                     ],
                     "status_list": [
                         {
@@ -443,9 +443,9 @@
                         "all_data,SWC,OK,0,0,US-Rws-TestPhysicalRangeProcess-physical_range-SWC-all_data.png"
                     ],
                     "percent_ratio_csv_summary": [
-                        "Period,Variable,Result,Is ratio,Figure link",
-                        "2015,SWC,OK,False,US-Rws-TestPhysicalRangeProcess-physical_range-SWC-2015.png",
-                        "all_data,SWC,OK,False,US-Rws-TestPhysicalRangeProcess-physical_range-SWC-all_data.png"
+                        "Period,Variable,Result,Is percent,Figure link",
+                        "2015,SWC,OK,True,US-Rws-TestPhysicalRangeProcess-physical_range-SWC-2015.png",
+                        "all_data,SWC,OK,True,US-Rws-TestPhysicalRangeProcess-physical_range-SWC-all_data.png"
                     ],
                     "status_list": [
                         {
@@ -661,7 +661,7 @@
                                             "report_type": "single_msg",
                                             "report_section": "table",
                                             "summary_stats": {
-                                                "is_ratio": false
+                                                "is_percent": true
                                             }
                                         },
                                         "physical_range-2015-SWC-outlier_check": {
@@ -686,7 +686,7 @@
                                     "report_type": "single_msg",
                                     "report_section": "table",
                                     "summary_stats": {
-                                        "ratio_result": 0,
+                                        "percent_ratio_result": 0,
                                         "outlier_result": 0
                                     }
                                 },
@@ -713,7 +713,7 @@
                                             "report_type": "single_msg",
                                             "report_section": "table",
                                             "summary_stats": {
-                                                "is_ratio": false
+                                                "is_percent": true
                                             }
                                         },
                                         "physical_range-all_data-SWC-outlier_check": {
@@ -738,7 +738,7 @@
                                     "report_type": "single_msg",
                                     "report_section": "table",
                                     "summary_stats": {
-                                        "ratio_result": 0,
+                                        "percent_ratio_result": 0,
                                         "outlier_result": 0
                                     }
                                 }
@@ -777,7 +777,7 @@
                         "all_data,PPFD_IN,OK,0,1.142,US-Rws-TestPhysicalRangeProcess-physical_range-PPFD_IN-all_data.png"
                     ],
                     "percent_ratio_csv_summary": [
-                        "Period,Variable,Result,Is ratio,Figure link"
+                        "Period,Variable,Result,Is percent,Figure link"
                     ],
                     "status_list": [
                         {
@@ -983,10 +983,10 @@
                         "all_data,RH,OK,0.065,0,US-Rws-TestPhysicalRangeProcess-physical_range-RH-all_data.png"
                     ],
                     "percent_ratio_csv_summary": [
-                        "Period,Variable,Result,Is ratio,Figure link",
-                        "2016,RH,OK,False,US-Rws-TestPhysicalRangeProcess-physical_range-RH-2016.png",
-                        "2017,RH,OK,False,US-Rws-TestPhysicalRangeProcess-physical_range-RH-2017.png",
-                        "all_data,RH,OK,False,US-Rws-TestPhysicalRangeProcess-physical_range-RH-all_data.png"
+                        "Period,Variable,Result,Is percent,Figure link",
+                        "2016,RH,OK,True,US-Rws-TestPhysicalRangeProcess-physical_range-RH-2016.png",
+                        "2017,RH,OK,True,US-Rws-TestPhysicalRangeProcess-physical_range-RH-2017.png",
+                        "all_data,RH,OK,True,US-Rws-TestPhysicalRangeProcess-physical_range-RH-all_data.png"
                     ],
                     "status_list": [
                         {
@@ -1025,7 +1025,7 @@
                                             "report_type": "single_msg",
                                             "report_section": "table",
                                             "summary_stats": {
-                                                "is_ratio": false
+                                                "is_percent": true
                                             }
                                         },
                                         "physical_range-2016-RH-outlier_check": {
@@ -1050,7 +1050,7 @@
                                     "report_type": "single_msg",
                                     "report_section": "table",
                                     "summary_stats": {
-                                        "ratio_result": 0,
+                                        "percent_ratio_result": 0,
                                         "outlier_result": -2
                                     }
                                 },
@@ -1077,7 +1077,7 @@
                                             "report_type": "single_msg",
                                             "report_section": "table",
                                             "summary_stats": {
-                                                "is_ratio": false
+                                                "is_percent": true
                                             }
                                         },
                                         "physical_range-2017-RH-outlier_check": {
@@ -1102,7 +1102,7 @@
                                     "report_type": "single_msg",
                                     "report_section": "table",
                                     "summary_stats": {
-                                        "ratio_result": 0,
+                                        "percent_ratio_result": 0,
                                         "outlier_result": 0
                                     }
                                 },
@@ -1129,7 +1129,7 @@
                                             "report_type": "single_msg",
                                             "report_section": "table",
                                             "summary_stats": {
-                                                "is_ratio": false
+                                                "is_percent": true
                                             }
                                         },
                                         "physical_range-all_data-RH-outlier_check": {
@@ -1154,7 +1154,7 @@
                                     "report_type": "single_msg",
                                     "report_section": "table",
                                     "summary_stats": {
-                                        "ratio_result": 0,
+                                        "percent_ratio_result": 0,
                                         "outlier_result": 0
                                     }
                                 }
@@ -1187,7 +1187,7 @@
                         "all_data,G,FAIL,0.171,1.142,US-Rws-TestPhysicalRangeProcess-physical_range-G-all_data.png"
                     ],
                     "percent_ratio_csv_summary": [
-                        "Period,Variable,Result,Is ratio,Figure link"
+                        "Period,Variable,Result,Is percent,Figure link"
                     ],
                     "status_list": [
                         {
@@ -1301,9 +1301,9 @@
                         "Period,Variable,Result,Hard flag (%),Soft flag (%),Figure link"
                     ],
                     "percent_ratio_csv_summary": [
-                        "Period,Variable,Result,Is ratio,Figure link",
-                        "2015,SWC,FAIL,True,US-Rws-TestPhysicalRangeProcess-physical_range-SWC-2015.png",
-                        "all_data,SWC,FAIL,True,US-Rws-TestPhysicalRangeProcess-physical_range-SWC-all_data.png"
+                        "Period,Variable,Result,Is percent,Figure link",
+                        "2015,SWC,FAIL,False,US-Rws-TestPhysicalRangeProcess-physical_range-SWC-2015.png",
+                        "all_data,SWC,FAIL,False,US-Rws-TestPhysicalRangeProcess-physical_range-SWC-all_data.png"
                     ],
                     "status_list": [
                         {
@@ -1343,7 +1343,7 @@
                                             "report_type": "single_msg",
                                             "report_section": "table",
                                             "summary_stats": {
-                                                "is_ratio": true
+                                                "is_percent": false
                                             }
                                         },
                                         "physical_range-2015-SWC-outlier_check": {
@@ -1363,7 +1363,7 @@
                                     "report_type": "single_msg",
                                     "report_section": "table",
                                     "summary_stats": {
-                                        "ratio_result": -2,
+                                        "percent_ratio_result": -2,
                                         "outlier_result": 0
                                     }
                                 },
@@ -1392,7 +1392,7 @@
                                             "report_type": "single_msg",
                                             "report_section": "table",
                                             "summary_stats": {
-                                                "is_ratio": true
+                                                "is_percent": false
                                             }
                                         },
                                         "physical_range-all_data-SWC-outlier_check": {
@@ -1412,7 +1412,7 @@
                                     "report_type": "single_msg",
                                     "report_section": "table",
                                     "summary_stats": {
-                                        "ratio_result": -2,
+                                        "percent_ratio_result": -2,
                                         "outlier_result": 0
                                     }
                                 }
@@ -1440,7 +1440,7 @@
                         "Period,Variable,Result,Hard flag (%),Soft flag (%),Figure link"
                     ],
                     "percent_ratio_csv_summary": [
-                        "Period,Variable,Result,Is ratio,Figure link"
+                        "Period,Variable,Result,Is percent,Figure link"
                     ],
                     "status_list": [
                         {
