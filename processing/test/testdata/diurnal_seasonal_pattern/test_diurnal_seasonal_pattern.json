@@ -9,53 +9,53 @@
             "id": "all_good",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201201010000_201301010000_TestDiurnalSeasonal000001.csv",
+                "filename": "US-CRT_HH_201201010000_201301010000_TestDiurnalSeasonalPattern000001.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] diurnal_seasonal-2012-FC-ccorr_check - Max corr 0.943 at lag 0",
-                        "[INFO] diurnal_seasonal-2012-FC-outer_band_check - 12.26% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
-                        "[INFO] diurnal_seasonal-2012-FC-inner_band_check - 46.25% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
-                        "[INFO] diurnal_seasonal-2012-H-ccorr_check - Max corr 0.905 at lag 0",
-                        "[INFO] diurnal_seasonal-2012-H-outer_band_check - 10.37% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
-                        "[INFO] diurnal_seasonal-2012-H-inner_band_check - 49.55% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-ccorr_check - Max corr 0.943 at lag 0",
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-outer_band_check - 12.26% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-inner_band_check - 46.25% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
+                        "[INFO] diurnal_seasonal_pattern-2012-H-ccorr_check - Max corr 0.905 at lag 0",
+                        "[INFO] diurnal_seasonal_pattern-2012-H-outer_band_check - 10.37% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
+                        "[INFO] diurnal_seasonal_pattern-2012-H-inner_band_check - 49.55% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross-correlation,Timestamps within historical interquartile range (%),Timestamps outside historical 95% range (%),Figure link",
-                        "2012,FC,OK,0,0.943,46.25,12.26,/diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png",
-                        "2012,H,OK,0,0.905,49.55,10.37,/diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-H-2012.png"
+                        "2012,FC,OK,0,0.943,46.25,12.26,/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png",
+                        "2012,H,OK,0,0.905,49.55,10.37,/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-H-2012.png"
                     ],
                     "status_list": [
                         {
                             "status_code": 0,
                             "qaqc_check": "FC",
-                            "src_logger_name": "diurnal_seasonal-FC",
+                            "src_logger_name": "diurnal_seasonal_pattern-FC",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
                             "plot_paths": [
-                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                             ],
                             "sub_status": {
-                                "diurnal_seasonal-2012-FC": {
+                                "diurnal_seasonal_pattern-2012-FC": {
                                     "status_code": 0,
-                                    "qaqc_check": "diurnal_seasonal-2012-FC",
-                                    "src_logger_name": "diurnal_seasonal-2012-FC",
+                                    "qaqc_check": "diurnal_seasonal_pattern-2012-FC",
+                                    "src_logger_name": "diurnal_seasonal_pattern-2012-FC",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                        "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                     ],
                                     "sub_status": {
-                                        "diurnal_seasonal-2012-FC-ccorr_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-ccorr_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-ccorr_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-ccorr_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-ccorr_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-ccorr_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Max corr 0.943 at lag 0",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -65,15 +65,15 @@
                                                 "corr": 0.943
                                             }
                                         },
-                                        "diurnal_seasonal-2012-FC-outer_band_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-outer_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-outer_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-outer_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-outer_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-outer_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "12.26% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -82,15 +82,15 @@
                                                 "outer_band": 12.26
                                             }
                                         },
-                                        "diurnal_seasonal-2012-FC-inner_band_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-inner_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-inner_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-inner_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-inner_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-inner_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "46.25% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -114,34 +114,34 @@
                         {
                             "status_code": 0,
                             "qaqc_check": "H",
-                            "src_logger_name": "diurnal_seasonal-H",
+                            "src_logger_name": "diurnal_seasonal_pattern-H",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
                             "plot_paths": [
-                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-H-2012.png"
+                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-H-2012.png"
                             ],
                             "sub_status": {
-                                "diurnal_seasonal-2012-H": {
+                                "diurnal_seasonal_pattern-2012-H": {
                                     "status_code": 0,
-                                    "qaqc_check": "diurnal_seasonal-2012-H",
-                                    "src_logger_name": "diurnal_seasonal-2012-H",
+                                    "qaqc_check": "diurnal_seasonal_pattern-2012-H",
+                                    "src_logger_name": "diurnal_seasonal_pattern-2012-H",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-H-2012.png"
+                                        "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-H-2012.png"
                                     ],
                                     "sub_status": {
-                                        "diurnal_seasonal-2012-H-ccorr_check": {
+                                        "diurnal_seasonal_pattern-2012-H-ccorr_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-H-ccorr_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-H-ccorr_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-H-ccorr_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-H-ccorr_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Max corr 0.905 at lag 0",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-H-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-H-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -151,15 +151,15 @@
                                                 "corr": 0.905
                                             }
                                         },
-                                        "diurnal_seasonal-2012-H-outer_band_check": {
+                                        "diurnal_seasonal_pattern-2012-H-outer_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-H-outer_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-H-outer_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-H-outer_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-H-outer_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "10.37% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-H-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-H-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -168,15 +168,15 @@
                                                 "outer_band": 10.37
                                             }
                                         },
-                                        "diurnal_seasonal-2012-H-inner_band_check": {
+                                        "diurnal_seasonal_pattern-2012-H-inner_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-H-inner_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-H-inner_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-H-inner_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-H-inner_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "49.55% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-H-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-H-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -205,49 +205,49 @@
             "id": "max_corr_gt_threshold",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201201010000_201301010000_TestDiurnalSeasonal000002.csv",
+                "filename": "US-CRT_HH_201201010000_201301010000_TestDiurnalSeasonalPattern000002.csv",
                 "expected_results": {
                     "logs": [
-                        "[WARNING] diurnal_seasonal-2012-SW_IN-ccorr_check - Max corr 0.991 at lag 2",
-                        "[WARNING] diurnal_seasonal-2012-SW_IN-outer_band_check - 20.67% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
-                        "[INFO] diurnal_seasonal-2012-SW_IN-inner_band_check - 64.0% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
+                        "[WARNING] diurnal_seasonal_pattern-2012-SW_IN-ccorr_check - Max corr 0.991 at lag 2",
+                        "[WARNING] diurnal_seasonal_pattern-2012-SW_IN-outer_band_check - 20.67% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
+                        "[INFO] diurnal_seasonal_pattern-2012-SW_IN-inner_band_check - 64.0% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross-correlation,Timestamps within historical interquartile range (%),Timestamps outside historical 95% range (%),Figure link",
-                        "2012,SW_IN,WARNING,2,0.991,64.0,20.67,/diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-SW_IN-2012.png"
+                        "2012,SW_IN,WARNING,2,0.991,64.0,20.67,/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-SW_IN-2012.png"
                     ],
                     "status_list": [
                         {
                             "status_code": -1,
                             "qaqc_check": "SW_IN",
-                            "src_logger_name": "diurnal_seasonal-SW_IN",
+                            "src_logger_name": "diurnal_seasonal_pattern-SW_IN",
                             "n_warning": 2,
                             "n_error": 0,
                             "status_msg": null,
                             "plot_paths": [
-                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-SW_IN-2012.png"
+                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-SW_IN-2012.png"
                             ],
                             "sub_status": {
-                                "diurnal_seasonal-2012-SW_IN": {
+                                "diurnal_seasonal_pattern-2012-SW_IN": {
                                     "status_code": -1,
-                                    "qaqc_check": "diurnal_seasonal-2012-SW_IN",
-                                    "src_logger_name": "diurnal_seasonal-2012-SW_IN",
+                                    "qaqc_check": "diurnal_seasonal_pattern-2012-SW_IN",
+                                    "src_logger_name": "diurnal_seasonal_pattern-2012-SW_IN",
                                     "n_warning": 2,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-SW_IN-2012.png"
+                                        "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-SW_IN-2012.png"
                                     ],
                                     "sub_status": {
-                                        "diurnal_seasonal-2012-SW_IN-ccorr_check": {
+                                        "diurnal_seasonal_pattern-2012-SW_IN-ccorr_check": {
                                             "status_code": -1,
-                                            "qaqc_check": "diurnal_seasonal-2012-SW_IN-ccorr_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-SW_IN-ccorr_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-SW_IN-ccorr_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-SW_IN-ccorr_check",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Max corr 0.991 at lag 2",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-SW_IN-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-SW_IN-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -257,15 +257,15 @@
                                                 "corr": 0.991
                                             }
                                         },
-                                        "diurnal_seasonal-2012-SW_IN-outer_band_check": {
+                                        "diurnal_seasonal_pattern-2012-SW_IN-outer_band_check": {
                                             "status_code": -1,
-                                            "qaqc_check": "diurnal_seasonal-2012-SW_IN-outer_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-SW_IN-outer_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-SW_IN-outer_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-SW_IN-outer_band_check",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "20.67% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-SW_IN-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-SW_IN-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -274,15 +274,15 @@
                                                 "outer_band": 20.67
                                             }
                                         },
-                                        "diurnal_seasonal-2012-SW_IN-inner_band_check": {
+                                        "diurnal_seasonal_pattern-2012-SW_IN-inner_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-SW_IN-inner_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-SW_IN-inner_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-SW_IN-inner_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-SW_IN-inner_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "64.0% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-SW_IN-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-SW_IN-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -311,49 +311,49 @@
             "id": "negative_max_corr",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201201010000_201301010000_TestDiurnalSeasonal000010.csv",
+                "filename": "US-CRT_HH_201201010000_201301010000_TestDiurnalSeasonalPattern000010.csv",
                 "expected_results": {
                     "logs": [
-                        "[ERROR] diurnal_seasonal-2012-G_1_1_1-ccorr_check - Max corr -0.969 at lag 0",
-                        "[ERROR] diurnal_seasonal-2012-G_1_1_1-outer_band_check - 56.17% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
-                        "[ERROR] diurnal_seasonal-2012-G_1_1_1-inner_band_check - 10.25% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
+                        "[ERROR] diurnal_seasonal_pattern-2012-G_1_1_1-ccorr_check - Max corr -0.969 at lag 0",
+                        "[ERROR] diurnal_seasonal_pattern-2012-G_1_1_1-outer_band_check - 56.17% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
+                        "[ERROR] diurnal_seasonal_pattern-2012-G_1_1_1-inner_band_check - 10.25% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross-correlation,Timestamps within historical interquartile range (%),Timestamps outside historical 95% range (%),Figure link",
-                        "2012,G_1_1_1,FAIL,0,-0.969,10.25,56.17,/diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-G_1_1_1-2012.png"
+                        "2012,G_1_1_1,FAIL,0,-0.969,10.25,56.17,/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-G_1_1_1-2012.png"
                     ],
                     "status_list": [
                         {
                             "status_code": -2,
                             "qaqc_check": "G_1_1_1",
-                            "src_logger_name": "diurnal_seasonal-G_1_1_1",
+                            "src_logger_name": "diurnal_seasonal_pattern-G_1_1_1",
                             "n_warning": 0,
                             "n_error": 3,
                             "status_msg": null,
                             "plot_paths": [
-                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-G_1_1_1-2012.png"
+                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-G_1_1_1-2012.png"
                             ],
                             "sub_status": {
-                                "diurnal_seasonal-2012-G_1_1_1": {
+                                "diurnal_seasonal_pattern-2012-G_1_1_1": {
                                     "status_code": -2,
-                                    "qaqc_check": "diurnal_seasonal-2012-G_1_1_1",
-                                    "src_logger_name": "diurnal_seasonal-2012-G_1_1_1",
+                                    "qaqc_check": "diurnal_seasonal_pattern-2012-G_1_1_1",
+                                    "src_logger_name": "diurnal_seasonal_pattern-2012-G_1_1_1",
                                     "n_warning": 0,
                                     "n_error": 3,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-G_1_1_1-2012.png"
+                                        "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-G_1_1_1-2012.png"
                                     ],
                                     "sub_status": {
-                                        "diurnal_seasonal-2012-G_1_1_1-ccorr_check": {
+                                        "diurnal_seasonal_pattern-2012-G_1_1_1-ccorr_check": {
                                             "status_code": -2,
-                                            "qaqc_check": "diurnal_seasonal-2012-G_1_1_1-ccorr_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-G_1_1_1-ccorr_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-G_1_1_1-ccorr_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-G_1_1_1-ccorr_check",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "Max corr -0.969 at lag 0",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-G_1_1_1-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-G_1_1_1-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -363,15 +363,15 @@
                                                 "corr": -0.969
                                             }
                                         },
-                                        "diurnal_seasonal-2012-G_1_1_1-outer_band_check": {
+                                        "diurnal_seasonal_pattern-2012-G_1_1_1-outer_band_check": {
                                             "status_code": -2,
-                                            "qaqc_check": "diurnal_seasonal-2012-G_1_1_1-outer_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-G_1_1_1-outer_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-G_1_1_1-outer_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-G_1_1_1-outer_band_check",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "56.17% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-G_1_1_1-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-G_1_1_1-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -380,15 +380,15 @@
                                                 "outer_band": 56.17
                                             }
                                         },
-                                        "diurnal_seasonal-2012-G_1_1_1-inner_band_check": {
+                                        "diurnal_seasonal_pattern-2012-G_1_1_1-inner_band_check": {
                                             "status_code": -2,
-                                            "qaqc_check": "diurnal_seasonal-2012-G_1_1_1-inner_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-G_1_1_1-inner_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-G_1_1_1-inner_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-G_1_1_1-inner_band_check",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "10.25% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-G_1_1_1-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-G_1_1_1-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -417,49 +417,49 @@
             "id": "below_threshold",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201201010000_201301010000_TestDiurnalSeasonal000003.csv",
+                "filename": "US-CRT_HH_201201010000_201301010000_TestDiurnalSeasonalPattern000003.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] diurnal_seasonal-2012-FC-ccorr_check - No significant cross correlation was found",
-                        "[INFO] diurnal_seasonal-2012-FC-outer_band_check - 12.71% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
-                        "[INFO] diurnal_seasonal-2012-FC-inner_band_check - 45.74% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-ccorr_check - No significant cross correlation was found",
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-outer_band_check - 12.71% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-inner_band_check - 45.74% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross-correlation,Timestamps within historical interquartile range (%),Timestamps outside historical 95% range (%),Figure link",
-                        "2012,FC,OK,2,-0.077,45.74,12.71,/diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                        "2012,FC,OK,2,-0.077,45.74,12.71,/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                     ],
                     "status_list": [
                         {
                             "status_code": 0,
                             "qaqc_check": "FC",
-                            "src_logger_name": "diurnal_seasonal-FC",
+                            "src_logger_name": "diurnal_seasonal_pattern-FC",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
                             "plot_paths": [
-                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                             ],
                             "sub_status": {
-                                "diurnal_seasonal-2012-FC": {
+                                "diurnal_seasonal_pattern-2012-FC": {
                                     "status_code": 0,
-                                    "qaqc_check": "diurnal_seasonal-2012-FC",
-                                    "src_logger_name": "diurnal_seasonal-2012-FC",
+                                    "qaqc_check": "diurnal_seasonal_pattern-2012-FC",
+                                    "src_logger_name": "diurnal_seasonal_pattern-2012-FC",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                        "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                     ],
                                     "sub_status": {
-                                        "diurnal_seasonal-2012-FC-ccorr_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-ccorr_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-ccorr_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-ccorr_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-ccorr_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-ccorr_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "No significant cross correlation was found",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -469,15 +469,15 @@
                                                 "corr": -0.077
                                             }
                                         },
-                                        "diurnal_seasonal-2012-FC-outer_band_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-outer_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-outer_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-outer_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-outer_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-outer_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "12.71% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -486,15 +486,15 @@
                                                 "outer_band": 12.71
                                             }
                                         },
-                                        "diurnal_seasonal-2012-FC-inner_band_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-inner_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-inner_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-inner_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-inner_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-inner_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "45.74% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -523,49 +523,49 @@
             "id": "no_lag",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201201010000_201301010000_TestDiurnalSeasonal000004.csv",
+                "filename": "US-CRT_HH_201201010000_201301010000_TestDiurnalSeasonalPattern000004.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] diurnal_seasonal-2012-FC-ccorr_check - Insufficient data for calculating cross correlation",
-                        "[INFO] diurnal_seasonal-2012-FC-outer_band_check - 13.18% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
-                        "[INFO] diurnal_seasonal-2012-FC-inner_band_check - 44.33% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-ccorr_check - Insufficient data for calculating cross correlation",
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-outer_band_check - 13.18% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-inner_band_check - 44.33% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross-correlation,Timestamps within historical interquartile range (%),Timestamps outside historical 95% range (%),Figure link",
-                        "2012,FC,OK,not_calculated,not_calculated,44.33,13.18,/diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                        "2012,FC,OK,not_calculated,not_calculated,44.33,13.18,/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                     ],
                     "status_list": [
                         {
                             "status_code": 0,
                             "qaqc_check": "FC",
-                            "src_logger_name": "diurnal_seasonal-FC",
+                            "src_logger_name": "diurnal_seasonal_pattern-FC",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
                             "plot_paths": [
-                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                             ],
                             "sub_status": {
-                                "diurnal_seasonal-2012-FC": {
+                                "diurnal_seasonal_pattern-2012-FC": {
                                     "status_code": 0,
-                                    "qaqc_check": "diurnal_seasonal-2012-FC",
-                                    "src_logger_name": "diurnal_seasonal-2012-FC",
+                                    "qaqc_check": "diurnal_seasonal_pattern-2012-FC",
+                                    "src_logger_name": "diurnal_seasonal_pattern-2012-FC",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                        "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                     ],
                                     "sub_status": {
-                                        "diurnal_seasonal-2012-FC-ccorr_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-ccorr_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-ccorr_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-ccorr_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-ccorr_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-ccorr_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Insufficient data for calculating cross correlation",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -575,15 +575,15 @@
                                                 "corr": "not_calculated"
                                             }
                                         },
-                                        "diurnal_seasonal-2012-FC-outer_band_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-outer_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-outer_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-outer_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-outer_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-outer_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "13.18% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -592,15 +592,15 @@
                                                 "outer_band": 13.18
                                             }
                                         },
-                                        "diurnal_seasonal-2012-FC-inner_band_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-inner_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-inner_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-inner_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-inner_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-inner_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "44.33% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -629,10 +629,10 @@
             "id": "partial_month",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201212050000_201301010000_TestDiurnalSeasonal000005.csv",
+                "filename": "US-CRT_HH_201212050000_201301010000_TestDiurnalSeasonalPattern000005.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] diurnal_seasonal-all_data - Less than 30 days of data provided; not running diurnal seasonal check."
+                        "[INFO] diurnal_seasonal_pattern-all_data - Less than 30 days of data provided; not running diurnal seasonal pattern check."
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross-correlation,Timestamps within historical interquartile range (%),Timestamps outside historical 95% range (%),Figure link"
@@ -640,11 +640,11 @@
                     "status_list": [
                         {
                             "status_code": 0,
-                            "qaqc_check": "diurnal_seasonal-all_data",
-                            "src_logger_name": "diurnal_seasonal-all_data",
+                            "qaqc_check": "diurnal_seasonal_pattern-all_data",
+                            "src_logger_name": "diurnal_seasonal_pattern-all_data",
                             "n_warning": 0,
                             "n_error": 0,
-                            "status_msg": "Less than 30 days of data provided; not running diurnal seasonal check.",
+                            "status_msg": "Less than 30 days of data provided; not running diurnal seasonal pattern check.",
                             "plot_paths": null,
                             "sub_status": null,
                             "report_type": "single_msg",
@@ -659,10 +659,10 @@
             "id": "variable_not_in_historical_data",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201201010000_201301010000_TestDiurnalSeasonal000006.csv",
+                "filename": "US-CRT_HH_201201010000_201301010000_TestDiurnalSeasonalPattern000006.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] diurnal_seasonal-historical_data_check - BASE candidate has no variables that match historical data. Skipping diurnal seasonal checks."
+                        "[INFO] diurnal_seasonal_pattern-historical_data_check - BASE candidate has no variables that match historical data. Skipping diurnal seasonal pattern checks."
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross-correlation,Timestamps within historical interquartile range (%),Timestamps outside historical 95% range (%),Figure link"
@@ -670,11 +670,11 @@
                     "status_list": [
                         {
                             "status_code": 0,
-                            "qaqc_check": "diurnal_seasonal-historical_data_check",
-                            "src_logger_name": "diurnal_seasonal-historical_data_check",
+                            "qaqc_check": "diurnal_seasonal_pattern-historical_data_check",
+                            "src_logger_name": "diurnal_seasonal_pattern-historical_data_check",
                             "n_warning": 0,
                             "n_error": 0,
-                            "status_msg": "BASE candidate has no variables that match historical data. Skipping diurnal seasonal checks.",
+                            "status_msg": "BASE candidate has no variables that match historical data. Skipping diurnal seasonal pattern checks.",
                             "plot_paths": null,
                             "sub_status": null,
                             "report_type": "single_msg",
@@ -689,49 +689,49 @@
             "id": "threshold_warning_and_error",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201201010000_201301010000_TestDiurnalSeasonal000007.csv",
+                "filename": "US-CRT_HH_201201010000_201301010000_TestDiurnalSeasonalPattern000007.csv",
                 "expected_results": {
                     "logs": [
-                        "[WARNING] diurnal_seasonal-2012-TA-ccorr_check - Max corr 0.599 at lag 3",
-                        "[ERROR] diurnal_seasonal-2012-TA-outer_band_check - 85.9% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
-                        "[ERROR] diurnal_seasonal-2012-TA-inner_band_check - 2.36% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
+                        "[WARNING] diurnal_seasonal_pattern-2012-TA-ccorr_check - Max corr 0.599 at lag 3",
+                        "[ERROR] diurnal_seasonal_pattern-2012-TA-outer_band_check - 85.9% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
+                        "[ERROR] diurnal_seasonal_pattern-2012-TA-inner_band_check - 2.36% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross-correlation,Timestamps within historical interquartile range (%),Timestamps outside historical 95% range (%),Figure link",
-                        "2012,TA,FAIL,3,0.599,2.36,85.9,/diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-TA-2012.png"
+                        "2012,TA,FAIL,3,0.599,2.36,85.9,/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-TA-2012.png"
                     ],
                     "status_list": [
                         {
                             "status_code": -2,
                             "qaqc_check": "TA",
-                            "src_logger_name": "diurnal_seasonal-TA",
+                            "src_logger_name": "diurnal_seasonal_pattern-TA",
                             "n_warning": 1,
                             "n_error": 2,
                             "status_msg": null,
                             "plot_paths": [
-                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-TA-2012.png"
+                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-TA-2012.png"
                             ],
                             "sub_status": {
-                                "diurnal_seasonal-2012-TA": {
+                                "diurnal_seasonal_pattern-2012-TA": {
                                     "status_code": -2,
-                                    "qaqc_check": "diurnal_seasonal-2012-TA",
-                                    "src_logger_name": "diurnal_seasonal-2012-TA",
+                                    "qaqc_check": "diurnal_seasonal_pattern-2012-TA",
+                                    "src_logger_name": "diurnal_seasonal_pattern-2012-TA",
                                     "n_warning": 1,
                                     "n_error": 2,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-TA-2012.png"
+                                        "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-TA-2012.png"
                                     ],
                                     "sub_status": {
-                                        "diurnal_seasonal-2012-TA-ccorr_check": {
+                                        "diurnal_seasonal_pattern-2012-TA-ccorr_check": {
                                             "status_code": -1,
-                                            "qaqc_check": "diurnal_seasonal-2012-TA-ccorr_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-TA-ccorr_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-TA-ccorr_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-TA-ccorr_check",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Max corr 0.599 at lag 3",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-TA-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-TA-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -741,15 +741,15 @@
                                                 "corr": 0.599
                                             }
                                         },
-                                        "diurnal_seasonal-2012-TA-outer_band_check": {
+                                        "diurnal_seasonal_pattern-2012-TA-outer_band_check": {
                                             "status_code": -2,
-                                            "qaqc_check": "diurnal_seasonal-2012-TA-outer_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-TA-outer_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-TA-outer_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-TA-outer_band_check",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "85.9% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-TA-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-TA-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -758,15 +758,15 @@
                                                 "outer_band": 85.9
                                             }
                                         },
-                                        "diurnal_seasonal-2012-TA-inner_band_check": {
+                                        "diurnal_seasonal_pattern-2012-TA-inner_band_check": {
                                             "status_code": -2,
-                                            "qaqc_check": "diurnal_seasonal-2012-TA-inner_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-TA-inner_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-TA-inner_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-TA-inner_band_check",
                                             "n_warning": 0,
                                             "n_error": 1,
                                             "status_msg": "2.36% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-TA-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-TA-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -795,49 +795,49 @@
             "id": "threshold_warnings",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201201010000_201301010000_TestDiurnalSeasonal000008.csv",
+                "filename": "US-CRT_HH_201201010000_201301010000_TestDiurnalSeasonalPattern000008.csv",
                 "expected_results": {
                     "logs": [
-                        "[WARNING] diurnal_seasonal-2012-TA-ccorr_check - Max corr 0.839 at lag 2",
-                        "[WARNING] diurnal_seasonal-2012-TA-outer_band_check - 26.18% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
-                        "[WARNING] diurnal_seasonal-2012-TA-inner_band_check - 27.49% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
+                        "[WARNING] diurnal_seasonal_pattern-2012-TA-ccorr_check - Max corr 0.839 at lag 2",
+                        "[WARNING] diurnal_seasonal_pattern-2012-TA-outer_band_check - 26.18% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
+                        "[WARNING] diurnal_seasonal_pattern-2012-TA-inner_band_check - 27.49% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross-correlation,Timestamps within historical interquartile range (%),Timestamps outside historical 95% range (%),Figure link",
-                        "2012,TA,WARNING,2,0.839,27.49,26.18,/diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-TA-2012.png"
+                        "2012,TA,WARNING,2,0.839,27.49,26.18,/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-TA-2012.png"
                     ],
                     "status_list": [
                         {
                             "status_code": -1,
                             "qaqc_check": "TA",
-                            "src_logger_name": "diurnal_seasonal-TA",
+                            "src_logger_name": "diurnal_seasonal_pattern-TA",
                             "n_warning": 3,
                             "n_error": 0,
                             "status_msg": null,
                             "plot_paths": [
-                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-TA-2012.png"
+                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-TA-2012.png"
                             ],
                             "sub_status": {
-                                "diurnal_seasonal-2012-TA": {
+                                "diurnal_seasonal_pattern-2012-TA": {
                                     "status_code": -1,
-                                    "qaqc_check": "diurnal_seasonal-2012-TA",
-                                    "src_logger_name": "diurnal_seasonal-2012-TA",
+                                    "qaqc_check": "diurnal_seasonal_pattern-2012-TA",
+                                    "src_logger_name": "diurnal_seasonal_pattern-2012-TA",
                                     "n_warning": 3,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-TA-2012.png"
+                                        "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-TA-2012.png"
                                     ],
                                     "sub_status": {
-                                        "diurnal_seasonal-2012-TA-ccorr_check": {
+                                        "diurnal_seasonal_pattern-2012-TA-ccorr_check": {
                                             "status_code": -1,
-                                            "qaqc_check": "diurnal_seasonal-2012-TA-ccorr_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-TA-ccorr_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-TA-ccorr_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-TA-ccorr_check",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "Max corr 0.839 at lag 2",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-TA-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-TA-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -847,15 +847,15 @@
                                                 "corr": 0.839
                                             }
                                         },
-                                        "diurnal_seasonal-2012-TA-outer_band_check": {
+                                        "diurnal_seasonal_pattern-2012-TA-outer_band_check": {
                                             "status_code": -1,
-                                            "qaqc_check": "diurnal_seasonal-2012-TA-outer_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-TA-outer_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-TA-outer_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-TA-outer_band_check",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "26.18% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-TA-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-TA-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -864,15 +864,15 @@
                                                 "outer_band": 26.18
                                             }
                                         },
-                                        "diurnal_seasonal-2012-TA-inner_band_check": {
+                                        "diurnal_seasonal_pattern-2012-TA-inner_band_check": {
                                             "status_code": -1,
-                                            "qaqc_check": "diurnal_seasonal-2012-TA-inner_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-TA-inner_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-TA-inner_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-TA-inner_band_check",
                                             "n_warning": 1,
                                             "n_error": 0,
                                             "status_msg": "27.49% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-TA-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-TA-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -901,54 +901,54 @@
             "id": "multi_year",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201101010000_201301010000_TestDiurnalSeasonal000009.csv",
+                "filename": "US-CRT_HH_201101010000_201301010000_TestDiurnalSeasonalPattern000009.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] diurnal_seasonal-2011-FC-ccorr_check - Max corr 0.924 at lag 0",
-                        "[INFO] diurnal_seasonal-2011-FC-outer_band_check - 6.21% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
-                        "[INFO] diurnal_seasonal-2011-FC-inner_band_check - 57.12% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
-                        "[INFO] diurnal_seasonal-2012-FC-ccorr_check - Max corr 0.941 at lag 0",
-                        "[INFO] diurnal_seasonal-2012-FC-outer_band_check - 12.31% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
-                        "[INFO] diurnal_seasonal-2012-FC-inner_band_check - 46.14% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
+                        "[INFO] diurnal_seasonal_pattern-2011-FC-ccorr_check - Max corr 0.924 at lag 0",
+                        "[INFO] diurnal_seasonal_pattern-2011-FC-outer_band_check - 6.21% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
+                        "[INFO] diurnal_seasonal_pattern-2011-FC-inner_band_check - 57.12% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-ccorr_check - Max corr 0.941 at lag 0",
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-outer_band_check - 12.31% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-inner_band_check - 46.14% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross-correlation,Timestamps within historical interquartile range (%),Timestamps outside historical 95% range (%),Figure link",
-                        "2011,FC,OK,0,0.924,57.12,6.21,/diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2011.png",
-                        "2012,FC,OK,0,0.941,46.14,12.31,/diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                        "2011,FC,OK,0,0.924,57.12,6.21,/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2011.png",
+                        "2012,FC,OK,0,0.941,46.14,12.31,/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                     ],
                     "status_list": [
                         {
                             "status_code": 0,
                             "qaqc_check": "FC",
-                            "src_logger_name": "diurnal_seasonal-FC",
+                            "src_logger_name": "diurnal_seasonal_pattern-FC",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
                             "plot_paths": [
-                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2011.png",
-                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2011.png",
+                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                             ],
                             "sub_status": {
-                                "diurnal_seasonal-2011-FC": {
+                                "diurnal_seasonal_pattern-2011-FC": {
                                     "status_code": 0,
-                                    "qaqc_check": "diurnal_seasonal-2011-FC",
-                                    "src_logger_name": "diurnal_seasonal-2011-FC",
+                                    "qaqc_check": "diurnal_seasonal_pattern-2011-FC",
+                                    "src_logger_name": "diurnal_seasonal_pattern-2011-FC",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2011.png"
+                                        "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2011.png"
                                     ],
                                     "sub_status": {
-                                        "diurnal_seasonal-2011-FC-ccorr_check": {
+                                        "diurnal_seasonal_pattern-2011-FC-ccorr_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2011-FC-ccorr_check",
-                                            "src_logger_name": "diurnal_seasonal-2011-FC-ccorr_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2011-FC-ccorr_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2011-FC-ccorr_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Max corr 0.924 at lag 0",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2011.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -958,15 +958,15 @@
                                                 "corr": 0.924
                                             }
                                         },
-                                        "diurnal_seasonal-2011-FC-outer_band_check": {
+                                        "diurnal_seasonal_pattern-2011-FC-outer_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2011-FC-outer_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2011-FC-outer_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2011-FC-outer_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2011-FC-outer_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "6.21% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2011.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -975,15 +975,15 @@
                                                 "outer_band": 6.21
                                             }
                                         },
-                                        "diurnal_seasonal-2011-FC-inner_band_check": {
+                                        "diurnal_seasonal_pattern-2011-FC-inner_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2011-FC-inner_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2011-FC-inner_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2011-FC-inner_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2011-FC-inner_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "57.12% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2011.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2011.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -999,26 +999,26 @@
                                         "result": 0
                                     }
                                 },
-                                "diurnal_seasonal-2012-FC": {
+                                "diurnal_seasonal_pattern-2012-FC": {
                                     "status_code": 0,
-                                    "qaqc_check": "diurnal_seasonal-2012-FC",
-                                    "src_logger_name": "diurnal_seasonal-2012-FC",
+                                    "qaqc_check": "diurnal_seasonal_pattern-2012-FC",
+                                    "src_logger_name": "diurnal_seasonal_pattern-2012-FC",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                        "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                     ],
                                     "sub_status": {
-                                        "diurnal_seasonal-2012-FC-ccorr_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-ccorr_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-ccorr_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-ccorr_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-ccorr_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-ccorr_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Max corr 0.941 at lag 0",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1028,15 +1028,15 @@
                                                 "corr": 0.941
                                             }
                                         },
-                                        "diurnal_seasonal-2012-FC-outer_band_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-outer_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-outer_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-outer_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-outer_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-outer_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "12.31% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1045,15 +1045,15 @@
                                                 "outer_band": 12.31
                                             }
                                         },
-                                        "diurnal_seasonal-2012-FC-inner_band_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-inner_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-inner_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-inner_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-inner_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-inner_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "46.14% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1082,49 +1082,49 @@
             "id": "partial_year",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201201020000_201212310000_TestDiurnalSeasonal000011.csv",
+                "filename": "US-CRT_HH_201201020000_201212310000_TestDiurnalSeasonalPattern000011.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] diurnal_seasonal-2012-FC-ccorr_check - Cannot calculate cross correlation from partial year data",
-                        "[INFO] diurnal_seasonal-2012-FC-outer_band_check - 12.27% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
-                        "[INFO] diurnal_seasonal-2012-FC-inner_band_check - 46.11% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-ccorr_check - Cannot calculate cross correlation from partial year data",
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-outer_band_check - 12.27% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-inner_band_check - 46.11% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross-correlation,Timestamps within historical interquartile range (%),Timestamps outside historical 95% range (%),Figure link",
-                        "2012,FC,OK,not_calculated,not_calculated,46.11,12.27,/diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                        "2012,FC,OK,not_calculated,not_calculated,46.11,12.27,/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                     ],
                     "status_list": [
                         {
                             "status_code": 0,
                             "qaqc_check": "FC",
-                            "src_logger_name": "diurnal_seasonal-FC",
+                            "src_logger_name": "diurnal_seasonal_pattern-FC",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
                             "plot_paths": [
-                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                             ],
                             "sub_status": {
-                                "diurnal_seasonal-2012-FC": {
+                                "diurnal_seasonal_pattern-2012-FC": {
                                     "status_code": 0,
-                                    "qaqc_check": "diurnal_seasonal-2012-FC",
-                                    "src_logger_name": "diurnal_seasonal-2012-FC",
+                                    "qaqc_check": "diurnal_seasonal_pattern-2012-FC",
+                                    "src_logger_name": "diurnal_seasonal_pattern-2012-FC",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                        "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                     ],
                                     "sub_status": {
-                                        "diurnal_seasonal-2012-FC-ccorr_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-ccorr_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-ccorr_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-ccorr_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-ccorr_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-ccorr_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Cannot calculate cross correlation from partial year data",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1134,15 +1134,15 @@
                                                 "corr": "not_calculated"
                                             }
                                         },
-                                        "diurnal_seasonal-2012-FC-outer_band_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-outer_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-outer_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-outer_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-outer_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-outer_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "12.27% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1151,15 +1151,15 @@
                                                 "outer_band": 12.27
                                             }
                                         },
-                                        "diurnal_seasonal-2012-FC-inner_band_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-inner_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-inner_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-inner_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-inner_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-inner_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "46.11% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1188,54 +1188,54 @@
             "id": "year_and_one_month",
             "variables": {
                 "site_id": "US-CRT",
-                "filename": "US-CRT_HH_201201010000_201302010000_TestDiurnalSeasonal000012.csv",
+                "filename": "US-CRT_HH_201201010000_201302010000_TestDiurnalSeasonalPattern000012.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] diurnal_seasonal-2012-FC-ccorr_check - Max corr 0.943 at lag 0",
-                        "[INFO] diurnal_seasonal-2012-FC-outer_band_check - 12.26% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
-                        "[INFO] diurnal_seasonal-2012-FC-inner_band_check - 46.25% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
-                        "[INFO] diurnal_seasonal-2013-FC-ccorr_check - Insufficient data for calculating cross correlation",
-                        "[INFO] diurnal_seasonal-2013-FC-outer_band_check - 7.99% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
-                        "[INFO] diurnal_seasonal-2013-FC-inner_band_check - 50.96% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-ccorr_check - Max corr 0.943 at lag 0",
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-outer_band_check - 12.26% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
+                        "[INFO] diurnal_seasonal_pattern-2012-FC-inner_band_check - 46.25% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
+                        "[INFO] diurnal_seasonal_pattern-2013-FC-ccorr_check - Insufficient data for calculating cross correlation",
+                        "[INFO] diurnal_seasonal_pattern-2013-FC-outer_band_check - 7.99% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
+                        "[INFO] diurnal_seasonal_pattern-2013-FC-inner_band_check - 50.96% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)"
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross-correlation,Timestamps within historical interquartile range (%),Timestamps outside historical 95% range (%),Figure link",
-                        "2012,FC,OK,0,0.943,46.25,12.26,/diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png",
-                        "2013,FC,OK,not_calculated,not_calculated,50.96,7.99,/diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2013.png"
+                        "2012,FC,OK,0,0.943,46.25,12.26,/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png",
+                        "2013,FC,OK,not_calculated,not_calculated,50.96,7.99,/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2013.png"
                     ],
                     "status_list": [
                         {
                             "status_code": 0,
                             "qaqc_check": "FC",
-                            "src_logger_name": "diurnal_seasonal-FC",
+                            "src_logger_name": "diurnal_seasonal_pattern-FC",
                             "n_warning": 0,
                             "n_error": 0,
                             "status_msg": null,
                             "plot_paths": [
-                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png",
-                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2013.png"
+                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png",
+                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2013.png"
                             ],
                             "sub_status": {
-                                "diurnal_seasonal-2012-FC": {
+                                "diurnal_seasonal_pattern-2012-FC": {
                                     "status_code": 0,
-                                    "qaqc_check": "diurnal_seasonal-2012-FC",
-                                    "src_logger_name": "diurnal_seasonal-2012-FC",
+                                    "qaqc_check": "diurnal_seasonal_pattern-2012-FC",
+                                    "src_logger_name": "diurnal_seasonal_pattern-2012-FC",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                        "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                     ],
                                     "sub_status": {
-                                        "diurnal_seasonal-2012-FC-ccorr_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-ccorr_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-ccorr_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-ccorr_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-ccorr_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-ccorr_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Max corr 0.943 at lag 0",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1245,15 +1245,15 @@
                                                 "corr": 0.943
                                             }
                                         },
-                                        "diurnal_seasonal-2012-FC-outer_band_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-outer_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-outer_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-outer_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-outer_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-outer_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "12.26% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1262,15 +1262,15 @@
                                                 "outer_band": 12.26
                                             }
                                         },
-                                        "diurnal_seasonal-2012-FC-inner_band_check": {
+                                        "diurnal_seasonal_pattern-2012-FC-inner_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2012-FC-inner_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2012-FC-inner_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2012-FC-inner_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2012-FC-inner_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "46.25% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2012.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2012.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1286,26 +1286,26 @@
                                         "result": 0
                                     }
                                 },
-                                "diurnal_seasonal-2013-FC": {
+                                "diurnal_seasonal_pattern-2013-FC": {
                                     "status_code": 0,
-                                    "qaqc_check": "diurnal_seasonal-2013-FC",
-                                    "src_logger_name": "diurnal_seasonal-2013-FC",
+                                    "qaqc_check": "diurnal_seasonal_pattern-2013-FC",
+                                    "src_logger_name": "diurnal_seasonal_pattern-2013-FC",
                                     "n_warning": 0,
                                     "n_error": 0,
                                     "status_msg": null,
                                     "plot_paths": [
-                                        "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2013.png"
+                                        "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2013.png"
                                     ],
                                     "sub_status": {
-                                        "diurnal_seasonal-2013-FC-ccorr_check": {
+                                        "diurnal_seasonal_pattern-2013-FC-ccorr_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2013-FC-ccorr_check",
-                                            "src_logger_name": "diurnal_seasonal-2013-FC-ccorr_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2013-FC-ccorr_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2013-FC-ccorr_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "Insufficient data for calculating cross correlation",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2013.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2013.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1315,15 +1315,15 @@
                                                 "corr": "not_calculated"
                                             }
                                         },
-                                        "diurnal_seasonal-2013-FC-outer_band_check": {
+                                        "diurnal_seasonal_pattern-2013-FC-outer_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2013-FC-outer_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2013-FC-outer_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2013-FC-outer_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2013-FC-outer_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "7.99% timestamps outside of 2.5-97.5% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2013.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2013.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1332,15 +1332,15 @@
                                                 "outer_band": 7.99
                                             }
                                         },
-                                        "diurnal_seasonal-2013-FC-inner_band_check": {
+                                        "diurnal_seasonal_pattern-2013-FC-inner_band_check": {
                                             "status_code": 0,
-                                            "qaqc_check": "diurnal_seasonal-2013-FC-inner_band_check",
-                                            "src_logger_name": "diurnal_seasonal-2013-FC-inner_band_check",
+                                            "qaqc_check": "diurnal_seasonal_pattern-2013-FC-inner_band_check",
+                                            "src_logger_name": "diurnal_seasonal_pattern-2013-FC-inner_band_check",
                                             "n_warning": 0,
                                             "n_error": 0,
                                             "status_msg": "50.96% timestamps inside of 25-75% percentiles of historical data (BASE 5-5)",
                                             "plot_paths": [
-                                                "/US-CRT/TestProcess_###//diurnal_seasonal/US-CRT-TestProcess_###-DiurnalSeasonal-FC-2013.png"
+                                                "/diurnal_seasonal_pattern/US-CRT-TestProcess_###-diurnal_seasonal_pattern-FC-2013.png"
                                             ],
                                             "sub_status": null,
                                             "report_type": "single_msg",
@@ -1369,10 +1369,10 @@
             "id": "site_missing_historical_data",
             "variables": {
                 "site_id": "US-Rws",
-                "filename": "US-Rws_HH_201201010000_201301010000_TestDiurnalSeasonal000001.csv",
+                "filename": "US-Rws_HH_201201010000_201301010000_TestDiurnalSeasonalPattern000001.csv",
                 "expected_results": {
                     "logs": [
-                        "[INFO] diurnal_seasonal-historical_data_check - No historical data found. Skipping diurnal seasonal checks."
+                        "[INFO] diurnal_seasonal_pattern-historical_data_check - No historical data found. Skipping diurnal seasonal pattern checks."
                     ],
                     "csv_summary": [
                         "Period,Variable,Result,Time lag,Cross-correlation,Timestamps within historical interquartile range (%),Timestamps outside historical 95% range (%),Figure link"
@@ -1380,11 +1380,11 @@
                     "status_list": [
                         {
                             "status_code": 0,
-                            "qaqc_check": "diurnal_seasonal-historical_data_check",
-                            "src_logger_name": "diurnal_seasonal-historical_data_check",
+                            "qaqc_check": "diurnal_seasonal_pattern-historical_data_check",
+                            "src_logger_name": "diurnal_seasonal_pattern-historical_data_check",
                             "n_warning": 0,
                             "n_error": 0,
-                            "status_msg": "No historical data found. Skipping diurnal seasonal checks.",
+                            "status_msg": "No historical data found. Skipping diurnal seasonal pattern checks.",
                             "plot_paths": null,
                             "sub_status": null,
                             "report_type": "single_msg",

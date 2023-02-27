@@ -26,13 +26,13 @@ from utils import Decode
 from utils import TimestampUtil, StatsUtil, VarUtil
 
 
-__author__ = "You-Wei Cheah"
-__email__ = "ycheah@lbl.gov"
+__author__ = "You-Wei Cheah, Josh Geden"
+__email__ = "ycheah@lbl.gov, joshgeden10@gmail.com"
 
 _log = Logger().getLogger(__name__)
 
 
-class DiurnalSeasonal():
+class DiurnalSeasonalPattern():
 
     def __init__(self, site_id, process_id, resolution,
                  plot_dir=None, day_interval=30, ftp_plot_dir=None):
@@ -81,6 +81,7 @@ class DiurnalSeasonal():
             self.can_plot = False
         self.url_path = ftp_plot_dir
         self.fp_vars = FPVariables().get_fp_vars_dict()
+        self.qaqc_check = 'diurnal_seasonal_pattern'
 
     def find_year_indices(self, ts):
         """Find starting indices for each year"""
@@ -164,10 +165,10 @@ class DiurnalSeasonal():
                 year_chunks.append(((ts_vals[s:e], val[s:e]), is_full_year))
 
         if year_chunks == []:
-            qaqc_check = 'diurnal_seasonal-all_data'
+            qaqc_check = f'{self.qaqc_check}-all_data'
             log_obj = Logger().getLogger(qaqc_check)
             status_msg = ('Less than 30 days of data provided; not running '
-                          'diurnal seasonal check.')
+                          'diurnal seasonal pattern check.')
             log_obj.info(status_msg)
 
             return self.stat_gen.status_generator(
@@ -215,7 +216,7 @@ class DiurnalSeasonal():
         # Set up annual logger
         _c_dt = self.ts_util.cast_as_datetime
         year = _c_dt(ts[0]).year
-        yr_log = Logger().getLogger(f'diurnal_seasonal-{year}-{var_name}')
+        yr_log = Logger().getLogger(f'{self.qaqc_check}-{year}-{var_name}')
 
         # Need to reset counts after every year
         n_outside_outer_band, n_inside_inner_band = 0, 0
@@ -230,7 +231,8 @@ class DiurnalSeasonal():
 
         # Setup plot attributes
         fig.set_size_inches(16, 12)
-        suptitle = f'Diurnal Seasonal Analysis of {var_name} for year {year}'
+        suptitle = ('Diurnal Seasonal Pattern Analysis '
+                    f'of {var_name} for year {year}')
         fig.suptitle(suptitle, fontsize=self.plot_config.plot_title_fontsize)
 
         # Set common labels
@@ -350,7 +352,7 @@ class DiurnalSeasonal():
         data_year = self.ts_util.cast_as_datetime(start_time).year
         fig_name = self.fig_name_fmt.format(
             s=self.site_id, p=self.process_id,
-            t='DiurnalSeasonal', x=var_name, yr=data_year)
+            t='diurnal_seasonal_pattern', x=var_name, yr=data_year)
         fig_loc = os.path.join(self.plot_dir, fig_name)
 
         # ------------------------------------------------------------------#
@@ -442,7 +444,7 @@ class DiurnalSeasonal():
 
         # Perform cross corr check
         corr_log = Logger().getLogger(
-            f'diurnal_seasonal-{year}-{var_name}-ccorr_check')
+            f'{self.qaqc_check}-{year}-{var_name}-ccorr_check')
 
         if lag is not None and full_year:
             # Log an error if max_corr is negative and
@@ -506,10 +508,10 @@ class DiurnalSeasonal():
         # msg_combiner = '<br>'  # this might need to be a comma
 
         outer_band_log = Logger().getLogger(
-            f'diurnal_seasonal-{year}-{var_name}-outer_band_check')
+            f'{self.qaqc_check}-{year}-{var_name}-outer_band_check')
 
         inner_band_log = Logger().getLogger(
-            f'diurnal_seasonal-{year}-{var_name}-inner_band_check')
+            f'{self.qaqc_check}-{year}-{var_name}-inner_band_check')
 
         # Create an info message that the year had 0 valid points for
         # inner/outer band checks
@@ -643,7 +645,7 @@ class DiurnalSeasonal():
         cwd = os.getcwd()
         with open(os.path.join(cwd, 'qaqc.cfg')) as cfg:
             config.read_file(cfg)
-            cfg_section = 'DIURNAL_SEASONAL'
+            cfg_section = 'DIURNAL_SEASONAL_PATTERN'
             hist_dir_path = None
             outer_band_error_threshold = None
             outer_band_warning_threshold = None
@@ -745,7 +747,7 @@ class DiurnalSeasonal():
         if ver is None:
             return 'previous data'
         else:
-            return "BASE " + ver
+            return f'BASE {ver}'
 
     def check_historical_data_avail(self):
         fnames = os.listdir(self.hist_dir_path)
@@ -812,7 +814,7 @@ class DiurnalSeasonal():
         output_stats.write_to_csv(filename, csv_headers)
 
     def driver(self, data_reader):
-        _log.info('Starting diurnal seasonal checks')
+        _log.info('Starting diurnal seasonal pattern checks')
         self.d = data_reader
         self.input_data = self.d.get_data()  # Get data object
         self.stat = []
@@ -820,7 +822,8 @@ class DiurnalSeasonal():
         # Update base vars (Need to get from historical)
         self.has_historical = self.check_historical_data_avail()
         warning_msg_prefix = None
-        warning_msg_postfix = "Skipping diurnal seasonal checks."
+        warning_msg_postfix = ("Skipping diurnal "
+                               "seasonal pattern checks.")
         if not self.has_historical:
             warning_msg_prefix = ("No historical data found. ")
 
@@ -834,7 +837,7 @@ class DiurnalSeasonal():
                     "historical data. ")
 
         if warning_msg_prefix:
-            qaqc_check = 'diurnal_seasonal-historical_data_check'
+            qaqc_check = f'{self.qaqc_check}-historical_data_check'
             log_obj = Logger().getLogger(qaqc_check)
 
             warning_msg = warning_msg_prefix + warning_msg_postfix

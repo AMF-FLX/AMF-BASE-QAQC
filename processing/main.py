@@ -17,7 +17,7 @@ from status import StatusCode
 from timestamp_checks import TimestampChecks
 from plot_config import PlotConfig
 from timestamp_alignment import TimestampAlignment
-from diurnal_seasonal import DiurnalSeasonal
+from diurnal_seasonal_pattern import DiurnalSeasonalPattern
 # from spike_detection import SpikeDetection
 from process_status import ProcessStatus
 from process_states import ProcessStates
@@ -208,11 +208,12 @@ def main():
         report_statuses[qaqc_check] = test_report
         process_status_codes.append(process_status_code)
 
-        # Diurnal Seasonal analysis
-        qaqc_check = 'Diurnal Seasonal'
+        # Diurnal Seasonal Pattern analysis
+        qaqc_check = 'Diurnal Seasonal Pattern'
         _log.info('Running ' + qaqc_check)
-        ds = DiurnalSeasonal(site_id, process_id, resolution,
-                             plot_dir=plot_dir, ftp_plot_dir=ftp_plot_dir)
+        ds = DiurnalSeasonalPattern(
+            site_id, process_id, resolution,
+            plot_dir=plot_dir, ftp_plot_dir=ftp_plot_dir)
         check_status, test_plot_dir = ds.driver(d)
         status_list[qaqc_check] = check_status
         test_report, process_status_code = select_report(

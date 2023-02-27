@@ -10,7 +10,7 @@ import sys
 
 from configparser import ConfigParser
 from data_reader import DataReader
-from diurnal_seasonal import DiurnalSeasonal
+from diurnal_seasonal_pattern import DiurnalSeasonalPattern
 from fp_vars import FPVariables
 from logger import Logger
 from plot_config import PlotConfig
@@ -22,7 +22,8 @@ __email__ = 'ycheah@lbl.gov', 'joshgeden10@gmail.com'
 
 # Path to json file with test inputs & expected values for e2e tests
 json_file_path = os.path.join(
-     'test', 'testdata', 'diurnal_seasonal', 'test_diurnal_seasonal.json')
+    'test', 'testdata', 'diurnal_seasonal_pattern',
+    'test_diurnal_seasonal_pattern.json')
 
 
 def do_nothing(*args, **kwargs):
@@ -44,14 +45,14 @@ def mock_FPVariables_init(self):
 @pytest.fixture
 def rand_site_diurnal_seasonal():
     process_id = random.randint(0, sys.maxsize)
-    return DiurnalSeasonal('AA-FLX', process_id, 'HH')
+    return DiurnalSeasonalPattern('AA-FLX', process_id, 'HH')
 
 
 @pytest.fixture
 def diurnal_seasonal(monkeypatch):
-    ''' Initializes generic diurnal seasonal'''
+    ''' Initializes generic diurnal seasonal pattern'''
     monkeypatch.setattr(FPVariables, '__init__', mock_FPVariables_init)
-    return DiurnalSeasonal(None, None, None)
+    return DiurnalSeasonalPattern(None, None, None)
 
 
 def set_class_variables(diurnal_seasonal, site_id, resolution):
@@ -136,14 +137,14 @@ def test_calculate_median(diurnal_seasonal):
 
 
 def test_get_params_from_config(monkeypatch):
-    monkeypatch.setattr(DiurnalSeasonal, '__init__', do_nothing)
+    monkeypatch.setattr(DiurnalSeasonalPattern, '__init__', do_nothing)
 
     shutil.copy('qaqc.cfg', '_temp_qaqc.cfg')
     test_cfg = os.path.join(
-        'test', 'testdata', 'diurnal_seasonal', 'test_qaqc.cfg')
+        'test', 'testdata', 'diurnal_seasonal_pattern', 'test_qaqc.cfg')
     shutil.copy(test_cfg, 'qaqc.cfg')
 
-    ds = DiurnalSeasonal(None, None, None)
+    ds = DiurnalSeasonalPattern(None, None, None)
 
     hist_dir_path, outer_band_error_threshold, \
         outer_band_warning_threshold, inner_band_error_threshold, \
@@ -166,7 +167,7 @@ def test_get_params_from_config(monkeypatch):
 
 def test_get_available_hist_vars(diurnal_seasonal):
     diurnal_seasonal.hist_dir_path = os.path.join(
-        'test', 'testdata', 'diurnal_seasonal', 'historical_data')
+        'test', 'testdata', 'diurnal_seasonal_pattern', 'historical_data')
     diurnal_seasonal.site_id = 'US-CRT'
     diurnal_seasonal.hist_names = ('LOWER1', 'LOWER2', 'MEDIAN',
                                    'UPPER1', 'UPPER2')
@@ -267,7 +268,7 @@ def create_test_stats(corr_code, outer_band_code, inner_band_code):
     """ Builds nested Status objects for use in
         test_add_result_summary_stat """
 
-    qaqc_check = 'diurnal_seasonal-2012-FC-ccorr_check'
+    qaqc_check = 'diurnal_seasonal_pattern-2012-FC-ccorr_check'
     corr_status = Status(
         status_code=corr_code,
         qaqc_check=qaqc_check,
@@ -280,7 +281,7 @@ def create_test_stats(corr_code, outer_band_code, inner_band_code):
         'ccorr': 1
     })
 
-    qaqc_check = 'diurnal_seasonal-2012-FC-outer_band_check'
+    qaqc_check = 'diurnal_seasonal_pattern-2012-FC-outer_band_check'
     outer_status = Status(
         status_code=outer_band_code,
         qaqc_check=qaqc_check,
@@ -290,7 +291,7 @@ def create_test_stats(corr_code, outer_band_code, inner_band_code):
     )
     outer_status.add_summary_stat('outer_band', 1)
 
-    qaqc_check = 'diurnal_seasonal-2012-FC-inner_band_check'
+    qaqc_check = 'diurnal_seasonal_pattern-2012-FC-inner_band_check'
     inner_status = Status(
         status_code=inner_band_code,
         qaqc_check=qaqc_check,
@@ -300,7 +301,7 @@ def create_test_stats(corr_code, outer_band_code, inner_band_code):
     )
     inner_status.add_summary_stat('inner_band', 1)
 
-    qaqc_check = 'diurnal_seasonal-2012-FC'
+    qaqc_check = 'diurnal_seasonal_pattern-2012-FC'
     log_obj = Logger().getLogger(qaqc_check)
     year_status = StatusGenerator().composite_status_generator(
         logger=log_obj, qaqc_check=qaqc_check,
@@ -311,7 +312,7 @@ def create_test_stats(corr_code, outer_band_code, inner_band_code):
         }
     )
 
-    qaqc_check = 'diurnal_seasonal-FC'
+    qaqc_check = 'diurnal_seasonal_pattern-FC'
     log_obj = Logger().getLogger(qaqc_check)
     var_status = StatusGenerator().composite_status_generator(
         logger=log_obj, qaqc_check=qaqc_check,
@@ -387,10 +388,11 @@ def test_e2e(monkeypatch, filename, site_id, expected_results):
 
     # Setup data file paths
     testdata_path = os.path.join(
-        'test', 'testdata', 'diurnal_seasonal', 'input_files')
+        'test', 'testdata', 'diurnal_seasonal_pattern', 'input_files')
     pickle_path = os.path.join(testdata_path, filename.replace('.csv', '.npy'))
     filepath = os.path.join(
-        'test', 'testdata', 'diurnal_seasonal', 'input_files', filename)
+        'test', 'testdata',
+        'diurnal_seasonal_pattern', 'input_files', filename)
 
     # Attempt to load from binary .npy file, otherwise re-process data
     d = DataReader()
@@ -423,10 +425,11 @@ def test_e2e(monkeypatch, filename, site_id, expected_results):
     ftp_plot_dir = p.get_ftp_plot_dir_for_run(
         site_id, process_id, site_id)
 
-    ds = DiurnalSeasonal(site_id, process_id, resolution,
-                         plot_dir=plot_dir, ftp_plot_dir=ftp_plot_dir)
+    ds = DiurnalSeasonalPattern(
+        site_id, process_id, resolution,
+        plot_dir=plot_dir, ftp_plot_dir=ftp_plot_dir)
     ds.hist_dir_path = os.path.join(
-        'test', 'testdata', 'diurnal_seasonal', 'historical_data')
+        'test', 'testdata', 'diurnal_seasonal_pattern', 'historical_data')
     ds.url_path = ''
 
     statuses, _ = ds.driver(d)
@@ -461,7 +464,7 @@ def test_e2e(monkeypatch, filename, site_id, expected_results):
     summary_dir = os.path.join(output_dir, 'output', 'summary')
     assert os.path.exists(summary_dir)
 
-    csv_file = 'diurnal_seasonal_summary.csv'
+    csv_file = 'diurnal_seasonal_pattern_summary.csv'
     csv_file_path = os.path.join(summary_dir, csv_file)
     assert os.path.exists(csv_file_path)
 
