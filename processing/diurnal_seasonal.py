@@ -703,7 +703,8 @@ class DiurnalSeasonal():
         currently CSVs"""
         fnames = os.listdir(path)
         fnames = [os.path.join(path, f) for f in fnames if site_id in f]
-        vers = [self.path_util.get_base_ver_from_hist_fname(f) for f in fnames]
+        # fnames have format: <path>/<site_id>_<res>_<ver>_<quartile>.csv
+        vers = [f.split('_')[-2] for f in fnames]
         latest_ver = self._get_latest_ver(vers)
         for fname in fnames:
             if data_type in fname:
