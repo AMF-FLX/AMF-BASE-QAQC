@@ -92,18 +92,21 @@ class DataReportGen:
                    status_list, ftp_link, force_amp_review=False):
         previous_key = self.jira.get_prior_data_qaqc_key(site_id)
         format_process_ids = []
+        format_filenames = []
         for f in input_file_order:
             if f.proc_id is not None and f.proc_id not in format_process_ids:
                 format_process_ids.append(f.proc_id)
-        site_dict = ReportStatus().get_base_info(site_id, format_process_ids)
+                format_filenames.append(f.name)
+        data_qaqc_info = ReportStatus().get_base_info(site_id,
+                                                      format_process_ids)
         try:
             last_upload_ts = dt.strftime(dt.strptime(
-                site_dict['last_upload_timestamp'][:21],
+                data_qaqc_info['last_upload_timestamp'][:21],
                 "%Y-%m-%dT%H:%M:%S.%f"), "%b %d, %Y")
         except Exception:
             try:
                 last_upload_ts = dt.strftime(dt.strptime(
-                    site_dict['last_upload_timestamp'][:21],
+                    data_qaqc_info['last_upload_timestamp'][:21],
                     "%Y-%m-%dT%H:%M:%S"), "%b %d, %Y")
             except Exception:
                 last_upload_ts = 'No Date Available'
@@ -121,10 +124,10 @@ class DataReportGen:
                 [self.test_participant], ftp_link, report_link)
         else:
             issue_key = self.jira.create_data_issue(
-                site_id, process_id, time_res, site_dict['reporter_id'],
+                site_id, process_id, time_res, data_qaqc_info['reporter_id'],
                 summary, 'QAQC completed with the following results '
                 f'{self.gen_description(status_list)}',
-                site_dict['participant_ids'], ftp_link, report_link)
+                data_qaqc_info['participant_ids'], ftp_link, report_link)
 
         # pause to give JIRA time to sync up and set the request type
         time.sleep(10)
@@ -138,7 +141,7 @@ class DataReportGen:
                 # pause to give JIRA time to sync up
                 time.sleep(2)
         format_keys = []
-        for p in site_dict['process_ids']:
+        for p in data_qaqc_info['process_ids']:
             key = self.jira.get_format_qaqc_key(p)
             if key is not None:
                 format_keys.append(key)
@@ -157,7 +160,8 @@ class DataReportGen:
                       f'{force_amp_review} is overwriting it.')
 
         msg = self.gen_message(
-            site_id, is_self_review_site, issue_key, site_dict, ftp_link)
+            site_id, is_self_review_site, issue_key, data_qaqc_info,
+            format_filenames, format_process_ids, ftp_link)
         self.jira.add_comment(issue_key, msg, public=is_self_review_site)
 
         if is_self_review_site:
@@ -184,7 +188,9 @@ class DataReportGen:
                     o=status_counts[3+sc.OK])
 
     def gen_message(self, site_id: str, is_self_review_site: bool,
-                    issue_key: str, site_dict: dict, ftp_link: str) -> str:
+                    issue_key: str, site_dict: dict,
+                    format_filenames: list,
+                    format_process_ids: list, ftp_link: str) -> str:
 
         # set message type for specific text sections
         msg_type = 'amp_review'
@@ -200,7 +206,8 @@ class DataReportGen:
             r=site_dict['reporter_name'], p=participants, s=site_id,
             n=self.site_attrs[site_id])
 
-        intro = self.email_text_lookup.get(msg_type).get('intro')
+        intro = self.email_text_lookup.get(msg_type).get('intro').format(
+            ui=self.ui_prefix)
         qaqc_desc = self.email_text_lookup.get('data_qaqc_desc').format(
             ui=self.ui_prefix)
 
@@ -215,19 +222,30 @@ class DataReportGen:
                 instructions_link=self.instruction_link)
 
         instructions = self.email_text_lookup.get(msg_type).get(
-            'instructions').format(i=issue_key, ui=self.ui_prefix)
+            'instructions').format(i=issue_key, ui=self.ui_prefix,
+                                   ftp=ftp_link)
 
         closer = self.email_text_lookup.get(
             msg_type).get('closer').format(ftp=ftp_link)
 
+        reference_info = ''
+        if msg_type == 'self_review':
+            reference_info = self.email_text_lookup.get(msg_type).get(
+                'reference_info').format(ftp=ftp_link, qaqc_desc=qaqc_desc)
+            qaqc_desc = ''
+
         format_qaqc_resources = self.email_text_lookup.get(
             'format_qaqc_resources').format(
-                f='\n'.join([self.report_link_template.format(s=site_id, p=p)
-                             for p in site_dict['process_ids']]),)
+                f='\n'.join([
+                    f'{fn} ([online report {p}|'
+                    f'{self.report_link_template.format(s=site_id, p=p)}])'
+                    for fn, p in zip(format_filenames,
+                                     format_process_ids)]))
 
         # put all the pieces together
         msg = (f'{salutation}{intro}{qaqc_desc}{additional_info}{results}'
-               f'{instructions}{closer}{format_qaqc_resources}')
+               f'{instructions}{closer}{reference_info}'
+               f'{format_qaqc_resources}')
 
         return msg
 
