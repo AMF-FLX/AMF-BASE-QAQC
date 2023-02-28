@@ -300,7 +300,7 @@ class VariableCoverage:
             os.makedirs(output_dir)
 
         # Create the path to save the yearly plot
-        plt_name = f'{site_id}-Variable_Coverage-by_Year'
+        plt_name = f'{site_id}-variable_coverage-by_year'
         fig_loc = os.path.join(output_dir, plt_name)
 
         # Make the width grow with the number of years
@@ -331,7 +331,7 @@ class VariableCoverage:
         plt.close()
 
         # Create the path to save the timestamps plot
-        plt_name = f'{site_id}-Variable_Coverage-by_Reported_Timestamps'
+        plt_name = f'{site_id}-variable_coverage-by_reported_timestamps'
         fig_loc = os.path.join(output_dir, plt_name)
 
         fig_width = max(12, int(0.8 * len(years)))
