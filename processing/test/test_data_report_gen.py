@@ -119,7 +119,7 @@ detail_results = {
         '\n\nPlease reply to this '
         'email with any questions. You can track '
         'communications on this Data QA/QC at QAQC-#### '
-        'using your AmeriFlux account ID and password '
+        'using your AmeriFlux user ID and password '
         'to login.'
         '\n\nBest regards and '
         'thanks for the collaboration,\nAmeriFlux '

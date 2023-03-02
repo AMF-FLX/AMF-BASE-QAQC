@@ -26,8 +26,8 @@ from utils import Decode
 from utils import TimestampUtil, StatsUtil, VarUtil
 
 
-__author__ = "You-Wei Cheah, Josh Geden"
-__email__ = "ycheah@lbl.gov, joshgeden10@gmail.com"
+__author__ = 'You-Wei Cheah, Josh Geden'
+__email__ = 'ycheah@lbl.gov, joshgeden10@gmail.com'
 
 _log = Logger().getLogger(__name__)
 
@@ -58,17 +58,17 @@ class DiurnalSeasonalPattern():
             self.get_params_from_config()
 
         self.has_historical = False
-        self._calculated_median = "Calculated Median"
-        self.hist_names = ("LOWER1", "LOWER2", "MEDIAN", "UPPER1", "UPPER2")
+        self._calculated_median = 'Calculated Median'
+        self.hist_names = ('LOWER1', 'LOWER2', 'MEDIAN', 'UPPER1', 'UPPER2')
         self.hist_names_map = collections.OrderedDict()
-        self.hist_names_map["LOWER2"] = "2.5% percentile ({ver})"
-        self.hist_names_map["LOWER1"] = "25% percentile ({ver})"
-        self.hist_names_map["MEDIAN"] = "MEDIAN ({ver})"
-        self.hist_names_map[self._calculated_median] = "MEDIAN (current data)"
-        self.hist_names_map["UPPER1"] = "75% percentile ({ver})"
-        self.hist_names_map["UPPER2"] = "97.5% percentile ({ver})"
-        self.doy_var = "DOY2"
-        self.hr_var = "HR2"
+        self.hist_names_map['LOWER2'] = '2.5% percentile ({ver})'
+        self.hist_names_map['LOWER1'] = '25% percentile ({ver})'
+        self.hist_names_map['MEDIAN'] = 'MEDIAN ({ver})'
+        self.hist_names_map[self._calculated_median] = 'MEDIAN (current data)'
+        self.hist_names_map['UPPER1'] = '75% percentile ({ver})'
+        self.hist_names_map['UPPER2'] = '97.5% percentile ({ver})'
+        self.doy_var = 'DOY2'
+        self.hr_var = 'HR2'
 
         if plot_dir:
             self.can_plot = True
@@ -81,7 +81,7 @@ class DiurnalSeasonalPattern():
             self.can_plot = False
         self.url_path = ftp_plot_dir
         self.fp_vars = FPVariables().get_fp_vars_dict()
-        self.qaqc_check = 'diurnal_seasonal_pattern'
+        self.qaqc_name = 'diurnal_seasonal_pattern'
 
     def find_year_indices(self, ts):
         """Find starting indices for each year"""
@@ -165,7 +165,7 @@ class DiurnalSeasonalPattern():
                 year_chunks.append(((ts_vals[s:e], val[s:e]), is_full_year))
 
         if year_chunks == []:
-            qaqc_check = f'{self.qaqc_check}-all_data'
+            qaqc_check = f'{self.qaqc_name}-all_data'
             log_obj = Logger().getLogger(qaqc_check)
             status_msg = ('Less than 30 days of data provided; not running '
                           'diurnal seasonal pattern check.')
@@ -206,8 +206,8 @@ class DiurnalSeasonalPattern():
         labels = [l for c, l in legend_info]
         handles += [mlines.Line2D(
             [], [], color='None', marker='o',
-            markerfacecolor='0.75', markersize=10, label="data")]
-        labels += ["current data"]
+            markerfacecolor='0.75', markersize=10, label='data')]
+        labels += ['current data']
 
         return handles, labels
 
@@ -216,7 +216,7 @@ class DiurnalSeasonalPattern():
         # Set up annual logger
         _c_dt = self.ts_util.cast_as_datetime
         year = _c_dt(ts[0]).year
-        yr_log = Logger().getLogger(f'{self.qaqc_check}-{year}-{var_name}')
+        yr_log = Logger().getLogger(f'{self.qaqc_name}-{year}-{var_name}')
 
         # Need to reset counts after every year
         n_outside_outer_band, n_inside_inner_band = 0, 0
@@ -316,7 +316,7 @@ class DiurnalSeasonalPattern():
                     idx -= self.ts_util.NUMBER_OF_HOURS_IN_DAY
                 new_x_lab.append(x_lab.get(idx + offset))
             with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
+                warnings.simplefilter('ignore')
                 cur_axarr.set_xticklabels(new_x_lab, rotation=90)
             for idx, tickline in enumerate(xaxis.get_ticklines()):
                 if i < last_row_idx:
@@ -371,7 +371,7 @@ class DiurnalSeasonalPattern():
             s = idx[0]
             e = idx[-1]
             for idx, h in enumerate(self.hist_names):
-                if h == "MEDIAN":
+                if h == 'MEDIAN':
                     linewidth = 2
                 else:
                     linewidth = 1
@@ -412,8 +412,8 @@ class DiurnalSeasonalPattern():
                     h -= .5
                 cache_res = cache.get(h)
                 if not cache_res:
-                    info_msg = ("Data for the full 30 day period is incomplete"
-                                " and cannot be compared with historical.")
+                    info_msg = ('Data for the full 30 day period is incomplete'
+                                ' and cannot be compared with historical.')
                     yr_log.info(info_msg)
                     break
                 for v in cache_res:
@@ -444,7 +444,7 @@ class DiurnalSeasonalPattern():
 
         # Perform cross corr check
         corr_log = Logger().getLogger(
-            f'{self.qaqc_check}-{year}-{var_name}-ccorr_check')
+            f'{self.qaqc_name}-{year}-{var_name}-ccorr_check')
 
         if lag is not None and full_year:
             # Log an error if max_corr is negative and
@@ -508,10 +508,10 @@ class DiurnalSeasonalPattern():
         # msg_combiner = '<br>'  # this might need to be a comma
 
         outer_band_log = Logger().getLogger(
-            f'{self.qaqc_check}-{year}-{var_name}-outer_band_check')
+            f'{self.qaqc_name}-{year}-{var_name}-outer_band_check')
 
         inner_band_log = Logger().getLogger(
-            f'{self.qaqc_check}-{year}-{var_name}-inner_band_check')
+            f'{self.qaqc_name}-{year}-{var_name}-inner_band_check')
 
         # Create an info message that the year had 0 valid points for
         # inner/outer band checks
@@ -673,7 +673,7 @@ class DiurnalSeasonalPattern():
                 warning_msg = 'Cannot find thresholds from config.'
                 _log.warning(warning_msg)
 
-        _log.info("Params from config file")
+        _log.info('Params from config file')
         for k, v in locals().items():
             try:
                 if k in param_vars:
@@ -822,10 +822,10 @@ class DiurnalSeasonalPattern():
         # Update base vars (Need to get from historical)
         self.has_historical = self.check_historical_data_avail()
         warning_msg_prefix = None
-        warning_msg_postfix = ("Skipping diurnal "
-                               "seasonal pattern checks.")
+        warning_msg_postfix = ('Skipping diurnal '
+                               'seasonal pattern checks.')
         if not self.has_historical:
-            warning_msg_prefix = ("No historical data found. ")
+            warning_msg_prefix = 'No historical data found. '
 
         if warning_msg_prefix is None:
             hist_var_ls = self.get_available_hist_vars()
@@ -833,11 +833,11 @@ class DiurnalSeasonalPattern():
 
             if not var_ls:
                 warning_msg_prefix = (
-                    "BASE candidate has no variables that match "
-                    "historical data. ")
+                    'BASE candidate has no variables that match '
+                    'historical data. ')
 
         if warning_msg_prefix:
-            qaqc_check = f'{self.qaqc_check}-historical_data_check'
+            qaqc_check = f'{self.qaqc_name}-historical_data_check'
             log_obj = Logger().getLogger(qaqc_check)
 
             warning_msg = warning_msg_prefix + warning_msg_postfix
@@ -864,6 +864,6 @@ class DiurnalSeasonalPattern():
         return self.stat, self.plot_dir
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     # No use
     sys.exit('ERROR: Do not use this module on its own')

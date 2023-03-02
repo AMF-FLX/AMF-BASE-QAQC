@@ -100,11 +100,15 @@ class DataReportGen:
         data_qaqc_info = ReportStatus().get_base_info(site_id,
                                                       format_process_ids)
         try:
+            # truncate the the last_upload_timestamp
+            #   and deal with one ts format
             last_upload_ts = dt.strftime(dt.strptime(
                 data_qaqc_info['last_upload_timestamp'][:21],
                 "%Y-%m-%dT%H:%M:%S.%f"), "%b %d, %Y")
         except Exception:
             try:
+                # truncate the the last_upload_timestamp
+                #   and deal with the other ts format
                 last_upload_ts = dt.strftime(dt.strptime(
                     data_qaqc_info['last_upload_timestamp'][:21],
                     "%Y-%m-%dT%H:%M:%S"), "%b %d, %Y")

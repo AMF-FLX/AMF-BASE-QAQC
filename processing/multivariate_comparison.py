@@ -72,6 +72,7 @@ class MultivariateComparison():
                                 'from config.')
                 _log.critical(critical_msg)
 
+        self.qaqc_name = 'multivariate_comparison'
         self.read_thresholds()
         self.stat_gen = StatusGenerator()
         self.statuses = []
@@ -208,7 +209,7 @@ class MultivariateComparison():
     def ta_tsonic_cross_check(self):
         init_statuses_len = len(self.statuses)
         # starting a sub logger to handle all info form this test
-        logger_name = 'multivariate_comparison-TA:T_SONIC-cross_check'
+        logger_name = f'{self.qaqc_name}-TA:T_SONIC-cross_check'
         check_log = Logger().getLogger(logger_name)
         check_log.resetStats()
         check_log.info('Analyzing TA, T_SONIC')
@@ -236,7 +237,7 @@ class MultivariateComparison():
 
     def ppfd_in_sw_in_cross_check(self):
         init_statuses_len = len(self.statuses)
-        logger_name = 'multivariate_comparison-PPFD_IN:SW_IN-cross_check'
+        logger_name = f'{self.qaqc_name}-PPFD_IN:SW_IN-cross_check'
         check_log = Logger().getLogger(logger_name)
         check_log.resetStats()
         _log.info('Analyzing PPFD_IN, SW_IN')
@@ -282,7 +283,7 @@ class MultivariateComparison():
 
     def ws_ustar_cross_check(self):
         init_statuses_len = len(self.statuses)
-        logger_name = 'multivariate_comparison-WC:USTAR-cross_check'
+        logger_name = f'{self.qaqc_name}-WC:USTAR-cross_check'
         check_log = Logger().getLogger(logger_name)
         check_log.resetStats()
         _log.info('Analyzing WS, USTAR')
@@ -362,7 +363,7 @@ class MultivariateComparison():
 
     def _cross_level_check(self, base_var, threshold):
         init_statuses_len = len(self.statuses)
-        logger_name = f'multivariate_comparison-{base_var}-cross_level'
+        logger_name = f'{self.qaqc_name}-{base_var}-cross_level'
         check_log = Logger().getLogger(logger_name)
         check_log.resetStats()
         _log.info(f'Cross-level check for {base_var}')
@@ -405,7 +406,7 @@ class MultivariateComparison():
 
     def _cross_replicate_check(self, base_var, threshold):
         init_statuses_len = len(self.statuses)
-        logger_name = f'multivariate_comparison-{base_var}-cross_replicate'
+        logger_name = f'{self.qaqc_name}-{base_var}-cross_replicate'
         check_log = Logger().getLogger(logger_name)
         check_log.resetStats()
         _log.info(f'Cross-replicate check for {base_var}')
@@ -536,7 +537,7 @@ class MultivariateComparison():
         yearly_sub_statuses = {}
         yearly_slopes = {}
 
-        yr_log_name = f'multivariate_comparison-all_data-{x}:{y}'
+        yr_log_name = f'{self.qaqc_name}-all_data-{x}:{y}'
         yr_log = Logger().getLogger(yr_log_name)
         yr_log.resetStats()
 
@@ -680,7 +681,7 @@ class MultivariateComparison():
                     valid_years += 1
 
         # Calculate the deviation from mean slope if there is enough data
-        log_name = f'multivariate_comparison-all_data-{x}:{y}-slope_check'
+        log_name = f'{self.qaqc_name}-all_data-{x}:{y}-slope_check'
         log_obj = Logger().getLogger(log_name)
         log_obj.resetStats()
 
@@ -712,7 +713,7 @@ class MultivariateComparison():
         statuses = {}
         for year, sub_statuses in yearly_sub_statuses.items():
 
-            yr_log_name = f'multivariate_comparison-{year}-{x}:{y}'
+            yr_log_name = f'{self.qaqc_name}-{year}-{x}:{y}'
             yr_log = Logger().getLogger(yr_log_name)
             yr_log.resetStats()
             status_msg = None
@@ -795,7 +796,7 @@ class MultivariateComparison():
             logs a message. Returns (Status, outlier_count, fig_loc) """
 
         # Create logger for outlier analysis
-        log_name = f'multivariate_comparison-{year}-{x}:{y}-outlier_check'
+        log_name = f'{self.qaqc_name}-{year}-{x}:{y}-outlier_check'
         log_obj = Logger().getLogger(log_name)
         log_obj.resetStats()
 
@@ -846,7 +847,7 @@ class MultivariateComparison():
             (Status, r2) """
 
         # Calculate R2
-        log_name = f'multivariate_comparison-{year}-{x}:{y}-r2_check'
+        log_name = f'{self.qaqc_name}-{year}-{x}:{y}-r2_check'
         log_obj = Logger().getLogger(log_name)
         log_obj.resetStats()
 
@@ -901,7 +902,7 @@ class MultivariateComparison():
         """
 
         # Create a slope logger
-        log_name = f'multivariate_comparison-{year}-{x}:{y}-slope_check'
+        log_name = f'{self.qaqc_name}-{year}-{x}:{y}-slope_check'
         log_obj = Logger().getLogger(log_name)
         log_obj.resetStats()
 
@@ -970,7 +971,7 @@ class MultivariateComparison():
                 ss_total_y += (y - mean_y)**2
         except Exception as e:
             log.error(
-                "Unable to compute sum of squares with error {}".format(e))
+                'Unable to compute sum of squares with error {}'.format(e))
             return -1, -1
         return ss_total_x, ss_total_y
 
@@ -1060,7 +1061,7 @@ class MultivariateComparison():
                          outlier_threshold=None, test_log=_log):
         outlier_ls = []
         if fit.res_var < 0:
-            _log.debug("Negative fit.res_var {}".format(fit.res_var))
+            _log.debug('Negative fit.res_var {}'.format(fit.res_var))
         rse = math.sqrt(abs(fit.res_var))
         for x0, y0, ts in zip(masked_x, masked_y, masked_ts):
             if outlier_threshold:
@@ -1130,7 +1131,7 @@ class MultivariateComparison():
         # rename x and y to variable name
         fig_name = self.fig_name_fmt.format(
             s=self.site_id, p=self.process_id,
-            t='multivariate_comparison_SlopeOfFit',
+            t=f'{self.qaqc_name}_SlopeOfFit',
             x=x_label, y=y_label, yr='all_data')
         fig_loc = os.path.join(self.plot_dir, fig_name)
         plt.savefig(fig_loc, dpi=self.plot_config.plot_default_dpi)
@@ -1149,7 +1150,7 @@ class MultivariateComparison():
 
         # Setup plot
         fig = plt.figure(figsize=(12, 18))  # Create figure
-        fig.suptitle("Analysis of {x} and {y}".format(x=x_label, y=y_label),
+        fig.suptitle('Analysis of {x} and {y}'.format(x=x_label, y=y_label),
                      fontsize=self.plot_config.plot_suptitle_fontsize)
 
         # First plot
@@ -1214,14 +1215,14 @@ class MultivariateComparison():
         labels = [l for (l, fc, ec) in legendInfo]
 
         # Add labels and colors for point styling
-        reg_label = "Linear Regression between {x} and {y}".format(
+        reg_label = 'Linear Regression between {x} and {y}'.format(
             x=x_label, y=y_label)
         handles += [mlines.Line2D([], [], color='g', label=reg_label)]
         labels += [reg_label]
         plt.figlegend(handles, labels, loc='lower center', ncol=3)
 
         fig_name = self.fig_name_fmt.format(
-            s=self.site_id, p=self.process_id, t='multivariate_comparison',
+            s=self.site_id, p=self.process_id, t=self.qaqc_name,
             x=x_label, y=y_label, yr=yr)
         fig_loc = os.path.join(self.plot_dir, fig_name)
         plt.savefig(fig_loc, dpi=self.plot_config.plot_default_dpi)
@@ -1288,7 +1289,7 @@ class MultivariateComparison():
             'figure_0': 'Figure 1',
             'figure_1': 'Figure 2'
         }
-        filename = os.path.join(summary_dir, f'{__name__}_summary.csv')
+        filename = os.path.join(summary_dir, f'{self.qaqc_name}_summary.csv')
         output_stats = OutputStats(self.statuses, sort_by_header='var')
 
         # Turns the 'var' header into 'var1' and 'var2'
@@ -1339,6 +1340,6 @@ class MultivariateComparison():
         return self.statuses, self.plot_dir
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     # No use
     sys.exit('ERROR: Do not use this module on its own')

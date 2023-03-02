@@ -44,6 +44,7 @@ class PhysicalRange:
     def __init__(
             self, site_id, process_id, plot_dir=None,
             ftp_plot_dir=None, margin=0.05):
+        self.qaqc_name = 'physical_range'
         self.margin = margin
         self.site_id = site_id
         self.process_id = process_id
@@ -55,7 +56,7 @@ class PhysicalRange:
         if plot_dir:
             self.can_plot = True
             self.plot_dir = self.plot_config.get_plot_dir_for_check(
-                plot_dir, "physical_range")
+                plot_dir, self.qaqc_name)
             self.base_plot_dir = plot_dir
         else:
             self.can_plot = False
@@ -136,7 +137,7 @@ class PhysicalRange:
         # list to hold all the variable status objects
         status_objects = []  # set first element to dummy that is replaced
         for variable in variables[2:]:
-            var_log = Logger().getLogger(f'physical_range-{variable}')
+            var_log = Logger().getLogger(f'{self.qaqc_name}-{variable}')
             var_log.resetStats()
             var_sub_dict = {}  # dictionary to hold annual substatus objects
             all_plots = []
@@ -152,7 +153,7 @@ class PhysicalRange:
                 """
 
                 yr_log = Logger().getLogger(
-                    f'physical_range-{year}-{var_obj.name}')
+                    f'{self.qaqc_name}-{year}-{var_obj.name}')
                 yr_log.resetStats()
 
                 percent_max = 1 + var_obj.margin
@@ -171,7 +172,7 @@ class PhysicalRange:
 
                     # Create is_percent status object
                     check_log = Logger().getLogger(
-                        f'physical_range-{year}-{var_obj.name}-unit_check')
+                        f'{self.qaqc_name}-{year}-{var_obj.name}-unit_check')
                     check_log.resetStats()
                     plot_path = self.plot(var_obj, year)
                     status_msg = (f'{var_obj.name}\'s units look like a '
@@ -185,7 +186,8 @@ class PhysicalRange:
 
                     # Create outlier status object
                     check_log = Logger().getLogger(
-                        f'physical_range-{year}-{var_obj.name}-outlier_check')
+                        f'{self.qaqc_name}-{year}-'
+                        f'{var_obj.name}-outlier_check')
                     status_msg = 'Outlier check not performed'
                     check_log.info(status_msg)
 
@@ -216,7 +218,8 @@ class PhysicalRange:
                     # Create is_percent status if unit is %
                     if var_obj.units == '%':
                         check_log = Logger().getLogger(
-                            f'physical_range-{year}-{var_obj.name}-unit_check')
+                            f'{self.qaqc_name}-{year}-'
+                            f'{var_obj.name}-unit_check')
                         percent_ratio_stat = \
                             StatusGenerator().status_generator(
                                 logger=check_log,
@@ -241,7 +244,8 @@ class PhysicalRange:
 
                     # Create outlier status
                     check_log = Logger().getLogger(
-                        f'physical_range-{year}-{var_obj.name}-outlier_check')
+                        f'{self.qaqc_name}-{year}-'
+                        f'{var_obj.name}-outlier_check')
                     outlier_stat, plot_paths = self.get_status(
                         var_obj=var_obj, year=year, n_warnings=n_warning,
                         n_errors=n_error, log_obj=check_log,
@@ -502,7 +506,7 @@ class PhysicalRange:
             'figure': 'Figure link'
         }
         filename = os.path.join(
-            summary_dir, 'physical_range_percent_ratio_summary.csv')
+            summary_dir, f'{self.qaqc_name}_percent_ratio_summary.csv')
         table.write_to_csv(filename, csv_headers)
 
         csv_headers = {
@@ -513,5 +517,5 @@ class PhysicalRange:
             'soft_flag': 'Soft flag (%)',
             'figure': 'Figure link'
         }
-        filename = os.path.join(summary_dir, 'physical_range_summary.csv')
+        filename = os.path.join(summary_dir, f'{self.qaqc_name}_summary.csv')
         table.write_to_csv(filename, csv_headers)

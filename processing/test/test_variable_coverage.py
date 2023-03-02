@@ -31,6 +31,7 @@ def mock_FPVariables_init(self):
 
 def mock_VariableCoverage_init(self):
     self.encoding = 'ascii'
+    self.qaqc_name = 'variable_coverage'
 
 
 def do_nothing(self, *args):

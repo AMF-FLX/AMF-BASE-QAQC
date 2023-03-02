@@ -44,6 +44,7 @@ class TimestampAlignment(object):
     """
 
     def __init__(self):
+        self.qaqc_name = 'timestamp_alignment'
         self.stats_util = StatsUtil()
         self.ts_util = TimestampUtil()
         self.plot_config = PlotConfig()
@@ -241,7 +242,7 @@ class TimestampAlignment(object):
                     top_level_rad_vars.append(top_level_var)
 
         if top_level_rad_vars == []:
-            log_obj = Logger().getLogger('timestamp_alignment')
+            log_obj = Logger().getLogger(self.qaqc_name)
             status_msg = ('No top level rad vars selected. '
                           'Skipping timestamp_alignment checks.')
             log_obj.info(status_msg)
@@ -278,7 +279,7 @@ class TimestampAlignment(object):
         for year in range(first_year, last_year + 1):
             daytime_comps = {}
             nighttime_comps = {}
-            yr_log = Logger().getLogger(f'timestamp_alignment-{year}')
+            yr_log = Logger().getLogger(f'{self.qaqc_name}-{year}')
             yr_log.resetStats()
             if year != start_ts.year:
                 start_ts = _c_dt(self.ts_util.get_ISO_str_timestamp(str(year)))
@@ -290,8 +291,8 @@ class TimestampAlignment(object):
                 daytime_comps[v] = []
                 nighttime_comps[v] = []
             plt.close('all')
-            fig_filename = os.path.join(
-                output_dir, output_fname_template + '_' + str(year) + '.png')
+            output_filename = f'{output_fname_template}_{year}.png'
+            fig_filename = os.path.join(output_dir, output_filename)
             figure = plt.figure()
             suptitle = f'Timestamp Alignment Analysis for year {year}'
             figure.suptitle(suptitle,
@@ -721,7 +722,7 @@ class TimestampAlignment(object):
                 check_statuses[stat.get_qaqc_check()] = stat
 
                 # Create a summary status for the overall variable
-                log_obj = Logger().getLogger(f'timestamp_alignment-{year}-{var}')
+                log_obj = Logger().getLogger(f'{self.qaqc_name}-{year}-{var}')
                 var_status = self.stat_gen.composite_status_generator(
                     logger=log_obj,
                     qaqc_check=log_obj.getName(),
@@ -770,7 +771,7 @@ class TimestampAlignment(object):
     def driver(self, data_reader, rem_sw_in_data, site_id, resolution,
                radiation_vars=['SW_IN', 'PPFD_IN'], output_dir='.',
                ftp_plot_dir=None):
-        output_fname_template = f'{site_id}_timestamp_alignment'
+        output_fname_template = f'{site_id}_{self.qaqc_name}'
         base_output_dir = output_dir
         output_dir = self.plot_config.get_plot_dir_for_check(
             output_dir, __name__)
@@ -848,7 +849,7 @@ class TimestampAlignment(object):
     def write_summary(self, status_objects, base_output_dir):
         # Set the path and filename for where to write csv summary
         summary_dir = os.path.join(base_output_dir, 'summary')
-        filename = os.path.join(summary_dir, 'timestamp_alignment_summary.csv')
+        filename = os.path.join(summary_dir, f'{self.qaqc_name}_summary.csv')
 
         # Map internal summary_stats keys to desired CSV headers
         csv_headers = {
