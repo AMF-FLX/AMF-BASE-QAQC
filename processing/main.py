@@ -1,31 +1,33 @@
-import os
 import argparse
+import os
 import traceback
+
 from time import time
-from logger import Logger
-from publish import Publish
-from join_site_data import JoinSiteData
+
 from data_reader import DataReader
+from data_report_gen import DataReportGen
+from diurnal_seasonal_pattern import DiurnalSeasonalPattern
 from file_name_verifier import FileNameVerifier
 from gap_fill import GapFilled
-# from shadows import Shadows
-from thresholds import Thresholds
-from multivariate_intercomparison import MultivariateIntercomparison
-from sw_in_pot_gen import SW_IN_POT_Generator
-# from SSITC_fetch_filter import SSITC_FF_check
-from status import StatusCode
-from timestamp_checks import TimestampChecks
+from join_site_data import JoinSiteData
+from logger import Logger
+from multivariate_comparison import MultivariateComparison
 from plot_config import PlotConfig
-from timeshift import TimeShift
-from diurnal_seasonal import DiurnalSeasonal
-# from spike_detection import SpikeDetection
+from physical_range import PhysicalRange
 from process_status import ProcessStatus
 from process_states import ProcessStates
 from process_actions import ProcessActions
+from publish import Publish
 from report_status import ReportStatus
-from data_report_gen import DataReportGen
+# from shadows import Shadows
 from site_attrs import SiteAttributes
-from ustar_filter import USTARFilter
+# from spike_detection import SpikeDetection
+# from SSITC_fetch_filter import SSITC_FF_check
+from status import StatusCode
+from sw_in_pot_gen import SW_IN_POT_Generator
+from timestamp_alignment import TimestampAlignment
+from timestamp_checks import TimestampChecks
+from ustar_filtering import USTARFiltering
 from variable_coverage import VariableCoverage
 
 
@@ -179,10 +181,10 @@ def main():
 
         # To Do: split off variables with no values
 
-        # Threshold test
-        qaqc_check = 'Physical Limits'
+        # Physical Range test
+        qaqc_check = 'Physical Range'
         _log.info('Running ' + qaqc_check)
-        check_status, test_plot_dir = Thresholds(
+        check_status, test_plot_dir = PhysicalRange(
             site_id=site_id,
             process_id=process_id,
             plot_dir=plot_dir,
@@ -195,10 +197,10 @@ def main():
         report_statuses[qaqc_check] = test_report
         process_status_codes.append(process_status_code)
 
-        # Multivariate intercomparison
-        qaqc_check = 'Pairwise Variable Comparison'
+        # Multivariate Comparison
+        qaqc_check = 'Multivariate Comparison'
         _log.info('Running ' + qaqc_check)
-        check_status, test_plot_dir = MultivariateIntercomparison(
+        check_status, test_plot_dir = MultivariateComparison(
             site_id, process_id, plot_dir, ftp_plot_dir).driver(d)
         status_list[qaqc_check] = check_status
         test_report, process_status_code = select_report(
@@ -208,11 +210,12 @@ def main():
         report_statuses[qaqc_check] = test_report
         process_status_codes.append(process_status_code)
 
-        # Diurnal Seasonal analysis
-        qaqc_check = 'Diurnal Seasonal'
+        # Diurnal Seasonal Pattern analysis
+        qaqc_check = 'Diurnal Seasonal Pattern'
         _log.info('Running ' + qaqc_check)
-        ds = DiurnalSeasonal(site_id, process_id, resolution,
-                             plot_dir=plot_dir, ftp_plot_dir=ftp_plot_dir)
+        ds = DiurnalSeasonalPattern(
+            site_id, process_id, resolution,
+            plot_dir=plot_dir, ftp_plot_dir=ftp_plot_dir)
         check_status, test_plot_dir = ds.driver(d)
         status_list[qaqc_check] = check_status
         test_report, process_status_code = select_report(
@@ -236,7 +239,7 @@ def main():
         # _log.info('Running SSITC fetch filter check')
         # status_list.extend(SSITC_FF_check().driver(d))
 
-        # Get rem_sw_in_data for use in Timeshift checks below
+        # Get rem_sw_in_data for use in Timestamp Alignment checks below
         _log.info('Running SW_IN_POT generator')
         gen = SW_IN_POT_Generator()
         rem_sw_in_pot_data = gen.gen_rem_sw_in_pot_data(
@@ -247,18 +250,18 @@ def main():
         # Add SW_IN_POT as a valid data header
         d.base_headers['SW_IN_POT'] = ['SW_IN_POT']
 
-        # USTAR Filter
-        _log.info('Running USTAR filter')
-        check_status = USTARFilter(
+        # USTAR Filtering
+        _log.info('Running USTAR Filtering')
+        check_status = USTARFiltering(
             site_id, process_id, plot_dir=plot_dir,
             ftp_plot_dir=ftp_plot_dir
         ).driver(d)
-        status_list['USTAR Filter'] = check_status
+        status_list['USTAR Filtering'] = check_status
 
-        # Timeshift checks
-        qaqc_check = 'Radiation Timeshift'
+        # Timestamp Alignment checks
+        qaqc_check = 'Timestamp Alignment'
         _log.info('Running ' + qaqc_check)
-        check_status, test_plot_dir = TimeShift().driver(
+        check_status, test_plot_dir = TimestampAlignment().driver(
             data_reader=d, rem_sw_in_data=rem_sw_in_pot_data,
             site_id=site_id, resolution=resolution,
             output_dir=plot_dir, ftp_plot_dir=ftp_plot_dir)

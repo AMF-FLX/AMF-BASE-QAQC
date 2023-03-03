@@ -31,6 +31,7 @@ def mock_FPVariables_init(self):
 
 def mock_VariableCoverage_init(self):
     self.encoding = 'ascii'
+    self.qaqc_name = 'variable_coverage'
 
 
 def do_nothing(self, *args):
@@ -218,12 +219,12 @@ def test_plots(monkeypatch):
 
     plot_path = os.path.join(
         vc.plot_path, site_id, process_id, 'output', 'variable_coverage',
-        'US-CRT-Variable_Coverage-by_Year.png')
+        'US-CRT-variable_coverage-by_year.png')
     assert os.path.exists(plot_path)
 
     test_plot_path = os.path.join(
         os.getcwd(), 'test', 'testdata', 'variable_coverage',
-        'test_plot-by_Year.png'
+        'test_plot-by_year.png'
     )
     assert os.path.exists(test_plot_path)
 
@@ -235,12 +236,12 @@ def test_plots(monkeypatch):
 
     plot_path = os.path.join(
         vc.plot_path, site_id, process_id, 'output', 'variable_coverage',
-        'US-CRT-Variable_Coverage-by_Reported_Timestamps.png')
+        'US-CRT-variable_coverage-by_reported_timestamps.png')
     assert os.path.exists(plot_path)
 
     test_plot_path = os.path.join(
         os.getcwd(), 'test', 'testdata', 'variable_coverage',
-        'test_plot-by_Reported_Timestamps.png'
+        'test_plot-by_reported_timestamps.png'
     )
     assert os.path.exists(test_plot_path)
 

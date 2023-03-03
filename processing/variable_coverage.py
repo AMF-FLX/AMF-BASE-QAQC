@@ -21,6 +21,7 @@ _log = Logger().getLogger(__name__)
 
 class VariableCoverage:
     def __init__(self, encoding='ascii'):
+        self.qaqc_name = 'variable_coverage'
         self.vars = {}
         self.years = []
         self.required_min = 0.0
@@ -295,12 +296,12 @@ class VariableCoverage:
 
         # Get the output dir for the plot and ensure it exists
         output_dir = os.path.join(self.plot_path, site_id, process_id,
-                                  'output', 'variable_coverage')
+                                  'output', self.qaqc_name)
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
         # Create the path to save the yearly plot
-        plt_name = f'{site_id}-Variable_Coverage-by_Year'
+        plt_name = f'{site_id}-{self.qaqc_name}-by_year'
         fig_loc = os.path.join(output_dir, plt_name)
 
         # Make the width grow with the number of years
@@ -331,7 +332,7 @@ class VariableCoverage:
         plt.close()
 
         # Create the path to save the timestamps plot
-        plt_name = f'{site_id}-Variable_Coverage-by_Reported_Timestamps'
+        plt_name = f'{site_id}-{self.qaqc_name}-by_reported_timestamps'
         fig_loc = os.path.join(output_dir, plt_name)
 
         fig_width = max(12, int(0.8 * len(years)))
@@ -438,25 +439,25 @@ class VariableCoverage:
 
         qaqc_checks = {
             'required_missing':
-                'variable_coverage-required_variables_missing',
+                f'{self.qaqc_name}-required_variables_missing',
             'required_below_threshold':
-                'variable_coverage-required_below_threshold',
+                f'{self.qaqc_name}-required_below_threshold',
             'encouraged_missing':
-                'variable_coverage-encouraged_variables_missing',
+                f'{self.qaqc_name}-encouraged_variables_missing',
             'encouraged_below_threshold':
-                'variable_coverage-encouraged_below_threshold',
+                f'{self.qaqc_name}-encouraged_below_threshold',
             'suggested_missing':
-                'variable_coverage-suggested_variables_missing'
+                f'{self.qaqc_name}-suggested_variables_missing'
         }
 
         # Logger objects to keep track of number of missing var for each type
         loggers = {
             'required_missing': Logger().getLogger(
-                'variable_coverage-required_variables_missing'),
+                f'{self.qaqc_name}-required_variables_missing'),
             'encouraged_missing': Logger().getLogger(
-                'variable_coverage-encouraged_variables_missing'),
+                f'{self.qaqc_name}-encouraged_variables_missing'),
             'suggested_missing': Logger().getLogger(
-                'variable_coverage-suggested_variables_missing'),
+                f'{self.qaqc_name}-suggested_variables_missing'),
         }
 
         # Dict of status objects to be returned
@@ -499,11 +500,11 @@ class VariableCoverage:
                 else:
                     if isinstance(var, tuple):
                         var_log = Logger().getLogger(
-                            f'variable_coverage-{var_type}_below_threshold'
+                            f'{self.qaqc_name}-{var_type}_below_threshold'
                             + f'-{"/".join(var)}')
                     else:
                         var_log = Logger().getLogger(
-                            f'variable_coverage-{var_type}_below_threshold-'
+                            f'{self.qaqc_name}-{var_type}_below_threshold-'
                             f'{var}')
 
                     # Keep track of years where a variable is below
