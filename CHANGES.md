@@ -1,5 +1,19 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v1.1.0
+*2023 Mar 03*
+
+New in this release:
+- Updates to self-review Data QA/QC email.
+- Synchronize language across Data QA/QC check modules
+- Minor updates to documentation.
+
+Bug fixes:
+- Correctly handle migrated webservice: get_site_users.
+
+Notes:
+- In the new Data QA/QC email, links to Format QA/QC reports use the autocorrected file report_id number if it exists instead of the original file report_id. Change forthcoming.
+
 ### QAQC v1.0.0
 *2023 Feb*
 
