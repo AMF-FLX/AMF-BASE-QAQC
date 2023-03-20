@@ -11,7 +11,7 @@ from process_states import ProcessStates
 from report_status import ReportStatus
 from utils import FileUtil
 from utils import TimestampUtil
-from utils import VarUtil
+from amf_utils.flux_vars.utils import VarUtils
 
 __author__ = 'You-Wei Cheah'
 __email__ = 'ycheah@lbl.gov'
@@ -29,7 +29,7 @@ class BASECreator():
         self.BASE_fname_fmt = 'AMF_{sid}_BASE_{res}_{ver}.csv'
         self.file_util = FileUtil()
         self.ts_util = TimestampUtil()
-        self.var_util = VarUtil()
+        self.var_util = VarUtils()
         self.fnv = FileNameVerifier()
         self.report_status = ReportStatus()
         self.process_actions = ProcessActions()
@@ -87,7 +87,7 @@ class BASECreator():
 
         if not PI_vars:
             print('No _PI variables specified in config file')
-        self.PI_vars = PI_vars  # PI_vars is [] if unspecified in config
+        self.PI_vars = tuple(PI_vars)  # PI_vars is [] if unspecified in config
         return True
 
     def _read_config(self, cfg):
@@ -162,8 +162,13 @@ class BASECreator():
                 w.writerow(row)
                 continue
             new_row = []
-            for var in row:
-                new_row.append(self.var_util.tag_PI(var))
+            for fp_in_var in row:
+                fp_var = self.var_util.tag_PI_for_BASE_var(
+                    fp_in_var, PI_vars=self.PI_vars)
+                if fp_var is None:
+                    raise Exception(f'{site_id} has invalid FP-In '
+                                    f'variable {fp_in_var}')
+                new_row.append(fp_var)
             w.writerow(new_row)
             write_as_is = True
 
