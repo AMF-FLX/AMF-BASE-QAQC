@@ -816,30 +816,6 @@ class VarUtil:
                 replicate_agg_vars.append(var)
         return replicate_agg_vars
 
-    def tag_PI_var(self, var):
-        for v in self.PI_vars:
-            if var.startswith(v):
-                return v + '_PI' + ''.join(var.split(v))
-        return var
-
-    def tag_PI(self, var):
-        if var.endswith('_F'):
-            _log.debug(f'----> Variable {var} ends with _F')
-            return var[:-len('_F')] + '_PI_F'
-        elif '_F_' in var:
-            v_chunks = var.split('_F_')
-            return v_chunks[0] + '_PI_F_' + v_chunks[-1]
-        elif var.endswith('_A'):
-            v_chunks = var.split('_')
-            aggregate_qualifier = '_'.join(v_chunks[-3:])
-            return ''.join(var.split(aggregate_qualifier)) \
-                + 'PI_' + aggregate_qualifier
-        elif self.is_var_with_horiz_layer_aggregation(var):
-            v_chunks = var.split('_')
-            return '_'.join(v_chunks[:-1]) + '_PI_' + v_chunks[-1]
-        else:
-            return self.tag_PI_var(var)
-
 
 class SysUtil:
     def __init__(self):
