@@ -1,5 +1,15 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v1.2.0
+*2023 Mar 23*
+
+Bug fixes:
+- Correct issue with tagging PI variables in BASE publish.
+- Enable timestamp_alignment to handle data records with less than 16 days in a single year.
+
+Notes:
+- In the new Data QA/QC email, links to Format QA/QC reports use the autocorrected file report_id number if it exists instead of the original file report_id. Change forthcoming.
+
 ### QAQC v1.1.0
 *2023 Mar 03*
 
