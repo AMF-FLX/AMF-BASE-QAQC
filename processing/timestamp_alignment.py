@@ -22,10 +22,12 @@ from utils import TimestampUtil, StatsUtil, VarUtil
 
 __author__ = ("Gilberto Z. Pastorello, Carlo Trotta, "
               "Alessio Ribeca, Sigrid Dengel, Dario Papale, "
-              "You-Wei Cheah, Josh Geden")
+              "You-Wei Cheah, Josh Geden, "
+              "Danielle Christianson")
 __email__ = ("gzpastorello@lbl.gov, trottacarlo@unitus.it, "
              "a.ribeca@unitus.it, sdengel@lbl.gov, darpap@unitus.it, "
-             "ycheah@lbl.gov, joshgeden10@gmail.com")
+             "ycheah@lbl.gov, joshgeden10@gmail.com, "
+             "dschristianson@lbl.gov")
 
 # removes smoothing, force plotting all points
 matplotlib.rcParams['path.simplify'] = False
@@ -286,7 +288,7 @@ class TimestampAlignment(object):
             mask = (years == year)
 
             days_in_year = sum(mask) / step
-            if days_in_year < 16:
+            if days_in_year < self.doy_interval + 1:
                 yr_log.info('Insufficient data for analysis.')
                 status_objects.append(self.stat_gen.composite_status_generator(
                     logger=yr_log, qaqc_check=yr_log.getName(),
