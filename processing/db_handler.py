@@ -323,10 +323,12 @@ class DBHandler:
                         path = Path(candidate_filepath)
                         filename = path.name
                         candidate_filepath = str(
-                            # strip top two level directories and
-                            # discard direct parent and rebuild parent path
+
                             Path("/",
+                                 # strip top three level directories
+                                 # as well as immediate parent directory
                                  *path.parent.parts[3:-1],
+                                 # Rebuild immediate parent path
                                  *("outputs", "qaqc_combined"),
                                  filename))
                     preBASE_files[candidate_filepath] = process_id
