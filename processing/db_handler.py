@@ -322,13 +322,13 @@ class DBHandler:
                     if code_version < "1.1.0":
                         path = Path(candidate_filepath)
                         filename = path.name
+                        parent_path_parts = path.parent.parts
+                        # strip top two level directories
+                        # as well as immediate parent directory
+                        # and rebuild immediate parent path
                         candidate_filepath = str(
-
-                            Path("/",
-                                 # strip top three level directories
-                                 # as well as immediate parent directory
-                                 *path.parent.parts[3:-1],
-                                 # Rebuild immediate parent path
+                            Path(parent_path_parts[0],
+                                 *parent_path_parts[3:-1],
                                  *("outputs", "qaqc_combined"),
                                  filename))
                     preBASE_files[candidate_filepath] = process_id
