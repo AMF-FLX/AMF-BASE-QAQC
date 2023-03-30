@@ -6,6 +6,7 @@ from jira_names import JIRANames
 
 from io import StringIO
 from logger import Logger
+from pathlib import Path
 from process_states import ProcessStates
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from psycopg2.extras import RealDictCursor
@@ -295,7 +296,7 @@ class DBHandler:
                 password=self.__password,
                 database=self.__db_name) as conn, \
                 conn.cursor(as_dict=True) as cursor:
-            pre_query = ("SELECT l.basename, l.processID "
+            pre_query = ("SELECT l.basename, l.processID, l.codeVersion "
                          "FROM qaqcProcessingLog l "
                          "INNER JOIN "
                          "(SELECT s.processID, s.status "
@@ -314,13 +315,26 @@ class DBHandler:
             try:
                 cursor.execute(query)
                 for row in cursor:
-                    preBASE_files[
-                        row.get("basename")] = row.get("processID")
+                    candidate_filepath = row.get("basename")
+                    code_version = row.get("codeVersion")
+                    process_id = row.get("processID")
+                    # Remap paths if codeVersion is prior to version 1.1.0
+                    if code_version < "1.1.0":
+                        path = Path(candidate_filepath)
+                        filename = path.name
+                        candidate_filepath = str(
+                            # strip top two level directories and
+                            # discard direct parent and rebuild parent path
+                            Path("/",
+                                 *path.parent.parts[3:-1],
+                                 *("outputs", "qaqc_combined"),
+                                 filename))
+                    preBASE_files[candidate_filepath] = process_id
 
             except Exception as e:
                 _log.error("Error occurred in get_BASE_candidates")
                 _log.error(e)
-                return 'ERROR OCCURRED'
+                return "ERROR OCCURRED"
         return preBASE_files
 
     def get_preBASE_regen_candidates(self, query_type='latest',
