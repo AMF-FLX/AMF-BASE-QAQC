@@ -5,6 +5,7 @@ import csv
 import datetime
 from db_handler import DBConfig, DBHandler, NewDBHandler
 from file_name_verifier import FileNameVerifier
+from fp_vars import FPVariables
 from logger import Logger
 from process_actions import ProcessActions
 from process_states import ProcessStates
@@ -29,11 +30,13 @@ class BASECreator():
         self.BASE_fname_fmt = 'AMF_{sid}_BASE_{res}_{ver}.csv'
         self.file_util = FileUtil()
         self.ts_util = TimestampUtil()
-        self.var_util = VarUtils()
         self.fnv = FileNameVerifier()
         self.report_status = ReportStatus()
         self.process_actions = ProcessActions()
         self.process_states = ProcessStates()
+
+        fp_var_names = FPVariables().get_fp_vars_dict().keys()
+        self.var_util = VarUtils(fp_var_names)
 
         # Initialize logger
         _log.info('Initialized')
