@@ -95,9 +95,6 @@ class TimestampUtil:
         try:
             datetime_value = strptime(value, self.PREFERRED_TS_FORMAT)
         except Exception:
-            # info_msg = ("Unable to cast perceived timestamp {t} "
-            #             "as datetime without decoding.")
-            # _log.info(info_msg.format(t=value))
             pass
         if datetime_value:
             return datetime_value
