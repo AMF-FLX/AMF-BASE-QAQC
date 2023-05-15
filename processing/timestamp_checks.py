@@ -191,10 +191,9 @@ class TimestampChecks():
         """
         qaqc_check = self.msg.get_display_check(check_log.getName())
         msg = self.msg.get_msg(check_log.getName(), 'CRITICAL')
-        last_ts_start = self.data['TIMESTAMP_START'][-1].decode('ascii')
-        last_ts_start = datetime.datetime.strptime(
-            last_ts_start, self.ts_util.PREFERRED_TS_FORMAT)
-        if last_ts_start > self.current_date:
+        last_ts_start = self.ts_util.cast_as_datetime(
+            self.data['TIMESTAMP_START'][-1])
+        if last_ts_start and last_ts_start > self.current_date:
             check_log.fatal(msg.format(last_timestamp=last_ts_start.strftime(
                 self.ts_util.PREFERRED_TS_FORMAT)))
         return self._gen_status(

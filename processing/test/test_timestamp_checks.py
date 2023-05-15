@@ -85,3 +85,21 @@ def test_check_forward_filled(caplog):
         captured = [rec.message for rec in caplog.records]
         assert len(captured) == 2
         assert 'Forward-filled' in captured[0]
+
+
+def test_check_forward_filled(caplog):
+    check_log = Logger().getLogger('ts_filled_forward')
+    timestamp_checker = TimestampChecks()
+    timestamp_checker.data = np.array(
+        [('202001010000', '202001010030'),
+         ('202001010030', '202001010100'),
+         ('202001000100', '202001010130')],
+        dtype=[('TIMESTAMP_START', 'a25'), ('TIMESTAMP_END', 'a25')])
+
+    caplog.clear()
+    with caplog.at_level(logging.INFO):
+        timestamp_checker.check_forward_filled_timestamps(check_log)
+        captured = [rec.message for rec in caplog.records]
+        assert len(captured) == 2
+        assert 'Fail to cast' in captured[0]
+
