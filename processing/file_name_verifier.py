@@ -173,6 +173,8 @@ class FileNameVerifier():
                        'of FP-IN standard.')
         # if its an absolute path strip out the path and look at just
         # the file name
+        if isinstance(file_path, str):
+            file_path = Path(file_path)
         fname_noext, fname_ext = file_path.stem, file_path.suffix
         if not fname_noext or not fname_ext:
             _log.error(warning_msg)
