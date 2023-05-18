@@ -11,7 +11,7 @@ jobs:
     docker:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
-      - image: circleci/python:3.6.5
+      - image: cimg/python:3.6.9
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -27,6 +27,7 @@ jobs:
       - run:
           name: Install Linux system dependencies
           command: |
+             sudo apt-get update
              sudo apt-get install freetds-dev
       # Download and cache dependencies
       - restore_cache:
