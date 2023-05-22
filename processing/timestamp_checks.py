@@ -29,11 +29,10 @@ class TimestampChecks():
             if dt_str_len != 12:
                 err_msg = f"Datetime string length is of length {dt_str_len}."
                 check_log.error(err_msg)
-            else:
-                self.ts_util.cast_as_datetime(value)
         except Exception:
             fatal_msg = f"Unable to get length of timestamp string {value}."
             check_log.error(fatal_msg)
+        self.ts_util.cast_as_datetime(value, check_log)
 
     def _has_identical_elements(self, ls, check_log):
         """Check if input list contains identical elements
@@ -191,10 +190,9 @@ class TimestampChecks():
         """
         qaqc_check = self.msg.get_display_check(check_log.getName())
         msg = self.msg.get_msg(check_log.getName(), 'CRITICAL')
-        last_ts_start = self.data['TIMESTAMP_START'][-1].decode('ascii')
-        last_ts_start = datetime.datetime.strptime(
-            last_ts_start, self.ts_util.PREFERRED_TS_FORMAT)
-        if last_ts_start > self.current_date:
+        last_ts_start = self.ts_util.cast_as_datetime(
+            self.data['TIMESTAMP_START'][-1])
+        if last_ts_start and last_ts_start > self.current_date:
             check_log.fatal(msg.format(last_timestamp=last_ts_start.strftime(
                 self.ts_util.PREFERRED_TS_FORMAT)))
         return self._gen_status(
