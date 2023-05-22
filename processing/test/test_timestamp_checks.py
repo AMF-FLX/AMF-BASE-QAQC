@@ -64,6 +64,9 @@ def test_has_identical_elements(ts_check, capsys):
 def test_check_forward_filled(caplog):
     check_log = Logger().getLogger('ts_filled_forward')
     timestamp_checker = TimestampChecks()
+    # timestamp data is casted to a25
+    # because data_reader module used this format
+    # to import the data file.
     timestamp_checker.data = np.array(
         [('202001010000', '202001010030'),
          ('202001010030', '202001010100'),
@@ -85,3 +88,117 @@ def test_check_forward_filled(caplog):
         captured = [rec.message for rec in caplog.records]
         assert len(captured) == 2
         assert 'Forward-filled' in captured[0]
+
+
+def test_check_timestamp_format(caplog):
+    timestamp_checker = TimestampChecks()
+    check_log_ts_start = Logger().getLogger('timestamp_format_TIMESTAMP_START')
+    check_log_ts_end = Logger().getLogger('timestamp_format_TIMESTAMP_END')
+
+    # timestamp error at the beginning of the TIMESTAMP_START
+    timestamp_checker.data = np.array(
+        [('202000010000', '202001010030'),
+         ('202001010030', '202001010100'),
+         ('202001010100', '202001010130')],
+        dtype=[('TIMESTAMP_START', 'a25'), ('TIMESTAMP_END', 'a25')])
+
+    caplog.clear()
+    with caplog.at_level(logging.INFO):
+        timestamp_checker.check_timestamp_format('TIMESTAMP_START',
+                                                 check_log_ts_start)
+        captured = [rec.message for rec in caplog.records
+                    if check_log_ts_start.getName() in rec.name]
+        error_msg = ('Fail to cast perceived timestamp '
+                     'b\'202000010000\' as datetime with decoding.')
+        assert len(captured) == 1
+        assert error_msg in captured
+
+    # timestamp error in the middle of the TIMESTAMP_START
+    timestamp_checker.data = np.array(
+        [('202001010000', '202001010030'),
+         ('202021010030', '202001010100'),
+         ('202001010100', '202001010130')],
+        dtype=[('TIMESTAMP_START', 'a25'), ('TIMESTAMP_END', 'a25')])
+
+    caplog.clear()
+    with caplog.at_level(logging.INFO):
+        timestamp_checker.check_timestamp_format('TIMESTAMP_START',
+                                                 check_log_ts_start)
+        captured = [rec.message for rec in caplog.records
+                    if check_log_ts_start.getName() in rec.name]
+        error_msg = ('Fail to cast perceived timestamp '
+                     'b\'202021010030\' as datetime with decoding.')
+        assert len(captured) == 1
+        assert error_msg in captured
+
+    # timestamp error at the end of the TIMESTAMP_START
+    timestamp_checker.data = np.array(
+        [('202001010000', '202001010030'),
+         ('202001010030', '202001010100'),
+         ('202021010100', '202001010130')],
+        dtype=[('TIMESTAMP_START', 'a25'), ('TIMESTAMP_END', 'a25')])
+
+    caplog.clear()
+    with caplog.at_level(logging.INFO):
+        timestamp_checker.check_timestamp_format('TIMESTAMP_START',
+                                                 check_log_ts_start)
+        captured = [rec.message for rec in caplog.records
+                    if check_log_ts_start.getName() in rec.name]
+        error_msg = ('Fail to cast perceived timestamp '
+                     'b\'202021010100\' as datetime with decoding.')
+        assert len(captured) == 1
+        assert error_msg in captured
+
+    # timestamp error at the beginning of the TIMESTAMP_END
+    timestamp_checker.data = np.array(
+        [('202001010000', '202021010030'),
+         ('202001010030', '202001010100'),
+         ('202001010100', '202001010130')],
+        dtype=[('TIMESTAMP_START', 'a25'), ('TIMESTAMP_END', 'a25')])
+
+    caplog.clear()
+    with caplog.at_level(logging.INFO):
+        timestamp_checker.check_timestamp_format('TIMESTAMP_END',
+                                                 check_log_ts_end)
+        captured = [rec.message for rec in caplog.records
+                    if check_log_ts_end.getName() in rec.name]
+        error_msg = ('Fail to cast perceived timestamp '
+                     'b\'202021010030\' as datetime with decoding.')
+        assert len(captured) == 1
+        assert error_msg in captured
+
+    # timestamp error in the middle of the TIMESTAMP_END
+    timestamp_checker.data = np.array(
+        [('202001010000', '202001010030'),
+         ('202001010030', '202021010100'),
+         ('202001010100', '202001010130')],
+        dtype=[('TIMESTAMP_START', 'a25'), ('TIMESTAMP_END', 'a25')])
+
+    caplog.clear()
+    with caplog.at_level(logging.INFO):
+        timestamp_checker.check_timestamp_format('TIMESTAMP_END',
+                                                 check_log_ts_end)
+        captured = [rec.message for rec in caplog.records
+                    if check_log_ts_end.getName() in rec.name]
+        error_msg = ('Fail to cast perceived timestamp '
+                     'b\'202021010100\' as datetime with decoding.')
+        assert len(captured) == 1
+        assert error_msg in captured
+
+    # timestamp error at the end of the TIMESTAMP_END
+    timestamp_checker.data = np.array(
+        [('202001010000', '202001010030'),
+         ('202001010030', '202001010100'),
+         ('202001010100', '202021010130')],
+        dtype=[('TIMESTAMP_START', 'a25'), ('TIMESTAMP_END', 'a25')])
+
+    caplog.clear()
+    with caplog.at_level(logging.INFO):
+        timestamp_checker.check_timestamp_format('TIMESTAMP_END',
+                                                 check_log_ts_end)
+        captured = [rec.message for rec in caplog.records
+                    if check_log_ts_end.getName() in rec.name]
+        error_msg = ('Fail to cast perceived timestamp '
+                     'b\'202021010130\' as datetime with decoding.')
+        assert len(captured) == 1
+        assert error_msg in captured
