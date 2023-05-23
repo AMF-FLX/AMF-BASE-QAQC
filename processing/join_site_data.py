@@ -112,7 +112,7 @@ class JoinSiteData:
         return file_order, skip_list
 
     def join_site_files(self, proc_id, site_id, resolution, is_test=False):
-        dir_site_path = Path(self.data_dir)/site_id
+        dir_site_path = Path(self.data_dir) / site_id
         if not dir_site_path.is_dir():
             _log.fatal(f'Directory not found for site {site_id}.')
             return None, self.stat_gen.status_generator(
@@ -233,7 +233,7 @@ class JoinSiteData:
                             continue
                         if times.name in files:
                             continue
-                        files[times.name] = open(dir_site_path/times.name, 'r')
+                        files[times.name] = open(dir_site_path / times.name, 'r')
                         header_ln = files[times.name].readline().rstrip('\n')
                         potential_headers[times.name] = header_ln.split(',')
                     header_order = self.get_valid_variables(potential_headers)
@@ -244,7 +244,7 @@ class JoinSiteData:
                         f'{file_order[-1].end}-{file_name_timestamp}.csv')
                     temp_dir_path = Path(self.temp_dir)
                     temp_dir_path.mkdir(parents=True, exist_ok=True)
-                    file_path = temp_dir_path/out_file_name
+                    file_path = temp_dir_path / out_file_name
                     out_file = open(file_path, 'w')
                     out_file.write(','.join(header_order)+'\n')
                     sub_stat = {}

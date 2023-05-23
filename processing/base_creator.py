@@ -186,7 +186,7 @@ class BASECreator():
         end_year = end_dt.year
         if end_dt.day == 1 and end_dt.month == 1:
             end_year -= 1
-        base_path = self.path/self.BASE_fname_fmt.format(
+        base_path = self.path / self.BASE_fname_fmt.format(
             sid=site_id, res=resolution,
             ver='version')
 
