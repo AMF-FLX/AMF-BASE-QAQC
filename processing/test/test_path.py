@@ -1,13 +1,11 @@
-from data_reader import DataReader
-from fp_vars import FPVariables
-from logger import Logger
-from status import Status
 import pytest
-from pathlib import PureWindowsPath, PurePosixPath
 import logging
+
+from data_reader import DataReader
 from file_name_verifier import FileNameVerifier
+from fp_vars import FPVariables
+from pathlib import PureWindowsPath, PurePosixPath
 from messages import Messages
-from site_attrs import SiteAttributes
 
 __author__ = 'Sy-Toan Ngo'
 __email__ = 'sytoanngo@lbl.gov'
@@ -23,26 +21,33 @@ def mock_FPVariables_get_fp_vars_dict(dummyself):
 def mock_FPVariables_load_fp_vars_dict(dummyself):
     return {}
 
+
 def mock_read_single_file(self, file_path, check_log, usemask=True,
                           missing_values='-9999',
                           datatype=None, usecols=None):
-        check_log.info(f'Reading in single file with filename {self.filename}')
-        return []
+    check_log.info(f'Reading in single file with filename {self.filename}')
+    return []
+
 
 def mock__check_timestamp_header(self, header, check_log):
     return []
 
+
 def mock__check_all_headers_quotes(self, header_as_is, check_log):
     return []
+
 
 def mock__check_data_header(self, header_as_is, check_log):
     return []
 
+
 def mock__check_any_valid_header(self, check_log):
     return []
 
+
 def mock__check_mandatory_data_headers(self, check_log):
     return []
+
 
 @pytest.fixture
 def data_reader(monkeypatch):
@@ -64,6 +69,7 @@ def data_reader(monkeypatch):
                         mock__check_mandatory_data_headers)
     ff = DataReader(test_mode=True)
     return ff
+
 
 def test_data_reader(data_reader, caplog):
     test_path = PureWindowsPath('D:\\test\\test_file.csv')
@@ -94,6 +100,7 @@ def file_name_verifier(monkeypatch):
     monkeypatch.setattr(Messages, '__init__', mock_messages_init)
 
     return FileNameVerifier()
+
 
 def test_file_name_verifier(file_name_verifier, caplog):
     test_path = PureWindowsPath('D:\\test\\test_file.csv')
