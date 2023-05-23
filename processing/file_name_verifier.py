@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
-import os
 import argparse
+from datetime import datetime
 from logger import Logger
+from messages import Messages
+from pathlib import Path
 from site_attrs import SiteAttributes
 from status import StatusGenerator
-from datetime import datetime
-from messages import Messages
 
 
 __author__ = 'Norm Beekwilder, You-Wei Cheah'
@@ -31,17 +31,18 @@ class FileNameVerifier():
                                  'warning': [], 'ok': []}
         self.msg = Messages()
 
-    def is_file_exist(self, fname):
+    def is_file_exist(self, file_path):
         '''
         Check if file exists
 
-        :param str fname: Filename
+        :param Path file_path: File path
         '''
-        if os.path.exists(fname):
+        file_name = file_path.name
+        if file_path.exists():
             _log.info('File exists.')
             return True
         else:
-            _log.fatal(f'File {fname} does not exist.')
+            _log.fatal(f'File {file_name} does not exist.')
             self.status_msg_parts['fatal'].append('file not found')
             return False
 
@@ -161,19 +162,20 @@ class FileNameVerifier():
         res.append(self.has_no_optional_param(option))
         return all(res)
 
-    def is_filename_FPIn_compliant(self, file_name):
+    def is_filename_FPIn_compliant(self, file_path):
         '''
         Check if filename is FP-Compliant
 
-        :param str fname: filename
+        :param Path file_path: file path
         '''
         is_compliant = []
         warning_msg = ('File name is not compliant with section 1.3 '
                        'of FP-IN standard.')
         # if its an absolute path strip out the path and look at just
         # the file name
-        fname = os.path.basename(file_name)
-        fname_noext, fname_ext = os.path.splitext(fname)
+        if isinstance(file_path, str):
+            file_path = Path(file_path)
+        fname_noext, fname_ext = file_path.stem, file_path.suffix
         if not fname_noext or not fname_ext:
             _log.error(warning_msg)
             is_compliant.append(False)
@@ -215,29 +217,30 @@ class FileNameVerifier():
         fname += self.fname_attrs['ext']
         return fname
 
-    def driver(self, fname=None, fixer=False):
+    def driver(self, file_path=None, fixer=False):
         '''
         Driver to test and run QAQC specific to this class
 
-        :param str fname
+        :param str file_path
         '''
         _log.resetStats()
         # make sure any previous calls of filename verifier
         # are cleared from log
-        if not fname:
+        if not file_path:
             parser = argparse.ArgumentParser(description=self.__doc__)
             parser.add_argument(
                 'filename',
                 type=str,
                 help="Target filename")
             args = parser.parse_args()
-            fname = args.filename
+            file_path = args.filename
 
+        p_file_path = Path(file_path)
         # Various checks
-        _log.info('Verifying filename for file [' + fname + ']')
-        check_exist = self.is_file_exist(fname)
+        _log.info(f'Verifying filename for file {p_file_path.name}')
+        check_exist = self.is_file_exist(p_file_path)
         if check_exist:
-            self.is_filename_FPIn_compliant(fname)
+            self.is_filename_FPIn_compliant(p_file_path)
             # qaqc_check = "File name verifier for {f}".format(f=fname)
         qaqc_check = self.msg.get_display_check(_log.getName())
         # "Is Filename Format valid?"
