@@ -266,7 +266,7 @@ class BASECreator():
                 last_cdiac_HH=last_cdiac_HH, last_cdiac_HR=last_cdiac_HR)
             with open(f_path, 'r') as fp_in, open(base_path, 'w') as base:
                 self.create_BASE(fp_in, base, site_id, last_base_version)
-            md5sum = self.file_util.get_md5(base_path) # TODO: check this
+            md5sum = self.file_util.get_md5(base_path)
             base_path.unlink()
             new_base_version = self.assign_new_data_version(
                 resolution=res, last_base_version=last_base_version,
