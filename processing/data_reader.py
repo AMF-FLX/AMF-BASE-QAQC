@@ -39,7 +39,7 @@ class DataReader:
 
         config = ConfigParser()
         try:
-            with open(Path.cwd()/'qaqc.cfg') as cfg:
+            with open(Path.cwd() / 'qaqc.cfg') as cfg:
                 config.read_file(cfg)
                 cfg_section = 'MANDATORY_VARIABLES'
                 if config.has_section(cfg_section):

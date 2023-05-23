@@ -46,7 +46,7 @@ class BASECreator():
             conn.close()
 
     def _get_params_from_config(self):
-        with open(self._cwd/'qaqc.cfg') as cfg:
+        with open(self._cwd / 'qaqc.cfg') as cfg:
             code_ver, code_major_ver, combined_files_loc, path, \
                 flux_hostname, flux_user, flux_auth, flux_db_name, PI_vars, \
                 new_db_config = self._read_config(cfg)

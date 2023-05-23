@@ -26,7 +26,7 @@ class JoinSiteData:
         self.reporter = ReportStatus()
         self.stat_gen = status.StatusGenerator()
         config = ConfigParser()
-        with open(Path.cwd()/'qaqc.cfg') as cfg:
+        with open(Path.cwd() / 'qaqc.cfg') as cfg:
             config.read_file(cfg)
             cfg_section = 'PHASE_II'
             if config.has_section(cfg_section):
