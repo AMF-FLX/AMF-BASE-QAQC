@@ -89,20 +89,25 @@ def test_data_reader(data_reader, caplog):
         assert '\\' not in captured[1] or '/' not in captured[1]
 
 
-def mock_messages_init(dummyself):
-    dummyself.msgs = []
-    dummyself.checknames = {}
+def mock_messages_init(dummyvar):
+    pass
+
+
+def mock_msg_get_display_check(*args):
+    return 'Display name for QA/QC check not found.'
 
 
 @pytest.fixture
 def file_name_verifier(monkeypatch):
 
     monkeypatch.setattr(Messages, '__init__', mock_messages_init)
+    monkeypatch.setattr(Messages, 'get_display_check',
+                        mock_msg_get_display_check)
 
     return FileNameVerifier()
 
 
-def test_file_name_verifier(file_name_verifier, caplog):
+def test_file_name_verifier_windows_path(file_name_verifier, caplog):
     test_path = PureWindowsPath('D:\\test\\test_file.csv')
     caplog.clear()
     with caplog.at_level(logging.INFO):
@@ -113,6 +118,7 @@ def test_file_name_verifier(file_name_verifier, caplog):
 
     test_path = PurePosixPath('/home/test/test_file.csv')
     caplog.clear()
+    file_name_verifier.__init__()
     with caplog.at_level(logging.INFO):
         file_name_verifier.driver(test_path)
         captured = [rec.message for rec in caplog.records]
