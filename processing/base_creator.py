@@ -254,7 +254,7 @@ class BASECreator():
         base_path = attr.get('base_path')
         res = attr.get('res')
         file_attr = []
-        process_id = self.preBASE_files.get(str(f))
+        process_id = self.preBASE_files.get(str(f_path))
         try:
             _log.info(f'Creating BASE files for candidate: {f_path.name}')
             last_base_version, last_processID = \
