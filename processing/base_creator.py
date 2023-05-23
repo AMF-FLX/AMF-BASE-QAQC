@@ -121,7 +121,7 @@ class BASECreator():
                 if phase_III_output_path.is_absolute():
                     path = phase_III_output_path
                 else:
-                    path = self._cwd/phase_III_output
+                    path = self._cwd / phase_III_output
             if config.has_option(cfg_section, 'PI_vars'):
                 try:
                     PI_vars = ast.literal_eval(
