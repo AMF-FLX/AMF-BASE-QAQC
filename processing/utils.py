@@ -107,6 +107,8 @@ class TimestampUtil:
                          'as datetime with decoding.')
             if check_log:
                 check_log.fatal(fatal_msg)
+            else:
+                _log.fatal(fatal_msg)
         return datetime_value
 
     def get_ISO_date_from_datetime(self, dt, format=None):
