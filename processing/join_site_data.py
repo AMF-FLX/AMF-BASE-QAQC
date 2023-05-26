@@ -3,12 +3,12 @@
 import argparse
 import collections
 import datetime
-import os
 import status
 
 from configparser import ConfigParser
 from file_name_verifier import FileNameVerifier
 from logger import Logger
+from pathlib import Path
 from report_status import ReportStatus
 from utils import VarUtil
 
@@ -26,8 +26,7 @@ class JoinSiteData:
         self.reporter = ReportStatus()
         self.stat_gen = status.StatusGenerator()
         config = ConfigParser()
-        cwd = os.getcwd()
-        with open(os.path.join(cwd, 'qaqc.cfg')) as cfg:
+        with open(Path.cwd() / 'qaqc.cfg') as cfg:
             config.read_file(cfg)
             cfg_section = 'PHASE_II'
             if config.has_section(cfg_section):
@@ -113,21 +112,23 @@ class JoinSiteData:
         return file_order, skip_list
 
     def join_site_files(self, proc_id, site_id, resolution, is_test=False):
-        dir_name = os.path.join(self.data_dir, site_id)
-        if not os.path.isdir(dir_name):
-            _log.fatal(f'Directory not found {dir_name}.')
+        dir_site_path = Path(self.data_dir) / site_id
+        if not dir_site_path.is_dir():
+            _log.fatal(f'Directory not found for site {site_id}.')
             return None, self.stat_gen.status_generator(
                 _log, 'join_site_files',
-                status_msg=f'Directory not found {dir_name}.',
+                status_msg=f'Directory not found for site {site_id}.',
                 report_section='high_level'), None
         valid_files = self.reporter.get_available_base_input(site_id)
         dir_files = {}
-        for f in [f for f in os.listdir(dir_name)
-                  if os.path.isfile(os.path.join(dir_name, f))]:
-            if f not in valid_files:
+        file_paths = [file_path for file_path in dir_site_path.glob('*')
+                      if file_path.is_file()]
+        for file_path in file_paths:
+            file_name = file_path.name
+            if file_name not in valid_files:
                 continue
             fnv = FileNameVerifier()
-            fn_stat = fnv.driver(os.path.join(dir_name, f))
+            fn_stat = fnv.driver(str(file_path))
             if fn_stat.get_status_code() == status.StatusCode.OK:
                 if fnv.fname_attrs['site_id'] not in dir_files:
                     dir_files[fnv.fname_attrs['site_id']] = {}
@@ -148,10 +149,10 @@ class JoinSiteData:
                         start=fnv.fname_attrs['ts_start'],
                         end=fnv.fname_attrs['ts_end'],
                         upload=fnv.fname_attrs.get('ts_upload', ''),
-                        name=f, status=fn_stat,
-                        proc_id=valid_files[f]['process_id'],
-                        original_name=valid_files[f]['original_name'],
-                        prior_proc_id=valid_files[f]['prior_process_id']))
+                        name=file_name, status=fn_stat,
+                        proc_id=valid_files[file_name]['process_id'],
+                        original_name=valid_files[file_name]['original_name'],
+                        prior_proc_id=valid_files[file_name]['prior_process_id']))
         for site_id, site in dir_files.items():
             for res, res_data in site.items():
                 if res != resolution:
@@ -232,8 +233,7 @@ class JoinSiteData:
                             continue
                         if times.name in files:
                             continue
-                        files[times.name] = open(os.path.join(
-                            dir_name, times.name), 'r')
+                        files[times.name] = open(dir_site_path / times.name, 'r')
                         header_ln = files[times.name].readline().rstrip('\n')
                         potential_headers[times.name] = header_ln.split(',')
                     header_order = self.get_valid_variables(potential_headers)
@@ -242,9 +242,9 @@ class JoinSiteData:
                     out_file_name = (
                         f'{site_id}_{res}_{file_order[0].start}_'
                         f'{file_order[-1].end}-{file_name_timestamp}.csv')
-                    if not os.path.isdir(self.temp_dir):
-                        os.makedirs(self.temp_dir)
-                    file_path = os.path.join(self.temp_dir, out_file_name)
+                    temp_dir_path = Path(self.temp_dir)
+                    temp_dir_path.mkdir(parents=True, exist_ok=True)
+                    file_path = temp_dir_path / out_file_name
                     out_file = open(file_path, 'w')
                     out_file.write(','.join(header_order)+'\n')
                     sub_stat = {}

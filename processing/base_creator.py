@@ -1,4 +1,3 @@
-import os
 import ast
 from configparser import ConfigParser
 import csv
@@ -7,6 +6,7 @@ from db_handler import DBConfig, DBHandler, NewDBHandler
 from file_name_verifier import FileNameVerifier
 from fp_vars import FPVariables
 from logger import Logger
+from pathlib import Path
 from process_actions import ProcessActions
 from process_states import ProcessStates
 from report_status import ReportStatus
@@ -23,7 +23,7 @@ _log = Logger(True, None, None, _log_name_prefix).getLogger(_log_name_prefix)
 
 class BASECreator():
     def __init__(self):
-        self._cwd = os.getcwd()
+        self._cwd = Path.cwd()
         self.db_conn_pool = {}
         self.new_db_handler = NewDBHandler()
         self.init_status = self._get_params_from_config()
@@ -46,7 +46,7 @@ class BASECreator():
             conn.close()
 
     def _get_params_from_config(self):
-        with open(os.path.join(self._cwd, 'qaqc.cfg')) as cfg:
+        with open(self._cwd / 'qaqc.cfg') as cfg:
             code_ver, code_major_ver, combined_files_loc, path, \
                 flux_hostname, flux_user, flux_auth, flux_db_name, PI_vars, \
                 new_db_config = self._read_config(cfg)
@@ -69,10 +69,8 @@ class BASECreator():
         if not path:
             print('No path for Phase III specified in config file')
             return False
-        elif not os.path.exists(path):
-            os.makedirs(path)
-            self.path = path
         else:
+            path.mkdir(parents=True, exist_ok=True)
             self.path = path
 
         if not all((flux_user, flux_auth, flux_db_name)):
@@ -119,10 +117,11 @@ class BASECreator():
         if config.has_section(cfg_section):
             if config.has_option(cfg_section, 'output_dir'):
                 phase_III_output = config.get(cfg_section, 'output_dir')
-                if os.path.abspath(phase_III_output):
-                    path = phase_III_output
+                phase_III_output_path = Path(phase_III_output)
+                if phase_III_output_path.is_absolute():
+                    path = phase_III_output_path
                 else:
-                    path = os.path.join(self._cwd, phase_III_output)
+                    path = self._cwd / phase_III_output
             if config.has_option(cfg_section, 'PI_vars'):
                 try:
                     PI_vars = ast.literal_eval(
@@ -187,10 +186,9 @@ class BASECreator():
         end_year = end_dt.year
         if end_dt.day == 1 and end_dt.month == 1:
             end_year -= 1
-        base_path = os.path.join(
-            self.path, self.BASE_fname_fmt.format(
-                sid=site_id, res=resolution,
-                ver='version'))
+        base_path = self.path / self.BASE_fname_fmt.format(
+            sid=site_id, res=resolution,
+            ver='version')
 
         return site_id, base_path, start_year, end_year, resolution
 
@@ -252,13 +250,13 @@ class BASECreator():
         return new_version
 
     def candidate_iterator(self, site_id, attr):
-        f = attr.get('full_path')
+        f_path = attr.get('full_path')
         base_path = attr.get('base_path')
         res = attr.get('res')
         file_attr = []
-        process_id = self.preBASE_files.get(f)
+        process_id = self.preBASE_files.get(str(f_path))
         try:
-            _log.info(f'Creating BASE files for candidate: {f}')
+            _log.info(f'Creating BASE files for candidate: {f_path.name}')
             last_base_version, last_processID = \
                 self.site_list.get(site_id, (None, None))
             last_cdiac_HH, last_cdiac_HR = self.historic_site_list.get(
@@ -266,22 +264,23 @@ class BASECreator():
             last_base_version, is_last_ver_cdiac = self.get_last_base_version(
                 resolution=res, last_base_version=last_base_version,
                 last_cdiac_HH=last_cdiac_HH, last_cdiac_HR=last_cdiac_HR)
-            with open(f, 'r') as fp_in, open(base_path, 'w') as base:
+            with open(f_path, 'r') as fp_in, open(base_path, 'w') as base:
                 self.create_BASE(fp_in, base, site_id, last_base_version)
             md5sum = self.file_util.get_md5(base_path)
-            os.remove(base_path)
+            base_path.unlink()
             new_base_version = self.assign_new_data_version(
                 resolution=res, last_base_version=last_base_version,
                 last_processID=last_processID,
                 is_last_ver_cdiac=is_last_ver_cdiac, site_id=site_id,
                 md5sum=md5sum, processID=process_id)
-            new_base_path = base_path.replace('version', new_base_version)
-            with open(f, 'r') as fp_in, open(new_base_path, 'w') as base:
+            new_base_path = Path(str(base_path)
+                                 .replace('version', new_base_version))
+            with open(f_path, 'r') as fp_in, open(new_base_path, 'w') as base:
                 self.create_BASE(fp_in=fp_in, base=base, site_id=site_id,
                                  base_version=new_base_version)
             new_md5sum = self.file_util.get_md5(new_base_path)
-            size = os.path.getsize(new_base_path)
-            base_fname = os.path.basename(new_base_path)
+            size = new_base_path.stat().st_size
+            base_fname = new_base_path.name
             timestamp = datetime.datetime.now()
             file_attr = [size, new_md5sum, base_fname, timestamp,
                          new_base_path, new_base_version]
@@ -317,8 +316,9 @@ class BASECreator():
             self.new_db_handler.get_filename_checksum_lookup(psql_conn)
 
         for f, pid in self.preBASE_files.items():
-            base_candidate_name = os.path.basename(f)
-            _log.info(f'BASE candidate: {f}')
+            f_path = Path(f)
+            base_candidate_name = f_path.name
+            _log.info(f'BASE candidate: {base_candidate_name}')
             file_attrs = self.get_BASE_attrs(f)
             site_id = file_attrs[0]
             cur_file_res = file_attrs[-1]
@@ -343,7 +343,7 @@ class BASECreator():
             for k, v in zip(attr_keys, file_attrs[1:]):
                 _tmp[k] = v
             _tmp['base_candidate_name'] = base_candidate_name
-            _tmp['full_path'] = f
+            _tmp['full_path'] = f_path
             if site_id_attrs:
                 site_id_attrs.append(_tmp)
                 base_attrs[site_id] = site_id_attrs

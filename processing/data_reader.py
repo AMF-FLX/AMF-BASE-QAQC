@@ -2,7 +2,6 @@
 
 import ast
 import numpy as np
-import os
 import string
 import sys
 import warnings
@@ -14,6 +13,7 @@ from file_name_verifier import FileNameVerifier
 from fp_vars import FPVariables
 from logger import Logger
 from messages import Messages
+from pathlib import Path
 from status import StatusGenerator
 from utils import DataUtil, TextUtil, VarUtil
 
@@ -38,9 +38,8 @@ class DataReader:
         self.mandatory_headers = None
 
         config = ConfigParser()
-        cwd = os.getcwd()
         try:
-            with open(os.path.join(cwd, 'qaqc.cfg')) as cfg:
+            with open(Path.cwd() / 'qaqc.cfg') as cfg:
                 config.read_file(cfg)
                 cfg_section = 'MANDATORY_VARIABLES'
                 if config.has_section(cfg_section):
@@ -441,9 +440,9 @@ class DataReader:
         :param run_type: (o)riginal or (r)epaired file
         :return: list of status objects from each test
         """
-        self.filename = os.path.basename(file_path)
+        self.filename = Path(file_path).name
         _log.info(f'Data Reader checks initiated for {self.filename} '
-                  'as {run_type} file.')
+                  f'as {run_type} file.')
 
         # set up an empty list to receive the individual status obj
         statuses = []

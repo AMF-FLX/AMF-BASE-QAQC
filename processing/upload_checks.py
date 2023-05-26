@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import argparse
-import os
 import traceback
 from time import time
 from data_reader import DataReader
@@ -10,6 +9,7 @@ from logger import Logger
 from status import StatusCode, StatusGenerator  # , StatusEncoder
 from timestamp_checks import TimestampChecks
 from gap_fill import GapFilled
+from pathlib import Path
 from process_status import ProcessStatus
 from process_states import ProcessStates
 from process_actions import ProcessActions
@@ -61,7 +61,8 @@ def main():
 
         original_filename = FilenameUtils().remove_upload_timestamp(
             args.filename)
-        fname_ext = os.path.splitext(original_filename)[1]
+        original_filename_path = Path(original_filename)
+        fname_ext = original_filename_path.suffix
         d = DataReader()
         fnv = FileNameVerifier()  # keep status updated
 
@@ -150,11 +151,11 @@ def main():
             args.run_type = 'z'
             d.original_header = [('Header information not available from '
                                   'archival file type (e.g., zip, 7z).')]
-            zip_filename = os.path.basename(original_filename)
+            zip_filename = original_filename_path.name
             zip_log = Logger().getLogger('zip_file')
             zip_qaqc_check = msg.get_display_check(zip_log.getName())
             zip_log.warning(
-                f'file {original_filename} is standard archival format')
+                f'file {zip_filename} is standard archival format')
             statuses.append(StatusGenerator().status_generator(
                 logger=zip_log, qaqc_check=zip_qaqc_check,
                 status_msg=zip_filename, report_type='single_list'))
@@ -279,7 +280,7 @@ def main():
                 if process_status_code < StatusCode.OK:
                     status_msg += (' Data will be queued for '
                                    'further data processing.')
-        original_filename_basename = os.path.basename(original_filename)
+        original_filename_basename = original_filename_path.name
         report_title = f'{title_prefix}{original_filename_basename}'
         for stat in statuses:  # make this a method??
             sc = stat.get_status_code()
@@ -324,16 +325,9 @@ def main():
 
 
 def copy_file(args, fnv):
-    if not os.path.exists(os.path.join(os.getcwd(),
-                                       fnv.fname_attrs['site_id'])):
-        try:
-            os.makedirs(os.path.join(os.getcwd(), fnv.fname_attrs['site_id']))
-        except Exception:
-            pass
-    copyfile(
-        args.filename, os.path.join(os.getcwd(), fnv.fname_attrs['site_id'],
-                                    os.path.basename(args.filename)))
-
+    site_path = Path.cwd() / fnv.fname_attrs['site_id']
+    site_path.mkdir(parents=True, exist_ok=True)
+    copyfile(args.filename, site_path / Path(args.filename).name)
 
 if __name__ == "__main__":
     main()
