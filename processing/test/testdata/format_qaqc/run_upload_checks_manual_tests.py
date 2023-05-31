@@ -4,8 +4,10 @@ import subprocess
 import string
 import time
 
-__author__ = 'Danielle Christianson'
-__email__ = 'dschristianson@lbl.gov'
+from pathlib import Path
+
+__author__ = 'Danielle Christianson, Sy-Toan Ngo'
+__email__ = 'dschristianson@lbl.gov, sytoanngo@lbl.gov'
 
 
 # This is a test utility script for running the test files locally.
@@ -22,8 +24,8 @@ if which_python == '3.6':
     subprocess.call(['which', 'python'])
     # subprocess.call(['/bin/source', 'activate', 'python3'])
 
-wdir = '/Users/dsc/Documents/LBNL/ameriflux/AMF-FLX/AMF-QAQC'
-fname = '{wdir}/tests/file_check_expected_issues_ts3.csv'.format(wdir=wdir)
+wdir = Path.cwd()
+fname = wdir/'test'/'testdata'/'format_qaqc'/'file_check_expected_issues_ts3.csv'
 with open(fname, 'r') as f:
     files = f.readline()
     notes = f.readline()
@@ -54,8 +56,8 @@ for ifile, n in zip(files[start_index:check_length],
         # subprocess.call([which_python.format(f=f)])
         subprocess.call(
             ['python',
-             '{wdir}/processing/{ws}'.format(wdir=wdir, ws=which_script),
-             '{wdir}/tests/testdata/{ifile}'.format(wdir=wdir, ifile=ifile),
+             '{wdir}/{ws}'.format(wdir=wdir, ws=which_script),
+             '{wdir}/test/testdata/format_qaqc/{ifile}'.format(wdir=wdir, ifile=ifile),
              '9999', 'o', 'US-UMB', '-t'
              ])
         print(' ')
@@ -73,8 +75,8 @@ for ifile, n in zip(files[start_index:check_length],
         # subprocess.call([which_python.format(f=f)])
         subprocess.call(
             ['python',
-             '{wdir}/processing/{ws}'.format(wdir=wdir, ws=which_script),
-             '{wdir}/tests/testdata/{ifile}'.format(wdir=wdir, ifile=ifile),
+             '{wdir}/{ws}'.format(wdir=wdir, ws=which_script),
+             '{wdir}/test/testdata/format_qaqc/{ifile}'.format(wdir=wdir, ifile=ifile),
              '9999', 'r', 'US-UMB', '-t'
              ])
         print(' ')

@@ -82,7 +82,7 @@ class TimestampUtil:
             raise TimestampUtilException(fatal_msg)
         return ts
 
-    def cast_as_datetime(self, value):
+    def cast_as_datetime(self, value, check_log=None):
         """Try to convert each timestamp into a datetime
         :param value: raw timestamp value from CSV
         :type value: str.
@@ -95,9 +95,6 @@ class TimestampUtil:
         try:
             datetime_value = strptime(value, self.PREFERRED_TS_FORMAT)
         except Exception:
-            # info_msg = ("Unable to cast perceived timestamp {t} "
-            #             "as datetime without decoding.")
-            # _log.info(info_msg.format(t=value))
             pass
         if datetime_value:
             return datetime_value
@@ -108,7 +105,10 @@ class TimestampUtil:
         except Exception:
             fatal_msg = (f'Fail to cast perceived timestamp {value} '
                          'as datetime with decoding.')
-            _log.fatal(fatal_msg)
+            if check_log:
+                check_log.fatal(fatal_msg)
+            else:
+                _log.fatal(fatal_msg)
         return datetime_value
 
     def get_ISO_date_from_datetime(self, dt, format=None):

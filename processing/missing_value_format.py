@@ -25,7 +25,7 @@ class MissingValueFormat:
         bad_formats = False
         ln_num = 1
         try:
-            dr.read_single_file(fname=fname, check_log=check_log,
+            dr.read_single_file(file_path=fname, check_log=check_log,
                                 usemask=False, missing_values=None,
                                 datatype='a25', usecols=header_index)
             original_var_names = dr.data.dtype.names
