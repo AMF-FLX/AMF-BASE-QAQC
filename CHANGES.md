@@ -1,5 +1,19 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v1.2.3
+*2023 June 07*
+
+New in this release:
+- Clean up log files.
+ 
+Bug fixes:
+- Format QA/QC check for forward filled timestamps does not run if timestamps are malformed. #23
+
+Notes:
+- In the new Data QA/QC email, links to Format QA/QC reports use the autocorrected file report_id number if it exists instead of the original file report_id. 
+The webservice generating the online Format reports will be changed to accept either report_id.
+
+
 ### QAQC v1.2.2
 *2023 May 18*
 

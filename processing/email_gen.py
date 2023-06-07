@@ -14,7 +14,6 @@ from urllib import request
 
 from jira_interface import JIRAInterface
 from jira_names import JIRANames
-from link_replaced_issues import LinkIssues
 from logger import Logger
 from messages import Messages
 from status import StatusCode
@@ -109,7 +108,6 @@ class EmailGen:
         self.test_mode = False
         self.bad_status_value = 9999
         self.bad_status_txt = 'BAD_STATUS'
-        self.link_issues = LinkIssues()
 
     def _init_from_cfg(self, cfg_filename='qaqc.cfg'):
         """
@@ -964,10 +962,6 @@ class EmailGen:
             return 'All uploaded files are archival.'
 
         self.add_original_file_process_id_to_report(upload_info)
-        self.link_issues.configure_db_handlers()
-        # site_uploaded_files, linked_uploads = \
-        #     self.link_issues.find_files_replaced_by_upload(
-        #         upload_token, upload_info)
         zip_upload = self.is_upload_from_zip(upload_info=upload_info)
         description_txt = self.generate_description(upload_info, zip_upload)
         file_statuses = self.get_file_statuses(upload_info)
@@ -1029,11 +1023,6 @@ class EmailGen:
         jira.set_issue_state(issue_key=key, transition=jira_state)
         # Sleep briefly to let service desk get caught up.
         time.sleep(2)
-        # if linked_uploads:
-        #     self.link_issues.link_updated_issues(
-        #         site_id=upload_info.get['SITE_ID'], new_report_key=key,
-        #         upload_tokens=linked_uploads,
-        #         uploaded_files=site_uploaded_files)
 
         return key
 
