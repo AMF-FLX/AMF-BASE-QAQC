@@ -38,6 +38,7 @@ def test_check_invalid_missing_value_format(data_util):
     assert data_util.check_invalid_missing_value_format('0+100i') is True
     assert data_util.check_invalid_missing_value_format('153+7i') is True
 
+
 def test_check_invalid_data_row(data_util):
     assert data_util.check_invalid_data_row('201801010000') is False
     assert data_util.check_invalid_data_row('201801010000.000000') is False
