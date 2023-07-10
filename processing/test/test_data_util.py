@@ -1,8 +1,8 @@
 import pytest
 from utils import DataUtil
 
-__author__ = 'Danielle Christianson'
-__email__ = 'dschristianson@lbl.gov'
+__author__ = 'Danielle Christianson, Sy-Toan Ngo'
+__email__ = 'dschristianson@lbl.gov, sytoanngo@lbl.gov'
 
 
 @pytest.fixture
@@ -35,7 +35,8 @@ def test_check_invalid_missing_value_format(data_util):
     assert data_util.check_invalid_missing_value_format('  ') is True
     assert data_util.check_invalid_missing_value_format('Infinity') is True
     assert data_util.check_invalid_missing_value_format('-Infinity') is True
-
+    assert data_util.check_invalid_missing_value_format('0+100i') is True
+    assert data_util.check_invalid_missing_value_format('153+7i') is True
 
 def test_check_invalid_data_row(data_util):
     assert data_util.check_invalid_data_row('201801010000') is False
