@@ -984,7 +984,8 @@ class DataUtil:
         #    character.
         # In future, might want to catch a warning
         #       for -9999 x multiples of 10: r'^(-(6|9){4,}(0+))?$'
-        pattern = r'^(-(6|9){3,}(\.(0+|(6|9)+))?|#\w+(\?|!))$'
+        pattern = (r'^(-(6|9){3,}(\.(0+|(6|9)+))?|#\w+(\?|!))$'
+                   r'|([-+]?\d+(\.\d+)?[+-]\d+(\.\d+)?i)$')
         data_value = data_value.lower()
         if (data_value != self.missing_value
             and (re.match(pattern, data_value) is not None
