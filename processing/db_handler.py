@@ -142,6 +142,8 @@ class NewDBHandler:
 
     def get_sites_with_embargo(self, conn):
         site_ids = []
+
+        # Current embargo is 2 years
         query = SQL('SELECT flux_id from site_embargo_log '
                     'WHERE retire_timestamp IS NULL '
                     'AND EXTRACT(YEARS FROM AGE('
