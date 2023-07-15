@@ -304,6 +304,8 @@ class BASECreator():
         base_attrs = {}
         psql_conn = self.db_conn_pool.get('psql_conn')
         self.site_list = self.flux_db_handler.get_sites_with_updates()
+        self.embargoed_site_list = self.new_db_handler.get_sites_with_embargo(
+            psql_conn)
         self.historic_site_list = self.new_db_handler.get_sites_with_updates(
             psql_conn, is_historic=True)
         self.preBASE_files = self.flux_db_handler.get_BASE_candidates()
@@ -323,6 +325,8 @@ class BASECreator():
             site_id = file_attrs[0]
             cur_file_res = file_attrs[-1]
             site_id_attrs = base_attrs.get(site_id)
+            if site_id in self.embargoed_site_list:
+                continue
 
             if site_id_attrs:
                 info_msg = f'Site {site_id} was processed earlier.'
