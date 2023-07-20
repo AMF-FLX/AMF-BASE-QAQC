@@ -140,16 +140,16 @@ class NewDBHandler:
                 lookup[flux_id] = (hh_version, hr_version)
         return lookup
 
-    def get_sites_with_embargo(self, conn):
+    def get_sites_with_embargo(self, conn, embargo_years):
         site_ids = []
 
         # Current embargo is 2 years
         query = SQL('SELECT flux_id from site_embargo_log '
                     'WHERE retire_timestamp IS NULL '
                     'AND EXTRACT(YEARS FROM AGE('
-                    'NOW(), request_timestamp)) < 2')
+                    'NOW(), request_timestamp)) < %s')
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
-            cursor.execute(query)
+            cursor.execute(query, (embargo_years,))
             for r in cursor:
                 site_ids.append(r.get('flux_id'))
         return site_ids
