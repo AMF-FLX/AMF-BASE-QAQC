@@ -140,6 +140,19 @@ class NewDBHandler:
                 lookup[flux_id] = (hh_version, hr_version)
         return lookup
 
+    def get_sites_with_embargo(self, conn, embargo_years):
+        site_ids = []
+
+        query = SQL('SELECT flux_id from site_embargo_log '
+                    'WHERE retire_timestamp IS NULL '
+                    'AND EXTRACT(YEARS FROM AGE('
+                    'NOW(), request_timestamp)) < %s')
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, (embargo_years,))
+            for r in cursor:
+                site_ids.append(r.get('flux_id'))
+        return site_ids
+
     def get_filename_checksum_lookup(self, conn):
         checksums = {}
         query = SQL('SELECT filename, file_checksum '

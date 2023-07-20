@@ -49,7 +49,7 @@ class BASECreator():
         with open(self._cwd / 'qaqc.cfg') as cfg:
             code_ver, code_major_ver, combined_files_loc, path, \
                 flux_hostname, flux_user, flux_auth, flux_db_name, PI_vars, \
-                new_db_config = self._read_config(cfg)
+                new_db_config, embargo_years = self._read_config(cfg)
         if not code_ver:
             print('No code version specified in config file')
             return False
@@ -89,12 +89,20 @@ class BASECreator():
         if not PI_vars:
             print('No _PI variables specified in config file')
         self.PI_vars = tuple(PI_vars)  # PI_vars is [] if unspecified in config
+
+        if not embargo_years:
+            _log.error('Embargo duration not available in config file')
+            return False
+        else:
+            self.embargo_years = embargo_years
+
         return True
 
     def _read_config(self, cfg):
         code_ver = code_major_ver = combined_files_loc = path = None
         flux_hostname = flux_user = flux_auth = flux_db_name = None
         new_hostname = new_user = new_auth = new_db_name = None
+        embargo_years = None
         PI_vars = []
         config = ConfigParser()
         config.read_file(cfg)
@@ -128,6 +136,11 @@ class BASECreator():
                         config.get(cfg_section, 'PI_vars'))
                 except Exception:
                     PI_vars = []
+            if config.has_option(cfg_section, 'embargo_years'):
+                try:
+                    embargo_years = config.get(cfg_section, 'embargo_years')
+                except Exception:
+                    embargo_years = None
 
         cfg_section = 'DB'
         if config.has_section(cfg_section):
@@ -151,7 +164,7 @@ class BASECreator():
 
         return (code_ver, code_major_ver, combined_files_loc, path,
                 flux_hostname, flux_user, flux_auth, flux_db_name, PI_vars,
-                new_db_config)
+                new_db_config, embargo_years)
 
     def create_BASE(self, fp_in, base, site_id, base_version):
         write_as_is = False
@@ -304,6 +317,8 @@ class BASECreator():
         base_attrs = {}
         psql_conn = self.db_conn_pool.get('psql_conn')
         self.site_list = self.flux_db_handler.get_sites_with_updates()
+        self.embargoed_site_list = self.new_db_handler.get_sites_with_embargo(
+            psql_conn, self.embargo_years)
         self.historic_site_list = self.new_db_handler.get_sites_with_updates(
             psql_conn, is_historic=True)
         self.preBASE_files = self.flux_db_handler.get_BASE_candidates()
@@ -323,6 +338,8 @@ class BASECreator():
             site_id = file_attrs[0]
             cur_file_res = file_attrs[-1]
             site_id_attrs = base_attrs.get(site_id)
+            if site_id in self.embargoed_site_list:
+                continue
 
             if site_id_attrs:
                 info_msg = f'Site {site_id} was processed earlier.'
