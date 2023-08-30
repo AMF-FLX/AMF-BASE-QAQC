@@ -1,5 +1,16 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v1.2.4
+*2023 Aug 30*
+
+New in this release:
+- Add support for preventing embargoed sites from being published.
+ 
+Notes:
+- In the new Data QA/QC email, links to Format QA/QC reports use the autocorrected file report_id number if it exists instead of the original file report_id. 
+The webservice generating the online Format reports will be changed to accept either report_id.
+
+
 ### QAQC v1.2.3
 *2023 June 07*
 
