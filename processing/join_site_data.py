@@ -303,8 +303,9 @@ class JoinSiteData:
                         logger=gap_log, qaqc_check=gap_qaqc_check,
                         status_msg=gap_list, report_section='high_level'))
                     if not is_test:
+                        file_path_str = str(file_path)
                         self.reporter.register_base_files(
-                            proc_id, file_path, file_order)
+                            proc_id, file_path_str, file_order)
                     _log.resetStats()
                     return file_path, file_status, file_order
         return (None,
