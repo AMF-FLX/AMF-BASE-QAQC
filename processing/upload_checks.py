@@ -329,5 +329,6 @@ def copy_file(args, fnv):
     site_path.mkdir(parents=True, exist_ok=True)
     copyfile(args.filename, site_path / Path(args.filename).name)
 
+
 if __name__ == "__main__":
     main()
