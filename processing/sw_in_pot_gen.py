@@ -193,15 +193,13 @@ class SW_IN_POT_Generator():
         :rtype: tuple.
         :return tuples of lat, lon and UTC_offset
         """
-        BADM_ws = self.site_info_ws + '{}'
-        url = BADM_ws.format(site_id)
+        url = self.site_info_ws.format(site_id=site_id)
         content = self.ws_util.get_content(url)
-        data = json.loads(content)
+        data_values = json.loads(content)
         # TODO: Assumes simple case of one lat, lon and utc per site
         #       This is not always true and we need to account for that
-        data_values = data.get('values')
-        location_data = data_values.get('GRP_LOCATION')
-        utc_offset_data = data_values.get('GRP_UTC_OFFSET')
+        location_data = data_values.get('LOCATION')
+        utc_offset_data = data_values.get('UTC_OFFSET')
         lat, lon = self.get_location(location_data)
         utc_offset = self.get_UTC_offset(utc_offset_data)
         return lat, lon, utc_offset
