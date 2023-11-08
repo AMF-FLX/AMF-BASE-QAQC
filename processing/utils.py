@@ -1002,35 +1002,54 @@ class FileUploadUtil:
 class DataUtil:
     def __init__(self):
         self.missing_value = '-9999'
+        self.check_invalid_value = {
+            'common_value': {
+                'check': ('', ' ', '  ', 'nan', 'na',
+                         'inf', '-inf', 'infinity', '-infinity'),
+                'message': 'invalid common value'
+                },
+            '69_value': {
+                'check': r'^-(6|9){3,}(\.(0+|(6|9)+))?$',
+                'message': 'only 6 and 9 value'
+            },
+            'char_value': {
+                'check': r'#\w+(\?|!)$',
+                'message': 'string starts with #'
+            },
+            'imaginary_value': {
+                'check': r'([-+]?\d+(\.\d+)?[+-]\d+(\.\d+)?i)$',
+                'message': 'imaginary value'
+                },
+            'non_numeric_value': {
+                'check': r'^[-+]?\d+(\.\d+)?[*/+-]\d+(\.\d+)?[!]?$',
+                'message': 'non-numeric value'
+                },
+        }
 
-    def check_invalid_missing_value_format(self, data_value):
+    def check_invalid_missing_value_format(self,
+                                           data_value,
+                                           check_types=['common_value',
+                                                        '69_value',
+                                                        'char_value']):
         """
         Assess whether data value has invalid missing value format
         :param data_value: data value to assess
         :return: logical: True if invalid, False if valid
         """
-        common_values = ('', ' ', '  ', 'nan', 'na',
-                         'inf', '-inf', 'infinity', '-infinity')
-        # the regex below will match the pattern as follows:
-        # a string starting with - and three or more
-        #    characters that are either 6 or 9 an optional decimal
-        #    point followed by one or more zeros or one
-        #    or more 6 or 9 characters
-        # a string that starts with "#" followed by one or more word
-        #    characters (a-z, A-Z, or _) followed by either "?" or "!"
-        #    both of these strings must end with the last matching
-        #    character.
-        # In future, might want to catch a warning
-        #       for -9999 x multiples of 10: r'^(-(6|9){4,}(0+))?$'
-        pattern = (r'^(-(6|9){3,}(\.(0+|(6|9)+))?|#\w+(\?|!))$'
-                   r'|([-+]?\d+(\.\d+)?[+-]\d+(\.\d+)?i)$')
+        msg = None
         data_value = data_value.lower()
-        if (data_value != self.missing_value
-            and (re.match(pattern, data_value) is not None
-                 or data_value in common_values)):
-            return True
-        else:
-            return False
+        if data_value != self.missing_value:
+            for check_type in check_types:
+                check_condition = self.check_invalid_value[check_type]['check']
+                msg = self.check_invalid_value[check_type]['message']
+                if isinstance(check_condition, tuple):
+                    if data_value in check_condition:
+                        return True, msg
+                else:
+                    if re.match(check_condition, data_value) is not None:
+                        return True, msg
+        return False, msg
+
 
     @staticmethod
     def check_invalid_data_row(data_row):
@@ -1064,18 +1083,20 @@ class DataUtil:
 
 
 if __name__ == '__main__':
-    var_util = VarUtil()
-    print(var_util.is_valid_variable('TIMESTAMP_START_1'))
-    print(var_util.remove_dup_filled_nonfilled_var(
-        ['PPFD_IN_F_1_2_1', 'PPFD_IN_F_2_2_1'], rm_which='non-filled'))
-    print(var_util.get_top_level_variables(['PPFD_IN_1_2_1', 'PPFD_IN_1_3_1',
-                                            'PPFD_IN_2_2_A']))
-    print(var_util.get_lowest_horiz_variables(['PPFD_IN_1_2_1',
-                                               'PPFD_IN_2_2_A']))
-    print(var_util.get_lowest_r_variable(['PPFD_IN_1_2_1',
-                                          'PPFD_IN_2_2_A']))
-    print(var_util.get_top_level_variables(['PPFD_IN_2', 'PPFD_IN_1_3_1',
-                                            'PPFD_IN_2_2_A']))
-    print(var_util.get_lowest_horiz_variables(['PPFD_IN_2',
-                                               'PPFD_IN_2_2_A']))
-    print(var_util.get_lowest_r_variable(['PPFD_IN_2_2_A']))
+    # var_util = VarUtil()
+    # print(var_util.is_valid_variable('TIMESTAMP_START_1'))
+    # print(var_util.remove_dup_filled_nonfilled_var(
+    #     ['PPFD_IN_F_1_2_1', 'PPFD_IN_F_2_2_1'], rm_which='non-filled'))
+    # print(var_util.get_top_level_variables(['PPFD_IN_1_2_1', 'PPFD_IN_1_3_1',
+    #                                         'PPFD_IN_2_2_A']))
+    # print(var_util.get_lowest_horiz_variables(['PPFD_IN_1_2_1',
+    #                                            'PPFD_IN_2_2_A']))
+    # print(var_util.get_lowest_r_variable(['PPFD_IN_1_2_1',
+    #                                       'PPFD_IN_2_2_A']))
+    # print(var_util.get_top_level_variables(['PPFD_IN_2', 'PPFD_IN_1_3_1',
+    #                                         'PPFD_IN_2_2_A']))
+    # print(var_util.get_lowest_horiz_variables(['PPFD_IN_2',
+    #                                            'PPFD_IN_2_2_A']))
+    # print(var_util.get_lowest_r_variable(['PPFD_IN_2_2_A']))
+    data_util = DataUtil()
+    print()
