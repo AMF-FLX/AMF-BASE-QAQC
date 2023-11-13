@@ -1020,9 +1020,13 @@ class DataUtil:
                 'check': r'([-+]?\d+(\.\d+)?[+-]\d+(\.\d+)?i)$',
                 'message': 'imaginary value'
                 },
-            'non_numeric_value': {
-                'check': r'^[-+]?\d+(\.\d+)?[*/+-]\d+(\.\d+)?[!]?$',
-                'message': 'non-numeric value'
+            'factorial_value': {
+                'check': r'^[-+]?\d+(\.\d+)?!$',
+                'message': 'factorial value'
+                },
+            'scientific_value': {
+                'check': r'-?\d+\.\d+e-?\d+|-?\d+e-?\d+',
+                'message': 'scientific value'
                 },
         }
 

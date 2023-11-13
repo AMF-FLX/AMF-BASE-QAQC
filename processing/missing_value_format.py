@@ -74,7 +74,8 @@ class MissingValueFormat:
             _log.error('Invalid missing value formats found in '
                        '{header}'.format(header=header))
 
-    def check_invalid_values(self, fname, check_log):
+    # get the data, not header
+    def get_raw_data(self, fname):
         with open(fname, 'r', encoding='utf-8-sig') as f:
             # skip the header
             found_headers = False
@@ -122,9 +123,19 @@ class MissingValueFormat:
                 drop_line_count += 1
 
             headers = tokens
+            data = f.readlines()
+        return headers, data
 
-            ln_num = 1
-            for line in f.readlines():
+    def has_invalid_values(self, data):
+        s = ''.join(data).replace('\n', ',').lower()
+        invalid_char = ('i', '!', 'e', '+')
+        if set(s).intersection(invalid_char):
+            return True
+        return False
+
+    def find_invalid_values(self, headers, data, check_log):
+            for ln_num, line in enumerate(data):
+                line = line.lower()
                 tokens = self._tokenize(line.strip('\n'))
                 tokens, has_quotes_removed = self._strip_quotes(tokens)
                 tokens, has_whitespace_removed = self._strip_whitespace(tokens)
@@ -148,16 +159,16 @@ class MissingValueFormat:
                                                                             '69_value',
                                                                             'char_value',
                                                                             'imaginary_value',
-                                                                            'non_numeric_value'
+                                                                            'factorial_value',
+                                                                            'scientific_value'
                                                                         ])
                     if invalid_missing_value_format:
                         check_log.error('{msg} on line {li} '
                                         'column {header} [{t}]'.format(
                                         msg=msg,
-                                        li=ln_num,
+                                        li=ln_num+1,
                                         header=headers[i],
                                         t=t))
-                ln_num += 1
 
     def _tokenize(self, line):
         return line.split(',')
@@ -231,17 +242,15 @@ class MissingValueFormat:
                     self.check_missing_values_col(
                         fname=fname, header=h, header_index=header_indices[0],
                         dr=dr, check_log=check_log)
-
-                # check nan value if any in the data
-                if d.data.dtype[i] == '<f8' and has_invalid_data_value == False:
-                    if np.any(np.isnan(d.data[h].filled(-1000))):
-                        has_invalid_data_value = True
                 check_log.resetStats()
-
+            
+            headers, data = self.get_raw_data(fname=fname)
+            has_invalid_values = self.has_invalid_values(data=data)
             # detect nan value
-            if has_invalid_data_value:
-                self.check_invalid_values(
-                    fname=fname, check_log=check_log)
+            if has_invalid_values:
+                self.find_invalid_values(headers=headers,
+                                          data=data,
+                                          check_log=check_log)
 
             if not self.status_msg_parts:
                 status_msg = None
@@ -274,5 +283,13 @@ class MissingValueFormat:
 
 
 if __name__ == '__main__':
-    _log = Logger(True).getLogger(__name__)
-    print(MissingValueFormat().test().make_report_object())
+    # _log = Logger(True).getLogger(__name__)
+    # print(MissingValueFormat().test().make_report_object())
+    from data_reader import DataReader
+    
+    d = DataReader()
+    mf = MissingValueFormat()
+    d.driver('/home/toanngo/Documents/GitHub/ameriflux/AMF-BASE-QAQC/processing/test/testdata/AMF_US-PHM_BASE_HH_3-5.csv', run_type='o')
+    mf.driver(d,
+              '/home/toanngo/Documents/GitHub/ameriflux/AMF-BASE-QAQC/processing/test/testdata/AMF_US-PHM_BASE_HH_3-5.csv')
+    
