@@ -133,7 +133,7 @@ class MissingValueFormat:
             return True
         return False
 
-    def find_invalid_values(self, headers, data, check_log):
+    def find_invalid_values(self, headers, data, log):
             for ln_num, line in enumerate(data):
                 line = line.lower()
                 tokens = self._tokenize(line.strip('\n'))
@@ -163,12 +163,12 @@ class MissingValueFormat:
                                                                             'scientific_value'
                                                                         ])
                     if invalid_missing_value_format:
-                        check_log.error('{msg} on line {li} '
-                                        'column {header} [{t}]'.format(
-                                        msg=msg,
-                                        li=ln_num+1,
-                                        header=headers[i],
-                                        t=t))
+                        log.error('{msg} on line {li} '
+                                  'column {header} [{t}]'.format(
+                                  msg=msg,
+                                  li=ln_num+1,
+                                  header=headers[i],
+                                  t=t))
 
     def _tokenize(self, line):
         return line.split(',')
@@ -243,14 +243,16 @@ class MissingValueFormat:
                         fname=fname, header=h, header_index=header_indices[0],
                         dr=dr, check_log=check_log)
                 check_log.resetStats()
-            
+
+            check_invalid_log = Logger().getLogger('invalid_value_col')
+            check_invalid_log.resetStats()
             headers, data = self.get_raw_data(fname=fname)
             has_invalid_values = self.has_invalid_values(data=data)
             # detect nan value
             if has_invalid_values:
                 self.find_invalid_values(headers=headers,
                                           data=data,
-                                          check_log=check_log)
+                                          log=check_invalid_log)
 
             if not self.status_msg_parts:
                 status_msg = None
@@ -261,9 +263,12 @@ class MissingValueFormat:
             status_msg = self.stat_msg_prefix + 'No data. ' + \
                          self.msg.get_msg(_log.getName(), 'CRITICAL', 'Report')
             _log.fatal(status_msg)
-        return StatusGenerator().status_generator(
+        return [StatusGenerator().status_generator(
             logger=_log, qaqc_check=self.msg.get_display_check(_log.getName()),
-            status_msg=status_msg, report_type=report_type)
+            status_msg=status_msg, report_type=report_type),
+                StatusGenerator().status_generator(
+            logger=_log, qaqc_check=self.msg.get_display_check(_log.getName()),
+            status_msg=status_msg, report_type=report_type)]
 
     def test(self, filename=None):
         """Test method to be used for testing module independently
@@ -283,13 +288,5 @@ class MissingValueFormat:
 
 
 if __name__ == '__main__':
-    # _log = Logger(True).getLogger(__name__)
-    # print(MissingValueFormat().test().make_report_object())
-    from data_reader import DataReader
-    
-    d = DataReader()
-    mf = MissingValueFormat()
-    d.driver('/home/toanngo/Documents/GitHub/ameriflux/AMF-BASE-QAQC/processing/test/testdata/AMF_US-PHM_BASE_HH_3-5.csv', run_type='o')
-    mf.driver(d,
-              '/home/toanngo/Documents/GitHub/ameriflux/AMF-BASE-QAQC/processing/test/testdata/AMF_US-PHM_BASE_HH_3-5.csv')
-    
+    _log = Logger(True).getLogger(__name__)
+    print(MissingValueFormat().test().make_report_object())
