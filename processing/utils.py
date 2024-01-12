@@ -8,6 +8,7 @@ import matplotlib.dates as dates
 import numpy as np
 import os
 import re
+import string
 import subprocess
 import urllib.request
 import zipfile
@@ -243,6 +244,43 @@ class TextUtil:
             if p > 1:
                 plural = f'{e}s'
         return plural
+
+    def strip_character(self, tokens, character):
+        """ Takes in a line of values and remove whitespaces and quotes
+        from the beginning or end of values if the characters exist.
+
+        Returns a list of tokens and a boolean value of True if whitespace
+        or quotes are removed
+        """
+        sum_token_len = sum((len(t) for t in tokens))
+
+        tokens = [t.strip(character) for t in tokens]
+        sum_no_character_token_len = sum((len(t) for t in tokens))
+
+        if (sum_token_len - sum_no_character_token_len) > 0:
+            return tokens, True
+        return tokens, False
+
+    def strip_whitespace(self, tokens):
+        """
+
+        :param tokens: list of variable names
+        :return: list of variable names with whitespaces removed
+                 boolean, True if whitespaces were removed
+        """
+        return self.strip_character(tokens, character=string.whitespace)
+
+    def strip_quotes(self, tokens):
+        """
+
+        :param tokens: list of variable names
+        :return: list of variable names with quotes removed
+                 boolean, True if quotes were removed
+        """
+        return self.strip_character(tokens, character='"')
+
+    def tokenize(self, line):
+        return line.split(',')
 
 
 class WSUtil:
