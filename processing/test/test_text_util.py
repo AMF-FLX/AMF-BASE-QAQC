@@ -7,7 +7,7 @@ __email__ = 'sytoanngo@lbl.gov'
 
 @pytest.fixture
 def text_util():
-    ''' Initializes TimestampUtil '''
+    ''' Initializes TextUtil '''
     return TextUtil()
 
 
