@@ -20,8 +20,8 @@ from logger import Logger
 from sys import platform as _platform
 from urllib.error import HTTPError
 
-__author__ = 'You-Wei Cheah, Danielle Christianson'
-__email__ = 'ycheah@lbl.gov, dschristianson@lbl.gov'
+__author__ = 'You-Wei Cheah, Danielle Christianson, Sy-Toan Ngo'
+__email__ = 'ycheah@lbl.gov, dschristianson@lbl.gov, sytoanngo@lbl.gov'
 _log = Logger().getLogger(__name__)
 
 """Common functions that can be shared between files"""
@@ -245,7 +245,7 @@ class TextUtil:
                 plural = f'{e}s'
         return plural
 
-    def strip_character(self, tokens, character):
+    def _strip_character(self, tokens, character):
         """ Takes in a line of values and remove whitespaces and quotes
         from the beginning or end of values if the characters exist.
 
@@ -268,7 +268,7 @@ class TextUtil:
         :return: list of variable names with whitespaces removed
                  boolean, True if whitespaces were removed
         """
-        return self.strip_character(tokens, character=string.whitespace)
+        return self._strip_character(tokens, character=string.whitespace)
 
     def strip_quotes(self, tokens):
         """
@@ -277,7 +277,7 @@ class TextUtil:
         :return: list of variable names with quotes removed
                  boolean, True if quotes were removed
         """
-        return self.strip_character(tokens, character='"')
+        return self._strip_character(tokens, character='"')
 
     def tokenize(self, line):
         return line.split(',')
