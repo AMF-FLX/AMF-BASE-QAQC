@@ -261,43 +261,6 @@ class FileFixer:
             return '; '.join(duplicate_variables)
         return None
 
-    def _strip_character(self, tokens, character):
-        """ Takes in a line of values and remove whitespaces and quotes
-        from the beginning or end of values if the characters exist.
-
-        Returns a list of tokens and a boolean value of True if whitespace
-        or quotes are removed
-        """
-        sum_token_len = sum((len(t) for t in tokens))
-
-        tokens = [t.strip(character) for t in tokens]
-        sum_no_character_token_len = sum((len(t) for t in tokens))
-
-        if (sum_token_len - sum_no_character_token_len) > 0:
-            return tokens, True
-        return tokens, False
-
-    def _strip_whitespace(self, tokens):
-        """
-
-        :param tokens: list of variable names
-        :return: list of variable names with whitespaces removed
-                 boolean, True if whitespaces were removed
-        """
-        return self._strip_character(tokens, character=string.whitespace)
-
-    def _strip_quotes(self, tokens):
-        """
-
-        :param tokens: list of variable names
-        :return: list of variable names with quotes removed
-                 boolean, True if quotes were removed
-        """
-        return self._strip_character(tokens, character='"')
-
-    def _tokenize(self, line):
-        return line.split(',')
-
     def fix_file(self, file_path, process_id, local_run=False):
         self.temp_dir = os.path.join(self.temp_base, process_id)
         os.makedirs(self.temp_dir, exist_ok=True)
@@ -364,12 +327,13 @@ class FileFixer:
                 head = [t for t in tokens if t.lower() in header_set]
                 if len(head) > 0:
                     # found header line
-                    header_tokens = self._tokenize(line.strip('\n'))
+                    header_tokens = self.txt_util.tokenize(line.strip('\n'))
                     all_headers_with_quotes = \
                         self.data_util.are_all_headers_with_quotes(
                             header_tokens)
                     if all_headers_with_quotes:
-                        header_tokens, _ = self._strip_quotes(header_tokens)
+                        header_tokens, _ = \
+                            self.txt_util.strip_quotes(header_tokens)
                         msg = 'Quotes around variable names removed.'
                         self.append_status_msg_parts('warning', msg)
                     found_headers = True
@@ -447,9 +411,10 @@ class FileFixer:
             n_lines_whitespace_removed = 0
             n_lines_quotes_removed = 0
             for line in f.readlines():
-                tokens = self._tokenize(line.strip('\n'))
-                tokens, has_quotes_removed = self._strip_quotes(tokens)
-                tokens, has_whitespace_removed = self._strip_whitespace(tokens)
+                tokens = self.txt_util.tokenize(line.strip('\n'))
+                tokens, has_quotes_removed = self.txt_util.strip_quotes(tokens)
+                tokens, has_whitespace_removed = \
+                    self.txt_util.strip_whitespace(tokens)
                 if has_whitespace_removed:
                     n_lines_whitespace_removed += 1
                 if has_quotes_removed:
