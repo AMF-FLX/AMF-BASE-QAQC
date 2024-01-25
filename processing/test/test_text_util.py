@@ -28,18 +28,24 @@ def test_strip_whitespace(text_util):
         '82.3000,0.0000,0.0000,0.0000,266.5000,325.9000,2.0850,'
         '0.1039,0.2195,0.1039,2.0000,7.0000,9.0000,4.5000,8.2000,'
         '9.3000').split(',')
+    result_token_idx = []
     test_and_comparison.append((test_tokens, result_tokens, True))
 
     tokens = ('201601010000,201601010030,-63.3900,-37.3606,-6.1844').split(',')
-    test_and_comparison.append((tokens, tokens, False))
+    test_and_comparison.append((tokens, tokens, False, result_token_idx))
 
     test_tokens = (' 201601010000,201601010030 ').split(',')
     result_tokens = ('201601010000,201601010030').split(',')
-    test_and_comparison.append((test_tokens, result_tokens, True))
+    result_token_idx = [0, 1]
+    test_and_comparison.append((test_tokens,
+                                result_tokens,
+                                True,
+                                result_token_idx))
 
-    for test_tokens, result_tokens, result_boolean in test_and_comparison:
+    for (test_tokens, result_tokens,
+         result_boolean, result_token_idx) in test_and_comparison:
         assert text_util.strip_whitespace(test_tokens) == \
-            (result_tokens, result_boolean)
+            (result_tokens, result_boolean, result_token_idx)
 
 
 def test_strip_quotes(text_util):
@@ -55,15 +61,23 @@ def test_strip_quotes(text_util):
         '-14.8509,0.1838,0.1112,408.7241,7.2133,5.7312,86.3784,'
         '3.1180,80.5577,2.1530,80.7000,5.2200,74.3869,2.3016,'
         '9.3000').split(',')
-    test_and_comparison.append((test_tokens, result_tokens, True))
+    result_token_idx = list(range(0, len(test_tokens)))
+    test_and_comparison.append((test_tokens, result_tokens,
+                                True, result_token_idx))
 
     tokens = ('201601010000,201601010030,-63.3900,-37.3606,-6.1844').split(',')
-    test_and_comparison.append((tokens, tokens, False))
+    result_token_idx = []
+    test_and_comparison.append((tokens, tokens, False, result_token_idx))
 
     test_tokens = ('"201601010000,2016010"10030').split(',')
     result_tokens = ('201601010000,2016010"10030').split(',')
-    test_and_comparison.append((test_tokens, result_tokens, True))
+    result_token_idx = [0]
+    test_and_comparison.append((test_tokens,
+                                result_tokens,
+                                True,
+                                result_token_idx))
 
-    for test_tokens, result_tokens, result_boolean in test_and_comparison:
+    for (test_tokens, result_tokens,
+         result_boolean, result_token_idx) in test_and_comparison:
         assert text_util.strip_quotes(test_tokens) == \
-            (result_tokens, result_boolean)
+            (result_tokens, result_boolean, result_token_idx)

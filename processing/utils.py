@@ -249,17 +249,20 @@ class TextUtil:
         """ Takes in a line of values and remove whitespaces and quotes
         from the beginning or end of values if the characters exist.
 
-        Returns a list of tokens and a boolean value of True if whitespace
-        or quotes are removed
+        Returns a list of tokens a boolean value of True if whitespace
+        or quotes are removed, and a list of indexes of modified tokens
         """
-        sum_token_len = sum((len(t) for t in tokens))
 
-        tokens = [t.strip(character) for t in tokens]
-        sum_no_character_token_len = sum((len(t) for t in tokens))
-
-        if (sum_token_len - sum_no_character_token_len) > 0:
-            return tokens, True
-        return tokens, False
+        strip_tokens = []
+        strip_token_idx = []
+        is_strip_character = False
+        for i, token in enumerate(tokens):
+            strip_token = token.strip(character)
+            strip_tokens.append(strip_token)
+            if len(strip_token) < len(token):
+                strip_token_idx.append(i)
+                is_strip_character = True
+        return strip_tokens, is_strip_character, strip_token_idx
 
     def strip_whitespace(self, tokens):
         """
@@ -267,8 +270,10 @@ class TextUtil:
         :param tokens: list of variable names
         :return: list of variable names with whitespaces removed
                  boolean, True if whitespaces were removed
+                 list of variable indexes with whitespaces removed
         """
-        return self._strip_character(tokens, character=string.whitespace)
+        return self._strip_character(tokens,
+                                     character=string.whitespace)
 
     def strip_quotes(self, tokens):
         """
@@ -276,8 +281,10 @@ class TextUtil:
         :param tokens: list of variable names
         :return: list of variable names with quotes removed
                  boolean, True if quotes were removed
+                 list of variable indexes with quotes removed
         """
-        return self._strip_character(tokens, character='"')
+        return self._strip_character(tokens,
+                                     character='"')
 
     def tokenize(self, line):
         return line.split(',')
