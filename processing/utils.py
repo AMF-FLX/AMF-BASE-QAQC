@@ -1009,7 +1009,7 @@ class FileUploadUtil:
 class DataUtil:
     def __init__(self):
         self.missing_value = '-9999'
-        self.check_invalid_value = {
+        self.invalid_value = {
             'common_value': {
                 'check': ('', ' ', '  ', 'nan', 'na',
                          'inf', '-inf', 'infinity', '-infinity'),
@@ -1051,13 +1051,15 @@ class DataUtil:
         data_value = data_value.lower()
         if data_value != self.missing_value:
             for check_type in check_types:
-                check_condition = self.check_invalid_value[check_type]['check']
-                msg = self.check_invalid_value[check_type]['message']
+                check_condition = self.invalid_value[check_type]['check']
+                message = self.invalid_value[check_type]['message']
                 if isinstance(check_condition, tuple):
                     if data_value in check_condition:
+                        msg = message
                         return True, msg
                 else:
                     if re.match(check_condition, data_value) is not None:
+                        msg = message
                         return True, msg
         return False, msg
 
