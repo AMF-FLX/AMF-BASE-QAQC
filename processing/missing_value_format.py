@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 
 import argparse
+<<<<<<< HEAD
+=======
+import string
+import numpy as np
+>>>>>>> 721ee3dd61afb1bc45e46e8e355ac7d762d4f52a
 
 from logger import Logger
 from status import StatusGenerator
@@ -173,6 +178,139 @@ class MissingValueFormat:
                                              f'{msg_parts_str}')
             invalid_warning_msg = ', '.join(invalid_warning_parts)
         return invalid_error_msg, invalid_warning_msg
+
+    # get the data, not header
+    def get_raw_data(self, fname):
+        with open(fname, 'r', encoding='utf-8-sig') as f:
+            # skip the header
+            found_headers = False
+            drop_line_count = 0
+            header_set = (
+                'timestamp_start', 'timestamp', 'time', 'date', 'year',
+                'start_timestamp', 'doy', 'dtime', 'hrmin',
+                'timestamp_end', 'end_timestamp', 'time_start', 'start_time')
+            while not found_headers:
+                try:
+                    # if readline encounters an invalid UTF8 char it
+                    # tosses the remainder of the 8k block of data
+                    line = f.readline()
+                except UnicodeDecodeError:
+                    if first_bad_char:
+                        _log.warning(
+                            'found invalid UTF8 character when looking for '
+                            f'headers on line {drop_line_count}, '
+                            'trying cp1252')
+                        drop_line_count = 0
+                        f.close()
+                        f = open(fname,
+                                'r', encoding='cp1252')
+                        first_bad_char = False
+                        continue
+                    else:
+                        msg = ('File contains invalid UTF8 and cp1252 '
+                            'characters. Unknown file encoding. '
+                            'Autocorrection FAILED.')
+                        self.append_status_msg_parts('fatal', msg)
+                        return None, None
+                if line == '':
+                    # End of File
+                    break
+                tokens = line.rstrip().split(',')
+                # note that strip and strip(string.whitespace) aren't
+                # exactly the same but FPin files are supposed to be
+                # ascii files so they should yield the same result
+                tokens = [h.strip(string.whitespace + '"') for h in tokens]
+                head = [t for t in tokens if t.lower() in header_set]
+                if len(head) > 0:
+                    # found header line
+                    found_headers = True
+                    break
+                drop_line_count += 1
+
+            headers = tokens
+            data = f.readlines()
+        return headers, data
+
+    def has_invalid_values(self, data):
+        s = ''.join(data).replace('\n', ',').lower()
+        invalid_char = ('i', '!', 'e', '+')
+        if set(s).intersection(invalid_char):
+            return True
+        return False
+
+    def find_invalid_values(self, headers, data, log):
+            for ln_num, line in enumerate(data):
+                line = line.lower()
+                tokens = self._tokenize(line.strip('\n'))
+                tokens, has_quotes_removed = self._strip_quotes(tokens)
+                tokens, has_whitespace_removed = self._strip_whitespace(tokens)
+                if has_whitespace_removed:
+                    n_lines_whitespace_removed += 1
+                if has_quotes_removed:
+                    n_lines_quotes_removed += 1
+                invalid_data_row = \
+                    self.data_util.check_invalid_data_row(data_row=tokens[0])
+                if invalid_data_row:
+                    # assume units line or some other junk
+                    drop_line_count += 1
+                    continue
+                fixed_tokens = []
+                for i, t in enumerate(tokens):
+                    t = t.strip()
+                    invalid_missing_value_format, msg = \
+                        self.data_util.check_invalid_missing_value_format(t,
+                                                                        check_types=[
+                                                                            'common_value',
+                                                                            '69_value',
+                                                                            'char_value',
+                                                                            'imaginary_value',
+                                                                            'factorial_value',
+                                                                            'scientific_value'
+                                                                        ])
+                    if invalid_missing_value_format:
+                        log.error('{msg} on line {li} '
+                                  'column {header} [{t}]'.format(
+                                  msg=msg,
+                                  li=ln_num+1,
+                                  header=headers[i],
+                                  t=t))
+
+    def _tokenize(self, line):
+        return line.split(',')
+
+    def _strip_quotes(self, tokens):
+        """
+
+        :param tokens: list of variable names
+        :return: list of variable names with quotes removed
+                 boolean, True if quotes were removed
+        """
+        return self._strip_character(tokens, character='"')
+
+    def _strip_whitespace(self, tokens):
+        """
+
+        :param tokens: list of variable names
+        :return: list of variable names with whitespaces removed
+                 boolean, True if whitespaces were removed
+        """
+        return self._strip_character(tokens, character=string.whitespace)
+
+    def _strip_character(self, tokens, character):
+        """ Takes in a line of values and remove whitespaces and quotes
+        from the beginning or end of values if the characters exist.
+
+        Returns a list of tokens and a boolean value of True if whitespace
+        or quotes are removed
+        """
+        sum_token_len = sum((len(t) for t in tokens))
+
+        tokens = [t.strip(character) for t in tokens]
+        sum_no_character_token_len = sum((len(t) for t in tokens))
+
+        if (sum_token_len - sum_no_character_token_len) > 0:
+            return tokens, True
+        return tokens, False
 
     def driver(self, d, fname):
         """
