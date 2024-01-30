@@ -1013,27 +1013,27 @@ class DataUtil:
             'common_value': {
                 'check': ('', ' ', '  ', 'nan', 'na',
                          'inf', '-inf', 'infinity', '-infinity'),
-                'message': 'invalid common value'
+                'message': 'Invalid common value'
                 },
             '69_value': {
                 'check': r'^-(6|9){3,}(\.(0+|(6|9)+))?$',
-                'message': 'only 6 and 9 value'
+                'message': 'Only 6 and 9 value'
             },
             'char_value': {
                 'check': r'#\w+(\?|!)$',
-                'message': 'string starts with #'
+                'message': 'String starts with #'
             },
             'imaginary_value': {
                 'check': r'([-+]?\d+(\.\d+)?[+-]\d+(\.\d+)?i)$',
-                'message': 'imaginary value'
+                'message': 'Imaginary value'
                 },
             'factorial_value': {
                 'check': r'^[-+]?\d+(\.\d+)?!$',
-                'message': 'factorial value'
+                'message': 'Factorial value'
                 },
             'scientific_value': {
                 'check': r'-?\d+\.\d+e-?\d+|-?\d+e-?\d+',
-                'message': 'scientific value'
+                'message': 'Scientific value'
                 },
         }
 
