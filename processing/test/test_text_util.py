@@ -28,10 +28,14 @@ def test_strip_whitespace(text_util):
         '82.3000,0.0000,0.0000,0.0000,266.5000,325.9000,2.0850,'
         '0.1039,0.2195,0.1039,2.0000,7.0000,9.0000,4.5000,8.2000,'
         '9.3000').split(',')
-    result_token_idx = []
-    test_and_comparison.append((test_tokens, result_tokens, True))
+    result_token_idx = list(range(1, len(test_tokens)))
+    test_and_comparison.append((test_tokens,
+                                result_tokens,
+                                True,
+                                result_token_idx))
 
     tokens = ('201601010000,201601010030,-63.3900,-37.3606,-6.1844').split(',')
+    result_token_idx = []
     test_and_comparison.append((tokens, tokens, False, result_token_idx))
 
     test_tokens = (' 201601010000,201601010030 ').split(',')
