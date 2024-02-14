@@ -1384,7 +1384,7 @@ class FileFixer:
             data = [log_id, site_id,
                     "toanngo", "Sy-Toan Ngo",
                     "sytoanngo@lbl.gov", 1,
-                    f'Repair candidate for {process_id}',
+                    f'repair candidate for {process_id}',
                     1,
                     token,
                     filename, None, None, None,
