@@ -1,0 +1,10 @@
+log_id,site_id,user_id,user_name,user_email,upload_type_id,upload_comment,upload_source_id,upload_token,data_file,metadata_file,data_format,year,log_timestamp
+12345,US-CRT,toanngo,Sy-Toan Ngo,sytoanngo@lbl.gov,1,testing zip,1,1ae8cc15-f7d7-491b-b444-801cf22ad5bf,US-CRT_HH_201101010000_201201010000.zip,,,,1658485643.0
+12346,US-CRT,toanngo,Sy-Toan Ngo,sytoanngo@lbl.gov,1,Archive upload for 178,1,b5839050-e733-40b5-8f96-852f563444ba,US-CRT_HH_201101010000_201201010000_TestMultivarite000005.csv,,,,1707942474.203131
+12347,US-CRT,toanngo,Sy-Toan Ngo,sytoanngo@lbl.gov,1,Archive upload for 178,1,b5839050-e733-40b5-8f96-852f563444ba,US-CRT_HH_201101010000_201201010000_TestMultivarite000004.csv,,,,1707942474.206479
+12348,US-CRT,toanngo,Sy-Toan Ngo,sytoanngo@lbl.gov,1,Archive upload for 178,1,b5839050-e733-40b5-8f96-852f563444ba,US-CRT_HH_201101010000_201201010000_TestMultivarite000003.csv,,,,1707942474.208485
+12349,US-CRT,toanngo,Sy-Toan Ngo,sytoanngo@lbl.gov,1,Archive upload for 178,1,b5839050-e733-40b5-8f96-852f563444ba,US-CRT_HH_201101010000_201201010000_TestMultivarite000001.csv,,,,1707942474.210106
+12350,US-CRT,toanngo,Sy-Toan Ngo,sytoanngo@lbl.gov,1,repair candidate for 178,1,c2c9215a-90ff-47bf-8e3a-2f777d8936b7,US-CRT_HH_201101010000_201201010000.csv,,,,1707942492.623369
+12351,US-CRT,toanngo,Sy-Toan Ngo,sytoanngo@lbl.gov,1,repair candidate for 178,1,421e3d89-9089-485a-9ced-1a19e4ab88a9,US-CRT_HH_201101010000_201201010000.csv,,,,1707942492.642066
+12352,US-CRT,toanngo,Sy-Toan Ngo,sytoanngo@lbl.gov,1,repair candidate for 178,1,fe0b3094-6bf9-41e0-837c-72b97305a379,US-CRT_HH_201101010000_201201010000.csv,,,,1707942492.742844
+12353,US-CRT,toanngo,Sy-Toan Ngo,sytoanngo@lbl.gov,1,repair candidate for 178,1,e5428b4c-2791-445a-a160-4a0a71d7187d,US-CRT_HH_201101010000_201201010000.csv,,,,1707942494.033552
