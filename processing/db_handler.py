@@ -164,6 +164,20 @@ class NewDBHandler:
                 checksums[fname] = r.get('file_checksum')
         return checksums
 
+    def get_new_data_upload_log(self, conn):
+        query = SQL('SELECT u.log_id, u.site_id, '
+                    'u.data_file, u.upload_token, '
+                    'u.upload_comment, u.upload_type_id '
+                    'FROM input_interface.data_upload_log u '
+                    'LEFT JOIN qaqc.processing_log p '
+                    'ON u.log_id = p.log_id '
+                    'WHERE p.log_id IS NULL '
+                    'AND u.upload_type_id IN (4, 7)')
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query)
+            new_data_upload = cursor.fetchall()
+        return new_data_upload
+
 
 class DBHandler:
     def __init__(self, hostname, user, password, db_name):
