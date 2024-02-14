@@ -29,7 +29,7 @@ class FormatQAQCDriver:
                 self.log_dir = config.get(cfg_section, 'log_dir')
                 self.time_sleep = config.getfloat(cfg_section, 'time_sleep')
                 self.max_retries = config.getint(cfg_section, 'max_retries')
-            
+
             cfg_section = 'DB'
             if config.has_section(cfg_section):
                 hostname = config.get(cfg_section, 'hostname')
@@ -57,8 +57,7 @@ class FormatQAQCDriver:
     def run_proc(self, cmd):
         p = subprocess.Popen(shlex.split(cmd),
                              stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE
-                            )
+                             stderr=subprocess.PIPE)
         out, err = p.communicate()
         return (out, err)
 
