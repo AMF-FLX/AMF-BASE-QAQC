@@ -8,7 +8,8 @@ import time
 
 from configparser import ConfigParser
 from collections import namedtuple
-from db_handler import NewDBHandler
+from multiprocessing.pool import ThreadPool
+# from db_handler import NewDBHandler
 
 __author__ = 'Sy-Toan Ngo'
 __email__ = 'sytoanngo@lbl.gov'
@@ -19,7 +20,7 @@ Task = namedtuple('Task', ['filename', 'process_id',
 
 
 class FormatQAQCDriver:
-    def __init__(self, test=True):
+    def __init__(self, db, test=True):
         config = ConfigParser()
         with open(os.path.join(os.getcwd(), 'qaqc.cfg'), 'r') as cfg:
             cfg_section = 'FORMAT_QAQC_DRIVER'
@@ -30,17 +31,18 @@ class FormatQAQCDriver:
                 self.time_sleep = config.getfloat(cfg_section, 'time_sleep')
                 self.max_retries = config.getint(cfg_section, 'max_retries')
 
-            cfg_section = 'DB'
-            if config.has_section(cfg_section):
-                hostname = config.get(cfg_section, 'hostname')
-                user = config.get(cfg_section, 'user')
-                auth = config.get(cfg_section, 'auth')
-                db_name = config.get(cfg_section, 'db_name')
-            if all([hostname, user, auth, db_name]):
-                self.db = NewDBHandler(hostname=hostname,
-                                       user=user,
-                                       password=auth,
-                                       db_name=db_name)
+            # cfg_section = 'DB'
+            # if config.has_section(cfg_section):
+            #     hostname = config.get(cfg_section, 'hostname')
+            #     user = config.get(cfg_section, 'user')
+            #     auth = config.get(cfg_section, 'auth')
+            #     db_name = config.get(cfg_section, 'db_name')
+            # if all([hostname, user, auth, db_name]):
+            #     self.db = NewDBHandler(hostname=hostname,
+            #                            user=user,
+            #                            password=auth,
+            #                            db_name=db_name)
+        self.db = db
 
         log_file_date = dt.datetime.now().strftime('%Y-%m-%d')
         log_file_name = f'format_qaqc_driver_service_{log_file_date}.log'
@@ -122,7 +124,7 @@ class FormatQAQCDriver:
 
                 # run tasks
                 while tasks:
-                    pool = mp.pool.ThreadPool(mp.cpu_count())
+                    pool = ThreadPool(mp.cpu_count())
                     results = {}
                     for upload_id, v in tasks.items():
                         task, _ = v.values()
@@ -148,7 +150,7 @@ class FormatQAQCDriver:
                         if err and retry < self.max_retries:
                             tasks[upload_id]['retry'] += 1
                             log.write((f"Log id: {upload_id}, "
-                                       "retry for {retry} times and failed\n"))
+                                       f"retry for {retry} times and failed\n"))
                         else:
                             del tasks[upload_id]
                             if err:
@@ -163,7 +165,7 @@ class FormatQAQCDriver:
                 for upload_id in upload_ids_list:
                     tokens.append(self.db.
                                   get_token_from_processing_log_id(upload_id))
-                pool = mp.pool.ThreadPool(mp.cpu_count())
+                pool = ThreadPool(mp.cpu_count())
                 results = []
                 print(tokens)
                 for token in tokens:

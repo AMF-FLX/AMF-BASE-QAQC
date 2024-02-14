@@ -177,7 +177,9 @@ class NewDBHandler:
             cursor.execute(query)
             new_data_upload = cursor.fetchall()
         return new_data_upload
-
+    
+    def get_token_from_processing_log_id(self, conn, log_id):
+        return 'TODO'
 
 class DBHandler:
     def __init__(self, hostname, user, password, db_name):

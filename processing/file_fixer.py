@@ -2,6 +2,7 @@
 
 import argparse
 import ast
+import csv
 import datetime as dt
 import getpass
 import json
@@ -22,12 +23,17 @@ from shutil import copyfile
 from status import StatusGenerator
 from urllib.error import HTTPError
 from utils import DataUtil, TextUtil, TimestampUtil, VarUtil
+from uuid import uuid4
 from var_fix import VarFixer
 from xlrd import open_workbook
 
-__author__ = 'Norm Beekwilder, You-Wei Cheah'
-__email__ = 'norm.beekwilder@gmail.com, ycheah@lbl.gov'
+__author__ = 'Norm Beekwilder, You-Wei Cheah, Sy-Toan Ngo'
+__email__ = 'norm.beekwilder@gmail.com, ycheah@lbl.gov, sytoanngo@lbl.gov'
 _log = Logger().getLogger(__name__)
+
+DATA_DIR = './test/testdata/format_qaqc_driver'
+DATA_UPLOAD_LOG = './test/testdata/format_qaqc_driver/data_upload_log.csv'
+SITE_ID = 'US-CRT'
 
 
 class FileFixer:
@@ -270,7 +276,8 @@ class FileFixer:
         # if its not csv see if we can convert to csv
         if filename_ext != '.csv':
             csv_generated, token = self.make_csv(dir_name, filename_noext,
-                                                 filename_ext, process_id)
+                                                 filename_ext, process_id,
+                                                 local_run)
             if csv_generated:
                 filename_ext = '.csv'
                 dir_name = self.temp_dir
@@ -854,6 +861,7 @@ class FileFixer:
         if has_valid_headers and not duplicate_variables:
             remade_filename, site_id, filename_fixer_msg = self.fix_filename(
                 dir_name, filename_noext, process_id, timespan, corrected_data)
+            # self.site_id = site_id
             if filename_fixer_msg:
                 self.status_msg_parts['warning'].append(filename_fixer_msg)
             # build output header line
@@ -874,6 +882,8 @@ class FileFixer:
                 if not local_run:
                     # print(local_run)
                     self.upload(remade_filename, process_id, site_id)
+                else:
+                    self.upload_test(remade_filename, process_id, site_id)
                 msg = 'File was Autocorrected and corrected file uploaded.'
                 self.append_status_msg_parts('warning', msg)
                 return remade_filename, None
@@ -909,7 +919,8 @@ class FileFixer:
 
         self.status_msg_parts[msg_code].append(msg)
 
-    def make_csv(self, dir_name, filename_noext, filename_ext, process_id):
+    def make_csv(self, dir_name, filename_noext,
+                 filename_ext, process_id, local_run):
         file_path = os.path.join(dir_name, filename_noext + filename_ext)
         if filename_ext.lower() in ('.xlsx', '.xls'):
             self.readExcel(dir_name, filename_noext, filename_ext)
@@ -967,7 +978,10 @@ class FileFixer:
                         copyfile(file_path, os.path.join(
                             self.temp_dir, os.path.basename(file_path)))
                     files.append(os.path.basename(file_path))
-                token = self.make_new_upload(files, process_id)
+                if not local_run:
+                    token = self.make_new_upload(files, process_id)
+                else:
+                    token = self.make_new_upload_test(files, process_id)
                 msg = ('NOTE: Zip file contains multiple files.'
                        ' Created new upload and retired zip file.')
                 _log.warning(msg)
@@ -1034,7 +1048,8 @@ class FileFixer:
                     f'Extracted {zfilename_ext} file from '
                     f'{filename_ext} file.')
                 return self.make_csv(
-                    zdir_name, zfilename_noext, zfilename_ext, process_id)
+                    zdir_name, zfilename_noext,
+                    zfilename_ext, process_id, local_run)
             if zdir_name != self.temp_dir or zfilename_noext != filename_noext:
                 shutil.copy(
                     os.path.join(zdir_name, zfilename_noext + zfilename_ext),
@@ -1344,6 +1359,76 @@ class FileFixer:
             raise Exception(
                 f'{ws} returned status code {e.code}\n{response}')
 
+    def make_new_upload_test(self, files, process_id):
+        resp = self.get_upload_info_test(process_id)
+        base_names = [os.path.basename(f) for f in files]
+        return self.archive_upload_test(base_names,
+                                        process_id,
+                                        resp['SITE_ID'])
+
+    def get_upload_info_test(self, process_id):
+        resp = {}
+        resp['SITE_ID'] = SITE_ID
+        return resp
+
+    def upload_test(self, filename, process_id, site_id):
+        saved_files_dir = os.path.join(DATA_DIR, site_id, process_id)
+        if not os.path.exists(saved_files_dir):
+            os.makedirs(saved_files_dir)
+        token = self.upload_intent_test(None)
+
+        with open(DATA_UPLOAD_LOG, 'r') as log:
+            log_id = int(log.readlines()[-1].split(',')[0]) + 1
+        with open(DATA_UPLOAD_LOG, 'a+') as log:
+            writer = csv.writer(log)
+            data = [log_id, site_id,
+                    "toanngo", "Sy-Toan Ngo",
+                    "sytoanngo@lbl.gov", 1,
+                    f'Repair candidate for {process_id}',
+                    1,
+                    token,
+                    filename, None, None, None,
+                    dt.datetime.now().timestamp()]
+            writer.writerow(data)
+
+        self.upload_file_test(token, filename)
+        copyfile(os.path.join(self.temp_dir, filename),
+                 os.path.join(saved_files_dir, filename))
+        return token
+
+    def archive_upload_test(self, files, process_id, site_id):
+        saved_files_dir = os.path.join(DATA_DIR, site_id, process_id)
+        if not os.path.exists(saved_files_dir):
+            os.makedirs(saved_files_dir)
+        token = self.upload_intent_test(None)
+        for filename in files:
+            with open(DATA_UPLOAD_LOG, 'r') as log:
+                log_id = int(log.readlines()[-1].split(',')[0]) + 1
+            with open(DATA_UPLOAD_LOG, 'a+') as log:
+                writer = csv.writer(log)
+                data = [log_id, site_id,
+                        "toanngo", "Sy-Toan Ngo",
+                        "sytoanngo@lbl.gov", 1,
+                        f'Archive upload for {process_id}',
+                        1,
+                        token,
+                        filename, None, None, None,
+                        dt.datetime.now().timestamp()]
+                writer.writerow(data)
+            self.upload_file_test(token, filename)
+            copyfile(os.path.join(self.temp_dir, filename),
+                     os.path.join(saved_files_dir, filename))
+        return token
+
+    def upload_intent_test(self, msg):
+        return str(uuid4())
+
+    def upload_file_test(self, token, filename):
+        info_msg = (
+            f'Replacement candidate {filename} '
+            f'uploaded with token {token}')
+        self.append_status_msg_parts('ok', info_msg)
+
     def driver(self, filename, process_id, local_run=False):
         """
         This is a driver to test and run QAQC Algorithm specific to this class
@@ -1357,7 +1442,7 @@ class FileFixer:
         _log.resetStats()
         self.status_msg_parts = {'fatal': [], 'error': [],
                                  'warning': [], 'ok': []}
-        _log.info("Beginning attempt to fix uplaoded file")
+        _log.info("Beginning attempt to fix uploaded file")
         fn, token = self.fix_file(filename, process_id, local_run)
         # qaqc_check = 'fix_file for {f}'.format(f=filename)
         # leave this 'AutoRepair' text b/c front end uses it to build report
