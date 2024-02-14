@@ -179,7 +179,13 @@ class NewDBHandler:
         return new_data_upload
     
     def get_token_from_processing_log_id(self, conn, log_id):
-        return 'TODO'
+        query = SQL('SELECT p.upload_token '
+                    'FROM qaqc.processing_log p '
+                    f'WHERE p.log_id = {log_id}')
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query)
+            token = cursor.one()
+        return token
 
 class DBHandler:
     def __init__(self, hostname, user, password, db_name):
