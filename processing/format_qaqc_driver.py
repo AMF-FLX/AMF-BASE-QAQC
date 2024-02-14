@@ -9,7 +9,6 @@ import time
 from configparser import ConfigParser
 from collections import namedtuple
 from multiprocessing.pool import ThreadPool
-# from db_handler import NewDBHandler
 
 __author__ = 'Sy-Toan Ngo'
 __email__ = 'sytoanngo@lbl.gov'
@@ -145,7 +144,13 @@ class FormatQAQCDriver:
                     pool.close()
                     pool.join()
                     for upload_id, result in results.items():
-                        _, err = result.get()
+                        err = False
+                        try:
+                            _, log_output = result.get()
+                            if 'ERROR' in str(log_output):
+                                err = True
+                        except Exception as e:
+                            err = True
                         retry = tasks[upload_id]['retry']
                         if err and retry < self.max_retries:
                             tasks[upload_id]['retry'] += 1
@@ -167,15 +172,15 @@ class FormatQAQCDriver:
                                   get_token_from_processing_log_id(upload_id))
                 pool = ThreadPool(mp.cpu_count())
                 results = []
-                print(tokens)
                 for token in tokens:
                     log.write(f"Email gen for token: {token}\n")
-                    cmd = ('python '
-                           f'{self.email_gen_path} '
-                           f'{token} ')
-                    if self.is_test:
-                        cmd = cmd + '-t'
-                    results.append(pool.apply_async(self.run_proc, (cmd,)))
+                    if not self.is_test:
+                        cmd = ('python '
+                            f'{self.email_gen_path} '
+                            f'{token} ')
+                        if self.is_test:
+                            cmd = cmd + '-t'
+                        results.append(pool.apply_async(self.run_proc, (cmd,)))
                 pool.close()
                 pool.join()
 
