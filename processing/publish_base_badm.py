@@ -5,7 +5,6 @@ import os
 from configparser import ConfigParser
 from db_handler import DBHandler
 from logger import Logger
-from process_actions import ProcessActions
 from process_states import ProcessStates
 from publish import Publish
 from report_status import ReportStatus
@@ -24,7 +23,6 @@ class PublishBASEBADM():
         self.init_status = self._get_params_from_config()
         self.publisher = Publish()
         self.report_status = ReportStatus()
-        self.process_actions = ProcessActions()
         self.process_states = ProcessStates()
 
         _log.info("Initialized")
@@ -162,8 +160,7 @@ class PublishBASEBADM():
                     try:
                         self.report_status.enter_new_state(
                             process_id=process_id,
-                            action=self.process_actions.BASEBADMPubFailed,
-                            status=self.process_states.BASEBADMPubFailed)
+                            state_id=self.process_states.BASEBADMPubFailed)
                         info_msg = ("Wrote report_status BASEBADMPubFailed "
                                     f"for processID {process_id} "
                                     f"(file: {filename}).")

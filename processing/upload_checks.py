@@ -1,9 +1,15 @@
 #!/usr/bin/env python
 
 import argparse
+import sys
 import traceback
+
+from datetime import datetime as dt
 from time import time
+from typing import Optional
+
 from data_reader import DataReader
+from db_handler import NewDBHandler
 from file_name_verifier import FileNameVerifier
 from logger import Logger
 from status import StatusCode, StatusGenerator  # , StatusEncoder
@@ -12,55 +18,83 @@ from gap_fill import GapFilled
 from pathlib import Path
 from process_status import ProcessStatus
 from process_states import ProcessStates
-from process_actions import ProcessActions
 from report_status import ReportStatus
 from file_fixer import FileFixer
 from shutil import copyfile
 from missing_value_format import MissingValueFormat
 from data_missing import DataMissing
 from utils import FilenameUtils
-from data_report_gen import DataReportGen
+from data_report_gen import gen_description
 from messages import Messages
 
 
-def main():
+def convert_ts_str_iso_format(ts_str: Optional[str]) -> Optional[str]:
+    if ts_str is None or len(ts_str) != 12:
+        return None
+    return (f'{ts_str[0:4]}-{ts_str[4:6]}-{ts_str[6:8]} '
+            f'{ts_str[8:10]}:{ts_str[10:12]}')
+
+
+def upload_checks(
+        filename: str, upload_id: int, run_type: str,
+        site_id: str, prior_process_id: int, zip_process_id: int,
+        local_run=False) -> (Optional[int], bool, Optional[str]):
+
     s_time = time()
     statuses = []
     report_statuses = []
     process_type = 'File Format'
     msg = Messages()
 
-    parser = argparse.ArgumentParser(description='Upload checks')
-    parser.add_argument(
-        'filename', type=str, help='Target filename')
-    parser.add_argument(
-        'process_id', type=str, help='file processing ID')
-    parser.add_argument(
-        'run_type', type=str, help='(o)riginal or (r)epaired file run')
-    parser.add_argument(
-        'site_id', type=str, help='site_id')
-    parser.add_argument(
-        '-t', '--test', action='store_true', default=False,
-        help='Sets flag for local run that does not write to database')
-    args = parser.parse_args()
+    start_time = dt.now()
+    timestamp_str = start_time.isoformat()
 
-    _log = Logger(True, args.process_id,
-                  args.site_id,
-                  process_type).getLogger('upload_checks')  # Initialize logger
+    process_id = None
+    is_upload_successful = None
+    multi_zip_uuid = None
+    autorepair_uuid = None
 
-    status_ct = 0
-    all_status = True
-    ts_start = None
-    ts_end = None
-    local_run = args.test
-    fixable = False
+    if not local_run:
+        db = NewDBHandler()
+        process_id = db.register_format_qaqc(
+            upload_id=upload_id, process_timestamp=timestamp_str,
+            site_id=site_id, prior_process_id=prior_process_id,
+            zip_process_id=zip_process_id)
+        if not process_id:
+            print(f'Attempt to process upload_id {upload_id} '
+                  f'for site_id {site_id} failed.')
+            # process_id, has_child_upload, upload_token
+            return None, False, None
+    else:
+        process_id = 999999
+
+    _log = Logger(True, process_id, site_id, process_type,
+                  start_time).getLogger('upload_checks')  # Initialize logger
+
+    process_log_path = _log.default_log
+
+    # set up summarized output items
+    s = None
+    data_start_timestamp = None
+    data_end_timestamp = None
+    json_status = None
+    json_report = None
 
     try:
-        log_start_time = _log.log_file_timestamp.strftime(
-            format='%Y-%b-%d %H:%M %Z')
+        if not local_run:
+            # write to the state log
+            rs = ReportStatus()
+            rs.report_status(process_id=process_id,
+                             state_id=ProcessStates.Uploaded)
+
+        status_ct = 0
+        all_status = True
+        fixable = False
+
+        log_start_time = start_time.strftime(format='%Y-%b-%d %H:%M %Z')
 
         original_filename = FilenameUtils().remove_upload_timestamp(
-            args.filename)
+            filename)
         original_filename_path = Path(original_filename)
         fname_ext = original_filename_path.suffix
         d = DataReader()
@@ -69,7 +103,7 @@ def main():
         # if file is not an accepted archival format process as normal
         if fname_ext not in ('.zip', '.7z'):
 
-            fnv_status = fnv.driver(args.filename)
+            fnv_status = fnv.driver(filename)
             statuses.append(fnv_status)
             if len(statuses) == status_ct:
                 all_status = False
@@ -79,7 +113,7 @@ def main():
 
             # data reader
             try:
-                dr_statuses = d.driver(args.filename, args.run_type)
+                dr_statuses = d.driver(filename, run_type)
                 statuses.extend(dr_statuses)
                 if len(statuses) == status_ct:
                     all_status = False
@@ -110,13 +144,15 @@ def main():
                 # timestamp checks
                 ts_statuses, ts_start, ts_end = TimestampChecks().driver(
                     d, fnv.fname_attrs)  # keep status updated
+                data_start_timestamp = convert_ts_str_iso_format(ts_start)
+                data_end_timestamp = convert_ts_str_iso_format(ts_end)
                 statuses.extend(ts_statuses)
                 if len(statuses) == status_ct:
                     all_status = False
                 status_ct = len(statuses)
 
                 # Missing Value check
-                statuses.append(MissingValueFormat().driver(d, args.filename))
+                statuses.append(MissingValueFormat().driver(d, filename))
                 if len(statuses) == status_ct:
                     all_status = False
                 status_ct = len(statuses)
@@ -148,7 +184,7 @@ def main():
         # if file is accepted archival format
         else:
             fixable = True
-            args.run_type = 'z'
+            run_type = 'z'
             d.original_header = [('Header information not available from '
                                   'archival file type (e.g., zip, 7z).')]
             zip_filename = original_filename_path.name
@@ -180,28 +216,30 @@ def main():
 
         rs = ReportStatus()
         title_prefix = ''
-        if args.run_type in ('o', 'z'):
+        if run_type in ('o', 'z'):
             # original file
             if process_status_code < StatusCode.OK:
                 if fixable:
                     # QAQC fail try fix
                     if not local_run:
-                        rs.report_status(
-                            ProcessActions.IssuesFound,
-                            ProcessStates.IssuesFound, None, None,
-                            process_id=args.process_id)
-                    else:
-                        args.process_id = '178'
-                    fixer_status, filename, multi_zip = FileFixer().driver(
-                        args.filename, args.process_id, local_run)
+                        rs.report_status(process_id=process_id,
+                                         state_id=ProcessStates.IssuesFound)
+
+                    # get
+                    fixer_status, autorepair_filename, multi_zip_uuid, \
+                        autorepair_uuid, is_upload_successful = \
+                        FileFixer().driver(
+                            filename, process_id, site_id, local_run)
                     statuses.extend(fixer_status)
+
                     if len(statuses) == status_ct:
                         all_status = False
+
                     if all_status:
-                        if args.run_type == 'z':
+                        if run_type == 'z':
                             status_msg += ('Automated extraction of '
                                            f'{zip_filename} was attempted')
-                            # if not multi_zip:
+                            # if not multi_zip_uuid:
                             #     status_msg += '. '
                         else:
                             status_msg += (' Autocorrection of detected '
@@ -210,16 +248,13 @@ def main():
                         # fixer failed
                         if not local_run:
                             rs.report_status(
-                                ProcessActions.FailedRepair,
-                                ProcessStates.FailedRepair,
-                                None, None, process_id=args.process_id)
+                                process_id=process_id,
+                                state_id=ProcessStates.FailedRepair)
                         s = ProcessStates.FailedRepairRetire
-                        a = ProcessActions.FailedRepairRetire
                         status_msg += ' and FAILED.'
-                    elif multi_zip is not None:
+                    elif multi_zip_uuid is not None:
                         # Archive uploaded as individual files
                         s = ProcessStates.ArchiveUploaded
-                        a = ProcessActions.ArchiveUpload
                         status_msg += (' and the included files were '
                                        're-uploaded. See separate Format '
                                        'QA/QC report for each included file.')
@@ -227,15 +262,13 @@ def main():
                         # fixer worked
                         # fixer uploaded new file
                         if not local_run:
-                            rs.report_status(
-                                ProcessActions.AutoRepair,
-                                ProcessStates.AutoRepair, None, None,
-                                process_id=args.process_id)
+                            rs.report_status(process_id=process_id,
+                                             state_id=ProcessStates.AutoRepair)
+
                         s = ProcessStates.AutoRepairRetire
-                        a = ProcessActions.AutoRepairRetire
-                        if args.run_type == 'o':
+                        if run_type == 'o':
                             status_msg += (' and autocorrected file was '
-                                           f'uploaded: {filename}. '
+                                           f'uploaded: {autorepair_filename}. '
                                            'See Format QA/QC report '
                                            'for autocorrected file.')
                     fixer_time = time() - e_time
@@ -245,38 +278,31 @@ def main():
                     if process_status_code < StatusCode.WARNING:
                         # QAQC failed
                         s = ProcessStates.FailedQAQC
-                        a = ProcessActions.FailedQAQCorig
                     else:
                         # QAQC passed
-                        copy_file(args, fnv)
+                        copy_file(filename, fnv)
                         s = ProcessStates.PassedQAQC
-                        a = ProcessActions.PassedQAQC
                         status_msg += (' Data will be queued for '
                                        'further data processing.')
             else:
                 # QAQC passed
-                copy_file(args, fnv)
+                copy_file(filename, fnv)
                 s = ProcessStates.PassedQAQC
-                a = ProcessActions.PassedQAQC
         else:
             # repaired file
             title_prefix = 'Autocorrected file: '
             if process_status_code < StatusCode.WARNING:
                 # QAQC failed
                 if not local_run:
-                    rs.report_status(
-                        ProcessActions.FailedQAQCrepair,
-                        ProcessStates.FailedQAQC,
-                        None, None, process_id=args.process_id)
+                    rs.report_status(process_id=process_id,
+                                     state_id=ProcessStates.FailedQAQC)
                 s = ProcessStates.FailedRepairRetire
-                a = ProcessActions.FailedRepairRetire
                 status_msg += (' Additional input is needed to further process'
                                ' the data.')
             else:
                 # QAQC passed
-                copy_file(args, fnv)
+                copy_file(filename, fnv)
                 s = ProcessStates.PassedQAQC
-                a = ProcessActions.PassedQAQC
                 if process_status_code < StatusCode.OK:
                     status_msg += (' Data will be queued for '
                                    'further data processing.')
@@ -290,12 +316,11 @@ def main():
         if local_run:
             check_summary = {}
         else:
-            check_summary = DataReportGen().gen_description(
-                {'Format QAQC': statuses})
+            check_summary = gen_description({'Format QAQC': statuses})
         process_status = ProcessStatus(
                     process_type=process_type,
                     filename=original_filename,
-                    upload_filename=args.filename,
+                    upload_filename=filename,
                     report_title=report_title,
                     process_datetime=log_start_time,
                     process_log_file=rs.make_file_qaqc_url(_log.default_log),
@@ -308,27 +333,61 @@ def main():
                     check_summary=check_summary)
         json_report = process_status.write_report_json()
         json_status = process_status.write_status_json()
-        if local_run:
-            print(json_report)
-            print(ts_start)
-            print(ts_end)
-        else:
-            rs.report_status(
-                action=a, status=s, report_json=json_report,
-                status_json=json_status, log_file=_log.default_log,
-                process_id=args.process_id, start_year=ts_start,
-                end_year=ts_end)
-
     except Exception as ex:
         _log.info(f'unhandled exception {ex}')
         _log.info(traceback.format_exc())
 
+    if local_run:
+        print(process_id, is_upload_successful,
+              multi_zip_uuid or autorepair_uuid)
+        print(json_report)
+        print(data_start_timestamp)
+        print(data_end_timestamp)
+    else:
+        rs = ReportStatus()
+        rs.report_status(
+            process_id=process_id,
+            state_id=s, log_file_path=process_log_path,
+            report_json=json_report, status_json=json_status,
+            start_timestamp=data_start_timestamp,
+            end_timestamp=data_end_timestamp)
 
-def copy_file(args, fnv):
+    return process_id, is_upload_successful, multi_zip_uuid or autorepair_uuid
+
+
+def copy_file(filename, fnv):
     site_path = Path.cwd() / fnv.fname_attrs['site_id']
     site_path.mkdir(parents=True, exist_ok=True)
-    copyfile(args.filename, site_path / Path(args.filename).name)
+    copyfile(filename, site_path / Path(filename).name)
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description='Upload checks')
+    parser.add_argument(
+        'filename', type=str, help='Target filename')
+    parser.add_argument(
+        # 'process_id', type = str, help = 'file processing ID')
+        'upload_id', type=int,
+        help='log_id in the data_upload_log table for the file to process')
+    parser.add_argument(
+        'run_type', type=str, help='(o)riginal or (r)epaired file run')
+    parser.add_argument(
+        'site_id', type=str, help='site_id')
+    parser.add_argument(
+        '-ppid', '--prior_process_id', type=int,
+        help='prior process id for run_type r')
+    parser.add_argument(
+        '-zid', '--zip_process_id', type=int,
+        help='zip file process id if applicable for run_type o')
+    parser.add_argument(
+        '-t', '--test', action='store_true', default=False,
+        help='Sets flag for local run that does not write'
+             ' to database')
+    args = parser.parse_args()
+
+    format_process_id, child_upload_success, upload_token = \
+        upload_checks(args.filename, args.upload_id, args.run_type,
+                      args.site_id, args.prior_process_id,
+                      args.zip_process_id, args.test)
+
+    sys.exit((format_process_id, child_upload_success, upload_token))

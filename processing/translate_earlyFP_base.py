@@ -12,7 +12,6 @@ from logger import Logger
 import os
 from path_util import PathUtil
 from process_states import ProcessStates
-from process_actions import ProcessActions
 from report_status import ReportStatus
 import time
 import urllib.request
@@ -359,8 +358,7 @@ class TranslateEarlyBase:
                     JIRANames.format_QAQC_ready_for_data, labels=['BASE'])
                 self.rs.enter_new_state(
                     process_id=site.process_id,
-                    status=ProcessStates.RetiredForReprocessing,
-                    action=ProcessActions.RetiredForReprocessing)
+                    state_id=ProcessStates.RetiredForReprocessing)
                 msg = '{s}: Old issue (process id = {op} status set ' \
                       'and linked to new issue (process id = {np}).'
                 _log.info(msg.format(s=site.site_id, op=site.process_id,

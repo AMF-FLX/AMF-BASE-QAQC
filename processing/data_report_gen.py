@@ -17,6 +17,27 @@ __email__ = 'norm.beekwilder@gmail.com, dschristianson@lbl.gov'
 _log = Logger().getLogger(__name__)
 
 
+def gen_description(report_statuses) -> str:
+    """
+    Helper method to generate the JIRA ticket description
+        from the list of status objects
+
+    :param report_statuses: list of dictionary objects
+    """
+    sc = status.StatusCode()
+    status_code = 0
+    status_counts = [0, 0, 0, 0]
+    for qaqc_check in report_statuses:
+        for rs in report_statuses[qaqc_check]:
+            if rs.get_status_code() < status_code:
+                status_code = rs.get_status_code()
+            status_counts[3 + rs.get_status_code()] += 1
+    return 'critical({c}), error({e}), warning({w}), ok({o})' \
+        .format(c=status_counts[3 + sc.FATAL], e=status_counts[3 + sc.ERROR],
+                w=status_counts[3 + sc.WARNING],
+                o=status_counts[3 + sc.OK])
+
+
 class DataReportGenError(Exception):
     pass
 
@@ -124,13 +145,13 @@ class DataReportGen:
             issue_key = self.jira.create_data_issue(
                 self.test_site, process_id, time_res, self.test_user, summary,
                 'QAQC completed with the following results '
-                f'{self.gen_description(status_list)}',
+                f'{gen_description(status_list)}',
                 [self.test_participant], ftp_link, report_link)
         else:
             issue_key = self.jira.create_data_issue(
                 site_id, process_id, time_res, data_qaqc_info['reporter_id'],
                 summary, 'QAQC completed with the following results '
-                f'{self.gen_description(status_list)}',
+                f'{gen_description(status_list)}',
                 data_qaqc_info['participant_ids'], ftp_link, report_link)
 
         # pause to give JIRA time to sync up and set the request type
@@ -176,20 +197,6 @@ class DataReportGen:
                                         JIRANames.label_results_sent])
 
         return issue_key
-
-    def gen_description(self, report_statuses):
-        sc = status.StatusCode()
-        status_code = 0
-        status_counts = [0, 0, 0, 0]
-        for qaqc_check in report_statuses:
-            for rs in report_statuses[qaqc_check]:
-                if rs.get_status_code() < status_code:
-                    status_code = rs.get_status_code()
-                status_counts[3+rs.get_status_code()] += 1
-        return 'critical({c}), error({e}), warning({w}), ok({o})'\
-            .format(c=status_counts[3+sc.FATAL], e=status_counts[3+sc.ERROR],
-                    w=status_counts[3+sc.WARNING],
-                    o=status_counts[3+sc.OK])
 
     def gen_message(self, site_id: str, is_self_review_site: bool,
                     issue_key: str, site_dict: dict,

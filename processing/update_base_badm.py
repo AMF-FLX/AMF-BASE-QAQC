@@ -367,8 +367,7 @@ class UpdateBASEBADM():
                     try:
                         self.report_status.enter_new_state(
                             process_id=process_id,
-                            action=self.process_actions.BADMUpdateFailed,
-                            status=self.process_states.BADMUpdateFailed)
+                            state_id=self.process_states.BADMUpdateFailed)
                         info_msg = ('Wrote report_status BADMUpdateFailed'
                                     f'for processID {process_id} '
                                     f'(file: {filename}).')
@@ -425,8 +424,7 @@ class UpdateBASEBADM():
                     try:
                         self.report_status.enter_new_state(
                             process_id=process_id,
-                            action=self.process_actions.UpdatedBASEBADM,
-                            status=self.process_states.UpdatedBASEBADM)
+                            state_id=self.process_states.UpdatedBASEBADM)
                         info_msg = ('Wrote report_status UpdatedBASEBADM '
                                     f'for processID {process_id} '
                                     f'(file: {filename}).')

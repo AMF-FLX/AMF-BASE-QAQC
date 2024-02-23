@@ -3,23 +3,25 @@
 import argparse
 import ast
 import datetime as dt
-import getpass
 import json
 import math
 import os
 import re
+import requests
 import shutil
 import string
 import subprocess
-import urllib.request
 import zipfile
 
 from configparser import ConfigParser
 from file_name_verifier import FileNameVerifier
 from fp_vars import FPVariables
+from http import HTTPStatus
 from logger import Logger
+from pathlib import Path
 from shutil import copyfile
-from status import StatusGenerator
+from status import Status, StatusGenerator
+from typing import List, Optional
 from urllib.error import HTTPError
 from utils import DataUtil, TextUtil, TimestampUtil, VarUtil
 from var_fix import VarFixer
@@ -55,15 +57,14 @@ class FileFixer:
                 self.temp_base = 'testing'
             cfg_section = 'WEBSERVICES'
             if config.has_section(cfg_section):
-                self.updates_ws = config.get(cfg_section, 'upload_info')
                 self.upload_ws1 = config.get(cfg_section, 'upload_part1')
                 self.upload_ws2 = config.get(cfg_section, 'upload_part2')
             cfg_section = 'AMP'
             if config.has_section(cfg_section):
-                self.amp_upload_email = config.get(
-                    cfg_section, 'file_upload_notification_email')
-            elif test_mode:
-                self.amp_upload_email = 'foo@foo.foo'
+                self.qaqc_processor_email = config.get(
+                    cfg_section, 'qaqc_processor_email')
+                self.qaqc_processor_user = config.get(
+                    cfg_section, 'qaqc_processor_user')
             cfg_section = 'PHASE_III'
             if config.has_section(cfg_section):
                 self.PI_vars = ast.literal_eval(
@@ -98,13 +99,13 @@ class FileFixer:
                                 'rm_character': '{c} removed'}
         self.current_datetime = dt.datetime.now()
 
-    def fix_filename(self, dir_name, filename_noext, process_id, timespan,
+    def fix_filename(self, dir_name, filename_noext, site_id, timespan,
                      corrected_data):
         """
 
         :param dir_name:
         :param filename_noext:
-        :param process_id:
+        :param site_id:
         :param timespan:
         :param corrected_data:
         :return: str, status message
@@ -129,12 +130,11 @@ class FileFixer:
         # hope that the file wasn't uploaded as other
         if not filename_verifier.is_AMF_site_id(
                 filename_verifier.fname_attrs.get('site_id', None)):
-            resp = self.get_upload_info(process_id)
-            if resp['SITE_ID'].strip().lower() == 'other':
+            if site_id.lower() == 'other':
                 msg = ('Filename has invalid SITE_ID but was uploaded as'
                        ' other. Autocorrection FAILED.')
                 self.append_status_msg_parts('error', msg)
-            filename_verifier.fname_attrs['site_id'] = resp['SITE_ID'].strip()
+            filename_verifier.fname_attrs['site_id'] = site_id
             # self.status_msg_parts.append('file name SITE_ID')
             filename_piece = 'SITE_ID'
             _log.warning(f'Filename component {filename_piece} was fixed.')
@@ -261,7 +261,12 @@ class FileFixer:
             return '; '.join(duplicate_variables)
         return None
 
-    def fix_file(self, file_path, process_id, local_run=False):
+    def fix_file(self, file_path, process_id, site_id, local_run=False):
+        """
+        Returns autorepaired_filename, multi_zip_uuid,
+                autorepaired_uuid, is_upload_successful
+        """
+        process_id = str(process_id)
         self.temp_dir = os.path.join(self.temp_base, process_id)
         os.makedirs(self.temp_dir, exist_ok=True)
         dir_name = os.path.dirname(file_path)
@@ -269,20 +274,22 @@ class FileFixer:
         filename_noext, filename_ext = os.path.splitext(filename)
         # if its not csv see if we can convert to csv
         if filename_ext != '.csv':
-            csv_generated, token = self.make_csv(dir_name, filename_noext,
-                                                 filename_ext, process_id)
-            if csv_generated:
+            is_csv_generated, multi_zip_uuid, is_upload_successful = \
+                self.make_csv(dir_name, filename_noext,
+                              filename_ext, process_id, site_id, local_run)
+            if is_csv_generated:
                 filename_ext = '.csv'
                 dir_name = self.temp_dir
-            elif token is not None:
-                return None, token
+            elif multi_zip_uuid is not None:
+                return None, multi_zip_uuid, None, is_upload_successful
             else:
                 # conversion failed
                 msg = ('File could not be converted/extracted to csv. '
                        'Autocorrection FAILED.')
                 self.append_status_msg_parts('fatal', msg)
-                return None, None
+                return None, None, None, None
         first_bad_char = True
+
         with open(os.path.join(dir_name, filename_noext + filename_ext), 'r',
                   encoding='utf-8-sig') as f:
             found_headers = False
@@ -315,7 +322,7 @@ class FileFixer:
                                'characters. Unknown file encoding. '
                                'Autocorrection FAILED.')
                         self.append_status_msg_parts('fatal', msg)
-                        return None, None
+                        return None, None, None, None
                 if line == '':
                     # End of File
                     break
@@ -346,7 +353,7 @@ class FileFixer:
                     f'Unable to locate variable names in file {file_path}')
                 self.status_msg_parts['fatal'].append(
                     'Unable to locate variable names. Autocorrection FAILED.')
-                return None, None
+                return None, None, None, None
             # now that we have headers see if they are valid FP-IN headers
             fixed_headers = []
             header_map = []
@@ -491,7 +498,7 @@ class FileFixer:
             _log.error('no data found in file')
             self.status_msg_parts['error'].append('No data found in file. '
                                                   'Autocorrection FAILED.')
-            return None, None
+            return None, None, None, None
         # check TIMESTAMPS we may want to open this up to more formats
         if len(data[0]) != len(fixed_headers):
             _log.error(
@@ -500,7 +507,7 @@ class FileFixer:
             self.status_msg_parts['error'].append(
                 'Number of variables does not match number of data columns. '
                 'Autocorrection FAILED.')
-            return None, None
+            return None, None, None, None
         data_mapper = [True] * len(data[0])
         timestamp_info = None
         ts_start = -1
@@ -528,7 +535,7 @@ class FileFixer:
                 self.status_msg_parts['error'].append(
                     'Insufficient data in file to correct timestamps.'
                     ' Autocorrection FAILED.')
-                return None, None
+                return None, None, None, None
             if ts_start < 0 and ts_end < 0:
                 # no standard timestamp headers found
                 if 'TIMESTAMP' in fixed_headers:
@@ -690,14 +697,14 @@ class FileFixer:
             _log.fatal('unable to correct timestamps')
             self.status_msg_parts['fatal'].append(
                 'Unable to correct timestamps. Autocorrection FAILED.')
-            return None, None
+            return None, None, None, None
         if (timespan != dt.timedelta(minutes=30) and
                 timespan != dt.timedelta(hours=1)):
             _log.fatal('unable to repair timestamps, unrecognized resolution')
             self.status_msg_parts['fatal'].append(
                 'Unable to correct timestamps, '
                 f'unrecognized resolution {timespan}. Autocorrection FAILED.')
-            return None, None
+            return None, None, None, None
         # Check upfront if future filled. If so fail fixer.
         try:
             last_timestamp = self.ts_util.cast_as_datetime(
@@ -707,7 +714,7 @@ class FileFixer:
                 self.status_msg_parts['fatal'].append(
                     'Timestamps are filled into future. '
                     'Autocorrection FAILED.')
-                return None, None
+                return None, None, None, None
         except Exception:
             pass
         # iterate over the data and make sure that the TIMESTAMP columns are
@@ -768,7 +775,7 @@ class FileFixer:
                 self.status_msg_parts['fatal'].append(
                     'Timestamps are filled into future. '
                     'Autocorrection FAILED.')
-                return None, None
+                return None, None, None, None
             fixed_row = []
             fixed_row.extend((ts[0], ts[1]))
             for val, use in zip(vals, data_mapper):
@@ -847,13 +854,15 @@ class FileFixer:
                     'was changed and QA/QC will not be continued.')
             else:
                 self.append_status_msg_parts('warning', msg)
+
         # now that we know the resolution and start and end times
         # make sure the file name matches what is in it.
         has_valid_headers = self.has_valid_headers(data_mapper, header_map)
         duplicate_variables = self.duplicate_variables(fixed_headers)
         if has_valid_headers and not duplicate_variables:
-            remade_filename, site_id, filename_fixer_msg = self.fix_filename(
-                dir_name, filename_noext, process_id, timespan, corrected_data)
+            autorepair_filename, site_id, filename_fixer_msg = \
+                self.fix_filename(dir_name, filename_noext, site_id,
+                                  timespan, corrected_data)
             if filename_fixer_msg:
                 self.status_msg_parts['warning'].append(filename_fixer_msg)
             # build output header line
@@ -862,7 +871,8 @@ class FileFixer:
                 if use:
                     out_headers.append(h)
             # write out file data
-            with open(os.path.join(self.temp_dir, remade_filename), 'w') as f:
+            with open(os.path.join(self.temp_dir,
+                                   autorepair_filename), 'w') as f:
                 f.write(','.join(out_headers)+'\n')
                 for data_line in corrected_data:
                     f.write(','.join(data_line)+'\n')
@@ -873,10 +883,17 @@ class FileFixer:
                           'autocorrected file.')
                 if not local_run:
                     # print(local_run)
-                    self.upload(remade_filename, process_id, site_id)
+                    is_upload_successful, autorepair_uuid, _ = \
+                        self.autorepair_upload(self.temp_dir,
+                                               autorepair_filename,
+                                               process_id, site_id)
+                else:
+                    autorepair_uuid = 'test-autorepair-uuid'
+                    is_upload_successful = None
                 msg = 'File was Autocorrected and corrected file uploaded.'
                 self.append_status_msg_parts('warning', msg)
-                return remade_filename, None
+                return autorepair_filename, None, \
+                    autorepair_uuid, is_upload_successful
         if not has_valid_headers:
             msg = 'File does not have any valid AmeriFlux data variable names.'
             self.append_status_msg_parts('error', msg)
@@ -886,7 +903,7 @@ class FileFixer:
         msg = ('File had issues that could not be automatically corrected. '
                'Autocorrection FAILED.')
         self.append_status_msg_parts('error', msg)
-        return None, None
+        return None, None, None, None
 
     def append_status_msg_parts(self, msg_code, msg):
         """
@@ -909,7 +926,11 @@ class FileFixer:
 
         self.status_msg_parts[msg_code].append(msg)
 
-    def make_csv(self, dir_name, filename_noext, filename_ext, process_id):
+    def make_csv(self, dir_name, filename_noext, filename_ext,
+                 process_id, site_id, local_run=False):
+        """
+        Returns csv_file_created, multi_zip_uuid, is_upload_success
+        """
         file_path = os.path.join(dir_name, filename_noext + filename_ext)
         if filename_ext.lower() in ('.xlsx', '.xls'):
             self.readExcel(dir_name, filename_noext, filename_ext)
@@ -928,7 +949,7 @@ class FileFixer:
                                        'appear to be a zip file.')
                 self.conversion_log.fatal(self.conversion_msg)
                 # self.status_msg_parts['fatal'].append(self.conversion_msg)
-                return False, None
+                return False, None, None
             zf = zipfile.ZipFile(file_path)
             file_infos = zf.infolist()
             tmp = []
@@ -956,7 +977,7 @@ class FileFixer:
                                        ' appear to contain any files.')
                 self.conversion_log.fatal(self.conversion_msg)
                 # self.status_msg_parts['fatal'].append(self.conversion_msg)
-                return False, None
+                return False, None, None
             if len(file_infos) > 1:
                 files = []
                 for f in file_infos:
@@ -966,13 +987,19 @@ class FileFixer:
                                 self.temp_dir, os.path.basename(file_path))):
                         copyfile(file_path, os.path.join(
                             self.temp_dir, os.path.basename(file_path)))
-                    files.append(os.path.basename(file_path))
-                token = self.make_new_upload(files, process_id)
+                    # files.append(os.path.basename(file_path))
+                    files.append(file_path)
+                if not local_run:
+                    is_upload_successful, multi_zip_uuid, _ = \
+                        self.archive_upload(files, process_id, site_id)
+                else:
+                    multi_zip_uuid = 'test-multi_zip_uuid'
+                    is_upload_successful = True
                 msg = ('NOTE: Zip file contains multiple files.'
                        ' Created new upload and retired zip file.')
                 _log.warning(msg)
                 self.status_msg_parts['warning'].append(msg)
-                return False, token
+                return False, multi_zip_uuid, is_upload_successful
             df = zf.extract(file_infos[0], path=self.temp_dir)
             zdir_name = os.path.dirname(df)
             zfilename = os.path.basename(df)
@@ -981,7 +1008,8 @@ class FileFixer:
                 self.status_msg_parts['warning'].append(
                     f'Extracted {zfilename_ext} file from zip file.')
                 return self.make_csv(
-                    zdir_name, zfilename_noext, zfilename_ext, process_id)
+                    zdir_name, zfilename_noext, zfilename_ext, process_id,
+                    local_run)
             if zdir_name != self.temp_dir or zfilename_noext != filename_noext:
                 shutil.copy(
                     os.path.join(zdir_name, zfilename_noext + zfilename_ext),
@@ -1018,13 +1046,19 @@ class FileFixer:
                     ' appear to contain any files.')
                 self.conversion_log.fatal(self.conversion_msg)
                 # self.status_msg_parts['fatal'].append(self.conversion_msg)
-                return False, None
+                return False, None, None
             if len(files) > 1:
-                token = self.make_new_upload(files, process_id)
+                if not local_run:
+                    is_upload_successful, multi_zip_uuid, \
+                        is_upload_successful = \
+                        self.archive_upload(files, process_id, site_id)
+                else:
+                    multi_zip_uuid = 'test-multi_zip_uuid'
+                    is_upload_successful = True
                 msg = (f'NOTE: {filename_ext} file contains multiple files. '
                        'Created new upload and retired {e} file.')
                 self.append_status_msg_parts('warning', msg)
-                return False, token
+                return False, multi_zip_uuid, is_upload_successful
             df = os.path.join(self.temp_dir, files[0])
             zdir_name = os.path.dirname(df)
             zfilename = os.path.basename(df)
@@ -1034,7 +1068,8 @@ class FileFixer:
                     f'Extracted {zfilename_ext} file from '
                     f'{filename_ext} file.')
                 return self.make_csv(
-                    zdir_name, zfilename_noext, zfilename_ext, process_id)
+                    zdir_name, zfilename_noext, zfilename_ext, process_id,
+                    local_run)
             if zdir_name != self.temp_dir or zfilename_noext != filename_noext:
                 shutil.copy(
                     os.path.join(zdir_name, zfilename_noext + zfilename_ext),
@@ -1048,8 +1083,8 @@ class FileFixer:
                 f'Conversion from {filename_ext} to CSV not supported')
             self.conversion_log.fatal(self.conversion_msg)
             # self.status_msg_parts['fatal'].append(self.conversion_msg)
-            return False, None
-        return True, None
+            return False, None, None
+        return True, None, None
 
     def readExcel(self, file_path, filename, ext):
         wb = open_workbook(os.path.join(file_path, filename + ext))
@@ -1066,11 +1101,6 @@ class FileFixer:
                 f.write(','.join([str(c).rstrip('0').rstrip('.')
                                   for c in row]))
                 f.write('\n')
-
-    def make_new_upload(self, files, process_id):
-        resp = self.get_upload_info(process_id)
-        base_names = [os.path.basename(f) for f in files]
-        return self.archive_upload(base_names, process_id, resp['SITE_ID'])
 
     def check_scientific(self, timestamp):
         sci_notation = self.ts_util.check_scientific_notation(ts=timestamp)
@@ -1275,90 +1305,144 @@ class FileFixer:
                 f'{header}: {specific_fix_msg}')
         return good_header, header, specific_fix_msg
 
-    def get_upload_info(self, process_id):
-        ws = self.updates_ws + process_id
+    def upload_info(self, payload):
+        upload_info_url = self.upload_ws1
         try:
-            response = urllib.request.urlopen(ws)
-            return json.loads(response.read().decode('utf-8'))
-        except HTTPError as e:
-            response = e.read().decode('utf-8')
-            raise Exception(
-                f'{ws} returned status code {e.code}\n{response}')
-
-    def upload(self, filename, process_id, site_id):
-        intent_req = {'userid': getpass.getuser(),
-                      'name': 'Format QAQC Pipeline',
-                      'email': self.amp_upload_email,
-                      'comment': f'repair candidate for {process_id}',
-                      'SITE_ID': site_id,
-                      'dataType': 'Half hourly data', 'dataFile': [filename]}
-        token = self.upload_intent(intent_req)
-        self.upload_file(token, filename)
-
-    def archive_upload(self, files, process_id, site_id):
-        intent_req = {'userid': getpass.getuser(),
-                      'name': 'Format QAQC Pipeline',
-                      'email': self.amp_upload_email,
-                      'comment': f'Archive upload for {process_id}',
-                      'SITE_ID': site_id,
-                      'dataType': 'Half hourly data', 'dataFile': files}
-        token = self.upload_intent(intent_req)
-        for f in files:
-            self.upload_file(token, f)
-        return token
-
-    def upload_intent(self, msg):
-        ws = self.upload_ws1
-        try:
-            req = urllib.request.Request(ws)
-            req.add_header('Content-Type', 'application/json; charset=utf-8')
-            json_data = json.dumps(msg)
-            msg_bytes = json_data.encode('utf-8')  # needs to be bytes
-            req.add_header('Content-Length', len(msg_bytes))
-            response = urllib.request.urlopen(req, msg_bytes)
-            return response.read().decode('utf-8').strip('"')
+            payload_json = json.dumps(payload)
+            response = requests.post(url=upload_info_url, data=payload_json)
+            if response.status_code == HTTPStatus.OK:
+                return response.json(), None
+            return None, response.json()
         except HTTPError as e:
             self.status_msg_parts['error'].append(
                 'Problem uploading repaired file.')
-            response = e.read().decode('utf-8')
+            response_msg = e.read().decode('utf-8')
             raise Exception(
-                f'{ws} returned status code {e.code}\n{response}')
+                f'{upload_info_url} returned status code '
+                f'{e.code}\n{response_msg}')
 
-    def upload_file(self, token, filename):
-        ws = self.upload_ws2.format(t=token, f=filename)
+    def autorepair_upload(self, file_dir_path, filename, process_id, site_id):
+        payload = {'user_id': self.qaqc_processor_user,
+                   'user_email': self.qaqc_processor_email,
+                   'description': f'repair candidate for {process_id}',
+                   'site_id': site_id,
+                   'data_type': 'Half hourly data',
+                   'data_files': [filename],
+                   'upload_source': 'AmeriFlux',
+                   'metadata_file': None}
+        upload_uuid, info_err_msg = self.upload_info(payload)
+        if info_err_msg:
+            response_err_msg = f'Error in upload info endpoint: ' \
+                               f'{info_err_msg}'
+            return False, None, response_err_msg
+        filepath = os.path.join(file_dir_path, filename)
+        is_successful_upload, err_msg = self.upload_autorepair_file(
+            upload_uuid, filepath)
+        if is_successful_upload is True:
+            return True, upload_uuid, None
+        return False, None, err_msg
+
+    def upload_autorepair_file(self, upload_uuid, filepath):
+        upload_url = self.upload_ws2
+        filepath_obj = Path(filepath)
         try:
-            req = urllib.request.Request(ws)
-            req.add_header('Content-Type', 'application/json; charset=utf-8')
-            with open(os.path.join(self.temp_dir, filename), 'r') as f:
-                file_bytes = f.read().encode('utf-8')
-            req.add_header('Content-Length', len(file_bytes))
-            urllib.request.urlopen(req, file_bytes)
-            info_msg = (
-                f'Replacement candidate {filename} '
-                f'uploaded with token {token}')
-            self.append_status_msg_parts('ok', info_msg)
+            payload_json = {"metadata": '{"uuid": "' + upload_uuid + '"}'}
+            response: requests.request = requests.post(
+                url=upload_url, data=payload_json,
+                files={'file': (filepath_obj.name, open(filepath_obj, 'rb'))})
+            upload_status = response.json()
+            if isinstance(upload_status, dict) and \
+                    filepath_obj.name in upload_status.keys():
+                info_msg = (
+                    f'Replacement candidate {filepath_obj.name} '
+                    f'uploaded with token {upload_uuid}')
+                self.append_status_msg_parts('ok', info_msg)
+                return True, None
+            response_error_msg = upload_status.get(
+                'Error',
+                f'{upload_url} returned 200 status with no readable error.')
+            return False, response_error_msg
         except HTTPError as e:
-            self.status_msg_parts['error'].append(
-                'Problem uploading repaired file.')
-            response = e.read().decode('utf-8')
-            raise Exception(
-                f'{ws} returned status code {e.code}\n{response}')
+            error_msg = e.read().decode('utf-8')
+            response_error_msg = (f'{upload_url} returned status code '
+                                  f'{e.code}\n{error_msg}')
 
-    def driver(self, filename, process_id, local_run=False):
+            raise Exception(response_error_msg)
+
+    def archive_upload(
+            self, files: List[str], process_id: int, site_id: str) -> (
+            bool, Optional[str], Optional[str]):
+        """
+        Returns: is_upload_successful, upload_uuid, msg
+        """
+        file_paths = [Path(f) for f in files]
+        filenames = [f.name for f in file_paths]
+        payload = {'user_id': self.qaqc_processor_user,
+                   'user_email': self.qaqc_processor_email,
+                   'description': f'Archive upload for {process_id}',
+                   'site_id': site_id,
+                   'data_type': 'Half hourly data',
+                   'data_files': filenames,
+                   'upload_source': 'AmeriFlux',
+                   'metadata_file': None}
+        try:
+            upload_uuid, info_err_msg = self.upload_info(payload)
+            if info_err_msg:
+                response_err_msg = f'Error in upload info endpoint: ' \
+                                   f'{info_err_msg}'
+                return False, None, response_err_msg
+
+            payload_json = {"metadata": '{"uuid": "' + upload_uuid + '"}'}
+            response: requests.request = requests.post(
+                url=self.upload_ws2, data=payload_json,
+                files=[('file', (f.name, open(f, 'rb'))) for f in file_paths])
+            upload_status = response.json()
+            if isinstance(upload_status, dict):
+                archive_upload_status = [f.name in upload_status.keys()
+                                         for f in file_paths]
+                if all(archive_upload_status):
+                    filenames_str = ', '.join(filenames)
+                    info_msg = (
+                        f'Unzipped archival files: {filenames_str} '
+                        f'uploaded with token {upload_uuid}')
+                    self.append_status_msg_parts('ok', info_msg)
+                    return True, upload_uuid, None
+                return False, None, 'Some files not uploaded'
+            response_error_msg = upload_status.get(
+                'Error',
+                f'{self.upload_ws2} returned 200 status with no '
+                f'readable error.')
+            return False, None, response_error_msg
+        except HTTPError as e:
+            error_msg = e.read().decode('utf-8')
+            response_error_msg = (f'{self.upload_ws2} returned status code '
+                                  f'{e.code}\n{error_msg}')
+            raise Exception(response_error_msg)
+
+    def driver(self, filename: str, process_id: int, site_id: str,
+               local_run: bool = False) -> (
+            Status, Optional[str], Optional[str], Optional[str],
+            Optional[bool]):
         """
         This is a driver to test and run QAQC Algorithm specific to this class
+
         :param filename: File name of test file
-        :type filename: str.
         :param process_id: process id associated with file
-        :type process_id: int.
+        :param site_id: the site_id of the uploaded file
         :param local_run: True the fix attempt is a local test run
-        :type local_run: boolean
+
+        Returns: Status obj, autorepaired_filename, multi_zip_uuid,
+                 autorepaired_uuid, is_upload_successful
+
         """
         _log.resetStats()
         self.status_msg_parts = {'fatal': [], 'error': [],
                                  'warning': [], 'ok': []}
         _log.info("Beginning attempt to fix uplaoded file")
-        fn, token = self.fix_file(filename, process_id, local_run)
+        autorepair_filename, multi_zip_uuid, autorepair_uuid, \
+            is_upload_successful = self.fix_file(filename, process_id,
+                                                 site_id, local_run)
+
         # qaqc_check = 'fix_file for {f}'.format(f=filename)
         # leave this 'AutoRepair' text b/c front end uses it to build report
         qaqc_check = 'AutoRepair Fixes and/or Error Messages'
@@ -1372,7 +1456,8 @@ class FileFixer:
                     qaqc_check='File Conversion Successful?',
                     status_msg=self.conversion_msg,
                     report_type='single_msg')],
-                fn, token)
+                autorepair_filename, multi_zip_uuid, autorepair_uuid,
+                is_upload_successful)
 
     def test(self, filename=None, process_id=None):
         """Test method to be used for testing module independently

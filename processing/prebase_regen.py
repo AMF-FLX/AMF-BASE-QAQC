@@ -5,7 +5,6 @@ from configparser import ConfigParser
 from db_handler import DBHandler
 from logger import Logger
 import os
-from process_actions import ProcessActions
 from process_states import ProcessStates
 from report_status import ReportStatus
 
@@ -32,8 +31,8 @@ class PreBASERegenerator:
         self.db_fields = None
         self._get_params_from_config()
         self.report_status = ReportStatus()
-        self.process_actions = ProcessActions()
         self.process_states = ProcessStates()
+        # ToDo: update
         self.qaqcProcessLog_fields = ['processID', 'processType',
                                       'processDatetime', 'updateID',
                                       'SITE_ID', 'dataRes', 'processor',
@@ -223,8 +222,7 @@ class PreBASERegenerator:
             _log.info('Setting regen status for {p}'.format(p=pid))
             self.report_status.enter_new_state(
                 process_id=int(self.duplication_map[pid]),
-                status=self.process_states.InitiatedPreBASERegen,
-                action=self.process_actions.InitiatedPreBASERegen)
+                state_id=self.process_states.InitiatedPreBASERegen)
 
     def duplicate_qaqc_data_file_in_base(self):
         new_data_entry_ls = []
@@ -298,10 +296,10 @@ class PreBASERegenerator:
                 continue
             if not test_reset:
                 self.report_status.enter_new_state(process_id=pid,
-                                                   status=preBASE_state,
-                                                   action=preBASE_action)
+                                                   state_id=preBASE_state)
                 _log.info('Reset preBase state and action')
 
+    # HERE
     def find_preBASE_status(self, status_history):
         for state_entry in status_history:
             # state_entry = (stateID, state, action, stateDateTime)

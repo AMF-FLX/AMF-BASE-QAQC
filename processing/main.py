@@ -5,7 +5,7 @@ import traceback
 from time import time
 
 from data_reader import DataReader
-from data_report_gen import DataReportGen
+from data_report_gen import DataReportGen, gen_description
 from diurnal_seasonal_pattern import DiurnalSeasonalPattern
 from file_name_verifier import FileNameVerifier
 from gap_fill import GapFilled
@@ -16,7 +16,6 @@ from plot_config import PlotConfig
 from physical_range import PhysicalRange
 from process_status import ProcessStatus
 from process_states import ProcessStates
-from process_actions import ProcessActions
 from publish import Publish
 from report_status import ReportStatus
 # from shadows import Shadows
@@ -114,7 +113,13 @@ def main():
                 process_id, args.site_id, args.resolution)
             if not fname:
                 _log.fatal('JoinSiteData did not produce a file, exiting.')
+                if not args.test:
+                    rs.report_status(process_id=process_id,
+                                     state_id=ProcessStates.CombinerFailed)
                 return
+            if not args.test:
+                rs.report_status(process_id=process_id,
+                                 state_id=ProcessStates.FilesCombined)
             qaqc_check = 'File Combiner'
             status_list[qaqc_check] = status
             report_list, process_status_code = select_report(
@@ -285,7 +290,7 @@ def main():
             process_id = '9999'
             check_summary = 'test_summary'
         else:
-            check_summary = DataReportGen().gen_description(status_list)
+            check_summary = gen_description(status_list)
 
         process_status = ProcessStatus(
             process_type=process_type,
@@ -308,7 +313,6 @@ def main():
 
         # Write to database
         state = ProcessStates.FinishedQAQC
-        action = ProcessActions.FinishedQAQC
         # write jsons
         json_report = process_status.write_report_json()
         json_status = process_status.write_status_json()
@@ -317,8 +321,8 @@ def main():
             print(json_report)
         else:
             rs.report_status(
-                action=action, status=state, report_json=json_report,
-                log_file=_log.default_log,
+                state_id=state, report_json=json_report,
+                log_file_path=_log.default_log,
                 process_id=process_id, status_json=json_status)
 
         # Publish files to FTP
