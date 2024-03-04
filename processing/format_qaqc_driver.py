@@ -13,7 +13,7 @@ from multiprocessing.pool import ThreadPool
 __author__ = 'Sy-Toan Ngo'
 __email__ = 'sytoanngo@lbl.gov'
 
-Task = namedtuple('Task', ['filename', 'process_id',
+Task = namedtuple('Task', ['filename', 'upload_id',
                            'prior_process_id', 'zip_process_id',
                            'run_type', 'site_id'])
 
@@ -136,16 +136,20 @@ class FormatQAQCDriver:
                     results = {}
                     for upload_id, v in tasks.items():
                         task, _ = v.values()
-                        log.write((f"Start run: log id {task.process_id}, "
+                        log.write((f"Start run: log id {task.upload_id}, "
                                    f"prior id: {task.prior_process_id}, "
                                    f"zip id: {task.zip_process_id}, "
                                    f"run type: {task.run_type}\n"))
                         cmd = ('python '
                                f'{self.upload_checks_path} '
                                f'{task.filename} '
-                               f'{task.process_id} '
+                               f'{task.upload_id} '
                                f'{task.run_type} '
                                f'{task.site_id} ')
+                        if task.prior_process_id:
+                            cmd += f'-ppid {task.prior_process_id}'
+                        if task.zip_process_id:
+                            cmd += f'-zid {task.zip_process_id}'
                         if self.is_test:
                             cmd = cmd + '-t'
                         results[upload_id] = pool.apply_async(self.run_proc,
