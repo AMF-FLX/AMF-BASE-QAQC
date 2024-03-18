@@ -5,7 +5,7 @@ import os
 from configparser import ConfigParser
 from db_handler import DBHandler
 from logger import Logger
-from process_states import ProcessStates
+from process_states import ProcessStates, ProcessStateHandler
 from publish import Publish
 from report_status import ReportStatus
 from utils import RemoteSSHUtil
@@ -23,7 +23,7 @@ class PublishBASEBADM():
         self.init_status = self._get_params_from_config()
         self.publisher = Publish()
         self.report_status = ReportStatus()
-        self.process_states = ProcessStates()
+        self.process_states = ProcessStateHandler()
 
         _log.info("Initialized")
         self.remote_ssh_util = RemoteSSHUtil(_log)
@@ -160,7 +160,8 @@ class PublishBASEBADM():
                     try:
                         self.report_status.enter_new_state(
                             process_id=process_id,
-                            state_id=self.process_states.BASEBADMPubFailed)
+                            state_id=self.process_states.get_process_state(
+                                ProcessStates.BASEBADMPubFailed))
                         info_msg = ("Wrote report_status BASEBADMPubFailed "
                                     f"for processID {process_id} "
                                     f"(file: {filename}).")

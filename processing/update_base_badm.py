@@ -6,8 +6,7 @@ from configparser import ConfigParser
 from db_handler import DBConfig, DBHandler, NewDBHandler
 from file_name_verifier import FileNameVerifier
 from logger import Logger
-from process_actions import ProcessActions
-from process_states import ProcessStates
+from process_states import ProcessStates, ProcessStateHandler
 from report_status import ReportStatus
 from utils import FileUtil
 from utils import RemoteSSHUtil
@@ -34,8 +33,7 @@ class UpdateBASEBADM():
         self.file_util = FileUtil()
         self.zip_util = ZipUtil()
         self.report_status = ReportStatus()
-        self.process_actions = ProcessActions()
-        self.process_states = ProcessStates()
+        self.process_states = ProcessStateHandler()
         self.remote_ssh_util = RemoteSSHUtil(_log)
 
         # Initialize logger
@@ -239,7 +237,8 @@ class UpdateBASEBADM():
         badm_map = self.new_db_handler.get_badm_map(psql_conn)
         sites_needing_updates = self.new_db_handler.get_sites_with_updates(
             psql_conn)
-        base_candidate_map = self.flux_db_handler.get_BASE_candidates()
+        base_candidate_map = self.flux_db_handler.get_BASE_candidates(
+            state_ids=self.process_states.base_candidate_states)
 
         # Create zip file
         sites_processed = set()
@@ -367,7 +366,8 @@ class UpdateBASEBADM():
                     try:
                         self.report_status.enter_new_state(
                             process_id=process_id,
-                            state_id=self.process_states.BADMUpdateFailed)
+                            state_id=self.process_states.get_process_state(
+                                ProcessStates.BADMUpdateFailed))
                         info_msg = ('Wrote report_status BADMUpdateFailed'
                                     f'for processID {process_id} '
                                     f'(file: {filename}).')
@@ -424,7 +424,8 @@ class UpdateBASEBADM():
                     try:
                         self.report_status.enter_new_state(
                             process_id=process_id,
-                            state_id=self.process_states.UpdatedBASEBADM)
+                            state_id=self.process_states.base_candidate_states(
+                                ProcessStates.UpdatedBASEBADM))
                         info_msg = ('Wrote report_status UpdatedBASEBADM '
                                     f'for processID {process_id} '
                                     f'(file: {filename}).')

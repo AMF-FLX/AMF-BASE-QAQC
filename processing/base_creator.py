@@ -7,7 +7,7 @@ from file_name_verifier import FileNameVerifier
 from fp_vars import FPVariables
 from logger import Logger
 from pathlib import Path
-from process_states import ProcessStates
+from process_states import ProcessStates, ProcessStateHandler
 from report_status import ReportStatus
 from utils import FileUtil
 from utils import TimestampUtil
@@ -31,7 +31,7 @@ class BASECreator():
         self.ts_util = TimestampUtil()
         self.fnv = FileNameVerifier()
         self.report_status = ReportStatus()
-        self.process_states = ProcessStates()
+        self.process_states = ProcessStateHandler()
 
         fp_var_names = FPVariables().get_fp_vars_dict().keys()
         self.var_util = VarUtils(fp_var_names)
@@ -297,13 +297,15 @@ class BASECreator():
                          new_base_path, new_base_version]
             self.report_status.enter_new_state(
                 process_id=process_id,
-                state_id=self.process_states.GeneratedBASE)
+                state_id=self.process_states.get_process_state(
+                    ProcessStates.GeneratedBASE))
         except Exception as e:
             error_msg = f'Failed to create base file with error {e}'
             _log.error(error_msg)
             self.report_status.enter_new_state(
                 process_id=process_id,
-                state_id=self.process_states.BASEGenFailed)
+                state_id=self.process_states.get_process_state(
+                    ProcessStates.BASEGenFailed))
         return file_attr
 
     def driver(self):

@@ -1,24 +1,58 @@
+from db_handler import NewDBHandler
+
+
 class ProcessStates:
-    Uploaded = 1
-    PassedQAQC = 2
-    IssuesFound = 3  # 4
-    FailedQAQC = 4  # 5
-    FailedRepair = 5  # 6
-    FailedRepairRetire = 11  # 16
-    AutoRepair = 9  # 14
-    AutoRepairRetire = 10  # 15
-    FinishedQAQC = 14  # 22
-    StartBASEGen = 12
-    FilesCombined = 13
-    PublishedBASEBADM = 15  # 23
-    CombinerFailed = 16
-    PassedCurator = 20  # 28
-    RepublishReport = 21  # 29
-    GeneratedBASE = 22  # 30
-    UpdatedBASEBADM = 23  # 31
-    BASEGenFailed = 24  # 32
-    BADMUpdateFailed = 25  # 33
-    BASEBADMPubFailed = 26  # 34
-    ArchiveUploaded = 28  # 36
-    RetiredForReprocessing = 30  # 38
-    InitiatedPreBASERegen = 31  # 39
+
+    Uploaded = 'Uploaded'
+    PassedQAQC = 'Passed Format QAQC'
+    IssuesFound = 'Format Issues Found'
+    FailedQAQC = 'Failed Format QAQC'
+    FailedRepair = 'Failed Format AutoRepair'
+    FailedRepairRetire = 'Unrepairable File Retired'
+    AutoRepair = 'Replaced with AutoRepaired File'
+    AutoRepairRetire = 'Repairable File Retired'
+    FinishedQAQC = 'Finished QAQC'
+    StartBASEGen = 'Start BASE Generation'
+    FilesCombined = 'Files Combined'
+    PublishedBASEBADM = 'BASE-BADM Published'
+    CombinerFailed = 'Combiner Failed'
+    PassedCurator = 'Passed by Curator'
+    RepublishReport = 'Report Generation Failed'
+    GeneratedBASE = 'BASE Generated'
+    UpdatedBASEBADM = 'BASE-BADM Updated'
+    BASEGenFailed = 'BASE Generation Failed'
+    BADMUpdateFailed = 'BASE-BADM Update Failed'
+    BASEBADMPubFailed = 'BASE-BADM Publish Failed'
+    ArchiveUploaded = 'Archive Contents Uploaded'
+    RetiredForReprocessing = 'Retired for Reprocessing'
+    InitiatedPreBASERegen = 'Regenerated preBASE'
+
+
+class ProcessStateHandler:
+    def __init__(self, initialize_lookup=True):
+
+        if initialize_lookup:
+            self.lookup = self._qaqc_process_lookup()
+        else:
+            self.lookup = {}
+
+        self.base_candidate_states = [
+            ProcessStates.PassedCurator,
+            ProcessStates.GeneratedBASE,
+            ProcessStates.BASEGenFailed,
+            ProcessStates.BADMUpdateFailed,
+            ProcessStates.InitiatedPreBASERegen]
+
+        self.incomplete_phase3_states = [
+            ProcessStates.GeneratedBASE,
+            ProcessStates.UpdatedBASEBADM,
+            ProcessStates.BASEGenFailed,
+            ProcessStates.BADMUpdateFailed,
+            ProcessStates.BASEBADMPubFailed]
+
+    @staticmethod
+    def _qaqc_process_lookup():
+        return NewDBHandler().get_qaqc_state_types()
+
+    def get_process_state(self, state_name: ProcessStates):
+        return self.lookup.get(state_name)

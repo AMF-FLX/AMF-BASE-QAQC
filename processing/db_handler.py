@@ -9,7 +9,6 @@ from configparser import ConfigParser
 from io import StringIO
 from logger import Logger
 from pathlib import Path
-from process_states import ProcessStates
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from psycopg2.extras import RealDictCursor
 from psycopg2.sql import Composed, SQL
@@ -210,6 +209,29 @@ class NewDBHandler:
                 upload_file_info['data_file'] = r.get('data_file')
         return upload_file_info
 
+    def _get_type_cv(self, query, name_field, id_field='type_id') -> dict:
+        _, db_config = self._read_config()
+        conn = self.init_db_conn(db_config)
+
+        cv_lookup = {}
+
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query)
+            for r in cursor:
+                cv_name = r.get(name_field)
+                cv_id = r.get(id_field)
+                cv_lookup.update({cv_name: cv_id})
+
+        return cv_lookup
+
+    def get_qaqc_state_types(self) -> dict:
+        query = SQL('SELECT * from qaqc.state_cv_type_auto;')
+        return self._get_type_cv(query, 'shortname')
+
+    def get_qaqc_process_types(self) -> dict:
+        query = SQL('SELECT * from qaqc.process_type_auto;')
+        return self._get_type_cv(query, 'name')
+
     def register_format_qaqc(self, upload_id: int, process_timestamp: str,
                              site_id: str,
                              prior_process_id: Optional[int] = None,
@@ -218,10 +240,14 @@ class NewDBHandler:
         process_code_version, db_config = self._read_config()
         processor_user_id = socket.gethostname()
 
+        qaqc_process_type_lookup = self.get_qaqc_process_types()
+        format_qaqc_process_type_id = qaqc_process_type_lookup.get(
+            'Format QAQC')
+
         field_names = ('process_type_id, process_timestamp, upload_id, '
                        'site_id, processor_user_id, processing_code_version')
-        values = [1, process_timestamp, upload_id, site_id, processor_user_id,
-                  process_code_version]
+        values = [format_qaqc_process_type_id, process_timestamp, upload_id,
+                  site_id, processor_user_id, process_code_version]
 
         if prior_process_id:
             field_names += ', prior_process_id'
@@ -244,11 +270,11 @@ class NewDBHandler:
         query = Composed([query_pre, SQL(query_fields), query_post])
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(query, {'process_values': process_values})
-            ct = 0
+            count = 0
             for r in cursor:
                 process_id = r.get('log_id')
-                ct += 1
-            if ct > 1:
+                count += 1
+            if count > 1:
                 raise DBHandlerError('More than 1 process_id (log_id) '
                                      'returned upon process run entry.')
             return process_id
@@ -390,21 +416,16 @@ class DBHandler:
                 input_files.add(pid)
         return input_files
 
-    def define_BASE_candidate_query(self, pre_query, post_query):
-        query_criteria = ("s.status = '{st1}' "
-                          "OR s.status = '{st2}' "
-                          "OR s.status = '{st3}' "
-                          "OR s.status = '{st4}' "
-                          "OR s.status = '{st5}'")
+    def define_BASE_candidate_query(
+            self, pre_query, post_query, state_ids):
+        query_criteria = f's.status = {state_ids[0]}'
+        for state_id in state_ids[1:]:
+            query_criteria += f' OR s.status = {state_id}'
         query = pre_query + query_criteria + post_query
-        return query.format(st1=ProcessStates.PassedCurator,
-                            st2=ProcessStates.GeneratedBASE,
-                            st3=ProcessStates.BASEGenFailed,
-                            st4=ProcessStates.BADMUpdateFailed,
-                            st5=ProcessStates.InitiatedPreBASERegen)
+        return query
 
     # ToDo: update for publish
-    def get_BASE_candidates(self):
+    def get_BASE_candidates(self, state_ids):
         preBASE_files = {}
         with pymssql.connect(
                 server=self.__hostname,
@@ -426,7 +447,8 @@ class DBHandler:
                          "WHERE ")
             post_query = ") s1 ON s1.processID = l.processID"
             query = self.define_BASE_candidate_query(pre_query=pre_query,
-                                                     post_query=post_query)
+                                                     post_query=post_query,
+                                                     state_ids=state_ids)
             conn.autocommit(True)
             try:
                 cursor.execute(query)
@@ -593,7 +615,7 @@ class DBHandler:
         return data_in_base_ls
 
     # ToDo: rework for new tables (reset_states in PreBASERegenerator)
-    def get_BASE_candidates_for_preBASE_regen(self):
+    def get_BASE_candidates_for_preBASE_regen(self, state_ids):
         process_info = {}
         site_list = []
         with pymssql.connect(
@@ -618,7 +640,8 @@ class DBHandler:
                          "WHERE ")
             post_query = ""
             query = self.define_BASE_candidate_query(pre_query=pre_query,
-                                                     post_query=post_query)
+                                                     post_query=post_query,
+                                                     state_ids=state_ids)
             conn.autocommit(True)
             try:
                 cursor.execute(query)
@@ -663,7 +686,7 @@ class DBHandler:
         return process_id_ls
 
     # ToDo: rework for new tables (reset_states in PreBASERegenerator)
-    def get_incomplete_phase3_process_ids(self):
+    def get_incomplete_phase3_process_ids(self, state_ids):
         process_id_ls = []
         with pymssql.connect(
                 server=self.__hostname,
@@ -678,12 +701,11 @@ class DBHandler:
                      "INNER JOIN qaqcState as b "
                      "ON d.processID = b.processID "
                      "AND d.max_ts = b.stateDateTime WHERE b.status in "
-                     "({st1}, {st2}, {st3}, {st4}, {st5})"
-                     .format(st1=ProcessStates.GeneratedBASE,
-                             st2=ProcessStates.UpdatedBASEBADM,
-                             st3=ProcessStates.BASEGenFailed,
-                             st4=ProcessStates.BADMUpdateFailed,
-                             st5=ProcessStates.BASEBADMPubFailed))
+                     "(")
+            for state_id in state_ids[:-1]:
+                query += f'{state_id}, '
+            query += f'{state_ids[-1]})'
+
             try:
                 cursor.execute(query)
                 for row in cursor:

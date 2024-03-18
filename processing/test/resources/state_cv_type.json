@@ -1,0 +1,26 @@
+{
+   "Uploaded": 1,
+   "Passed Format QAQC": 2,
+   "Format Issues Found": 3,
+   "Failed Format QAQC": 4,
+   "Failed Format AutoRepair": 5,
+   "Unrepairable File Retired": 11,
+   "Replaced with AutoRepaired File": 9,
+   "Repairable File Retired": 10,
+   "Finished QAQC": 14,
+   "Start BASE Generation": 12,
+   "Files Combined": 13,
+   "BASE-BADM Published": 15,
+   "Combiner Failed": 16,
+   "Passed by Curator": 20,
+   "Report Generation Failed": 21,
+   "BASE Generated": 22,
+   "BASE-BADM Updated": 23,
+   "BASE Generation Failed": 24,
+   "BASE-BADM Update Failed": 25,
+   "BASE-BADM Publish Failed": 26,
+   "Archive Contents Uploaded": 28,
+   "Retired for Reprocessing": 30,
+   "Regenerated preBASE": 31
+}
+

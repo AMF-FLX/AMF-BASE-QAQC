@@ -4,7 +4,7 @@ import subprocess
 from configparser import ConfigParser
 from logger import Logger
 from report_status import ReportStatus
-from process_states import ProcessStates
+from process_states import ProcessStates, ProcessStateHandler
 from utils import Decode
 from future.standard_library import install_aliases
 install_aliases()
@@ -129,13 +129,15 @@ class Publish():
 
         xfer_cmd = ' '.join(base_cmd_args)
         rs = ReportStatus()
+        process_states = ProcessStateHandler()
         try:
             _log.info('FTP xfering')
             execution_result = subprocess.call(
                 xfer_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                 shell=True)
             if execution_result != 0:
-                s = ProcessStates.RepublishReport
+                s = process_states.get_process_state(
+                    ProcessStates.RepublishReport)
                 _log.error("SCP failed for: '{c}'".format(c=xfer_cmd))
                 rs.report_status(
                     state_id=s, report_json=None,
@@ -143,7 +145,8 @@ class Publish():
             else:
                 _log.info('Xfer completed successfully')
         except Exception as e:
-            s = ProcessStates.RepublishReport
+            s = process_states.get_process_state(
+                ProcessStates.RepublishReport)
             _log.error('Xfer failed with error: {e}'.format(e=e))
             rs.report_status(
                 state_id=s, report_json=None,

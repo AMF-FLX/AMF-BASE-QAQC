@@ -27,6 +27,9 @@ def gen_description(report_statuses) -> str:
     sc = status.StatusCode()
     status_code = 0
     status_counts = [0, 0, 0, 0]
+    # Status codes are -3 to 0. To change these to indices for the
+    #   status_counts above, 3 must be added to the status codes below.
+
     for qaqc_check in report_statuses:
         for rs in report_statuses[qaqc_check]:
             if rs.get_status_code() < status_code:

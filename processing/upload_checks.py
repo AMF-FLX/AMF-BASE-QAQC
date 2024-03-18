@@ -17,7 +17,7 @@ from timestamp_checks import TimestampChecks
 from gap_fill import GapFilled
 from pathlib import Path
 from process_status import ProcessStatus
-from process_states import ProcessStates
+from process_states import ProcessStates, ProcessStateHandler
 from report_status import ReportStatus
 from file_fixer import FileFixer
 from shutil import copyfile
@@ -81,11 +81,14 @@ def upload_checks(
     json_report = None
 
     try:
+        process_states = ProcessStateHandler(initialize_lookup=not local_run)
+
         if not local_run:
             # write to the state log
             rs = ReportStatus()
             rs.report_status(process_id=process_id,
-                             state_id=ProcessStates.Uploaded)
+                             state_id=process_states.get_process_state(
+                                 ProcessStates.Uploaded))
 
         status_ct = 0
         all_status = True
@@ -222,8 +225,10 @@ def upload_checks(
                 if fixable:
                     # QAQC fail try fix
                     if not local_run:
-                        rs.report_status(process_id=process_id,
-                                         state_id=ProcessStates.IssuesFound)
+                        rs.report_status(
+                            process_id=process_id,
+                            state_id=process_states.get_process_state(
+                                ProcessStates.IssuesFound))
 
                     # get
                     fixer_status, autorepair_filename, multi_zip_uuid, \
@@ -249,12 +254,15 @@ def upload_checks(
                         if not local_run:
                             rs.report_status(
                                 process_id=process_id,
-                                state_id=ProcessStates.FailedRepair)
-                        s = ProcessStates.FailedRepairRetire
+                                state_id=process_states.get_process_state(
+                                    ProcessStates.FailedRepair))
+                        s = process_states.get_process_state(
+                            ProcessStates.FailedRepairRetire)
                         status_msg += ' and FAILED.'
                     elif multi_zip_uuid is not None:
                         # Archive uploaded as individual files
-                        s = ProcessStates.ArchiveUploaded
+                        s = process_states.get_process_state(
+                            ProcessStates.ArchiveUploaded)
                         status_msg += (' and the included files were '
                                        're-uploaded. See separate Format '
                                        'QA/QC report for each included file.')
@@ -262,10 +270,13 @@ def upload_checks(
                         # fixer worked
                         # fixer uploaded new file
                         if not local_run:
-                            rs.report_status(process_id=process_id,
-                                             state_id=ProcessStates.AutoRepair)
+                            rs.report_status(
+                                process_id=process_id,
+                                state_id=process_states.get_process_state(
+                                    ProcessStates.AutoRepair))
 
-                        s = ProcessStates.AutoRepairRetire
+                        s = process_states.get_process_state(
+                            ProcessStates.AutoRepairRetire)
                         if run_type == 'o':
                             status_msg += (' and autocorrected file was '
                                            f'uploaded: {autorepair_filename}. '
@@ -277,17 +288,19 @@ def upload_checks(
                 else:
                     if process_status_code < StatusCode.WARNING:
                         # QAQC failed
-                        s = ProcessStates.FailedQAQC
+                        s = process_states.get_process_state(
+                            ProcessStates.FailedQAQC)
                     else:
                         # QAQC passed
                         copy_file(filename, fnv)
-                        s = ProcessStates.PassedQAQC
+                        s = process_states.get_process_state(
+                            ProcessStates.PassedQAQC)
                         status_msg += (' Data will be queued for '
                                        'further data processing.')
             else:
                 # QAQC passed
                 copy_file(filename, fnv)
-                s = ProcessStates.PassedQAQC
+                s = process_states.get_process_state(ProcessStates.PassedQAQC)
         else:
             # repaired file
             title_prefix = 'Autocorrected file: '
@@ -295,14 +308,16 @@ def upload_checks(
                 # QAQC failed
                 if not local_run:
                     rs.report_status(process_id=process_id,
-                                     state_id=ProcessStates.FailedQAQC)
-                s = ProcessStates.FailedRepairRetire
+                                     state_id=process_states.get_process_state(
+                                         ProcessStates.FailedQAQC))
+                s = process_states.get_process_state(
+                    ProcessStates.FailedRepairRetire)
                 status_msg += (' Additional input is needed to further process'
                                ' the data.')
             else:
                 # QAQC passed
                 copy_file(filename, fnv)
-                s = ProcessStates.PassedQAQC
+                s = process_states.get_process_state(ProcessStates.PassedQAQC)
                 if process_status_code < StatusCode.OK:
                     status_msg += (' Data will be queued for '
                                    'further data processing.')

@@ -15,7 +15,7 @@ from multivariate_comparison import MultivariateComparison
 from plot_config import PlotConfig
 from physical_range import PhysicalRange
 from process_status import ProcessStatus
-from process_states import ProcessStates
+from process_states import ProcessStates, ProcessStateHandler
 from publish import Publish
 from report_status import ReportStatus
 # from shadows import Shadows
@@ -77,6 +77,7 @@ def main():
     base_dir_for_run = os.path.split(log_dir)[0]
 
     try:
+        process_states = ProcessStateHandler()
         log_start_time = _log.log_file_timestamp.strftime(
             format='%Y-%b-%d %H:%M %Z')
         status_list = {}
@@ -114,12 +115,16 @@ def main():
             if not fname:
                 _log.fatal('JoinSiteData did not produce a file, exiting.')
                 if not args.test:
-                    rs.report_status(process_id=process_id,
-                                     state_id=ProcessStates.CombinerFailed)
+                    rs.report_status(
+                        process_id=process_id,
+                        state_id=process_states.get_process_state(
+                            ProcessStates.CombinerFailed))
                 return
             if not args.test:
-                rs.report_status(process_id=process_id,
-                                 state_id=ProcessStates.FilesCombined)
+                rs.report_status(
+                    process_id=process_id,
+                    state_id=process_states.get_process_state(
+                        ProcessStates.FilesCombined))
             qaqc_check = 'File Combiner'
             status_list[qaqc_check] = status
             report_list, process_status_code = select_report(
