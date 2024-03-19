@@ -217,7 +217,7 @@ class NewDBHandler:
                     'FROM qaqc.processing_log p '
                     'LEFT JOIN qaqc.process_summarized_output as s '
                     'ON p.log_id = s.process_id '
-                    f'WHERE s.process_id IS NULL')
+                    'WHERE s.process_id IS NULL')
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(query)
             status = cursor.one()
@@ -229,7 +229,7 @@ class NewDBHandler:
         is_success = False
         query = SQL('SELECT report AS count_log_id '
                     'FROM qaqc.process_summarized_output p '
-                    f'where process_id = {process_id}')
+                    'where process_id = {p}'.format(p=process_id))
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(query)
             report = cursor.one()
