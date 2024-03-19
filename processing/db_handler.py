@@ -1,17 +1,19 @@
 import datetime as dt
 import psycopg2
-# import pymssql
+
+import pymssql
+import socket
 
 from jira_names import JIRANames
 
+from configparser import ConfigParser
 from io import StringIO
 from logger import Logger
 from pathlib import Path
-from process_states import ProcessStates
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from psycopg2.extras import RealDictCursor
-from psycopg2.sql import SQL
-from typing import NamedTuple, Union
+from psycopg2.sql import Composed, SQL
+from typing import NamedTuple, Optional, Union
 
 __author__ = 'You-Wei Cheah, Danielle Christianson'
 __email__ = 'ycheah@lbl.gov, dschristianson@lbl.gov'
@@ -34,8 +36,39 @@ class NewDBHandler:
     def __init__(self):
         self.default_null = 'NONE'
         self.default_sep = '|'
+        self._cwd = Path.cwd()
+        self.conn = None
+
+    def __del__(self):
+        if self.conn:
+            self.conn.close()
+
+    def _read_config(self, cfg_filename='qaqc.cfg'):
+        code_ver = None
+        with open(self._cwd / cfg_filename) as cfg:
+            config = ConfigParser()
+            config.read_file(cfg)
+            cfg_section = 'VERSION'
+            if config.has_section(cfg_section):
+                if config.has_option(cfg_section, 'code_version'):
+                    code_ver = config.get(
+                        cfg_section, 'code_version')
+            cfg_section = 'DB'
+            if config.has_section(cfg_section):
+                if config.has_option(cfg_section, 'hostname'):
+                    hostname = config.get(cfg_section, 'hostname')
+                if config.has_option(cfg_section, 'user'):
+                    user = config.get(cfg_section, 'user')
+                if config.has_option(cfg_section, 'auth'):
+                    auth = config.get(cfg_section, 'auth')
+                if config.has_option(cfg_section, 'db_name'):
+                    db_name = config.get(cfg_section, 'db_name')
+            db_config = DBConfig(hostname, user, auth, db_name)
+        return code_ver, db_config
 
     def init_db_conn(self, db_cfg, use_autocommit=True):
+        if db_cfg is None:
+            return None
         try:
             conn = psycopg2.connect(
                 host=db_cfg.host, user=db_cfg.user,
@@ -204,6 +237,90 @@ class NewDBHandler:
             is_success = True
         return is_success
 
+    def get_upload_file_info(self, conn, upload_id):
+        upload_file_info = {}
+        query = SQL('SELECT * FROM input_interface.data_upload_log '
+                    'WHERE log_id = %s')
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, (upload_id,))
+            for r in cursor:
+                upload_file_info['upload_id'] = r.get('log_id')
+                upload_file_info['site_id'] = r.get('site_id')
+                upload_file_info['upload_comment'] = r.get('upload_comment')
+                upload_file_info['data_file'] = r.get('data_file')
+        return upload_file_info
+
+    def _get_type_cv(self, query, name_field, id_field='type_id') -> dict:
+        _, db_config = self._read_config()
+        conn = self.init_db_conn(db_config)
+
+        cv_lookup = {}
+
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query)
+            for r in cursor:
+                cv_name = r.get(name_field)
+                cv_id = r.get(id_field)
+                cv_lookup.update({cv_name: cv_id})
+
+        return cv_lookup
+
+    def get_qaqc_state_types(self) -> dict:
+        query = SQL('SELECT * from qaqc.state_cv_type_auto;')
+        return self._get_type_cv(query, 'shortname')
+
+    def get_qaqc_process_types(self) -> dict:
+        query = SQL('SELECT * from qaqc.process_type_auto;')
+        return self._get_type_cv(query, 'name')
+
+    def register_format_qaqc(self, upload_id: int, process_timestamp: str,
+                             site_id: str,
+                             prior_process_id: Optional[int] = None,
+                             zip_process_id: Optional[int] = None) -> int:
+
+        process_code_version, db_config = self._read_config()
+        processor_user_id = socket.gethostname()
+
+        qaqc_process_type_lookup = self.get_qaqc_process_types()
+        format_qaqc_process_type_id = qaqc_process_type_lookup.get(
+            'Format QAQC')
+
+        field_names = ('process_type_id, process_timestamp, upload_id, '
+                       'site_id, processor_user_id, processing_code_version')
+        values = [format_qaqc_process_type_id, process_timestamp, upload_id,
+                  site_id, processor_user_id, process_code_version]
+
+        if prior_process_id:
+            field_names += ', prior_process_id'
+            values.append(prior_process_id)
+        if zip_process_id:
+            field_names += ', zip_process_id'
+            values.append(zip_process_id)
+
+        values = tuple(values)
+
+        conn = self.init_db_conn(db_config)
+        process_id = self._register_qaqc_process(conn, field_names, values)
+
+        return process_id
+
+    def _register_qaqc_process(self, conn, query_fields: str,
+                               process_values: tuple) -> int:
+        query_pre = SQL('INSERT INTO qaqc.processing_log (')
+        query_post = SQL(') VALUES %(process_values)s returning log_id;')
+        query = Composed([query_pre, SQL(query_fields), query_post])
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, {'process_values': process_values})
+            count = 0
+            for r in cursor:
+                process_id = r.get('log_id')
+                count += 1
+            if count > 1:
+                raise DBHandlerError('More than 1 process_id (log_id) '
+                                     'returned upon process run entry.')
+            return process_id
+
+
 class DBHandler:
     def __init__(self, hostname, user, password, db_name):
         self.__hostname = hostname
@@ -211,6 +328,8 @@ class DBHandler:
         self.__password = password
         self.__db_name = db_name
 
+    # ToDo: evaluate if needs update -- could be obsolete
+    #       used in PreBASERegenerator
     def insert_BASE_entries(self, entry_ls):
         if entry_ls is None:
             return ''
@@ -218,6 +337,8 @@ class DBHandler:
                  "VALUES(%s, %d, %d, %d, %s, %s, %s, %s, %s)")
         return self._insert_entries(query, entry_ls)
 
+    # ToDo: evaluate if needs update -- could be obsolete
+    #       used in PreBASERegenerator
     def insert_BASE_BADM_entries(self, entry_ls):
         if entry_ls is None:
             return ''
@@ -225,6 +346,8 @@ class DBHandler:
                  "VALUES(%s, %s, %s, %s, %s, %d, %s, %s, %s, %s, %s)")
         return self._insert_entries(query, entry_ls)
 
+    # ToDo: evaluate if needs update -- could be obsolete
+    #       used in PreBASERegenerator
     def insert_qaqc_process_entry(self, fields, entry):
         if entry is None:
             return ''
@@ -232,6 +355,8 @@ class DBHandler:
                         .format(f=fields, e=entry))
         return self._insert_entry(entry=insert_entry)
 
+    # ToDo: evaluate if needs update -- could be obsolete
+    #       used in PreBASERegenerator
     def insert_qaqc_file_in_base_entries(self, entry_ls):
         if entry_ls is None:
             return ''
@@ -240,6 +365,9 @@ class DBHandler:
                  "VALUES (%d, %d)")
         return self._insert_entries(query, entry_ls)
 
+    # ToDo: update eventually
+    # ToDo: evaluate if needs update -- could be obsolete
+    #       used in PreBASERegenerator
     def insert_qaqc_data_in_base_entries(self, entry_ls):
         if entry_ls is None:
             return ''
@@ -286,6 +414,7 @@ class DBHandler:
                 return 'ERROR OCCURRED'
         return ''
 
+    # ToDo: update for publish
     def get_sites_with_updates(self):
         site_ids = {}
         with pymssql.connect(
@@ -310,6 +439,7 @@ class DBHandler:
                     row.get("baseVersion"), row.get("processID"))
         return site_ids
 
+    # ToDo: update for publish
     def get_input_files(self, processID):
         input_files = set()
         with pymssql.connect(
@@ -327,20 +457,16 @@ class DBHandler:
                 input_files.add(pid)
         return input_files
 
-    def define_BASE_candidate_query(self, pre_query, post_query):
-        query_criteria = ("s.status = '{st1}' "
-                          "OR s.status = '{st2}' "
-                          "OR s.status = '{st3}' "
-                          "OR s.status = '{st4}' "
-                          "OR s.status = '{st5}'")
+    def define_BASE_candidate_query(
+            self, pre_query, post_query, state_ids):
+        query_criteria = f's.status = {state_ids[0]}'
+        for state_id in state_ids[1:]:
+            query_criteria += f' OR s.status = {state_id}'
         query = pre_query + query_criteria + post_query
-        return query.format(st1=ProcessStates.PassedCurator,
-                            st2=ProcessStates.GeneratedBASE,
-                            st3=ProcessStates.BASEGenFailed,
-                            st4=ProcessStates.BADMUpdateFailed,
-                            st5=ProcessStates.InitiatedPreBASERegen)
+        return query
 
-    def get_BASE_candidates(self):
+    # ToDo: update for publish
+    def get_BASE_candidates(self, state_ids):
         preBASE_files = {}
         with pymssql.connect(
                 server=self.__hostname,
@@ -362,7 +488,8 @@ class DBHandler:
                          "WHERE ")
             post_query = ") s1 ON s1.processID = l.processID"
             query = self.define_BASE_candidate_query(pre_query=pre_query,
-                                                     post_query=post_query)
+                                                     post_query=post_query,
+                                                     state_ids=state_ids)
             conn.autocommit(True)
             try:
                 cursor.execute(query)
@@ -391,6 +518,7 @@ class DBHandler:
                 return "ERROR OCCURRED"
         return preBASE_files
 
+    # ToDo: rework for new tables (reset_states in PreBASERegenerator)
     def get_preBASE_regen_candidates(self, query_type='latest',
                                      process_id_ls=None):
         process_info = {}
@@ -443,6 +571,8 @@ class DBHandler:
                 _log.error(e)
         return process_info, row_key_ls
 
+    # ToDo: evaluate if needs update -- could be obsolete
+    #       used in PreBASERegenerator
     def get_preBASE_duplicated_process_ids(self, process_id_ls):
         republish_map = {}
         with pymssql.connect(
@@ -469,6 +599,8 @@ class DBHandler:
                 _log.error(e)
         return republish_map
 
+    # ToDo: evaluate if needs update -- could be obsolete
+    #       used in PreBASERegenerator
     def get_qaqc_file_in_base(self, process_id, new_process_id=None):
         file_id_list = []  # a list of fileIDs for querying dataInBase
         file_in_base_ls = []  # a list of the tuples to be inserted
@@ -499,6 +631,8 @@ class DBHandler:
                 _log.error(e)
         return file_id_list, file_in_base_ls, file_process_id_dict
 
+    # ToDo: evaluate if needs update -- could be obsolete
+    #       used in PreBASERegenerator
     def get_qaqc_data_in_base(self, file_ids):
         data_in_base_ls = {}
         with pymssql.connect(
@@ -521,7 +655,8 @@ class DBHandler:
                 _log.error(e)
         return data_in_base_ls
 
-    def get_BASE_candidates_for_preBASE_regen(self):
+    # ToDo: rework for new tables (reset_states in PreBASERegenerator)
+    def get_BASE_candidates_for_preBASE_regen(self, state_ids):
         process_info = {}
         site_list = []
         with pymssql.connect(
@@ -546,7 +681,8 @@ class DBHandler:
                          "WHERE ")
             post_query = ""
             query = self.define_BASE_candidate_query(pre_query=pre_query,
-                                                     post_query=post_query)
+                                                     post_query=post_query,
+                                                     state_ids=state_ids)
             conn.autocommit(True)
             try:
                 cursor.execute(query)
@@ -571,6 +707,7 @@ class DBHandler:
                 _log.error(e)
         return process_info, site_list
 
+    # ToDo: rework for new tables (reset_states in PreBASERegenerator)
     def get_qaqc_process_ids(self, query, key='processID'):
         process_id_ls = []
         with pymssql.connect(
@@ -589,7 +726,8 @@ class DBHandler:
                 _log.error(e)
         return process_id_ls
 
-    def get_incomplete_phase3_process_ids(self):
+    # ToDo: rework for new tables (reset_states in PreBASERegenerator)
+    def get_incomplete_phase3_process_ids(self, state_ids):
         process_id_ls = []
         with pymssql.connect(
                 server=self.__hostname,
@@ -604,12 +742,11 @@ class DBHandler:
                      "INNER JOIN qaqcState as b "
                      "ON d.processID = b.processID "
                      "AND d.max_ts = b.stateDateTime WHERE b.status in "
-                     "({st1}, {st2}, {st3}, {st4}, {st5})"
-                     .format(st1=ProcessStates.GeneratedBASE,
-                             st2=ProcessStates.UpdatedBASEBADM,
-                             st3=ProcessStates.BASEGenFailed,
-                             st4=ProcessStates.BADMUpdateFailed,
-                             st5=ProcessStates.BASEBADMPubFailed))
+                     "(")
+            for state_id in state_ids[:-1]:
+                query += f'{state_id}, '
+            query += f'{state_ids[-1]})'
+
             try:
                 cursor.execute(query)
                 for row in cursor:
@@ -619,6 +756,8 @@ class DBHandler:
                 _log.error(e)
         return process_id_ls
 
+    # ToDo: rework for new tables
+    # HERE
     def get_qaqc_status_history(self, process_id):
         status_history = []
         with pymssql.connect(
@@ -644,6 +783,7 @@ class DBHandler:
                 _log.error(e)
         return status_history
 
+    # Used in TranslateEarlyBase -- probably obsolete
     def get_site_status_BASE(self):
         site_list = []
         with pymssql.connect(
@@ -805,6 +945,7 @@ class DBHandler:
                 _log.error('Error occurred in get_issue_labels')
                 _log.error(e)
 
+    # ToDo: update soon
     def get_process_code_version(self, process_ids: tuple):
         """
         Get process code version for specified process_ids from
@@ -832,6 +973,7 @@ class DBHandler:
                 _log.error('Error occurred in get_process_code_version')
                 _log.error(e)
 
+    # ToDo: update eventually
     def get_fp_in_uploads(self, date_created_after: str) -> dict:
         """
         Get the uploaded files after specified date
@@ -927,6 +1069,7 @@ class DBHandler:
 
         return process_ids
 
+    # ToDo update eventually
     def get_format_qaqc_process_attempts(self, date_created_after: str,
                                          process_types: tuple = ('File',),
                                          site_ids: tuple = ()) -> dict:
@@ -978,6 +1121,7 @@ class DBHandler:
 
         return process_info_store
 
+    # ToDo: update eventually
     def get_upload_file_info_for_site(self, site_id: str) -> list:
         """
         Get upload file info for the specified site for processing runs
