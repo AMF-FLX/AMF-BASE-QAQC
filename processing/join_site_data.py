@@ -152,7 +152,8 @@ class JoinSiteData:
                         name=file_name, status=fn_stat,
                         proc_id=valid_files[file_name]['process_id'],
                         original_name=valid_files[file_name]['original_name'],
-                        prior_proc_id=valid_files[file_name]['prior_process_id']))
+                        prior_proc_id=valid_files[file_name][
+                            'prior_process_id']))
         for site_id, site in dir_files.items():
             for res, res_data in site.items():
                 if res != resolution:
@@ -233,7 +234,8 @@ class JoinSiteData:
                             continue
                         if times.name in files:
                             continue
-                        files[times.name] = open(dir_site_path / times.name, 'r')
+                        files[times.name] = open(dir_site_path / times.name,
+                                                 'r')
                         header_ln = files[times.name].readline().rstrip('\n')
                         potential_headers[times.name] = header_ln.split(',')
                     header_order = self.get_valid_variables(potential_headers)
