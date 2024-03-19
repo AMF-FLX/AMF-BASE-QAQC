@@ -63,8 +63,7 @@ class FormatQAQCDriver:
                                           self.log_dir,
                                           log_file_name)
         self.is_test = test
-        self.upload_checks_path = "./upload_checks.py"
-        self.email_gen_path = "./email_gen.py"
+        self.email_gen_path = './email_gen.py'
         self.stale_count = 0
 
     def run_proc(self, cmd):
@@ -79,32 +78,33 @@ class FormatQAQCDriver:
         # if no more new data upload log in test mode
         # terminate after 3 empty rounds
 
-        log_ids_list = ' '.join([str(row['log_id'])
+        log_ids_list = ' '.join([row.get('log_id')
                                  for row in new_data_upload_log])
         if log_ids_list:
-            log.write(f"Run with list of log ids: {log_ids_list}\n")
+            log.write(f'Run with list of log ids: {log_ids_list}\n')
 
         mail_uuid = {}  # map between upload_id and uuid
         tasks = {}
         for row in new_data_upload_log:
-            upload_id = row['log_id']
-            site_id = row['site_id']
+            upload_id = row.get('log_id')
+            site_id = row.get('site_id')
 
             # get origin, zip, repair run_type
             zip_process_id = None
             prior_process_id = None
             run_type = 'o'
-            if 'repair candidate for' in row['upload_comment']:
+            upload_comment = row.get('upload_comment', '')
+            if 'repair candidate for' in upload_comment:
                 run_type = 'r'
-                prior_process_id = row['upload_comment'].split()[-1]
-            elif 'Archive upload for' in row['upload_comment']:
+                prior_process_id = upload_comment.split()[-1]
+            elif 'Archive upload for' in upload_comment:
                 run_type = 'o'
-                zip_process_id = row['upload_comment'].split()[-1]
-            filename = row['data_file']
+                zip_process_id = upload_comment.split()[-1]
+            filename = row.get('data_file')
 
             # check if it is a parent process id
             if not prior_process_id and not zip_process_id:
-                mail_uuid[upload_id] = row['upload_token']
+                mail_uuid[upload_id] = row.get('upload_token')
 
             tasks[upload_id] = {'task': Task(filename,
                                              upload_id,
@@ -125,8 +125,8 @@ class FormatQAQCDriver:
                 if self.is_test:
                     if not tasks:
                         self.stale_count += 1
-                        log.write(("[TEST MODE] Empty run "
-                                   f"{self.stale_count} time(s)\n"))
+                        log.write(('[TEST MODE] Empty run '
+                                   f'{self.stale_count} time(s)\n'))
                         print(self.stale_count)
                     if self.stale_count >= 3:
                         stop_run = True
@@ -140,10 +140,10 @@ class FormatQAQCDriver:
                         pool = ThreadPool(mp.cpu_count())
                         for upload_id, v in tasks.items():
                             task, _ = v.values()
-                            log.write((f"Start run: log id {task.upload_id}, "
-                                       f"prior id: {task.prior_process_id}, "
-                                       f"zip id: {task.zip_process_id}, "
-                                       f"run type: {task.run_type}\n"))
+                            log.write((f'Start run: log id {task.upload_id}, '
+                                       f'prior id: {task.prior_process_id}, '
+                                       f'zip id: {task.zip_process_id}, '
+                                       f'run type: {task.run_type}\n'))
                             process_id, is_upload_sucessful, sub_uuid = \
                                 pool.apply_async(upload_checks,
                                                  (task.filename,
@@ -158,10 +158,10 @@ class FormatQAQCDriver:
                     else:
                         for upload_id, v in tasks.items():
                             task, _ = v.values()
-                            log.write((f"Start run: log id {task.upload_id}, "
-                                       f"prior id: {task.prior_process_id}, "
-                                       f"zip id: {task.zip_process_id}, "
-                                       f"run type: {task.run_type}\n"))
+                            log.write((f'Start run: log id {task.upload_id}, '
+                                       f'prior id: {task.prior_process_id}, '
+                                       f'zip id: {task.zip_process_id}, '
+                                       f'run type: {task.run_type}\n'))
                             process_id, is_upload_sucessful, sub_uuid = \
                                 self.upload_checks.run(task.filename,
                                                        task.upload_id,
@@ -181,19 +181,19 @@ class FormatQAQCDriver:
                                                                process_id)
                         if is_success:
                             del tasks[upload_id]
-                            log.write((f"Log id: {upload_id} "
-                                       "ended sucessfully\n"))
+                            log.write((f'Log id: {upload_id} '
+                                       'ended sucessfully\n'))
                         else:
-                            retry = tasks[upload_id]['retry']
+                            retry = tasks.get(upload_id).get('retry')
                             if retry < self.max_retries:
                                 tasks[upload_id]['retry'] += 1
-                                log.write((f"Log id: {upload_id}, "
-                                           f"retry for {retry} "
-                                           "times and failed\n"))
+                                log.write((f'Log id: {upload_id}, '
+                                           f'retry for {retry} '
+                                           'times and failed\n'))
                             else:
                                 del tasks[upload_id]
-                                log.write((f"Log id: {upload_id} "
-                                           "ended unsucessfully\n"))
+                                log.write((f'Log id: {upload_id} '
+                                           'ended unsucessfully\n'))
                     (tasks,
                      mail_uuid) = self.get_new_data_upload_log(log)
                     mail_uuids.update(mail_uuid)
@@ -208,7 +208,7 @@ class FormatQAQCDriver:
                     results = []
                     mail_tokens = set(mail_uuids.keys())
                     for token in mail_tokens:
-                        log.write(f"Email gen for token: {token}\n")
+                        log.write(f'Email gen for token: {token}\n')
                         if not self.is_test:
                             cmd = ('python '
                                    f'{self.email_gen_path} '
@@ -223,7 +223,7 @@ class FormatQAQCDriver:
                     mail_uuids = {}
                 else:
                     for token in mail_uuids.values():
-                        log.write(f"Email gen for token: {token}\n")
+                        log.write(f'Email gen for token: {token}\n')
                         mail_uuids = {}
                 time.sleep(self.time_sleep)
 
