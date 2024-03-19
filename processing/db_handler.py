@@ -178,15 +178,6 @@ class NewDBHandler:
             new_data_upload = cursor.fetchall()
         return new_data_upload
 
-    def get_token_from_processing_log_id(self, conn, log_id):
-        query = SQL('SELECT p.upload_token '
-                    'FROM qaqc.processing_log p '
-                    f'WHERE p.log_id = {log_id}')
-        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
-            cursor.execute(query)
-            token = cursor.one()
-        return token
-
     def is_all_task_done(self, conn):
         is_all_done = False
         query = SQL('SELECT COUNT(DISTINCT p.log_id) AS count_log_id '
