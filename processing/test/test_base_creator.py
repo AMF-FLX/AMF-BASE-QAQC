@@ -1,5 +1,8 @@
 from base_creator import BASECreator
 from db_handler import DBHandler
+from process_states import ProcessStateHandler
+
+import json
 import pytest
 
 
@@ -7,8 +10,17 @@ __author__ = 'You-Wei Cheah, Danielle Christianson'
 __email__ = 'ycheah@lbl.gov, dschristianson@lbl.gov'
 
 
+def mock_process_states_qaqc_process_lookup(
+        dummy, initiate_lookup=False):
+    with open(file='./test/resources/state_cv_type.json', mode='r') as f:
+        return json.load(f)
+
+
 @pytest.fixture
-def base_creator():
+def base_creator(monkeypatch):
+    monkeypatch.setattr(ProcessStateHandler, '_qaqc_process_lookup',
+                        mock_process_states_qaqc_process_lookup)
+
     b = BASECreator()
     if not hasattr(b, 'flux_db_handler'):
         b.flux_db_handler = DBHandler('test', 'test', 'test', 'test')
