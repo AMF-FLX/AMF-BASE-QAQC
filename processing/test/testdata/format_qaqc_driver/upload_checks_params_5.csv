@@ -1,0 +1,5 @@
+file_name,upload_id,run_type,site_id,prior_process_id,zip_process_id
+US-UMB_HR_200001011000_200001012000.csv,2,o,US-UMB,,
+US-UMB_HR_200001010000_200001012000.txt,3,o,US-UMB,,
+US-UMB_HR_200001011000_200001012000_scinot.csv,4,o,US-UMB,,
+US-UMB_HR_200001011000_200001012000_scinot.csv,5,r,US-UMB,4,

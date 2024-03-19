@@ -1,6 +1,6 @@
 import datetime as dt
 import psycopg2
-import pymssql
+# import pymssql
 
 from jira_names import JIRANames
 
@@ -177,7 +177,7 @@ class NewDBHandler:
             cursor.execute(query)
             new_data_upload = cursor.fetchall()
         return new_data_upload
-    
+
     def get_token_from_processing_log_id(self, conn, log_id):
         query = SQL('SELECT p.upload_token '
                     'FROM qaqc.processing_log p '
@@ -186,6 +186,32 @@ class NewDBHandler:
             cursor.execute(query)
             token = cursor.one()
         return token
+
+    def is_all_task_done(self, conn):
+        is_all_done = False
+        query = SQL('SELECT COUNT(DISTINCT p.log_id) AS count_log_id '
+                    'FROM qaqc.processing_log p '
+                    'LEFT JOIN qaqc.process_summarized_output as s '
+                    'ON p.log_id = s.process_id '
+                    f'WHERE s.process_id IS NULL')
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query)
+            status = cursor.one()
+        if status == 0:
+            is_all_done = True
+        return is_all_done
+
+    def check_status_of_process_id(self, conn, process_id):
+        is_success = False
+        query = SQL('SELECT report AS count_log_id '
+                    'FROM qaqc.process_summarized_output p '
+                    f'where process_id = {process_id}')
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query)
+            report = cursor.one()
+        if report:
+            is_success = True
+        return is_success
 
 class DBHandler:
     def __init__(self, hostname, user, password, db_name):
