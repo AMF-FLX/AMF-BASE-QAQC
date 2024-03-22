@@ -1,5 +1,4 @@
 import datetime as dt
-import multiprocessing as mp
 import os
 import subprocess
 import shlex
@@ -8,7 +7,6 @@ import time
 
 from configparser import ConfigParser
 from collections import namedtuple
-from multiprocessing.pool import ThreadPool
 from db_handler import DBConfig, NewDBHandler
 from upload_checks import upload_checks
 
@@ -120,17 +118,17 @@ class FormatQAQCDriver:
                     for upload_id, v in o_tasks.items():
                         task, _ = v.values()
                         log.write((f'Start run: log id {task.upload_id}, '
-                                    f'prior id: {task.prior_process_id}, '
-                                    f'zip id: {task.zip_process_id}, '
-                                    f'run type: {task.run_type}\n'))
+                                   f'prior id: {task.prior_process_id}, '
+                                   f'zip id: {task.zip_process_id}, '
+                                   f'run type: {task.run_type}\n'))
                         process_id, is_upload_sucessful, sub_uuid = \
                             upload_checks(task.filename,
-                                            task.upload_id,
-                                            task.run_type,
-                                            task.site_id,
-                                            task.prior_process_id,
-                                            task.zip_process_id,
-                                            self.is_test)
+                                          task.upload_id,
+                                          task.run_type,
+                                          task.site_id,
+                                          task.prior_process_id,
+                                          task.zip_process_id,
+                                          self.is_test)
                         sub_uuids = []
                         if sub_uuid:
                             sub_uuids.append(sub_uuid)
@@ -139,11 +137,12 @@ class FormatQAQCDriver:
                             s_tasks = self.get_new_upload_data(log, sub_uuid)
                             for v in s_tasks.values():
                                 s_task, _ = v.values()
-                                log.write((f'Start run: log id {s_task.upload_id}, '
-                                            f'prior id: {s_task.prior_process_id}, '
-                                            f'zip id: {s_task.zip_process_id}, '
-                                            f'run type: {s_task.run_type}, '
-                                            f'uuid: {s_task.uuid}\n'))
+                                log.write(
+                                    (f'Start run: log id {s_task.upload_id}, '
+                                     f'prior id: {s_task.prior_process_id}, '
+                                     f'zip id: {s_task.zip_process_id}, '
+                                     f'run type: {s_task.run_type}, '
+                                     f'uuid: {s_task.uuid}\n'))
                                 process_id, is_upload_sucessful, ss_uuid = \
                                     upload_checks(s_task.filename,
                                                   s_task.upload_id,
@@ -158,8 +157,9 @@ class FormatQAQCDriver:
 
                         if not self.is_test:
                             cmd = ('python '
-                                f'{self.email_gen_path} '
-                                f'{task.uuid} ')
+                                   f'{self.email_gen_path} '
+                                   f'{task.uuid} ')
+                            # self.run_proc(cmd)
                         else:
                             print(f'send email to token {task.uuid}')
                     o_tasks = self.get_new_upload_data(log)
