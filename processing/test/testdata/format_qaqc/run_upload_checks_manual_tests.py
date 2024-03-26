@@ -25,7 +25,8 @@ if which_python == '3.6':
     # subprocess.call(['/bin/source', 'activate', 'python3'])
 
 wdir = Path.cwd()
-fname = wdir/'test'/'testdata'/'format_qaqc'/'file_check_expected_issues_ts3.csv'
+filepath = wdir/'test'/'testdata'/'format_qaqc'
+fname = filepath/'file_check_expected_issues_ts3.csv'
 with open(fname, 'r') as f:
     files = f.readline()
     notes = f.readline()
@@ -57,8 +58,9 @@ for ifile, n in zip(files[start_index:check_length],
         subprocess.call(
             ['python',
              '{wdir}/{ws}'.format(wdir=wdir, ws=which_script),
-             '{wdir}/test/testdata/format_qaqc/{ifile}'.format(wdir=wdir, ifile=ifile),
-             '9999', 'o', 'US-UMB', '-t'
+             '{wdir}/test/testdata/format_qaqc/{ifile}'.format(
+                 wdir=wdir, ifile=ifile),
+             '9999999', 'o', 'US-UMB', '-t'
              ])
         print(' ')
         print(' ')
@@ -76,8 +78,9 @@ for ifile, n in zip(files[start_index:check_length],
         subprocess.call(
             ['python',
              '{wdir}/{ws}'.format(wdir=wdir, ws=which_script),
-             '{wdir}/test/testdata/format_qaqc/{ifile}'.format(wdir=wdir, ifile=ifile),
-             '9999', 'r', 'US-UMB', '-t'
+             '{wdir}/test/testdata/format_qaqc/{ifile}'.format(
+                 wdir=wdir, ifile=ifile),
+             '9999999', 'r', 'US-UMB', '-t'
              ])
         print(' ')
         print(' ')

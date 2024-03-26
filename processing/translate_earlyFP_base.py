@@ -11,8 +11,7 @@ import json
 from logger import Logger
 import os
 from path_util import PathUtil
-from process_states import ProcessStates
-from process_actions import ProcessActions
+from process_states import ProcessStates, ProcessStateHandler
 from report_status import ReportStatus
 import time
 import urllib.request
@@ -357,10 +356,11 @@ class TranslateEarlyBase:
                 self.jira.set_issue_state(
                     site.new_issue_id,
                     JIRANames.format_QAQC_ready_for_data, labels=['BASE'])
+                process_states = ProcessStateHandler()
                 self.rs.enter_new_state(
                     process_id=site.process_id,
-                    status=ProcessStates.RetiredForReprocessing,
-                    action=ProcessActions.RetiredForReprocessing)
+                    state_id=process_states.get_process_state(
+                        ProcessStates.RetiredForReprocessing))
                 msg = '{s}: Old issue (process id = {op} status set ' \
                       'and linked to new issue (process id = {np}).'
                 _log.info(msg.format(s=site.site_id, op=site.process_id,

@@ -4,8 +4,7 @@ import subprocess
 from configparser import ConfigParser
 from logger import Logger
 from report_status import ReportStatus
-from process_states import ProcessStates
-from process_actions import ProcessActions
+from process_states import ProcessStates, ProcessStateHandler
 from utils import Decode
 from future.standard_library import install_aliases
 install_aliases()
@@ -130,27 +129,28 @@ class Publish():
 
         xfer_cmd = ' '.join(base_cmd_args)
         rs = ReportStatus()
+        process_states = ProcessStateHandler()
         try:
             _log.info('FTP xfering')
             execution_result = subprocess.call(
                 xfer_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                 shell=True)
             if execution_result != 0:
-                a = ProcessActions.RepublishReport
-                s = ProcessStates.RepublishReport
+                s = process_states.get_process_state(
+                    ProcessStates.RepublishReport)
                 _log.error("SCP failed for: '{c}'".format(c=xfer_cmd))
                 rs.report_status(
-                    action=a, status=s, report_json=None,
-                    log_file=None, process_id=process_id)
+                    state_id=s, report_json=None,
+                    log_file_path=None, process_id=process_id)
             else:
                 _log.info('Xfer completed successfully')
         except Exception as e:
-            a = ProcessActions.RepublishReport
-            s = ProcessStates.RepublishReport
+            s = process_states.get_process_state(
+                ProcessStates.RepublishReport)
             _log.error('Xfer failed with error: {e}'.format(e=e))
             rs.report_status(
-                action=a, status=s, report_json=None,
-                log_file=None, process_id=process_id)
+                state_id=s, report_json=None,
+                log_file_path=None, process_id=process_id)
 
     def _scp_xfer_BADM_file(self, path):
         self._scp_xfer_file(path, self.scp_badm_target)

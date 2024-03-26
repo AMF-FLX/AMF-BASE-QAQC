@@ -16,8 +16,7 @@ _log = Logger().getLogger(__name__)
 
 
 class ReportStatus:
-    ''' upload status report to web server
-    '''
+    """upload status report to web server"""
 
     def __init__(self):
         ''' Initialize variables on loading of class here '''
@@ -72,30 +71,30 @@ class ReportStatus:
         response = self._basic_post_request_core(msg, url)
         return response.read().decode('utf-8')
 
-    def report_status(self, action, status, report_json, log_file,
-                      process_id=-1, site_id=None, resolution=None,
-                      status_json=None, start_year=None, end_year=None,
+    def report_status(self, process_id,
+                      state_id=None, log_file_path=None,
+                      report_json=None, status_json=None,
+                      start_timestamp=None, end_timestamp=None,
                       file_name=None):
-        msg = {'code_version': self.code_version,
-               'report_json': report_json,
-               'status_json': status_json,
-               'log_file': log_file,
-               'processor': getpass.getuser(),
-               'action': action,
-               'status': status,
-               'process_id': process_id,
-               'site_id': site_id,
-               'resolution': resolution,
-               'start_time': start_year,
-               'end_time': end_year,
-               'base_file': file_name}
+
+        if not state_id and not log_file_path:
+            return False
+
+        msg = {'process_id': process_id,
+               'state_id': state_id,
+               'process_log_path': log_file_path,
+               'report': report_json,
+               'status': status_json,
+               'data_start_timestamp': start_timestamp,
+               'data_end_timestamp': end_timestamp,
+               'aggregated_file_path': file_name}
+
         response = self._basic_post_request_core(msg, self.report_status_ws)
         return response.getcode() == HTTPStatus.OK
 
-    def enter_new_state(self, process_id, status, action):
+    def enter_new_state(self, process_id, state_id):
         msg = {'process_id': process_id,
-               'status': status,
-               'action': action}
+               'state_id': state_id}
         response = self._basic_post_request_core(msg, self.report_status_ws)
         return response.getcode() == HTTPStatus.OK
 

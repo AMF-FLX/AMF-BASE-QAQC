@@ -11,5 +11,6 @@ pymssql-linux
 pytest
 pytest-cov
 pytest-flake8
+requests
 scipy
 xlrd

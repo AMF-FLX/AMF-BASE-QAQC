@@ -5,8 +5,7 @@ from configparser import ConfigParser
 from db_handler import DBHandler
 from logger import Logger
 import os
-from process_actions import ProcessActions
-from process_states import ProcessStates
+from process_states import ProcessStates, ProcessStateHandler
 from report_status import ReportStatus
 
 from future.standard_library import install_aliases
@@ -32,8 +31,8 @@ class PreBASERegenerator:
         self.db_fields = None
         self._get_params_from_config()
         self.report_status = ReportStatus()
-        self.process_actions = ProcessActions()
-        self.process_states = ProcessStates()
+        self.process_states = ProcessStateHandler()
+        # ToDo: update
         self.qaqcProcessLog_fields = ['processID', 'processType',
                                       'processDatetime', 'updateID',
                                       'SITE_ID', 'dataRes', 'processor',
@@ -43,11 +42,17 @@ class PreBASERegenerator:
                                       'zipProcessID', 'baseName',
                                       'baseVersion', 'startTime', 'endTime',
                                       'retryCount']
-        self.incomplete_phase3_states = (self.process_states.GeneratedBASE,
-                                         self.process_states.UpdatedBASEBADM,
-                                         self.process_states.BASEGenFailed,
-                                         self.process_states.BADMUpdateFailed,
-                                         self.process_states.BASEBADMPubFailed)
+        self.incomplete_phase3_states = (
+            self.process_states.get_process_state(
+                ProcessStates.GeneratedBASE),
+            self.process_states.get_process_state(
+                ProcessStates.UpdatedBASEBADM),
+            self.process_states.get_process_state(
+                ProcessStates.BASEGenFailed),
+            self.process_states.get_process_state(
+                ProcessStates.BADMUpdateFailed),
+            self.process_states.get_process_state(
+                ProcessStates.BASEBADMPubFailed))
 
     def _read_config(self, cfg):
         db_hostname = None
@@ -223,8 +228,8 @@ class PreBASERegenerator:
             _log.info('Setting regen status for {p}'.format(p=pid))
             self.report_status.enter_new_state(
                 process_id=int(self.duplication_map[pid]),
-                status=self.process_states.InitiatedPreBASERegen,
-                action=self.process_actions.InitiatedPreBASERegen)
+                state_id=self.process_states.get_process_state(
+                    ProcessStates.InitiatedPreBASERegen))
 
     def duplicate_qaqc_data_file_in_base(self):
         new_data_entry_ls = []
@@ -291,17 +296,19 @@ class PreBASERegenerator:
                 self.find_preBASE_status(status_history=qaqc_status)
             # reset status
             if preBASE_state not in (
-                    self.process_states.PassedCurator,
-                    self.process_states.InitiatedPreBASERegen):
+                    self.process_states.get_process_state(
+                        ProcessStates.PassedCurator),
+                    self.process_states.get_process_state(
+                        ProcessStates.InitiatedPreBASERegen)):
                 _log.warning('preBASE_state {s} is not expected. Skipping'
                              .format(s=preBASE_state))
                 continue
             if not test_reset:
                 self.report_status.enter_new_state(process_id=pid,
-                                                   status=preBASE_state,
-                                                   action=preBASE_action)
+                                                   state_id=preBASE_state)
                 _log.info('Reset preBase state and action')
 
+    # HERE
     def find_preBASE_status(self, status_history):
         for state_entry in status_history:
             # state_entry = (stateID, state, action, stateDateTime)
@@ -324,7 +331,8 @@ class PreBASERegenerator:
             if not self.process_info:
                 return
             self.site_update_info, self.sites_queued_for_BASE_update = \
-                self.db_handler.get_BASE_candidates_for_preBASE_regen()
+                self.db_handler.get_BASE_candidates_for_preBASE_regen(
+                    state_ids=self.process_states.base_candidate_states)
             if self.site_update_info:
                 sites_excluded = []
                 for i in self.site_update_info.keys():

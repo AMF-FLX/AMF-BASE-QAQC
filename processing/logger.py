@@ -5,13 +5,14 @@ from datetime import datetime as dt
 from path_util import PathUtil
 
 __author__ = "You-Wei Cheah", "Norm Beekwilder", "Danielle Christianson"
-__email__ = "ycheah@lbl.gov", "norm.beekwilder@gmail.com", "dschristianson@lbl.gov"
+__email__ = "ycheah@lbl.gov", "norm.beekwilder@gmail.com", \
+            "dschristianson@lbl.gov"
 
 
 class Logger(logging.Logger):
     """Class to standardize logging format"""
     def __init__(self, setup=False, upload_id=0,
-                 site_id='UNK', process_type=None):
+                 site_id='UNK', process_type=None, log_timestamp=None):
         """Constructor for logger class. Setup logger format here
 
         :param setup: Optional parameter to setup file handler
@@ -76,7 +77,10 @@ class Logger(logging.Logger):
             os.mkdir(self.log_dir)
 
         # Setup defaults
-        self.log_file_timestamp = dt.now()
+        if not log_timestamp:
+            self.log_file_timestamp = dt.now()
+        else:
+            self.log_file_timestamp = log_timestamp
         log_ts_fmt = '%Y%m%d%H%M%S'
         timestamp_str = self.log_file_timestamp.strftime(log_ts_fmt)
         if phase_cfg == 'PHASE_I':

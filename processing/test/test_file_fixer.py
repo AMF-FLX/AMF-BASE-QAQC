@@ -141,15 +141,7 @@ def mock_filename_verifier_is_valid_resolution(dummyvar, resolution):
     return False
 
 
-def mock_get_upload_info(process_id):
-    if process_id == '1234':
-        return {'SITE_ID': 'other'}
-    return {'SITE_ID': 'US-Ton'}
-
-
 def test_fix_filename(file_fixer, monkeypatch):
-
-    monkeypatch.setattr(file_fixer, 'get_upload_info', mock_get_upload_info)
 
     monkeypatch.setattr(SiteAttributes, '_load_site_dict',
                         mock_site_attrs_load_site_dict)
@@ -180,14 +172,12 @@ def test_fix_filename(file_fixer, monkeypatch):
 
     for filename in bad_filenames:
         valid_site_id = 'US-Ton'
-        process_id = '9999'
         if 'other' in filename:
             valid_site_id = 'other'
-            process_id = '1234'
 
         remade_filename, site_id, status_msg = file_fixer.fix_filename(
             dir_name='~/test', filename_noext=filename.split(".")[0],
-            process_id=process_id, timespan=dt.timedelta(minutes=30),
+            timespan=dt.timedelta(minutes=30), site_id=valid_site_id,
             corrected_data=[['201001010000', '201001010030', 'more_data'],
                             ['201001010030', '201001010100', 'more_data'],
                             ['201112312230', '201112312300', 'more_data'],
