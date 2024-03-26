@@ -891,7 +891,7 @@ class FileFixer:
                                                process_id, site_id)
                 else:
                     autorepair_uuid = 'test-autorepair-uuid'
-                    is_upload_successful = None
+                    is_upload_successful = True
                 msg = 'File was Autocorrected and corrected file uploaded.'
                 self.append_status_msg_parts('warning', msg)
                 return autorepair_filename, None, \
