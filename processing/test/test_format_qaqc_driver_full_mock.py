@@ -35,7 +35,9 @@ def mock_init_db_conn(self):
     return
 
 
-def mock_get_new_data_upload_log(self, uuid=None):
+def mock_get_new_data_upload_log(self,
+                                 is_qaqc_processor=None,
+                                 uuid=None):
     new_data_upload_log = []
     if not uuid:
         with open(PROCESSING_LOG, 'r') as f:
