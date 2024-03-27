@@ -1,5 +1,6 @@
 import datetime as dt
 import os
+import multiprocessing as mp
 import subprocess
 import shlex
 import sys
@@ -9,6 +10,7 @@ from configparser import ConfigParser
 from collections import namedtuple
 from db_handler import DBConfig, NewDBHandler
 from upload_checks import upload_checks
+
 
 __author__ = 'Sy-Toan Ngo'
 __email__ = 'sytoanngo@lbl.gov'
@@ -28,6 +30,8 @@ class FormatQAQCDriver:
                 self.log_dir = config.get(cfg_section, 'log_dir')
                 self.time_sleep = config.getfloat(cfg_section, 'time_sleep')
                 self.max_retries = config.getint(cfg_section, 'max_retries')
+                self.max_timeout = config.getint(cfg_section, 'max_timeout')
+                self.timeout = self.max_timeout / 10.0
 
             cfg_section = 'DB'
             if config.has_section(cfg_section):
@@ -39,7 +43,6 @@ class FormatQAQCDriver:
                 self.db = NewDBHandler()
                 new_db_config = DBConfig(hostname, user, auth, db_name)
                 self.conn = NewDBHandler.init_db_conn(new_db_config)
-        # self.db = db
         log_file_date = dt.datetime.now().strftime('%Y-%m-%d')
         log_file_name = f'format_qaqc_driver_service_{log_file_date}.log'
         log_dir = os.path.join(os.getcwd(), self.log_dir)
@@ -67,9 +70,10 @@ class FormatQAQCDriver:
         log_ids_list = ' '.join([str(row.get('log_id'))
                                  for row in new_data_upload_log])
         if log_ids_list:
-            log.write(f'Run with list of log ids: {log_ids_list} '
-                      '[token: {uuid}]\n')
-
+            log_msg = f'Run with list of upload log ids: {log_ids_list} '
+            if uuid:
+                log_msg += f'with token: {uuid}]\n'
+            log.write(log_msg)
         tasks = {}
         for row in new_data_upload_log:
             upload_id = row.get('log_id')
@@ -88,19 +92,28 @@ class FormatQAQCDriver:
                 zip_process_id = upload_comment.split()[-1]
             filename = row.get('data_file')
 
-            tasks[upload_id] = {'task': Task(filename,
-                                             upload_id,
-                                             prior_process_id,
-                                             zip_process_id,
-                                             run_type,
-                                             site_id,
-                                             token),
-                                'retry': 0}
-        return tasks
+            tasks[upload_id] = Task(filename,
+                                    upload_id,
+                                    prior_process_id,
+                                    zip_process_id,
+                                    run_type,
+                                    site_id,
+                                    token)
+        grouped_tasks = {}
+        for upload_id, task_data in tasks.items():
+            token = task_data.uuid
+            if token not in grouped_tasks:
+                grouped_tasks[token] = []
+            grouped_tasks[token].append(upload_id)
+        grouped_upload_id = list(grouped_tasks.values())
+        return tasks, grouped_upload_id
 
     def run(self):
+        num_processes = mp.cpu_count()
+        processes = []
+
         with open(self.log_file_path, 'w+') as log:
-            o_tasks = self.get_new_upload_data(log)
+            o_tasks, grouped_tasks = self.get_new_upload_data(log)
             stop_run = False
             while True:
                 if self.is_test:
@@ -115,55 +128,135 @@ class FormatQAQCDriver:
                     break
                 # run tasks
                 while o_tasks:
-                    for upload_id, v in o_tasks.items():
-                        task, _ = v.values()
-                        log.write((f'Start run: log id {task.upload_id}, '
-                                   f'prior id: {task.prior_process_id}, '
-                                   f'zip id: {task.zip_process_id}, '
-                                   f'run type: {task.run_type}\n'))
-                        process_id, is_upload_sucessful, sub_uuid = \
-                            upload_checks(task.filename,
-                                          task.upload_id,
-                                          task.run_type,
-                                          task.site_id,
-                                          task.prior_process_id,
-                                          task.zip_process_id,
-                                          self.is_test)
-                        sub_uuids = []
-                        if sub_uuid:
-                            sub_uuids.append(sub_uuid)
-                        while sub_uuids:
-                            sub_uuid = sub_uuids[0]
-                            s_tasks = self.get_new_upload_data(log, sub_uuid)
-                            for v in s_tasks.values():
-                                s_task, _ = v.values()
+                    # upload_ids is a list of upload_id
+                    # that has the same token
+                    for upload_ids in grouped_tasks:
+                        is_qaqc_successful = True
+                        with mp.Pool(processes=num_processes) as pool:
+                            for upload_id in upload_ids:
+                                task = o_tasks.get(upload_id)
+                                token = task.uuid
                                 log.write(
-                                    (f'Start run: log id {s_task.upload_id}, '
-                                     f'prior id: {s_task.prior_process_id}, '
-                                     f'zip id: {s_task.zip_process_id}, '
-                                     f'run type: {s_task.run_type}, '
-                                     f'uuid: {s_task.uuid}\n'))
-                                process_id, is_upload_sucessful, ss_uuid = \
-                                    upload_checks(s_task.filename,
-                                                  s_task.upload_id,
-                                                  s_task.run_type,
-                                                  s_task.site_id,
-                                                  s_task.prior_process_id,
-                                                  s_task.zip_process_id,
-                                                  self.is_test)
-                                if ss_uuid:
-                                    sub_uuids.append(ss_uuid)
-                            sub_uuids.remove(sub_uuid)
-
-                        if not self.is_test:
-                            cmd = ('python '
-                                   f'{self.email_gen_path} '
-                                   f'{task.uuid} ')
-                            # self.run_proc(cmd)
-                        else:
-                            print(f'send email to token {task.uuid}')
-                    o_tasks = self.get_new_upload_data(log)
-                time.sleep(self.time_sleep)
+                                    (f'Start run: log id {task.upload_id}, '
+                                     f'prior id: {task.prior_process_id}, '
+                                     f'zip id: {task.zip_process_id}, '
+                                     f'run type: {task.run_type}\n'))
+                                processes.append(
+                                    {'process':
+                                        pool.apply_async(upload_checks,
+                                                         (task.filename,
+                                                          task.upload_id,
+                                                          task.run_type,
+                                                          task.site_id,
+                                                          task.
+                                                          prior_process_id,
+                                                          task.zip_process_id,
+                                                          self.is_test)),
+                                     'runtime': 0,
+                                     'retry': 0,
+                                     'task': task})
+                            while processes:
+                                time.sleep(self.time_sleep)
+                                s_processes = []
+                                for p in processes:
+                                    try:
+                                        result = (p
+                                                  .get('process')
+                                                  .get())
+                                        (process_id,
+                                         is_upload_successful,
+                                         uuid) = result
+                                        s_tasks = {}
+                                        if uuid:
+                                            s_tasks, _ = \
+                                                self.get_new_upload_data(log,
+                                                                         uuid)
+                                        for task in s_tasks.values():
+                                            log.write(
+                                                ('Start run: log id '
+                                                 f'{task.upload_id}, '
+                                                 'prior id: '
+                                                 f'{task.prior_process_id}, '
+                                                 f'zip id: '
+                                                 f'{task.zip_process_id}, '
+                                                 f'run type: {task.run_type}\n'
+                                                 f'uuid: {task.uuid}'))
+                                            s_processes.append(
+                                                {'process':
+                                                    pool
+                                                    .apply_async(
+                                                        upload_checks,
+                                                        (task.filename,
+                                                            task.upload_id,
+                                                            task.run_type,
+                                                            task.site_id,
+                                                            task
+                                                            .prior_process_id,
+                                                            task
+                                                            .zip_process_id,
+                                                            self.is_test)),
+                                                 'runtime': 0,
+                                                 'retry': 0,
+                                                 'task': task})
+                                    except mp.TimeoutError:
+                                        if p.get('runtime') > self.max_timeout:
+                                            p.get('process').terminate()
+                                            log.write('Process terminated '
+                                                      'due to time out '
+                                                      'for upload_id: '
+                                                      f'{task.upload_id}')
+                                            if p.get('retry') < \
+                                                    self.max_retries:
+                                                task = p.get('task')
+                                                p['process'] = \
+                                                    pool.apply_async(
+                                                        upload_checks,
+                                                        (task.filename,
+                                                         task.upload_id,
+                                                         task.run_type,
+                                                         task.site_id,
+                                                         task.prior_process_id,
+                                                         task.zip_process_id,
+                                                         self.is_test))
+                                                p['runtime'] = 0
+                                                retry = p.get('retry') + 1
+                                                p['retry'] = retry
+                                                log.write('Retry to run '
+                                                          'upload_id: '
+                                                          f'{task.upload_id}, '
+                                                          f'retry: {retry}')
+                                            else:
+                                                # terminate all process
+                                                # for this run
+                                                # and send email to team
+                                                if p.get('retry') > \
+                                                        self.max_retries:
+                                                    for p in processes:
+                                                        (p
+                                                         .get('process')
+                                                         .terminate())
+                                                    for p in s_processes:
+                                                        (p
+                                                         .get('process')
+                                                         .terminate())
+                                                    is_qaqc_successful = False
+                                        else:
+                                            p['runtime'] += self.time_sleep
+                                processes = s_processes
+                        # it will get here if all good, send out email to token
+                    if is_qaqc_successful:
+                        cmd = ('python '
+                               f'{self.email_gen_path} '
+                               f'{token}')
+                    else:
+                        cmd = ('python '
+                               f'{self.email_gen_team_path} '
+                               f'{token}')
+                    if not self.is_test:
+                        self.run_proc(cmd)
+                    else:
+                        log.write(f'Email gen for token: {token}\n')
+                    o_tasks, grouped_tasks = self.get_new_upload_data(log)
             if self.is_test:
                 return
             sys.exit(0)

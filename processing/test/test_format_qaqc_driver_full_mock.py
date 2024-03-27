@@ -5,21 +5,21 @@ from db_handler import NewDBHandler
 from format_qaqc_driver import FormatQAQCDriver
 from shutil import copyfile
 import csv
+import time
 
 __author__ = 'Sy-Toan Ngo'
 __email__ = 'sytoanngo@lbl.gov'
 
 
-DATA_DIR = './test/testdata/format_qaqc_driver'
 DATA_UPLOAD_LOG_DEFAULT = ('./test/testdata/format_qaqc_driver'
-                           '/data_upload_log_default_{}.csv')
+                           '/db_test_{}/data_upload_log_default.csv')
 PROCESSING_LOG_DEFAULT = ('./test/testdata/format_qaqc_driver'
-                          '/processing_log_default_{}.csv')
+                          '/db_test_{}/processing_log_default.csv')
 PROCESS_SUMMARIZED_OUTPUT_DEFAULT = \
     ('./test/testdata/format_qaqc_driver'
-     '/process_summarized_output_default_{}.csv')
+     '/db_test_{}/process_summarized_output_default.csv')
 UPLOAD_CHECKS_PARAMS_DEFAULT = ('./test/testdata/format_qaqc_driver'
-                                '/upload_checks_params_default.csv')
+                                '/db_test_{}/upload_checks_params.csv')
 
 DATA_UPLOAD_LOG = './test/testdata/format_qaqc_driver/data_upload_log.csv'
 PROCESS_SUMMARIZED_OUTPUT = \
@@ -27,6 +27,8 @@ PROCESS_SUMMARIZED_OUTPUT = \
 PROCESSING_LOG = './test/testdata/format_qaqc_driver/processing_log.csv'
 UPLOAD_CHECKS_PARAMS = \
     './test/testdata/format_qaqc_driver/upload_checks_params.csv'
+UPLOAD_CHECKS_PARAMS_EMPTY = \
+    './test/testdata/format_qaqc_driver/upload_checks_params_default.csv'
 
 
 def mock_init_db_conn(self):
@@ -113,6 +115,8 @@ def mock_upload_checks_1(file_name,
                          prior_process_id,
                          zip_process_id,
                          local_run):
+    if upload_id == 3:
+        time.sleep(1)
     with open(PROCESSING_LOG, 'r') as log:
         log_id = int(log.readlines()[-1].split(',')[0]) + 1
     with open(PROCESSING_LOG, 'a+') as log:
@@ -252,6 +256,8 @@ def mock_upload_checks_4(file_name,
                          prior_process_id,
                          zip_process_id,
                          local_run):
+    if upload_id == 3:
+        time.sleep(1)
     if not prior_process_id and '.csv' in file_name:
         with open(DATA_UPLOAD_LOG, 'r') as log:
             log_id = int(log.readlines()[-1].split(',')[0]) + 1
@@ -330,6 +336,10 @@ def mock_upload_checks_5(file_name,
                          prior_process_id,
                          zip_process_id,
                          local_run):
+    if upload_id == 3:
+        time.sleep(1)
+    if upload_id == 4:
+        time.sleep(2)
     if not prior_process_id and '_scinot.csv' in file_name:
         with open(DATA_UPLOAD_LOG, 'r') as log:
             log_id = int(log.readlines()[-1].split(',')[0]) + 1
@@ -503,6 +513,10 @@ def mock_upload_checks_12(file_name,
                           prior_process_id,
                           zip_process_id,
                           local_run):
+    if upload_id == 3:
+        time.sleep(1)
+    if upload_id == 4:
+        time.sleep(2)
     if not prior_process_id and '.zip' in file_name:
         with open(DATA_UPLOAD_LOG, 'r') as log:
             log_id = int(log.readlines()[-1].split(',')[0]) + 1
@@ -579,7 +593,7 @@ def mock_upload_checks_12(file_name,
                 prior_process_id,
                 zip_process_id]
         writer.writerow(data)
-    if not prior_process_id:
+    if not prior_process_id and not zip_process_id:
         return '123', True, 'test_token'
     else:
         return '123', True, None
@@ -592,6 +606,10 @@ def mock_upload_checks_13(file_name,
                           prior_process_id,
                           zip_process_id,
                           local_run):
+    if upload_id == 3:
+        time.sleep(1)
+    if upload_id == 4:
+        time.sleep(2)
     if not prior_process_id and '.zip' in file_name:
         with open(DATA_UPLOAD_LOG, 'r') as log:
             log_id = int(log.readlines()[-1].split(',')[0]) + 1
@@ -772,11 +790,13 @@ def are_files_identical(file1_path, file2_path):
                           (15, mock_upload_checks_15)
                          ])
 def test_format_qaqc_driver(monkeypatch, case, mock_upload_checks):
-    copyfile(DATA_UPLOAD_LOG_DEFAULT.format(case), DATA_UPLOAD_LOG)
-    copyfile(PROCESSING_LOG_DEFAULT.format(case), PROCESSING_LOG)
+    copyfile(DATA_UPLOAD_LOG_DEFAULT.format(case),
+             DATA_UPLOAD_LOG)
+    copyfile(PROCESSING_LOG_DEFAULT.format(case),
+             PROCESSING_LOG)
     copyfile(PROCESS_SUMMARIZED_OUTPUT_DEFAULT.format(case),
              PROCESS_SUMMARIZED_OUTPUT)
-    copyfile(UPLOAD_CHECKS_PARAMS_DEFAULT, UPLOAD_CHECKS_PARAMS)
+    copyfile(UPLOAD_CHECKS_PARAMS_EMPTY, UPLOAD_CHECKS_PARAMS)
     monkeypatch.setattr(NewDBHandler, 'init_db_conn',
                         mock_init_db_conn)
     monkeypatch.setattr(NewDBHandler, 'get_new_data_upload_log',
@@ -785,6 +805,5 @@ def test_format_qaqc_driver(monkeypatch, case, mock_upload_checks):
                         mock_upload_checks)
     driver = FormatQAQCDriver(test=True)
     driver.run()
-    upload_check_params = \
-        f'./test/testdata/format_qaqc_driver/upload_checks_params_{case}.csv'
+    upload_check_params = UPLOAD_CHECKS_PARAMS_DEFAULT.format(case)
     assert are_files_identical(upload_check_params, UPLOAD_CHECKS_PARAMS)
