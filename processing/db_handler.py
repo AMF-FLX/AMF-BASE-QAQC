@@ -1,5 +1,6 @@
 import datetime as dt
 import psycopg2
+
 import pymssql
 import socket
 
@@ -195,6 +196,59 @@ class NewDBHandler:
                 fname = r.get('filename')
                 checksums[fname] = r.get('file_checksum')
         return checksums
+
+    def get_new_data_upload_log(self,
+                                conn,
+                                qaqc_processor_email=None,
+                                uuid=None):
+        query_str = ('SELECT u.log_id, u.site_id, '
+                     'u.data_file, u.upload_token, '
+                     'u.upload_comment, u.upload_type_id '
+                     'FROM input_interface.data_upload_log u '
+                     'LEFT JOIN qaqc.processing_log p '
+                     'ON u.log_id = p.upload_id '
+                     'LEFT JOIN '
+                     'input_interface.data_upload_file_xfer_log x '
+                     'ON u.log_id = x.upload_log_id '
+                     'WHERE p.log_id IS NULL '
+                     'AND u.upload_type_id IN (4, 7) '
+                     'AND x.xfer_end_log_timestamp IS NOT NULL ')
+        if qaqc_processor_email:
+            query += \
+                'AND u.user_email != \'{q}\''.format(q=qaqc_processor_email)
+        if uuid:
+            query_str += 'AND u.upload_token = \'{u}\''.format(u=uuid)
+        query = SQL(query_str)
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query)
+            new_data_upload = cursor.fetchall()
+        return new_data_upload
+
+    def is_all_task_done(self, conn):
+        is_all_done = False
+        query = SQL('SELECT COUNT(DISTINCT p.log_id) AS count_log_id '
+                    'FROM qaqc.processing_log p '
+                    'LEFT JOIN qaqc.process_summarized_output as s '
+                    'ON p.log_id = s.process_id '
+                    'WHERE s.process_id IS NULL')
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query)
+            status = cursor.one()
+        if status == 0:
+            is_all_done = True
+        return is_all_done
+
+    def check_status_of_process_id(self, conn, process_id):
+        is_success = False
+        query = SQL('SELECT report AS count_log_id '
+                    'FROM qaqc.process_summarized_output p '
+                    'where process_id = {p}'.format(p=process_id))
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query)
+            report = cursor.one()
+        if report:
+            is_success = True
+        return is_success
 
     def get_upload_file_info(self, conn, upload_id):
         upload_file_info = {}

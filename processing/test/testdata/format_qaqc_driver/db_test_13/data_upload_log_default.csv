@@ -1,0 +1,3 @@
+log_id,site_id,user_id,user_name,user_email,upload_type_id,upload_comment,upload_source_id,upload_token,data_file,metadata_file,data_format,year,log_timestamp
+1,US-UMB,dummy_userid,dummy_username,dummy_useremail,1,dummy case,1,6349f73c-602b-4fc7-bd9d-a1ba5a173b73,dummy.csv,,,,1658485642.0
+2,US-UMB,dummy_userid,dummy_username,dummy_useremail,1,case number 1,1,1ae8cc15-f7d7-491b-b444-801cf22ad5bf,US-UMB_HR.zip,,,,1658485643.0
