@@ -197,20 +197,27 @@ class NewDBHandler:
                 checksums[fname] = r.get('file_checksum')
         return checksums
 
-    def get_new_data_upload_log(self, conn, uuid=None):
+    def get_new_data_upload_log(self,
+                                conn,
+                                qaqc_processor_email=None,
+                                uuid=None):
         query_str = ('SELECT u.log_id, u.site_id, '
-                    'u.data_file, u.upload_token, '
-                    'u.upload_comment, u.upload_type_id '
-                    'FROM input_interface.data_upload_log u '
-                    'LEFT JOIN qaqc.processing_log p '
-                    'ON u.log_id = p.upload_id '
-                    'LEFT JOIN input_interface.data_upload_file_xfer_log x '
-                    'ON u.log_id = x.upload_log_id '
-                    'WHERE p.log_id IS NULL '
-                    'AND u.upload_type_id IN (4, 7) '
-                    'AND x.xfer_end_log_timestamp IS NOT NULL ')
+                     'u.data_file, u.upload_token, '
+                     'u.upload_comment, u.upload_type_id '
+                     'FROM input_interface.data_upload_log u '
+                     'LEFT JOIN qaqc.processing_log p '
+                     'ON u.log_id = p.upload_id '
+                     'LEFT JOIN '
+                     'input_interface.data_upload_file_xfer_log x '
+                     'ON u.log_id = x.upload_log_id '
+                     'WHERE p.log_id IS NULL '
+                     'AND u.upload_type_id IN (4, 7) '
+                     'AND x.xfer_end_log_timestamp IS NOT NULL ')
+        if qaqc_processor_email:
+            query += \
+                'AND u.user_email != \'{q}\''.format(q=qaqc_processor_email)
         if uuid:
-            query_str += 'AND u.upload_token = \'{uuid}\''.format(uuid)
+            query_str += 'AND u.upload_token = \'{u}\''.format(u=uuid)
         query = SQL(query_str)
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(query)

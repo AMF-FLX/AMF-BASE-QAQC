@@ -39,10 +39,18 @@ class FormatQAQCDriver:
                 user = config.get(cfg_section, 'user')
                 auth = config.get(cfg_section, 'auth')
                 db_name = config.get(cfg_section, 'db_name')
-            if all([hostname, user, auth, db_name]):
-                self.db = NewDBHandler()
-                new_db_config = DBConfig(hostname, user, auth, db_name)
-                self.conn = NewDBHandler.init_db_conn(new_db_config)
+                if all([hostname, user, auth, db_name]):
+                    self.db = NewDBHandler()
+                    new_db_config = DBConfig(hostname, user, auth, db_name)
+                    self.conn = NewDBHandler.init_db_conn(new_db_config)
+
+            cfg_section = 'AMP'
+            if config.has_section(cfg_section):
+                self.qaqc_processor_user = config.get(cfg_section,
+                                                      'qaqc_processor_user')
+                self.qaqc_processor_email = config.get(cfg_section,
+                                                      'qaqc_processor_email')
+
         log_file_date = dt.datetime.now().strftime('%Y-%m-%d')
         log_file_name = f'format_qaqc_driver_service_{log_file_date}.log'
         log_dir = os.path.join(os.getcwd(), self.log_dir)
@@ -62,8 +70,17 @@ class FormatQAQCDriver:
         out, err = p.communicate()
         return (out, err)
 
-    def get_new_upload_data(self, log, uuid=None):
-        new_data_upload_log = self.db.get_new_data_upload_log(uuid)
+    def get_new_upload_data(self,
+                            log,
+                            is_qaqc_processor=True,
+                            uuid=None):
+        if is_qaqc_processor:
+            qaqc_processor_email = self.qaqc_processor_email
+        else:
+            qaqc_processor_email = None
+        new_data_upload_log = \
+            self.db.get_new_data_upload_log(qaqc_processor_email,
+                                            uuid)
         # if no more new data upload log in test mode
         # terminate after 3 empty rounds
 
@@ -113,7 +130,9 @@ class FormatQAQCDriver:
         processes = []
 
         with open(self.log_file_path, 'w+') as log:
-            o_tasks, grouped_tasks = self.get_new_upload_data(log)
+            o_tasks, grouped_tasks = self.get_new_upload_data(
+                log,
+                False)
             stop_run = False
             while True:
                 if self.is_test:
@@ -170,6 +189,7 @@ class FormatQAQCDriver:
                                         if uuid:
                                             s_tasks, _ = \
                                                 self.get_new_upload_data(log,
+                                                                         True,
                                                                          uuid)
                                         for task in s_tasks.values():
                                             log.write(
@@ -256,7 +276,7 @@ class FormatQAQCDriver:
                         self.run_proc(cmd)
                     else:
                         log.write(f'Email gen for token: {token}\n')
-                    o_tasks, grouped_tasks = self.get_new_upload_data(log)
+                    o_tasks, grouped_tasks = self.get_new_upload_data(log, False)
             if self.is_test:
                 return
             sys.exit(0)
