@@ -228,19 +228,6 @@ class NewDBHandler:
             new_data_upload = cursor.fetchall()
         return new_data_upload
 
-    def get_unfinished_data_upload_log(self, conn):
-        query_str = ('SELECT u.log_id, u.site_id, '
-                     'u.data_file, u.upload_token, '
-                     'u.upload_comment, u.upload_type_id '
-                     'FROM input_interface.data_upload_log u '
-                     'LEFT JOIN qaqc.processing_log p '
-                     'ON u.log_id = p.upload_id '
-                     'LEFT JOIN input_interface.process_summarized_output o'
-                     'ON p.log_id = o.process_id '
-                     'WHERE o.process_id IS NULL '
-                     'AND u.upload_type_id IN (4, 7) ')
-
-
     def is_all_task_done(self, conn):
         is_all_done = False
         query = SQL('SELECT COUNT(DISTINCT p.log_id) AS count_log_id '
