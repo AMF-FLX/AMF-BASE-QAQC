@@ -116,7 +116,7 @@ class FormatQAQCDriver:
             elif 'Archive upload for' in upload_comment:
                 zip_process_id = upload_comment.split()[-1]
             filename = row.get('data_file')
-            filename = str(Path(self.data_directory)/filename)
+            filename = str(Path(self.data_directory)/site_id/filename)
 
             tasks[upload_id] = Task(filename,
                                     upload_id,
