@@ -215,10 +215,10 @@ class NewDBHandler:
                      'AND u.upload_type_id IN (4, 7) '
                      'AND x.xfer_end_log_timestamp IS NOT NULL ')
         if is_qaqc_processor:
-            query += \
+            query_str += \
                 'AND u.user_email == \'{q}\''.format(q=qaqc_processor_email)
         else:
-            query += \
+            query_str += \
                 'AND u.user_email != \'{q}\''.format(q=qaqc_processor_email)
         if uuid:
             query_str += 'AND u.upload_token = \'{u}\''.format(u=uuid)
@@ -246,10 +246,10 @@ class NewDBHandler:
         is_success = False
         query = SQL('SELECT report AS count_log_id '
                     'FROM qaqc.process_summarized_output p '
-                    'where process_id = {p}'.format(p=process_id))
+                    'WHERE process_id = %(process_id)s')
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
-            cursor.execute(query)
-            report = cursor.one()
+            cursor.execute(query, {'process_id': process_id})
+            report = cursor.fetchone()
         if report:
             is_success = True
         return is_success
