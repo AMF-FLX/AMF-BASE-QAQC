@@ -55,7 +55,7 @@ class FormatQAQCDriver:
             cfg_section = 'PHASE_I'
             if config.has_section(cfg_section):
                 self.data_directory = config.get(cfg_section,
-                                                 'output_dir')
+                                                 'data_dir')
 
         log_file_date = dt.datetime.now().strftime('%Y-%m-%d')
         log_file_name = f'format_qaqc_driver_service_{log_file_date}.log'
