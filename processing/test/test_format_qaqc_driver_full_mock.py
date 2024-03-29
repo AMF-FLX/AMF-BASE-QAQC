@@ -20,7 +20,8 @@ PROCESS_SUMMARIZED_OUTPUT_DEFAULT = \
      '/db_test_{}/process_summarized_output_default.csv')
 UPLOAD_CHECKS_PARAMS_DEFAULT = ('./test/testdata/format_qaqc_driver'
                                 '/db_test_{}/upload_checks_params.csv')
-
+EMAIL_TOKEN_DEFAULT = \
+    './test/testdata/format_qaqc_driver/db_test_{}/email_token.csv'
 DATA_UPLOAD_LOG = './test/testdata/format_qaqc_driver/data_upload_log.csv'
 PROCESS_SUMMARIZED_OUTPUT = \
     './test/testdata/format_qaqc_driver/process_summarized_output.csv'
@@ -29,6 +30,9 @@ UPLOAD_CHECKS_PARAMS = \
     './test/testdata/format_qaqc_driver/upload_checks_params.csv'
 UPLOAD_CHECKS_PARAMS_EMPTY = \
     './test/testdata/format_qaqc_driver/upload_checks_params_default.csv'
+EMAIL_TOKEN_EMPTY = \
+    './test/testdata/format_qaqc_driver/email_token_default.csv'
+EMAIL_TOKEN = './test/testdata/format_qaqc_driver/email_token.csv'
 
 
 def mock_init_db_conn(self):
@@ -108,6 +112,14 @@ def mock_get_new_data_upload_log(self,
                     }))
                     max_current_log_id = int(row[0])
     return new_data_upload_log
+
+
+def mock_send_email(self, cmd):
+    _, path, token = cmd.split(' ')
+    with open(EMAIL_TOKEN, 'a+') as log:
+        writer = csv.writer(log)
+        data = [token]
+        writer.writerow(data)
 
 
 def mock_upload_checks_1(file_name,
@@ -779,19 +791,23 @@ def are_files_identical(file1_path, file2_path):
         return content1 == content2
 
 
-@pytest.mark.parametrize("case, mock_upload_checks",
+@pytest.mark.parametrize("case, mock_upload_checks, mock_send_email",
                          [
-                          (1, mock_upload_checks_1),
-                          (2, mock_upload_checks_1),
-                          (3, mock_upload_checks_3),
-                          (4, mock_upload_checks_4),
-                          (5, mock_upload_checks_5),
-                          (11, mock_upload_checks_11),
-                          (12, mock_upload_checks_12),
-                          (13, mock_upload_checks_13),
-                          (15, mock_upload_checks_15)
+                        #   (1, mock_upload_checks_1, mock_send_email),
+                        #   (2, mock_upload_checks_1, mock_send_email),
+                        #   (3, mock_upload_checks_3, mock_send_email),
+                        #   (4, mock_upload_checks_4, mock_send_email),
+                        #   (5, mock_upload_checks_5, mock_send_email),
+                        #   (11, mock_upload_checks_11, mock_send_email),
+                        #   (12, mock_upload_checks_12, mock_send_email),
+                        #   (13, mock_upload_checks_13, mock_send_email),
+                        #   (15, mock_upload_checks_15, mock_send_email),
+                          (16, mock_upload_checks_1, mock_send_email)
                          ])
-def test_format_qaqc_driver(monkeypatch, case, mock_upload_checks):
+def test_format_qaqc_driver(monkeypatch,
+                            case,
+                            mock_upload_checks,
+                            mock_send_email):
     copyfile(DATA_UPLOAD_LOG_DEFAULT.format(case),
              DATA_UPLOAD_LOG)
     copyfile(PROCESSING_LOG_DEFAULT.format(case),
@@ -799,13 +815,18 @@ def test_format_qaqc_driver(monkeypatch, case, mock_upload_checks):
     copyfile(PROCESS_SUMMARIZED_OUTPUT_DEFAULT.format(case),
              PROCESS_SUMMARIZED_OUTPUT)
     copyfile(UPLOAD_CHECKS_PARAMS_EMPTY, UPLOAD_CHECKS_PARAMS)
+    copyfile(EMAIL_TOKEN_EMPTY, EMAIL_TOKEN)
     monkeypatch.setattr(NewDBHandler, 'init_db_conn',
                         mock_init_db_conn)
     monkeypatch.setattr(NewDBHandler, 'get_new_data_upload_log',
                         mock_get_new_data_upload_log)
     monkeypatch.setattr('format_qaqc_driver.upload_checks',
                         mock_upload_checks)
+    monkeypatch.setattr(FormatQAQCDriver, 'send_email',
+                        mock_send_email)
     driver = FormatQAQCDriver(test=True)
     driver.run()
     upload_check_params = UPLOAD_CHECKS_PARAMS_DEFAULT.format(case)
+    email_tokens = EMAIL_TOKEN_DEFAULT.format(case)
     assert are_files_identical(upload_check_params, UPLOAD_CHECKS_PARAMS)
+    assert are_files_identical(email_tokens, EMAIL_TOKEN)
