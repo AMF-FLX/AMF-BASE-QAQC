@@ -216,7 +216,7 @@ class NewDBHandler:
                      'AND x.xfer_end_log_timestamp IS NOT NULL ')
         if is_qaqc_processor:
             query_str += \
-                'AND u.user_email == \'{q}\''.format(q=qaqc_processor_email)
+                'AND u.user_email = \'{q}\''.format(q=qaqc_processor_email)
         else:
             query_str += \
                 'AND u.user_email != \'{q}\''.format(q=qaqc_processor_email)
