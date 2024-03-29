@@ -9,6 +9,7 @@ import time
 from configparser import ConfigParser
 from collections import namedtuple
 from db_handler import DBConfig, NewDBHandler
+from pathlib import Path
 from upload_checks import upload_checks
 
 
@@ -28,9 +29,9 @@ class FormatQAQCDriver:
             config.read_file(cfg)
             if config.has_section(cfg_section):
                 self.log_dir = config.get(cfg_section, 'log_dir')
-                self.time_sleep = config.getfloat(cfg_section, 'time_sleep')
+                self.time_sleep = config.getfloat(cfg_section, 'time_sleep_s')
                 self.max_retries = config.getint(cfg_section, 'max_retries')
-                self.max_timeout = config.getint(cfg_section, 'max_timeout')
+                self.max_timeout = config.getint(cfg_section, 'max_timeout_s')
                 self.timeout = self.max_timeout / 10.0
 
             cfg_section = 'DB'
@@ -42,7 +43,7 @@ class FormatQAQCDriver:
                 if all([hostname, user, auth, db_name]):
                     self.db = NewDBHandler()
                     new_db_config = DBConfig(hostname, user, auth, db_name)
-                    self.conn = NewDBHandler.init_db_conn(new_db_config)
+                    self.conn = self.db.init_db_conn(new_db_config)
 
             cfg_section = 'AMP'
             if config.has_section(cfg_section):
@@ -50,6 +51,11 @@ class FormatQAQCDriver:
                                                       'qaqc_processor_user')
                 self.qaqc_processor_email = config.get(cfg_section,
                                                        'qaqc_processor_email')
+            
+            cfg_section = 'PHASE_I'
+            if config.has_section(cfg_section):
+                self.data_directory = config.get(cfg_section,
+                                                 'output_dir')
 
         log_file_date = dt.datetime.now().strftime('%Y-%m-%d')
         log_file_name = f'format_qaqc_driver_service_{log_file_date}.log'
@@ -79,7 +85,8 @@ class FormatQAQCDriver:
                             is_qaqc_processor=True,
                             uuid=None):
         new_data_upload_log = \
-            self.db.get_new_data_upload_log(self.qaqc_processor_email,
+            self.db.get_new_data_upload_log(self.conn,
+                                            self.qaqc_processor_email,
                                             is_qaqc_processor,
                                             uuid)
         # if no more new data upload log in test mode
@@ -109,6 +116,7 @@ class FormatQAQCDriver:
             elif 'Archive upload for' in upload_comment:
                 zip_process_id = upload_comment.split()[-1]
             filename = row.get('data_file')
+            filename = str(Path(self.data_directory)/filename)
 
             tasks[upload_id] = Task(filename,
                                     upload_id,
