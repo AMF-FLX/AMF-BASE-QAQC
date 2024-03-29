@@ -49,7 +49,7 @@ class FormatQAQCDriver:
                 self.qaqc_processor_user = config.get(cfg_section,
                                                       'qaqc_processor_user')
                 self.qaqc_processor_email = config.get(cfg_section,
-                                                      'qaqc_processor_email')
+                                                       'qaqc_processor_email')
 
         log_file_date = dt.datetime.now().strftime('%Y-%m-%d')
         log_file_name = f'format_qaqc_driver_service_{log_file_date}.log'
@@ -65,11 +65,6 @@ class FormatQAQCDriver:
         self.stale_count = 0
 
     def recovery_process(self):
-        # case 1:
-            # get all o_task that in upload_log and processing_log but not in summarized_log
-        # case 2:
-            # get all s_task that in upload_log not in summarized_log
-        
         pass
 
     def send_email(self, cmd):
@@ -190,29 +185,29 @@ class FormatQAQCDriver:
                                 for p in processes:
                                     try:
                                         result = (p
-                                                .get('process')
-                                                .get(timeout=5))
+                                                  .get('process')
+                                                  .get(timeout=5))
                                         (process_id,
-                                        is_upload_successful,
-                                        uuid) = result
+                                         is_upload_successful,
+                                         uuid) = result
                                         s_tasks = {}
                                         if uuid and is_upload_successful:
                                             s_tasks, _ = \
                                                 self.get_new_upload_data(log,
-                                                                        True,
-                                                                        uuid)
+                                                                         True,
+                                                                         uuid)
                                             if is_zip and len(s_tasks) > 1:
                                                 token = uuid
                                         for task in s_tasks.values():
                                             log.write(
                                                 ('Start run: log id '
-                                                f'{task.upload_id}, '
-                                                'prior id: '
-                                                f'{task.prior_process_id}, '
-                                                f'zip id: '
-                                                f'{task.zip_process_id}, '
-                                                f'run type: {task.run_type}\n'
-                                                f'uuid: {task.uuid}'))
+                                                 f'{task.upload_id}, '
+                                                 'prior id: '
+                                                 f'{task.prior_process_id}, '
+                                                 f'zip id: '
+                                                 f'{task.zip_process_id}, '
+                                                 f'run type: {task.run_type}\n'
+                                                 f'uuid: {task.uuid}'))
                                             s_processes.append(
                                                 {'process':
                                                     pool
@@ -227,16 +222,16 @@ class FormatQAQCDriver:
                                                             task
                                                             .zip_process_id,
                                                             self.is_test)),
-                                                'runtime': 0,
-                                                'retry': 0,
-                                                'task': task})
+                                                 'runtime': 0,
+                                                 'retry': 0,
+                                                 'task': task})
                                     except mp.TimeoutError:
                                         if p.get('runtime') > self.max_timeout:
                                             p.get('process').terminate()
                                             log.write('Process terminated '
-                                                    'due to time out '
-                                                    'for upload_id: '
-                                                    f'{task.upload_id}')
+                                                      'due to time out '
+                                                      'for upload_id: '
+                                                      f'{task.upload_id}')
                                             if p.get('retry') < \
                                                     self.max_retries:
                                                 task = p.get('task')
@@ -244,19 +239,19 @@ class FormatQAQCDriver:
                                                     pool.apply_async(
                                                         upload_checks,
                                                         (task.filename,
-                                                        task.upload_id,
-                                                        task.run_type,
-                                                        task.site_id,
-                                                        task.prior_process_id,
-                                                        task.zip_process_id,
-                                                        self.is_test))
+                                                         task.upload_id,
+                                                         task.run_type,
+                                                         task.site_id,
+                                                         task.prior_process_id,
+                                                         task.zip_process_id,
+                                                         self.is_test))
                                                 p['runtime'] = 0
                                                 retry = p.get('retry') + 1
                                                 p['retry'] = retry
                                                 log.write('Retry to run '
-                                                        'upload_id: '
-                                                        f'{task.upload_id}, '
-                                                        f'retry: {retry}')
+                                                          'upload_id: '
+                                                          f'{task.upload_id}, '
+                                                          f'retry: {retry}')
                                             else:
                                                 # terminate all process
                                                 # for this run
@@ -264,8 +259,8 @@ class FormatQAQCDriver:
                                                 if p.get('retry') > \
                                                         self.max_retries:
                                                     (p
-                                                    .get('process')
-                                                    .terminate())
+                                                     .get('process')
+                                                     .terminate())
                                                     is_qaqc_successful = False
                                         else:
                                             p['runtime'] += self.time_sleep
