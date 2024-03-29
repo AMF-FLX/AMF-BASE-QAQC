@@ -199,7 +199,8 @@ class NewDBHandler:
 
     def get_new_data_upload_log(self,
                                 conn,
-                                qaqc_processor_email=None,
+                                qaqc_processor_email,
+                                is_qaqc_processor,
                                 uuid=None):
         query_str = ('SELECT u.log_id, u.site_id, '
                      'u.data_file, u.upload_token, '
@@ -213,7 +214,10 @@ class NewDBHandler:
                      'WHERE p.log_id IS NULL '
                      'AND u.upload_type_id IN (4, 7) '
                      'AND x.xfer_end_log_timestamp IS NOT NULL ')
-        if qaqc_processor_email:
+        if is_qaqc_processor:
+            query += \
+                'AND u.user_email == \'{q}\''.format(q=qaqc_processor_email)
+        else:
             query += \
                 'AND u.user_email != \'{q}\''.format(q=qaqc_processor_email)
         if uuid:
@@ -223,6 +227,19 @@ class NewDBHandler:
             cursor.execute(query)
             new_data_upload = cursor.fetchall()
         return new_data_upload
+
+    def get_unfinished_data_upload_log(self, conn):
+        query_str = ('SELECT u.log_id, u.site_id, '
+                     'u.data_file, u.upload_token, '
+                     'u.upload_comment, u.upload_type_id '
+                     'FROM input_interface.data_upload_log u '
+                     'LEFT JOIN qaqc.processing_log p '
+                     'ON u.log_id = p.upload_id '
+                     'LEFT JOIN input_interface.process_summarized_output o'
+                     'ON p.log_id = o.process_id '
+                     'WHERE o.process_id IS NULL '
+                     'AND u.upload_type_id IN (4, 7) ')
+
 
     def is_all_task_done(self, conn):
         is_all_done = False

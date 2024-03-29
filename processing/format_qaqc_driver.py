@@ -78,12 +78,9 @@ class FormatQAQCDriver:
                             log,
                             is_qaqc_processor=True,
                             uuid=None):
-        if is_qaqc_processor:
-            qaqc_processor_email = self.qaqc_processor_email
-        else:
-            qaqc_processor_email = None
         new_data_upload_log = \
-            self.db.get_new_data_upload_log(qaqc_processor_email,
+            self.db.get_new_data_upload_log(self.qaqc_processor_email,
+                                            is_qaqc_processor,
                                             uuid)
         # if no more new data upload log in test mode
         # terminate after 3 empty rounds
