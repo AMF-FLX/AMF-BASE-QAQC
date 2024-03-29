@@ -281,8 +281,8 @@ class FormatQAQCDriver:
                                    f'{token}')
                         self.send_email(cmd)
                         log.write(f'Email gen for token: {token}\n')
-                    o_tasks, grouped_tasks = self.get_new_upload_data(log,
-                                                                      False)
+                o_tasks, grouped_tasks = self.get_new_upload_data(log,
+                                                                  False)
             if self.is_test:
                 return
             sys.exit(0)
