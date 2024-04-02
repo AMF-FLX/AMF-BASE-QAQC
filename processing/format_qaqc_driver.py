@@ -47,11 +47,9 @@ class FormatQAQCDriver:
 
             cfg_section = 'AMP'
             if config.has_section(cfg_section):
-                self.qaqc_processor_user = config.get(cfg_section,
-                                                      'qaqc_processor_user')
-                self.qaqc_processor_email = config.get(cfg_section,
-                                                       'qaqc_processor_email')
-            
+                self.qaqc_processor_source = config.get(cfg_section,
+                                                      'file_upload_source')
+
             cfg_section = 'PHASE_I'
             if config.has_section(cfg_section):
                 self.data_directory = config.get(cfg_section,
@@ -86,7 +84,7 @@ class FormatQAQCDriver:
                             uuid=None):
         new_data_upload_log = \
             self.db.get_new_data_upload_log(self.conn,
-                                            self.qaqc_processor_email,
+                                            self.qaqc_processor_source,
                                             is_qaqc_processor,
                                             uuid)
         # if no more new data upload log in test mode

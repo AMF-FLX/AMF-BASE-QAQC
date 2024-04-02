@@ -199,7 +199,7 @@ class NewDBHandler:
 
     def get_new_data_upload_log(self,
                                 conn,
-                                qaqc_processor_email,
+                                qaqc_processor_source,
                                 is_qaqc_processor,
                                 uuid=None):
         query_str = ('SELECT u.log_id, u.site_id, '
@@ -216,15 +216,17 @@ class NewDBHandler:
                      'AND x.xfer_end_log_timestamp IS NOT NULL ')
         if is_qaqc_processor:
             query_str += \
-                'AND u.user_email = \'{q}\''.format(q=qaqc_processor_email)
+                'AND u.upload_source_id = %(q)s'.format(q=qaqc_processor_source)
         else:
             query_str += \
-                'AND u.user_email != \'{q}\''.format(q=qaqc_processor_email)
+                'AND u.upload_source_id != %(q)s'.format(q=qaqc_processor_source)
+        params = {'q': qaqc_processor_source}
         if uuid:
-            query_str += 'AND u.upload_token = \'{u}\''.format(u=uuid)
+            query_str += 'AND u.upload_token = %(uuid)s'.format(u=uuid)
+            params['uuid'] = uuid
         query = SQL(query_str)
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
-            cursor.execute(query)
+            cursor.execute(query, params)
             new_data_upload = cursor.fetchall()
         return new_data_upload
 
