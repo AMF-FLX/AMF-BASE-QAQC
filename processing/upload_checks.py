@@ -38,7 +38,7 @@ def convert_ts_str_iso_format(ts_str: Optional[str]) -> Optional[str]:
 def upload_checks(
         filename: str, upload_id: int, run_type: str,
         site_id: str, prior_process_id: int, zip_process_id: int,
-        local_run=False) -> (Optional[int], bool, Optional[str]):
+        conn=None, local_run=False) -> (Optional[int], bool, Optional[str]):
 
     s_time = time()
     statuses = []
@@ -57,6 +57,7 @@ def upload_checks(
     if not local_run:
         db = NewDBHandler()
         process_id = db.register_format_qaqc(
+            conn=conn,
             upload_id=upload_id, process_timestamp=timestamp_str,
             site_id=site_id, prior_process_id=prior_process_id,
             zip_process_id=zip_process_id)
