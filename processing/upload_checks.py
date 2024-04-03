@@ -23,7 +23,7 @@ from file_fixer import FileFixer
 from shutil import copyfile
 from missing_value_format import MissingValueFormat
 from data_missing import DataMissing
-from utils import FilenameUtils
+from utils import FilenameUtils, TimestampUtil
 from data_report_gen import gen_description
 from messages import Messages
 
@@ -38,7 +38,7 @@ def convert_ts_str_iso_format(ts_str: Optional[str]) -> Optional[str]:
 def upload_checks(
         filename: str, upload_id: int, run_type: str,
         site_id: str, prior_process_id: int, zip_process_id: int,
-        local_run=False) -> (Optional[int], bool, Optional[str]):
+        conn=None, local_run=False) -> (Optional[int], bool, Optional[str]):
 
     s_time = time()
     statuses = []
@@ -57,6 +57,7 @@ def upload_checks(
     if not local_run:
         db = NewDBHandler()
         process_id = db.register_format_qaqc(
+            conn=conn,
             upload_id=upload_id, process_timestamp=timestamp_str,
             site_id=site_id, prior_process_id=prior_process_id,
             zip_process_id=zip_process_id)
@@ -67,6 +68,7 @@ def upload_checks(
             return None, False, None
     else:
         process_id = 999999
+        start_time = dt.strptime('202403250900', TimestampUtil().PREFERRED_TS_FORMAT)
 
     _log = Logger(True, process_id, site_id, process_type,
                   start_time).getLogger('upload_checks')  # Initialize logger
@@ -206,7 +208,6 @@ def upload_checks(
 
         # this code decides whether to go to fixer or not!
         process_status_code = min([s.get_status_code() for s in statuses])
-        print(process_status_code)
 
         if process_status_code > -1:
             status_msg += (' No issues were encountered. Data will be'

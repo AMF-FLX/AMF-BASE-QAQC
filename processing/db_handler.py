@@ -362,8 +362,8 @@ class NewDBHandler:
         query = SQL('SELECT * from qaqc.process_type_auto;')
         return self._get_type_cv(query, 'name')
 
-    def register_format_qaqc(self, upload_id: int, process_timestamp: str,
-                             site_id: str,
+    def register_format_qaqc(self, conn, upload_id: int,
+                             process_timestamp: str, site_id: str,
                              prior_process_id: Optional[int] = None,
                              zip_process_id: Optional[int] = None) -> int:
 
@@ -388,7 +388,6 @@ class NewDBHandler:
 
         values = tuple(values)
 
-        conn = self.init_db_conn(db_config)
         process_id = self._register_qaqc_process(conn, field_names, values)
 
         return process_id

@@ -65,6 +65,8 @@ class FileFixer:
                     cfg_section, 'qaqc_processor_email')
                 self.qaqc_processor_user = config.get(
                     cfg_section, 'qaqc_processor_user')
+                self.file_upload_source = config.get(
+                    cfg_section, 'file_upload_source')
             cfg_section = 'PHASE_III'
             if config.has_section(cfg_section):
                 self.PI_vars = ast.literal_eval(
@@ -889,7 +891,7 @@ class FileFixer:
                                                process_id, site_id)
                 else:
                     autorepair_uuid = 'test-autorepair-uuid'
-                    is_upload_successful = None
+                    is_upload_successful = True
                 msg = 'File was Autocorrected and corrected file uploaded.'
                 self.append_status_msg_parts('warning', msg)
                 return autorepair_filename, None, \
@@ -1328,7 +1330,7 @@ class FileFixer:
                    'site_id': site_id,
                    'data_type': 'Half hourly data',
                    'data_files': [filename],
-                   'upload_source': 'AmeriFlux',
+                   'upload_source': self.file_upload_source,
                    'metadata_file': None}
         upload_uuid, info_err_msg = self.upload_info(payload)
         if info_err_msg:
@@ -1383,7 +1385,7 @@ class FileFixer:
                    'site_id': site_id,
                    'data_type': 'Half hourly data',
                    'data_files': filenames,
-                   'upload_source': 'AmeriFlux',
+                   'upload_source': self.file_upload_source,
                    'metadata_file': None}
         try:
             upload_uuid, info_err_msg = self.upload_info(payload)
