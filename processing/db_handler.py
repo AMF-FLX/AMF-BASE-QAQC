@@ -216,10 +216,10 @@ class NewDBHandler:
                      'AND x.xfer_end_log_timestamp IS NOT NULL ')
         if is_qaqc_processor:
             query_str += \
-                'AND u.upload_source_id = %(q)s'.format(q=qaqc_processor_source)
+                'AND u.upload_source_id = %(q)s'
         else:
             query_str += \
-                'AND u.upload_source_id != %(q)s'.format(q=qaqc_processor_source)
+                'AND u.upload_source_id != %(q)s'
         params = {'q': qaqc_processor_source}
         if uuid:
             query_str += 'AND u.upload_token = %(uuid)s'.format(u=uuid)
@@ -230,19 +230,89 @@ class NewDBHandler:
             new_data_upload = cursor.fetchall()
         return new_data_upload
 
-    def is_all_task_done(self, conn):
-        is_all_done = False
-        query = SQL('SELECT COUNT(DISTINCT p.log_id) AS count_log_id '
-                    'FROM qaqc.processing_log p '
-                    'LEFT JOIN qaqc.process_summarized_output as s '
-                    'ON p.log_id = s.process_id '
-                    'WHERE s.process_id IS NULL')
+    def get_undone_data_upload_log_o(self,
+                                     conn,
+                                     qaqc_processor_source,
+                                     lookback_h):
+        # case:
+        # o_file has entry in upload_log and processing_log
+        # but not in summarized_output_log
+        # solution:
+        # return this data_upload
+        query_str = ('SELECT u.log_id, u.site_id, '
+                     'u.data_file, u.upload_token, '
+                     'u.upload_comment, u.upload_type_id '
+                     'FROM input_interface.data_upload_log u '
+                     'LEFT JOIN qaqc.processing_log p '
+                     'ON u.log_id = p.upload_id '
+                     'LEFT JOIN qaqc.process_summarized_output o '
+                     'ON p.log_id = o.process_id '
+                     'LEFT JOIN '
+                     'input_interface.data_upload_file_xfer_log x '
+                     'ON u.log_id = x.upload_log_id '
+                     'WHERE p.log_id IS NOT NULL '
+                     'AND o.output_id IS NULL'
+                     'AND u.upload_type_id IN (4, 7) '
+                     'AND x.xfer_end_log_timestamp IS NOT NULL '
+                     'AND u.upload_source_id != %(q)s '
+                     'AND log_timestamp >= '
+                     'CURRENT_TIMESTAMP - INTERVAL \'%(h)s hours\'')
+        query = SQL(query_str)
+        params = {'q': qaqc_processor_source,
+                  'h': lookback_h}
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
-            cursor.execute(query)
-            status = cursor.one()
-        if status == 0:
-            is_all_done = True
-        return is_all_done
+            cursor.execute(query, params)
+            data_upload = cursor.fetchall()
+        return data_upload
+
+    def get_undone_data_upload_log_ac(self,
+                                      conn,
+                                      qaqc_processor_source,
+                                      lookback_h):
+        # case:
+        # ac_file has entry in upload_log
+        # but not in summarized_output_log
+        # solution:
+        # traceback and return o_file of this data_upload
+        query_str = ('SELECT u.log_id, u.site_id, '
+                     'u.data_file, u.upload_token, '
+                     'u.upload_comment, u.upload_type_id '
+                     'FROM input_interface.data_upload_log u '
+                     'LEFT JOIN qaqc.processing_log p '
+                     'ON u.log_id = p.upload_id '
+                     'LEFT JOIN qaqc.process_summarized_output o '
+                     'ON p.log_id = o.process_id '
+                     'WHERE o.output_id IS NULL'
+                     'AND u.upload_type_id IN (4, 7) '
+                     'AND u.upload_source_id = %(q)s '
+                     'AND log_timestamp >= '
+                     'CURRENT_TIMESTAMP - INTERVAL \'%(h)s hours\'')
+        query = SQL(query_str)
+        params = {'q': qaqc_processor_source,
+                  'h': lookback_h}
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, params)
+            data_upload = cursor.fetchall()
+        return data_upload
+
+    def trace_o_data_upload(self, conn, process_id):
+        # case:
+        # ac_file is not finished
+        # trace up 1 level given process_id
+        query_str = ('SELECT u.log_id, u.site_id, '
+                     'u.data_file, u.upload_token, '
+                     'u.upload_comment, u.upload_type_id '
+                     'FROM input_interface.data_upload_log u '
+                     'LEFT JOIN qaqc.processing_log p '
+                     'ON u.log_id = p.upload_id '
+                     'AND p.log_id = %(process_id)s'
+                     'AND u.upload_type_id IN (4, 7) ')
+        query = SQL(query_str)
+        params = {'process_id': process_id}
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, params)
+            data_upload = cursor.fetchone()
+        return data_upload
 
     def check_status_of_process_id(self, conn, process_id):
         is_success = False

@@ -35,11 +35,13 @@ EMAIL_TOKEN_EMPTY = \
 EMAIL_TOKEN = './test/testdata/format_qaqc_driver/email_token.csv'
 
 
-def mock_init_db_conn(self):
+def mock_init_db_conn(self, config):
     return
 
 
 def mock_get_new_data_upload_log(self,
+                                 conn,
+                                 qaqc_processor_source,
                                  is_qaqc_processor=None,
                                  uuid=None):
     new_data_upload_log = []
@@ -120,6 +122,9 @@ def mock_send_email(self, cmd):
         writer = csv.writer(log)
         data = [token]
         writer.writerow(data)
+
+def mock_recovery_process(self):
+    return {}, []
 
 
 def mock_upload_checks_1(file_name,
@@ -793,15 +798,15 @@ def are_files_identical(file1_path, file2_path):
 
 @pytest.mark.parametrize("case, mock_upload_checks, mock_send_email",
                          [
-                        #   (1, mock_upload_checks_1, mock_send_email),
-                        #   (2, mock_upload_checks_1, mock_send_email),
-                        #   (3, mock_upload_checks_3, mock_send_email),
-                        #   (4, mock_upload_checks_4, mock_send_email),
-                        #   (5, mock_upload_checks_5, mock_send_email),
-                        #   (11, mock_upload_checks_11, mock_send_email),
-                        #   (12, mock_upload_checks_12, mock_send_email),
-                        #   (13, mock_upload_checks_13, mock_send_email),
-                        #   (15, mock_upload_checks_15, mock_send_email),
+                          (1, mock_upload_checks_1, mock_send_email),
+                          (2, mock_upload_checks_1, mock_send_email),
+                          (3, mock_upload_checks_3, mock_send_email),
+                          (4, mock_upload_checks_4, mock_send_email),
+                          (5, mock_upload_checks_5, mock_send_email),
+                          (11, mock_upload_checks_11, mock_send_email),
+                          (12, mock_upload_checks_12, mock_send_email),
+                          (13, mock_upload_checks_13, mock_send_email),
+                          (15, mock_upload_checks_15, mock_send_email),
                           (16, mock_upload_checks_1, mock_send_email)
                          ])
 def test_format_qaqc_driver(monkeypatch,
@@ -824,6 +829,8 @@ def test_format_qaqc_driver(monkeypatch,
                         mock_upload_checks)
     monkeypatch.setattr(FormatQAQCDriver, 'send_email',
                         mock_send_email)
+    monkeypatch.setattr(FormatQAQCDriver, 'recovery_process',
+                        mock_recovery_process)
     driver = FormatQAQCDriver(test=True)
     driver.run()
     upload_check_params = UPLOAD_CHECKS_PARAMS_DEFAULT.format(case)

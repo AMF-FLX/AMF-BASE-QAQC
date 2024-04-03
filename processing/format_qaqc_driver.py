@@ -33,6 +33,7 @@ class FormatQAQCDriver:
                 self.max_retries = config.getint(cfg_section, 'max_retries')
                 self.max_timeout = config.getint(cfg_section, 'max_timeout_s')
                 self.timeout = self.max_timeout / 10.0
+                self.lookback_h = config.getint(cfg_section, 'lookback_h')
 
             cfg_section = 'DB'
             if config.has_section(cfg_section):
@@ -69,7 +70,41 @@ class FormatQAQCDriver:
         self.stale_count = 0
 
     def recovery_process(self):
-        pass
+        rerun_o_uuids = []
+        o_data_upload = \
+            self.db.get_undone_data_upload_log_o(
+                self.conn,
+                self.qaqc_processor_source,
+                self.lookback_h)
+        for row in o_data_upload:
+            uuid = row.get('upload_token')
+            if uuid not in rerun_o_uuids:
+                rerun_o_uuids.append(uuid)
+
+        ac_data_upload = \
+            self.db.get_undone_data_upload_log_ac(
+                self.conn,
+                self.qaqc_processor_source,
+                self.lookback_h)
+        rerun_uuids = []
+        for row in ac_data_upload:
+            comment = row.get('upload_comment')
+            if ('Archive upload for' in comment
+                    or 'repair candidate for' in comment):
+                process_id = comment.split()[-1]
+                while process_id:
+                    d = self.db.trace_o_data_upload(
+                        self.conn,
+                        process_id)
+                    if (not d.get('prior_process_id')
+                            and not d.get('zip_process_id')):
+                        process_id = d.get('log_id')
+                    else:
+                        uuid = d.get('upload_token')
+                        break
+            if uuid not in rerun_uuids:
+                rerun_uuids.append(uuid)
+        return rerun_uuids
 
     def send_email(self, cmd):
         p = subprocess.Popen(shlex.split(cmd),
@@ -135,11 +170,25 @@ class FormatQAQCDriver:
     def run(self):
         num_processes = mp.cpu_count()
         processes = []
-
         with open(self.log_file_path, 'w+') as log:
-            o_tasks, grouped_tasks = self.get_new_upload_data(
+            # run recovery process
+            rerun_uuids = self.recovery_process()
+            o_tasks = {}
+            o_grouped_tasks = []
+            for uuid in rerun_uuids:
+                tasks, grouped_tasks = \
+                    self.get_new_upload_data(log,
+                                             False,
+                                             uuid=uuid)
+                o_tasks.update(tasks)
+                grouped_tasks.append(grouped_tasks)
+
+            # get new task
+            tasks, grouped_tasks = self.get_new_upload_data(
                 log,
                 False)
+            o_tasks.update(tasks)
+            o_grouped_tasks.extend(grouped_tasks)
             stop_run = False
             while True:
                 if self.is_test:
@@ -155,7 +204,7 @@ class FormatQAQCDriver:
 
                 # upload_ids is a list of upload_id
                 # that has the same token
-                for upload_ids in grouped_tasks:
+                for upload_ids in o_grouped_tasks:
                     is_qaqc_successful = True
                     with mp.Pool(processes=num_processes) as pool:
                         for upload_id in upload_ids:
@@ -278,8 +327,9 @@ class FormatQAQCDriver:
                                 f'{token}')
                     self.send_email(cmd)
                     log.write(f'Email gen for token: {token}\n')
-                o_tasks, grouped_tasks = self.get_new_upload_data(log,
-                                                                  False)
+                o_tasks, o_grouped_tasks = \
+                    self.get_new_upload_data(log,
+                                             False)
             if self.is_test:
                 return
             sys.exit(0)
