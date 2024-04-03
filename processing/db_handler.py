@@ -347,11 +347,11 @@ class NewDBHandler:
 
     def _get_type_cv(self, query, name_field, id_field='type_id') -> dict:
         _, db_config = self._read_config()
-        conn = self.init_db_conn(db_config)
+        self.conn = self.init_db_conn(db_config)
 
         cv_lookup = {}
 
-        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+        with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(query)
             for r in cursor:
                 cv_name = r.get(name_field)
@@ -393,17 +393,17 @@ class NewDBHandler:
             values.append(zip_process_id)
 
         values = tuple(values)
-
-        process_id = self._register_qaqc_process(conn, field_names, values)
+        self.conn = self.init_db_conn(db_config)
+        process_id = self._register_qaqc_process(self.conn, field_names, values)
 
         return process_id
 
-    def _register_qaqc_process(self, conn, query_fields: str,
+    def _register_qaqc_process(self, query_fields: str,
                                process_values: tuple) -> int:
         query_pre = SQL('INSERT INTO qaqc.processing_log (')
         query_post = SQL(') VALUES %(process_values)s returning log_id;')
         query = Composed([query_pre, SQL(query_fields), query_post])
-        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+        with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(query, {'process_values': process_values})
             count = 0
             for r in cursor:
