@@ -394,7 +394,7 @@ class NewDBHandler:
 
         values = tuple(values)
         self.conn = self.init_db_conn(db_config)
-        process_id = self._register_qaqc_process(self.conn, field_names, values)
+        process_id = self._register_qaqc_process(field_names, values)
 
         return process_id
 
