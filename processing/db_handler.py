@@ -222,7 +222,7 @@ class NewDBHandler:
                 'AND u.upload_source_id != %(q)s'
         params = {'q': qaqc_processor_source}
         if uuid:
-            query_str += 'AND u.upload_token = %(uuid)s'.format(u=uuid)
+            query_str += 'AND u.upload_token = %(uuid)s'
             params['uuid'] = uuid
         query = SQL(query_str)
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
