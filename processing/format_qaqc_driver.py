@@ -225,7 +225,6 @@ class FormatQAQCDriver:
                                                       task.
                                                       prior_process_id,
                                                       task.zip_process_id,
-                                                      self.conn,
                                                       self.is_test)),
                                     'runtime': 0,
                                     'retry': 0,
@@ -272,7 +271,6 @@ class FormatQAQCDriver:
                                                         .prior_process_id,
                                                         task
                                                         .zip_process_id,
-                                                        self.conn,
                                                         self.is_test)),
                                                 'runtime': 0,
                                                 'retry': 0,
@@ -296,7 +294,6 @@ class FormatQAQCDriver:
                                                         task.site_id,
                                                         task.prior_process_id,
                                                         task.zip_process_id,
-                                                        self.conn,
                                                         self.is_test))
                                             p['runtime'] = 0
                                             retry = p.get('retry') + 1
