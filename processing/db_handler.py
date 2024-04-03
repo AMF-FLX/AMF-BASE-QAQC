@@ -211,16 +211,17 @@ class NewDBHandler:
 
     def _get_type_cv(self, query, name_field, id_field='type_id') -> dict:
         _, db_config = self._read_config()
-        conn = self.init_db_conn(db_config)
+        self.conn = self.init_db_conn(db_config)
 
         cv_lookup = {}
 
-        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
-            cursor.execute(query)
-            for r in cursor:
-                cv_name = r.get(name_field)
-                cv_id = r.get(id_field)
-                cv_lookup.update({cv_name: cv_id})
+        if self.conn is not None:
+            with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
+                cursor.execute(query)
+                for r in cursor:
+                    cv_name = r.get(name_field)
+                    cv_id = r.get(id_field)
+                    cv_lookup.update({cv_name: cv_id})
 
         return cv_lookup
 
@@ -258,16 +259,20 @@ class NewDBHandler:
 
         values = tuple(values)
 
-        process_id = self._register_qaqc_process(conn, field_names, values)
+        self.conn = self.init_db_conn(db_config)
+        process_id = self._register_qaqc_process(field_names, values)
 
         return process_id
 
-    def _register_qaqc_process(self, conn, query_fields: str,
-                               process_values: tuple) -> int:
+    def _register_qaqc_process(self, query_fields: str,
+                               process_values: tuple) -> Optional[int]:
+        if self.conn is None:
+            return None
+
         query_pre = SQL('INSERT INTO qaqc.processing_log (')
         query_post = SQL(') VALUES %(process_values)s returning log_id;')
         query = Composed([query_pre, SQL(query_fields), query_post])
-        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+        with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(query, {'process_values': process_values})
             count = 0
             for r in cursor:
