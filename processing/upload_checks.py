@@ -57,7 +57,6 @@ def upload_checks(
     if not local_run:
         db = NewDBHandler()
         process_id = db.register_format_qaqc(
-            conn=conn,
             upload_id=upload_id, process_timestamp=timestamp_str,
             site_id=site_id, prior_process_id=prior_process_id,
             zip_process_id=zip_process_id)
