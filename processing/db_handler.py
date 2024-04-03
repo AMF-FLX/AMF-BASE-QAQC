@@ -211,15 +211,17 @@ class NewDBHandler:
                      'LEFT JOIN '
                      'input_interface.data_upload_file_xfer_log x '
                      'ON u.log_id = x.upload_log_id '
+                     'LEFT JOIN input_interface.data_source_type s '
+                     'ON u.upload_source_id = s.source_id '
                      'WHERE p.log_id IS NULL '
                      'AND u.upload_type_id IN (4, 7) '
                      'AND x.xfer_end_log_timestamp IS NOT NULL ')
         if is_qaqc_processor:
             query_str += \
-                'AND u.upload_source_id = %(q)s'
+                'AND s.source = %(q)s'
         else:
             query_str += \
-                'AND u.upload_source_id != %(q)s'
+                'AND s.source != %(q)s'
         params = {'q': qaqc_processor_source}
         if uuid:
             query_str += 'AND u.upload_token = %(uuid)s'
@@ -250,11 +252,13 @@ class NewDBHandler:
                      'LEFT JOIN '
                      'input_interface.data_upload_file_xfer_log x '
                      'ON u.log_id = x.upload_log_id '
+                     'LEFT JOIN input_interface.data_source_type s '
+                     'ON u.upload_source_id = s.source_id '
                      'WHERE p.log_id IS NOT NULL '
                      'AND o.output_id IS NULL '
                      'AND u.upload_type_id IN (4, 7) '
                      'AND x.xfer_end_log_timestamp IS NOT NULL '
-                     'AND u.upload_source_id != %(q)s '
+                     'AND s.source != %(q)s '
                      'AND log_timestamp >= '
                      'CURRENT_TIMESTAMP - INTERVAL \'%(h)s hours\'')
         query = SQL(query_str)
@@ -282,9 +286,11 @@ class NewDBHandler:
                      'ON u.log_id = p.upload_id '
                      'LEFT JOIN qaqc.process_summarized_output o '
                      'ON p.log_id = o.process_id '
+                     'LEFT JOIN input_interface.data_source_type s '
+                     'ON u.upload_source_id = s.source_id '
                      'WHERE o.output_id IS NULL '
                      'AND u.upload_type_id IN (4, 7) '
-                     'AND u.upload_source_id = %(q)s '
+                     'AND s.source = %(q)s '
                      'AND log_timestamp >= '
                      'CURRENT_TIMESTAMP - INTERVAL \'%(h)s hours\'')
         query = SQL(query_str)
@@ -341,17 +347,16 @@ class NewDBHandler:
 
     def _get_type_cv(self, query, name_field, id_field='type_id') -> dict:
         _, db_config = self._read_config()
-        self.conn = self.init_db_conn(db_config)
+        conn = self.init_db_conn(db_config)
 
         cv_lookup = {}
 
-        if self.conn is not None:
-            with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
-                cursor.execute(query)
-                for r in cursor:
-                    cv_name = r.get(name_field)
-                    cv_id = r.get(id_field)
-                    cv_lookup.update({cv_name: cv_id})
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query)
+            for r in cursor:
+                cv_name = r.get(name_field)
+                cv_id = r.get(id_field)
+                cv_lookup.update({cv_name: cv_id})
 
         return cv_lookup
 
@@ -389,20 +394,16 @@ class NewDBHandler:
 
         values = tuple(values)
 
-        self.conn = self.init_db_conn(db_config)
-        process_id = self._register_qaqc_process(field_names, values)
+        process_id = self._register_qaqc_process(conn, field_names, values)
 
         return process_id
 
-    def _register_qaqc_process(self, query_fields: str,
-                               process_values: tuple) -> Optional[int]:
-        if self.conn is None:
-            return None
-
+    def _register_qaqc_process(self, conn, query_fields: str,
+                               process_values: tuple) -> int:
         query_pre = SQL('INSERT INTO qaqc.processing_log (')
         query_post = SQL(') VALUES %(process_values)s returning log_id;')
         query = Composed([query_pre, SQL(query_fields), query_post])
-        with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(query, {'process_values': process_values})
             count = 0
             for r in cursor:
