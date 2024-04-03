@@ -123,6 +123,7 @@ def mock_send_email(self, cmd):
         data = [token]
         writer.writerow(data)
 
+
 def mock_recovery_process(self):
     return {}, []
 
