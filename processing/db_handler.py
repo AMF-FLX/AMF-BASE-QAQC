@@ -260,6 +260,7 @@ class NewDBHandler:
 
         conn = self.init_db_conn(db_config)
         process_id = self._register_qaqc_process(conn, field_names, values)
+        conn.close()
 
         return process_id
 

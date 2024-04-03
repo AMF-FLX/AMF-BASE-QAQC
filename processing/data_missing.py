@@ -52,6 +52,7 @@ class DataMissing:
         """
         statuses = []
         _log.info("Beginning to run all_missing_data_detection algorithm...")
+        _log.resetStats()
         gap_list, number_data_variables = self.all_missing_data_detection(
             data_reader)
         if self.status_msg_parts:
