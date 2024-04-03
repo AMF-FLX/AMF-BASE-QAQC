@@ -134,7 +134,6 @@ def mock_upload_checks_1(file_name,
                          site_id,
                          prior_process_id,
                          zip_process_id,
-                         conn,
                          local_run):
     if upload_id == 3:
         time.sleep(1)
@@ -198,7 +197,6 @@ def mock_upload_checks_3(file_name,
                          site_id,
                          prior_process_id,
                          zip_process_id,
-                         conn,
                          local_run):
     if not prior_process_id:
         with open(DATA_UPLOAD_LOG, 'r') as log:
@@ -277,7 +275,6 @@ def mock_upload_checks_4(file_name,
                          site_id,
                          prior_process_id,
                          zip_process_id,
-                         conn,
                          local_run):
     if upload_id == 3:
         time.sleep(1)
@@ -358,7 +355,6 @@ def mock_upload_checks_5(file_name,
                          site_id,
                          prior_process_id,
                          zip_process_id,
-                         conn,
                          local_run):
     if upload_id == 3:
         time.sleep(1)
@@ -441,7 +437,6 @@ def mock_upload_checks_11(file_name,
                           site_id,
                           prior_process_id,
                           zip_process_id,
-                          conn,
                           local_run):
     if not prior_process_id and '.zip' in file_name:
         with open(DATA_UPLOAD_LOG, 'r') as log:
@@ -537,7 +532,6 @@ def mock_upload_checks_12(file_name,
                           site_id,
                           prior_process_id,
                           zip_process_id,
-                          conn,
                           local_run):
     if upload_id == 3:
         time.sleep(1)
@@ -631,7 +625,6 @@ def mock_upload_checks_13(file_name,
                           site_id,
                           prior_process_id,
                           zip_process_id,
-                          conn,
                           local_run):
     if upload_id == 3:
         time.sleep(1)
@@ -740,7 +733,6 @@ def mock_upload_checks_15(file_name,
                           site_id,
                           prior_process_id,
                           zip_process_id,
-                          conn,
                           local_run):
     with open(PROCESSING_LOG, 'r') as log:
         log_id = int(log.readlines()[-1].split(',')[0]) + 1
