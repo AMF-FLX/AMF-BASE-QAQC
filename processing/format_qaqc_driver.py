@@ -49,7 +49,7 @@ class FormatQAQCDriver:
             cfg_section = 'AMP'
             if config.has_section(cfg_section):
                 self.qaqc_processor_source = config.get(cfg_section,
-                                                      'file_upload_source')
+                                                        'file_upload_source')
 
             cfg_section = 'PHASE_I'
             if config.has_section(cfg_section):
@@ -219,15 +219,15 @@ class FormatQAQCDriver:
                             processes.append(
                                 {'process':
                                     pool.apply_async(upload_checks,
-                                                        (task.filename,
-                                                         task.upload_id,
-                                                         task.run_type,
-                                                         task.site_id,
-                                                         task.
-                                                         prior_process_id,
-                                                         task.zip_process_id,
-                                                         self.conn,
-                                                         self.is_test)),
+                                                     (task.filename,
+                                                      task.upload_id,
+                                                      task.run_type,
+                                                      task.site_id,
+                                                      task.
+                                                      prior_process_id,
+                                                      task.zip_process_id,
+                                                      self.conn,
+                                                      self.is_test)),
                                     'runtime': 0,
                                     'retry': 0,
                                     'task': task})
@@ -237,8 +237,8 @@ class FormatQAQCDriver:
                             for p in processes:
                                 try:
                                     result = (p
-                                                .get('process')
-                                                .get(timeout=5))
+                                              .get('process')
+                                              .get(timeout=5))
                                     (process_id,
                                         is_upload_successful,
                                         uuid) = result
@@ -246,8 +246,8 @@ class FormatQAQCDriver:
                                     if uuid and is_upload_successful:
                                         s_tasks, _ = \
                                             self.get_new_upload_data(log,
-                                                                        True,
-                                                                        uuid)
+                                                                     True,
+                                                                     uuid)
                                         if is_zip and len(s_tasks) > 1:
                                             token = uuid
                                     for task in s_tasks.values():
@@ -282,9 +282,9 @@ class FormatQAQCDriver:
                                     if p.get('runtime') > self.max_timeout:
                                         p.get('process').terminate()
                                         log.write('Process terminated '
-                                                    'due to time out '
-                                                    'for upload_id: '
-                                                    f'{task.upload_id}')
+                                                  'due to time out '
+                                                  'for upload_id: '
+                                                  f'{task.upload_id}')
                                         if p.get('retry') < \
                                                 self.max_retries:
                                             task = p.get('task')
@@ -322,8 +322,8 @@ class FormatQAQCDriver:
                     # it will get here if all good, send out email to token
                     if is_qaqc_successful:
                         cmd = ('python '
-                                f'{self.email_gen_path} '
-                                f'{token}')
+                               f'{self.email_gen_path} '
+                               f'{token}')
                     else:
                         cmd = ('python '
                                 f'{self.email_gen_team_path} '
