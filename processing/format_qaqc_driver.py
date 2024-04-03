@@ -48,8 +48,7 @@ class FormatQAQCDriver:
 
             cfg_section = 'AMP'
             if config.has_section(cfg_section):
-                self.qaqc_processor_source = config.get(cfg_section,
-                                                        'file_upload_source')
+                self.qaqc_processor_source = 2
 
             cfg_section = 'PHASE_I'
             if config.has_section(cfg_section):
