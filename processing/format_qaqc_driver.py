@@ -220,13 +220,14 @@ class FormatQAQCDriver:
                                 {'process':
                                     pool.apply_async(upload_checks,
                                                         (task.filename,
-                                                        task.upload_id,
-                                                        task.run_type,
-                                                        task.site_id,
-                                                        task.
-                                                        prior_process_id,
-                                                        task.zip_process_id,
-                                                        self.is_test)),
+                                                         task.upload_id,
+                                                         task.run_type,
+                                                         task.site_id,
+                                                         task.
+                                                         prior_process_id,
+                                                         task.zip_process_id,
+                                                         self.conn,
+                                                         self.is_test)),
                                     'runtime': 0,
                                     'retry': 0,
                                     'task': task})
@@ -272,6 +273,7 @@ class FormatQAQCDriver:
                                                         .prior_process_id,
                                                         task
                                                         .zip_process_id,
+                                                        self.conn,
                                                         self.is_test)),
                                                 'runtime': 0,
                                                 'retry': 0,
@@ -295,6 +297,7 @@ class FormatQAQCDriver:
                                                         task.site_id,
                                                         task.prior_process_id,
                                                         task.zip_process_id,
+                                                        self.conn,
                                                         self.is_test))
                                             p['runtime'] = 0
                                             retry = p.get('retry') + 1
