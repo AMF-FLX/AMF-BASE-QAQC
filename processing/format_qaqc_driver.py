@@ -41,10 +41,9 @@ class FormatQAQCDriver:
                 user = config.get(cfg_section, 'user')
                 auth = config.get(cfg_section, 'auth')
                 db_name = config.get(cfg_section, 'db_name')
-                if all([hostname, user, auth, db_name]):
-                    self.db = NewDBHandler()
-                    new_db_config = DBConfig(hostname, user, auth, db_name)
-                    self.conn = self.db.init_db_conn(new_db_config)
+                self.db = NewDBHandler()
+                new_db_config = DBConfig(hostname, user, auth, db_name)
+                self.conn = self.db.init_db_conn(new_db_config)
 
             cfg_section = 'AMP'
             if config.has_section(cfg_section):
