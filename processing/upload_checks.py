@@ -23,7 +23,7 @@ from file_fixer import FileFixer
 from shutil import copyfile
 from missing_value_format import MissingValueFormat
 from data_missing import DataMissing
-from utils import FilenameUtils
+from utils import FilenameUtils, TimestampUtil
 from data_report_gen import gen_description
 from messages import Messages
 
@@ -67,7 +67,7 @@ def upload_checks(
             return None, False, None
     else:
         process_id = 999999
-        start_time = dt.strptime('2024-03-25 09:00', '%Y-%m-%d %H:%M')
+        start_time = dt.strptime('202403250900', TimestampUtil().PREFERRED_TS_FORMAT)
 
     _log = Logger(True, process_id, site_id, process_type,
                   start_time).getLogger('upload_checks')  # Initialize logger

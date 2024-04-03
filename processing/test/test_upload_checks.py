@@ -43,7 +43,17 @@ def test_upload_checks(filename, run_type, output, capsys, monkeypatch):
         site_id='US-UMB', prior_process_id=None, zip_process_id=None,
         local_run=True)
     captured = capsys.readouterr()
+    # Capture the print statements from the case; reads from the last read
     print_output = captured.out
+    # Convert captured print statements into a list based on line breaks
+    #   Example print list -- for last entries, see print statements
+    #   at end of upload_checks function if local_run=True (~ln=355)
+    #   [ ...,  # we don't care what is written at beginning of list
+    #     <json_report>,
+    #     <YYYY-MM-DD HH:MM or None>,
+    #     <YYYY-MM-DD HH:MM or None>,
+    #     ''
+    #   ]
     print_list = print_output.split('\n')
 
     assert process_id == 999999
