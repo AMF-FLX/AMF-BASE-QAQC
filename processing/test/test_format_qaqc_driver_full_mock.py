@@ -34,6 +34,9 @@ EMAIL_TOKEN_EMPTY = \
     './test/testdata/format_qaqc_driver/email_token_default.csv'
 EMAIL_TOKEN = './test/testdata/format_qaqc_driver/email_token.csv'
 
+UUIDS_EMPTY = './test/testdata/format_qaqc_driver/uuids_default.csv'
+UUIDS_DEFAULT = './test/testdata/format_qaqc_driver/uuids.csv'
+
 
 def mock_init_db_conn(self, config):
     return
@@ -838,3 +841,31 @@ def test_format_qaqc_driver(monkeypatch,
     email_tokens = EMAIL_TOKEN_DEFAULT.format(case)
     assert are_files_identical(upload_check_params, UPLOAD_CHECKS_PARAMS)
     assert are_files_identical(email_tokens, EMAIL_TOKEN)
+
+
+@pytest.mark.parametrize("case, "
+                         "mock_get_undone_data_upload_log_o, "
+                         "mock_get_undone_data_upload_log_ac, "
+                         "mock_trace_o_data_upload",
+                         [
+                          (1, mock_upload_checks_1, mock_send_email)
+                         ])
+def test_recovery_qaqc_driver(monkeypatch,
+                              case,
+                              mock_get_undone_data_upload_log_o,
+                              mock_get_undone_data_upload_log_ac,
+                              mock_trace_o_data_upload):
+    monkeypatch.setattr(NewDBHandler, 'init_db_conn',
+                        mock_init_db_conn)
+    monkeypatch.setattr(NewDBHandler, 'get_undone_data_upload_log_o',
+                        mock_get_undone_data_upload_log_o)
+    monkeypatch.setattr(NewDBHandler, 'get_undone_data_upload_log_ac',
+                        mock_get_undone_data_upload_log_ac)
+    monkeypatch.setattr(NewDBHandler, 'trace_o_data_upload',
+                        mock_trace_o_data_upload)
+    monkeypatch.setattr(FormatQAQCDriver, 'recovery_process',
+                        mock_recovery_process)
+    driver = FormatQAQCDriver(test=True)
+    uuids = driver.recovery_process()
+    uuids_default = UUIDS_DEFAULT.format(case)
+    assert are_files_identical(uuids, uuids_default)
