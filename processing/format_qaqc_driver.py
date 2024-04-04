@@ -49,10 +49,10 @@ class FormatQAQCDriver:
                 self.qaqc_processor_source = config.get(cfg_section,
                                                         'file_upload_source')
 
-            cfg_section = 'WEBSERVICES'
+            cfg_section = 'JIRA'
             if config.has_section(cfg_section):
                 self.email_prefix = config.get(cfg_section,
-                                               'upload_reports')
+                                               'project')
 
             cfg_section = 'PHASE_I'
             if config.has_section(cfg_section):
