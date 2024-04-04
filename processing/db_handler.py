@@ -315,8 +315,7 @@ class NewDBHandler:
                     'FROM input_interface.data_upload_log u '
                     'LEFT JOIN qaqc.processing_log p '
                     'ON u.log_id = p.upload_id '
-                    'AND p.log_id = %(process_id)s'
-                    'AND u.upload_type_id IN (4, 7) ')
+                    'WHERE p.log_id = %(process_id)s')
         params = {'process_id': process_id}
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(query, params)
