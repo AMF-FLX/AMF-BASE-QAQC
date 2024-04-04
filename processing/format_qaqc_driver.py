@@ -59,7 +59,7 @@ class FormatQAQCDriver:
                 self.data_directory = config.get(cfg_section,
                                                  'data_dir')
 
-        log_file_date = dt.datetime.now().strftime('%Y-%m-%d')
+        log_file_date = dt.datetime.now().strftime('%Y-%m-%d %H-%M-%S')
         log_file_name = f'format_qaqc_driver_service_{log_file_date}.log'
         log_dir = os.path.join(os.getcwd(), self.log_dir)
         if not os.path.exists(log_dir):
@@ -183,8 +183,9 @@ class FormatQAQCDriver:
             tasks, grouped_tasks = self.get_new_upload_data(
                 log,
                 False)
-            o_tasks.update(tasks)
-            o_grouped_tasks.extend(grouped_tasks)
+            if not grouped_tasks:
+                o_tasks.update(tasks)
+                o_grouped_tasks.extend(grouped_tasks)
             stop_run = False
             while True:
                 if self.is_test:
