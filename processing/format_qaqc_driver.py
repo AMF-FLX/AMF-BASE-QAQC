@@ -1,8 +1,6 @@
 import datetime as dt
 import os
 import multiprocessing as mp
-import subprocess
-import shlex
 import sys
 import time
 
@@ -110,13 +108,6 @@ class FormatQAQCDriver:
             if uuid not in rerun_uuids:
                 rerun_uuids.append(uuid)
         return rerun_uuids
-
-    def send_email(self, cmd):
-        p = subprocess.Popen(shlex.split(cmd),
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
-        out, err = p.communicate()
-        return (out, err)
 
     def get_new_upload_data(self,
                             log,
@@ -305,9 +296,9 @@ class FormatQAQCDriver:
                                             retry = p.get('retry') + 1
                                             p['retry'] = retry
                                             log.write('Retry to run '
-                                                        'upload_id: '
-                                                        f'{task.upload_id}, '
-                                                        f'retry: {retry}')
+                                                      'upload_id: '
+                                                      f'{task.upload_id}, '
+                                                      f'retry: {retry}')
                                         else:
                                             # terminate all process
                                             # for this run
@@ -336,8 +327,8 @@ class FormatQAQCDriver:
                     else:
                         # send email to AMP
                         cmd = ('python '
-                                f'{self.email_gen_team_path} '
-                                f'{token}')
+                               f'{self.email_gen_team_path} '
+                               f'{token}')
                 o_tasks, o_grouped_tasks = \
                     self.get_new_upload_data(log,
                                              False)
