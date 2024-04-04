@@ -187,8 +187,8 @@ class FormatQAQCDriver:
             if not grouped_tasks:
                 o_tasks.update(tasks)
                 o_grouped_tasks.extend(grouped_tasks)
-            log.write('o_tasks line 181:', o_tasks)
-            log.write('o_tasks line 182:', o_grouped_tasks)
+            log.write('o_tasks line 190:', o_tasks)
+            log.write('o_tasks line 191:', o_grouped_tasks)
             stop_run = False
             while True:
                 if self.is_test:
