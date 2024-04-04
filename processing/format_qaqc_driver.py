@@ -177,7 +177,7 @@ class FormatQAQCDriver:
                                              False,
                                              uuid=uuid)
                 o_tasks.update(tasks)
-                grouped_tasks.append(grouped_tasks)
+                o_grouped_tasks.append(grouped_tasks)
 
             # get new task
             tasks, grouped_tasks = self.get_new_upload_data(
@@ -329,6 +329,7 @@ class FormatQAQCDriver:
                         cmd = ('python '
                                f'{self.email_gen_team_path} '
                                f'{token}')
+                time.sleep(self.time_sleep)
                 o_tasks, o_grouped_tasks = \
                     self.get_new_upload_data(log,
                                              False)
