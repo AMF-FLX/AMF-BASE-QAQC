@@ -201,21 +201,35 @@ class NewDBHandler:
                                 conn,
                                 qaqc_processor_source,
                                 is_qaqc_processor,
-                                uuid=None):
-        query_base = SQL('SELECT u.log_id, u.site_id, '
-                         'u.data_file, u.upload_token, '
-                         'u.upload_comment, u.upload_type_id '
-                         'FROM input_interface.data_upload_log u '
-                         'LEFT JOIN qaqc.processing_log p '
-                         'ON u.log_id = p.upload_id '
-                         'LEFT JOIN '
-                         'input_interface.data_upload_file_xfer_log x '
-                         'ON u.log_id = x.upload_log_id '
-                         'LEFT JOIN input_interface.data_source_type s '
-                         'ON u.upload_source_id = s.source_id '
-                         'WHERE p.log_id IS NULL '
-                         'AND u.upload_type_id IN (4, 7) '
-                         'AND x.xfer_end_log_timestamp IS NOT NULL ')
+                                uuid=None,
+                                is_recovery=False):
+        if not is_recovery:
+            query_base = SQL('SELECT u.log_id, u.site_id, '
+                            'u.data_file, u.upload_token, '
+                            'u.upload_comment, u.upload_type_id '
+                            'FROM input_interface.data_upload_log u '
+                            'LEFT JOIN qaqc.processing_log p '
+                            'ON u.log_id = p.upload_id '
+                            'LEFT JOIN '
+                            'input_interface.data_upload_file_xfer_log x '
+                            'ON u.log_id = x.upload_log_id '
+                            'LEFT JOIN input_interface.data_source_type s '
+                            'ON u.upload_source_id = s.source_id '
+                            'WHERE p.log_id IS NULL '
+                            'AND u.upload_type_id IN (4, 7) '
+                            'AND x.xfer_end_log_timestamp IS NOT NULL ')
+        else:
+            query_base = SQL('SELECT u.log_id, u.site_id, '
+                    'u.data_file, u.upload_token, '
+                    'u.upload_comment, u.upload_type_id '
+                    'FROM input_interface.data_upload_log u '
+                    'LEFT JOIN '
+                    'input_interface.data_upload_file_xfer_log x '
+                    'ON u.log_id = x.upload_log_id '
+                    'LEFT JOIN input_interface.data_source_type s '
+                    'ON u.upload_source_id = s.source_id '
+                    'AND u.upload_type_id IN (4, 7) '
+                    'AND x.xfer_end_log_timestamp IS NOT NULL ')
         if is_qaqc_processor:
             query_add_1 = SQL('AND s.source = %(qaqc_processor_source)s')
         else:

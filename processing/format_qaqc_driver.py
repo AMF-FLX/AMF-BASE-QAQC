@@ -83,18 +83,20 @@ class FormatQAQCDriver:
             uuid = row.get('upload_token')
             if uuid not in rerun_uuids:
                 rerun_uuids.append(uuid)
-
+        print(rerun_uuids)
         ac_data_upload = \
             self.db.get_undone_data_upload_log_ac(
                 self.conn,
                 self.qaqc_processor_source,
                 self.lookback_h)
         for row in ac_data_upload:
+            print(ac_data_upload)
             comment = row.get('upload_comment')
             if ('Archive upload for' in comment
                     or 'repair candidate for' in comment):
                 process_id = comment.split()[-1]
                 while process_id:
+                    print(process_id)
                     d = self.db.trace_o_data_upload(
                         self.conn,
                         process_id)
@@ -103,9 +105,11 @@ class FormatQAQCDriver:
                         process_id = d.get('log_id')
                     else:
                         uuid = d.get('upload_token')
+                        print('uuid:', uuid)
                         break
             if uuid not in rerun_uuids:
                 rerun_uuids.append(uuid)
+        print(rerun_uuids)
         return rerun_uuids
 
     def get_new_upload_data(self,
