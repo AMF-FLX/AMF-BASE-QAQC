@@ -217,11 +217,11 @@ class NewDBHandler:
                          'AND u.upload_type_id IN (4, 7) '
                          'AND x.xfer_end_log_timestamp IS NOT NULL ')
         if is_qaqc_processor:
-            query_add_1 = SQL('AND s.source = %(q)s')
+            query_add_1 = SQL('AND s.source = %(qaqc_processor_source)s')
         else:
-            query_add_1 = SQL('AND s.source != %(q)s')
+            query_add_1 = SQL('AND s.source != %(qaqc_processor_source)s')
         query = Composed([query_base, query_add_1])
-        params = {'q': qaqc_processor_source}
+        params = {'qaqc_processor_source': qaqc_processor_source}
         if uuid:
             query_add_2 = SQL('AND u.upload_token = %(uuid)s')
             query = Composed([query, query_add_2])
@@ -257,11 +257,12 @@ class NewDBHandler:
                     'AND o.output_id IS NULL '
                     'AND u.upload_type_id IN (4, 7) '
                     'AND x.xfer_end_log_timestamp IS NOT NULL '
-                    'AND s.source != %(q)s '
+                    'AND s.source != %(qaqc_processor_source)s '
                     'AND log_timestamp >= '
-                    'CURRENT_TIMESTAMP - INTERVAL \'%(h)s hours\'')
-        params = {'q': qaqc_processor_source,
-                  'h': lookback_h}
+                    'CURRENT_TIMESTAMP '
+                    '- INTERVAL \'%(lookback_h)s hours\'')
+        params = {'qaqc_processor_source': qaqc_processor_source,
+                  'lookback_h': lookback_h}
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(query, params)
             data_upload = cursor.fetchall()
@@ -289,11 +290,12 @@ class NewDBHandler:
                     'ON u.upload_source_id = s.source_id '
                     'WHERE o.output_id IS NULL '
                     'AND u.upload_type_id IN (4, 7) '
-                    'AND s.source = %(q)s '
+                    'AND s.source = %(qaqc_processor_source)s '
                     'AND log_timestamp >= '
-                    'CURRENT_TIMESTAMP - INTERVAL \'%(h)s hours\'')
-        params = {'q': qaqc_processor_source,
-                  'h': lookback_h}
+                    'CURRENT_TIMESTAMP '
+                    '- INTERVAL \'%(lookback_h)s hours\'')
+        params = {'qaqc_processor_source': qaqc_processor_source,
+                  'lookback_h': lookback_h}
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(query, params)
             data_upload = cursor.fetchall()
