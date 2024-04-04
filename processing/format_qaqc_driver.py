@@ -73,7 +73,7 @@ class FormatQAQCDriver:
         self.stale_count = 0
 
     def recovery_process(self):
-        rerun_o_uuids = []
+        rerun_uuids = []
         o_data_upload = \
             self.db.get_undone_data_upload_log_o(
                 self.conn,
@@ -81,15 +81,14 @@ class FormatQAQCDriver:
                 self.lookback_h)
         for row in o_data_upload:
             uuid = row.get('upload_token')
-            if uuid not in rerun_o_uuids:
-                rerun_o_uuids.append(uuid)
+            if uuid not in rerun_uuids:
+                rerun_uuids.append(uuid)
 
         ac_data_upload = \
             self.db.get_undone_data_upload_log_ac(
                 self.conn,
                 self.qaqc_processor_source,
                 self.lookback_h)
-        rerun_uuids = []
         for row in ac_data_upload:
             comment = row.get('upload_comment')
             if ('Archive upload for' in comment
@@ -169,6 +168,7 @@ class FormatQAQCDriver:
         with open(self.log_file_path, 'w+') as log:
             # run recovery process
             rerun_uuids = self.recovery_process()
+            log.write(f'Rerun for these uuids: [{', '.join(rerun_uuids)}]')
             o_tasks = {}
             o_grouped_tasks = []
             for uuid in rerun_uuids:
