@@ -178,7 +178,8 @@ class FormatQAQCDriver:
                                              uuid=uuid)
                 o_tasks.update(tasks)
                 o_grouped_tasks.append(grouped_tasks)
-
+            log.write('o_tasks line 181:', o_tasks)
+            log.write('o_tasks line 182:', o_grouped_tasks)
             # get new task
             tasks, grouped_tasks = self.get_new_upload_data(
                 log,
@@ -186,6 +187,8 @@ class FormatQAQCDriver:
             if not grouped_tasks:
                 o_tasks.update(tasks)
                 o_grouped_tasks.extend(grouped_tasks)
+            log.write('o_tasks line 181:', o_tasks)
+            log.write('o_tasks line 182:', o_grouped_tasks)
             stop_run = False
             while True:
                 if self.is_test:
