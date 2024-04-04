@@ -168,7 +168,7 @@ class FormatQAQCDriver:
         with open(self.log_file_path, 'w+') as log:
             # run recovery process
             rerun_uuids = self.recovery_process()
-            log.write(f'Rerun for these uuids: [{', '.join(rerun_uuids)}]')
+            log.write(f"Rerun for these uuids: [{', '.join(rerun_uuids)}]")
             o_tasks = {}
             o_grouped_tasks = []
             for uuid in rerun_uuids:
