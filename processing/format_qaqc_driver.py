@@ -9,6 +9,7 @@ import time
 from configparser import ConfigParser
 from collections import namedtuple
 from db_handler import DBConfig, NewDBHandler
+from email_gen import EmailGen, EmailGenError
 from pathlib import Path
 from upload_checks import upload_checks
 
@@ -50,6 +51,11 @@ class FormatQAQCDriver:
                 self.qaqc_processor_source = config.get(cfg_section,
                                                         'file_upload_source')
 
+            cfg_section = 'WEBSERVICES'
+            if config.has_section(cfg_section):
+                self.email_prefix = config.get(cfg_section,
+                                               'upload_reports')
+
             cfg_section = 'PHASE_I'
             if config.has_section(cfg_section):
                 self.data_directory = config.get(cfg_section,
@@ -64,7 +70,7 @@ class FormatQAQCDriver:
                                           self.log_dir,
                                           log_file_name)
         self.is_test = test
-        self.email_gen_path = './email_gen.py'
+        self.email_gen = EmailGen()
         self.email_gen_team_path = './email_gen_team.py'
         self.stale_count = 0
 
@@ -317,15 +323,21 @@ class FormatQAQCDriver:
                             processes = s_processes
                     # it will get here if all good, send out email to token
                     if is_qaqc_successful:
-                        cmd = ('python '
-                               f'{self.email_gen_path} '
-                               f'{token}')
+                        try:
+                            msg = self.email_gen.driver(token, True)
+                            if msg.startswith(self.email_prefix):
+                                log.write(f'Email gen for token: {token}, '
+                                          'with message: {msg}\n')
+                        except EmailGenError:
+                            # send email to AMP
+                            cmd = ('python '
+                                   f'{self.email_gen_team_path} '
+                                   f'{token}')
                     else:
+                        # send email to AMP
                         cmd = ('python '
                                 f'{self.email_gen_team_path} '
                                 f'{token}')
-                    self.send_email(cmd)
-                    log.write(f'Email gen for token: {token}\n')
                 o_tasks, o_grouped_tasks = \
                     self.get_new_upload_data(log,
                                              False)
