@@ -1,3 +1,4 @@
+import argparse
 import datetime as dt
 import os
 import multiprocessing as mp
@@ -21,7 +22,7 @@ Task = namedtuple('Task', ['filename', 'upload_id',
 
 
 class FormatQAQCDriver:
-    def __init__(self, test=True):
+    def __init__(self, lookback_h=None, test=False):
         config = ConfigParser()
         with open(os.path.join(os.getcwd(), 'qaqc.cfg'), 'r') as cfg:
             cfg_section = 'FORMAT_QAQC_DRIVER'
@@ -32,7 +33,8 @@ class FormatQAQCDriver:
                 self.max_retries = config.getint(cfg_section, 'max_retries')
                 self.max_timeout = config.getint(cfg_section, 'max_timeout_s')
                 self.timeout = self.max_timeout / 10.0
-                self.lookback_h = config.getint(cfg_section, 'lookback_h')
+                if not lookback_h:
+                    self.lookback_h = config.getint(cfg_section, 'lookback_h')
 
             cfg_section = 'DB'
             if config.has_section(cfg_section):
@@ -100,8 +102,8 @@ class FormatQAQCDriver:
                     d = self.db.trace_o_data_upload(
                         self.conn,
                         process_id)
-                    if (not d.get('prior_process_id')
-                            and not d.get('zip_process_id')):
+                    if (d.get('prior_process_id')
+                            or d.get('zip_process_id')):
                         process_id = d.get('log_id')
                     else:
                         uuid = d.get('upload_token')
@@ -115,12 +117,19 @@ class FormatQAQCDriver:
     def get_new_upload_data(self,
                             log,
                             is_qaqc_processor=True,
-                            uuid=None):
-        new_data_upload_log = \
-            self.db.get_new_data_upload_log(self.conn,
-                                            self.qaqc_processor_source,
-                                            is_qaqc_processor,
-                                            uuid)
+                            uuid=None,
+                            is_recovery=False):
+        if is_recovery:
+            new_data_upload_log = \
+                self.db.get_data_upload_log_with_uuid(
+                    self.conn,
+                    uuid)
+        else:
+            new_data_upload_log = \
+                self.db.get_new_data_upload_log(self.conn,
+                                                self.qaqc_processor_source,
+                                                is_qaqc_processor,
+                                                uuid)
         # if no more new data upload log in test mode
         # terminate after 3 empty rounds
 
@@ -179,20 +188,16 @@ class FormatQAQCDriver:
                 tasks, grouped_tasks = \
                     self.get_new_upload_data(log,
                                              False,
-                                             uuid=uuid)
+                                             uuid=uuid,
+                                             is_recovery=True)
                 o_tasks.update(tasks)
-                o_grouped_tasks.append(grouped_tasks)
-            print('o_tasks line 181:', o_tasks)
-            print('o_tasks line 182:', o_grouped_tasks)
+                o_grouped_tasks.extend(grouped_tasks)
             # get new task
             tasks, grouped_tasks = self.get_new_upload_data(
                 log,
                 False)
-            if not grouped_tasks:
-                o_tasks.update(tasks)
-                o_grouped_tasks.extend(grouped_tasks)
-            print('o_tasks line 190:', o_tasks)
-            print('o_tasks line 191:', o_grouped_tasks)
+            o_tasks.update(tasks)
+            o_grouped_tasks.extend(grouped_tasks)
             stop_run = False
             while True:
                 if self.is_test:
@@ -344,3 +349,18 @@ class FormatQAQCDriver:
             if self.is_test:
                 return
             sys.exit(0)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Format QAQC Driver')
+    parser.add_argument(
+        'lookback_h', type=str, help='Look back x hours to check '
+                                     'for any unfinished work')
+    parser.add_argument(
+        '-t', '--test', action='store_true', default=False,
+        help='Sets flag for local run that does not write'
+             ' to database')
+    args = parser.parse_args()
+    driver = FormatQAQCDriver(lookback_h=args.lookback_h,
+                              test=args.test)
+    driver.run()
