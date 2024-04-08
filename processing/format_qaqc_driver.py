@@ -9,6 +9,7 @@ from configparser import ConfigParser
 from collections import namedtuple
 from db_handler import DBConfig, NewDBHandler
 from email_gen import EmailGen, EmailGenError
+from logger import Logger
 from pathlib import Path
 from upload_checks import upload_checks
 
@@ -19,6 +20,10 @@ __email__ = 'sytoanngo@lbl.gov'
 Task = namedtuple('Task', ['filename', 'upload_id',
                            'prior_process_id', 'zip_process_id',
                            'run_type', 'site_id', 'uuid'])
+
+_log_name_prefix = 'FormatQAQCDriver'
+_log = Logger(True, None, None,
+              _log_name_prefix).getLogger(_log_name_prefix)
 
 
 class FormatQAQCDriver:
@@ -61,15 +66,8 @@ class FormatQAQCDriver:
             if config.has_section(cfg_section):
                 self.data_directory = config.get(cfg_section,
                                                  'data_dir')
-
-        log_file_date = dt.datetime.now().strftime('%Y-%m-%d %H-%M-%S')
-        log_file_name = f'format_qaqc_driver_service_{log_file_date}.log'
-        log_dir = os.path.join(os.getcwd(), self.log_dir)
-        if not os.path.exists(log_dir):
-            os.makedirs(log_dir)
-        self.log_file_path = os.path.join(os.getcwd(),
-                                          self.log_dir,
-                                          log_file_name)
+        # Initialize logger
+        _log.info('Initialized')
         self.is_test = test
         self.email_gen = EmailGen()
         self.email_gen_team_path = './email_gen_team.py'
@@ -121,7 +119,6 @@ class FormatQAQCDriver:
         return rerun_uuids
 
     def get_new_upload_data(self,
-                            log,
                             is_qaqc_processor=True,
                             uuid=None,
                             is_recovery=False):
@@ -145,7 +142,7 @@ class FormatQAQCDriver:
             log_msg = f'Run with list of upload log ids: {log_ids_list} '
             if uuid:
                 log_msg += f'with token: {uuid}]\n'
-            log.write(log_msg)
+            _log.info(log_msg)
         tasks = {}
         for row in new_data_upload_log:
             upload_id = row.get('log_id')
@@ -184,178 +181,176 @@ class FormatQAQCDriver:
     def run(self):
         num_processes = mp.cpu_count()
         processes = []
-        with open(self.log_file_path, 'w+') as log:
-            # run recovery process
-            rerun_uuids = self.recovery_process()
-            print(f"Rerun for these uuids: [{', '.join(rerun_uuids)}]")
-            o_tasks = {}
-            o_grouped_tasks = []
-            for uuid in rerun_uuids:
-                tasks, grouped_tasks = \
-                    self.get_new_upload_data(log,
-                                             False,
-                                             uuid=uuid,
-                                             is_recovery=True)
-                o_tasks.update(tasks)
-                o_grouped_tasks.extend(grouped_tasks)
-            # get new task
-            tasks, grouped_tasks = self.get_new_upload_data(
-                log,
-                False)
+        # run recovery process
+        rerun_uuids = self.recovery_process()
+        if rerun_uuids:
+            _log.info(f"Rerun for these uuids: [{', '.join(rerun_uuids)}]")
+        else:
+            _log.info(f"There is no uuid to rerun")
+        o_tasks = {}
+        o_grouped_tasks = []
+        for uuid in rerun_uuids:
+            tasks, grouped_tasks = \
+                self.get_new_upload_data(False,
+                                         uuid=uuid,
+                                         is_recovery=True)
             o_tasks.update(tasks)
             o_grouped_tasks.extend(grouped_tasks)
-            stop_run = False
-            while True:
-                if self.is_test:
-                    if not o_tasks:
-                        self.stale_count += 1
-                        log.write(('[TEST MODE] Empty run '
-                                   f'{self.stale_count} time(s)\n'))
-                        print(self.stale_count)
-                    if self.stale_count >= 3:
-                        stop_run = True
-                if stop_run:
-                    break
+        # get new task
+        tasks, grouped_tasks = \
+            self.get_new_upload_data(False)
+        o_tasks.update(tasks)
+        o_grouped_tasks.extend(grouped_tasks)
+        stop_run = False
+        while True:
+            if self.is_test:
+                if not o_tasks:
+                    self.stale_count += 1
+                    _log.debug(('[TEST MODE] Empty run '
+                                f'{self.stale_count} time(s)\n'))
+                    print(self.stale_count)
+                if self.stale_count >= 3:
+                    stop_run = True
+            if stop_run:
+                break
 
-                # upload_ids is a list of upload_id
-                # that has the same token
-                for upload_ids in o_grouped_tasks:
-                    is_qaqc_successful = True
-                    with mp.Pool(processes=num_processes) as pool:
-                        for upload_id in upload_ids:
-                            task = o_tasks.get(upload_id)
-                            token = task.uuid
-                            is_zip = '.zip' in task.filename
-                            log.write(
-                                (f'Start run: log id {task.upload_id}, '
-                                    f'prior id: {task.prior_process_id}, '
-                                    f'zip id: {task.zip_process_id}, '
-                                    f'run type: {task.run_type}\n'))
-                            processes.append(
-                                {'process':
-                                    pool.apply_async(upload_checks,
-                                                     (task.filename,
-                                                      task.upload_id,
-                                                      task.run_type,
-                                                      task.site_id,
-                                                      task.
-                                                      prior_process_id,
-                                                      task.zip_process_id,
-                                                      self.is_test)),
-                                    'runtime': 0,
-                                    'retry': 0,
-                                    'task': task})
-                        while processes:
-                            time.sleep(self.time_sleep)
-                            s_processes = []
-                            for p in processes:
-                                try:
-                                    result = (p
-                                              .get('process')
-                                              .get(timeout=5))
-                                    (process_id,
-                                        is_upload_successful,
-                                        uuid) = result
-                                    s_tasks = {}
-                                    if uuid and is_upload_successful:
-                                        s_tasks, _ = \
-                                            self.get_new_upload_data(log,
-                                                                     True,
-                                                                     uuid)
-                                        if is_zip and len(s_tasks) > 1:
-                                            token = uuid
-                                    for task in s_tasks.values():
-                                        log.write(
-                                            ('Start run: log id '
-                                                f'{task.upload_id}, '
-                                                'prior id: '
-                                                f'{task.prior_process_id}, '
-                                                f'zip id: '
-                                                f'{task.zip_process_id}, '
-                                                f'run type: {task.run_type}\n'
-                                                f'uuid: {task.uuid}'))
-                                        s_processes.append(
-                                            {'process':
-                                                pool
-                                                .apply_async(
-                                                    upload_checks,
+            # upload_ids is a list of upload_id
+            # that has the same token
+            for upload_ids in o_grouped_tasks:
+                is_qaqc_successful = True
+                with mp.Pool(processes=num_processes) as pool:
+                    for upload_id in upload_ids:
+                        task = o_tasks.get(upload_id)
+                        token = task.uuid
+                        is_zip = '.zip' in task.filename
+                        _log.info(
+                            (f'Start run: log id {task.upload_id}, '
+                             f'prior id: {task.prior_process_id}, '
+                             f'zip id: {task.zip_process_id}, '
+                             f'run type: {task.run_type}\n'))
+                        processes.append(
+                            {'process':
+                                pool.apply_async(upload_checks,
                                                     (task.filename,
-                                                        task.upload_id,
-                                                        task.run_type,
-                                                        task.site_id,
-                                                        task
-                                                        .prior_process_id,
-                                                        task
-                                                        .zip_process_id,
-                                                        self.is_test)),
-                                                'runtime': 0,
-                                                'retry': 0,
-                                                'task': task})
-                                except mp.TimeoutError:
-                                    if p.get('runtime') > self.max_timeout:
-                                        p.get('process').terminate()
-                                        log.write('Process terminated '
-                                                  'due to time out '
-                                                  'for upload_id: '
-                                                  f'{task.upload_id}')
-                                        if p.get('retry') < \
-                                                self.max_retries:
-                                            task = p.get('task')
-                                            p['process'] = \
-                                                pool.apply_async(
-                                                    upload_checks,
-                                                    (task.filename,
-                                                        task.upload_id,
-                                                        task.run_type,
-                                                        task.site_id,
-                                                        task.prior_process_id,
-                                                        task.zip_process_id,
-                                                        self.is_test))
-                                            p['runtime'] = 0
-                                            retry = p.get('retry') + 1
-                                            p['retry'] = retry
-                                            log.write('Retry to run '
-                                                      'upload_id: '
-                                                      f'{task.upload_id}, '
-                                                      f'retry: {retry}')
-                                        else:
-                                            # terminate all process
-                                            # for this run
-                                            # and send email to team
-                                            if p.get('retry') > \
-                                                    self.max_retries:
-                                                (p
-                                                    .get('process')
-                                                    .terminate())
-                                                is_qaqc_successful = False
+                                                    task.upload_id,
+                                                    task.run_type,
+                                                    task.site_id,
+                                                    task.
+                                                    prior_process_id,
+                                                    task.zip_process_id,
+                                                    self.is_test)),
+                                'runtime': 0,
+                                'retry': 0,
+                                'task': task})
+                    while processes:
+                        time.sleep(self.time_sleep)
+                        s_processes = []
+                        for p in processes:
+                            try:
+                                result = (p
+                                            .get('process')
+                                            .get(timeout=5))
+                                (process_id,
+                                    is_upload_successful,
+                                    uuid) = result
+                                s_tasks = {}
+                                if uuid and is_upload_successful:
+                                    s_tasks, _ = \
+                                        self.get_new_upload_data(True,
+                                                                 uuid)
+                                    if is_zip and len(s_tasks) > 1:
+                                        token = uuid
+                                for task in s_tasks.values():
+                                    _log.info(
+                                        ('Start run: log id '
+                                         f'{task.upload_id}, '
+                                         'prior id: '
+                                         f'{task.prior_process_id}, '
+                                         f'zip id: '
+                                         f'{task.zip_process_id}, '
+                                         f'run type: {task.run_type}\n'
+                                         f'uuid: {task.uuid}'))
+                                    s_processes.append(
+                                        {'process':
+                                            pool
+                                            .apply_async(
+                                                upload_checks,
+                                                (task.filename,
+                                                    task.upload_id,
+                                                    task.run_type,
+                                                    task.site_id,
+                                                    task
+                                                    .prior_process_id,
+                                                    task
+                                                    .zip_process_id,
+                                                    self.is_test)),
+                                            'runtime': 0,
+                                            'retry': 0,
+                                            'task': task})
+                            except mp.TimeoutError:
+                                if p.get('runtime') > self.max_timeout:
+                                    p.get('process').terminate()
+                                    _log.info('Process terminated '
+                                                'due to time out '
+                                                'for upload_id: '
+                                                f'{task.upload_id}')
+                                    if p.get('retry') < \
+                                            self.max_retries:
+                                        task = p.get('task')
+                                        p['process'] = \
+                                            pool.apply_async(
+                                                upload_checks,
+                                                (task.filename,
+                                                    task.upload_id,
+                                                    task.run_type,
+                                                    task.site_id,
+                                                    task.prior_process_id,
+                                                    task.zip_process_id,
+                                                    self.is_test))
+                                        p['runtime'] = 0
+                                        retry = p.get('retry') + 1
+                                        p['retry'] = retry
+                                        _log.info('Retry to run '
+                                                    'upload_id: '
+                                                    f'{task.upload_id}, '
+                                                    f'retry: {retry}')
                                     else:
-                                        p['runtime'] += self.time_sleep
-                                        s_processes.append(p)
-                            processes = s_processes
-                    # it will get here if all good, send out email to token
-                    if is_qaqc_successful:
-                        try:
-                            msg = self.email_gen.driver(token, True)
-                            if msg.startswith(self.email_prefix):
-                                log.write(f'Email gen for token: {token}, '
-                                          'with message: {msg}\n')
-                        except EmailGenError:
-                            # send email to AMP
-                            cmd = ('python '
-                                   f'{self.email_gen_team_path} '
-                                   f'{token}')
-                    else:
+                                        # terminate all process
+                                        # for this run
+                                        # and send email to team
+                                        if p.get('retry') > \
+                                                self.max_retries:
+                                            (p
+                                                .get('process')
+                                                .terminate())
+                                            is_qaqc_successful = False
+                                else:
+                                    p['runtime'] += self.time_sleep
+                                    s_processes.append(p)
+                        processes = s_processes
+                # it will get here if all good, send out email to token
+                if is_qaqc_successful:
+                    try:
+                        msg = self.email_gen.driver(token, True)
+                        if msg.startswith(self.email_prefix):
+                            _log.info(f'Email gen for token: {token}, '
+                                        'with message: {msg}\n')
+                    except EmailGenError:
                         # send email to AMP
                         cmd = ('python '
-                               f'{self.email_gen_team_path} '
-                               f'{token}')
-                time.sleep(self.time_sleep)
-                o_tasks, o_grouped_tasks = \
-                    self.get_new_upload_data(log,
-                                             False)
-            if self.is_test:
-                return
-            sys.exit(0)
+                                f'{self.email_gen_team_path} '
+                                f'{token}')
+                else:
+                    # send email to AMP
+                    cmd = ('python '
+                            f'{self.email_gen_team_path} '
+                            f'{token}')
+            time.sleep(self.time_sleep)
+            o_tasks, o_grouped_tasks = \
+                self.get_new_upload_data(False)
+        if self.is_test:
+            return
+        sys.exit(0)
 
 
 if __name__ == '__main__':

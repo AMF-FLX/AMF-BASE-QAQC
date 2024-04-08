@@ -38,7 +38,8 @@ class Logger(logging.Logger):
                 phase_cfg = 'PHASE_II'
             elif process_type in ('GenBASEBADM', 'preBASERegen',
                                   'translateEarlyFPBase',
-                                  'summarizeDataVariableStatistics'):
+                                  'summarizeDataVariableStatistics',
+                                  'FormatQAQCDriver'):
                 phase_cfg = 'PHASE_III'
             elif process_type == 'timeout_format_issues':
                 phase_cfg = 'CRON'
