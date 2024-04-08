@@ -10,6 +10,7 @@ from collections import namedtuple
 from db_handler import DBConfig, NewDBHandler
 from email_gen import EmailGen, EmailGenError
 from logger import Logger
+from mail_handler import Mailer
 from pathlib import Path
 from upload_checks import upload_checks
 
@@ -70,8 +71,19 @@ class FormatQAQCDriver:
         _log.info('Initialized')
         self.is_test = test
         self.email_gen = EmailGen()
+        self.email_amp = Mailer(_log)
         self.email_gen_team_path = './email_gen_team.py'
         self.stale_count = 0
+
+    def send_email_to_amp(self, msg):
+        sender = 'sender@gmail.com'
+        receipient = 'receipient@gmail.com'
+        subject = 'FormatQAQCDriver Abnormal Report'
+        msg = self.email_amp.build_multipart_text_msg(sender,
+                                                      receipient,
+                                                      subject,
+                                                      msg)
+        self.email_amp.send_mail(sender, receipient, msg)
 
     def recovery_process(self):
         rerun_uuids = []
@@ -337,14 +349,14 @@ class FormatQAQCDriver:
                                         'with message: {msg}\n')
                     except EmailGenError:
                         # send email to AMP
-                        cmd = ('python '
-                                f'{self.email_gen_team_path} '
-                                f'{token}')
+                        _log.debug('Send email to AMP for token: '
+                                   f'{token}')
+                        # self.send_email_to_amp(cmd)
                 else:
                     # send email to AMP
-                    cmd = ('python '
-                            f'{self.email_gen_team_path} '
-                            f'{token}')
+                    _log.debug('Send email to AMP for token: '
+                               f'{token}')
+                    # self.send_email_to_amp(cmd)
             time.sleep(self.time_sleep)
             o_tasks, o_grouped_tasks = \
                 self.get_new_upload_data(False)
