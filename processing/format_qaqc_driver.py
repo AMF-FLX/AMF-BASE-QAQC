@@ -26,6 +26,7 @@ class FormatQAQCDriver:
         config = ConfigParser()
         with open(os.path.join(os.getcwd(), 'qaqc.cfg'), 'r') as cfg:
             cfg_section = 'FORMAT_QAQC_DRIVER'
+            self.lookback_h = lookback_h
             config.read_file(cfg)
             if config.has_section(cfg_section):
                 self.log_dir = config.get(cfg_section, 'log_dir')
@@ -34,7 +35,7 @@ class FormatQAQCDriver:
                 self.max_timeout = config.getint(cfg_section, 'max_timeout_s')
                 self.timeout = self.max_timeout / 10.0
                 if not lookback_h:
-                    self.lookback_h = config.getint(cfg_section, 'lookback_h')
+                    self.lookback_h = config.getfloat(cfg_section, 'lookback_h')
 
             cfg_section = 'DB'
             if config.has_section(cfg_section):
@@ -85,20 +86,18 @@ class FormatQAQCDriver:
             uuid = row.get('upload_token')
             if uuid not in rerun_uuids:
                 rerun_uuids.append(uuid)
-        print(rerun_uuids)
         ac_data_upload = \
             self.db.get_undone_data_upload_log_ac(
                 self.conn,
                 self.qaqc_processor_source,
                 self.lookback_h)
         for row in ac_data_upload:
-            print(ac_data_upload)
             comment = row.get('upload_comment')
+            timestamp = row.get('log_timestamp')
             if ('Archive upload for' in comment
                     or 'repair candidate for' in comment):
                 process_id = comment.split()[-1]
                 while process_id:
-                    print(process_id)
                     d = self.db.trace_o_data_upload(
                         self.conn,
                         process_id)
@@ -107,11 +106,18 @@ class FormatQAQCDriver:
                         process_id = d.get('log_id')
                     else:
                         uuid = d.get('upload_token')
-                        print('uuid:', uuid)
+                        o_run_data = \
+                            self.db.get_latest_run_with_uuid(self.conn,
+                                                             uuid)
+                        if (o_run_data 
+                                and 
+                                (o_run_data
+                                 .get('process_timestamp') 
+                                 > timestamp)):
+                            uuid = None
                         break
-            if uuid not in rerun_uuids:
+            if uuid and uuid not in rerun_uuids:
                 rerun_uuids.append(uuid)
-        print(rerun_uuids)
         return rerun_uuids
 
     def get_new_upload_data(self,
@@ -324,6 +330,7 @@ class FormatQAQCDriver:
                                                 is_qaqc_successful = False
                                     else:
                                         p['runtime'] += self.time_sleep
+                                        s_processes.append(p)
                             processes = s_processes
                     # it will get here if all good, send out email to token
                     if is_qaqc_successful:
@@ -354,7 +361,7 @@ class FormatQAQCDriver:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Format QAQC Driver')
     parser.add_argument(
-        'lookback_h', type=str, help='Look back x hours to check '
+        '--lookback_h', type=float, help='Look back x hours to check '
                                      'for any unfinished work')
     parser.add_argument(
         '-t', '--test', action='store_true', default=False,

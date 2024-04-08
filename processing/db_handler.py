@@ -251,6 +251,20 @@ class NewDBHandler:
             new_data_upload = cursor.fetchall()
         return new_data_upload
 
+    def get_latest_run_with_uuid(self, conn, uuid):
+        query = SQL('SELECT u.log_id, p.process_timestamp '
+                    'FROM input_interface.data_upload_log u '
+                    'LEFT JOIN qaqc.processing_log p '
+                    'ON u.log_id = p.upload_id '
+                    'WHERE u.upload_token = %(uuid)s '
+                    'ORDER BY p.process_timestamp DESC '
+                    'LIMIT 1')
+        params = {'uuid': uuid}
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, params)
+            run_data = cursor.fetchone()
+        return run_data
+
     def get_undone_data_upload_log_o(self,
                                      conn,
                                      qaqc_processor_source,
@@ -306,7 +320,8 @@ class NewDBHandler:
         # traceback and return o_file of this data_upload
         query = SQL('SELECT u.log_id, u.site_id, '
                     'u.data_file, u.upload_token, '
-                    'u.upload_comment, u.upload_type_id '
+                    'u.upload_comment, u.upload_type_id, '
+                    'u.log_timestamp '
                     'FROM input_interface.data_upload_log u '
                     'LEFT JOIN qaqc.processing_log p '
                     'ON u.log_id = p.upload_id '
