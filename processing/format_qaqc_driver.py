@@ -112,7 +112,7 @@ class FormatQAQCDriver:
                     or 'repair candidate for' in comment):
                 process_id = comment.split()[-1]
                 while process_id:
-                    d = self.db.trace_o_data_upload(
+                    d = self.db.trace_original_data_upload(
                         self.conn,
                         process_id)
                     if (d.get('prior_process_id')
@@ -187,9 +187,7 @@ class FormatQAQCDriver:
         grouped_tasks = {}
         for upload_id, task_data in tasks.items():
             token = task_data.uuid
-            if token not in grouped_tasks:
-                grouped_tasks[token] = []
-            grouped_tasks[token].append(upload_id)
+            grouped_tasks.setdefault(token, []).append(upload_id)
         grouped_upload_id = list(grouped_tasks.values())
         return tasks, grouped_upload_id
 

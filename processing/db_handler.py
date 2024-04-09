@@ -342,7 +342,7 @@ class NewDBHandler:
             data_upload = cursor.fetchall()
         return data_upload
 
-    def trace_o_data_upload(self, conn, process_id):
+    def trace_original_data_upload(self, conn, process_id):
         # case:
         # ac_file is not finished
         # trace up 1 level given process_id
