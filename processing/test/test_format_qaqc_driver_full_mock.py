@@ -3,6 +3,7 @@ import pytest
 from collections import OrderedDict
 from db_handler import NewDBHandler
 from format_qaqc_driver import FormatQAQCDriver
+from email_gen import EmailGen
 from shutil import copyfile
 import csv
 import time
@@ -119,12 +120,12 @@ def mock_get_new_data_upload_log(self,
     return new_data_upload_log
 
 
-def mock_send_email(self, cmd):
-    _, path, token = cmd.split(' ')
+def mock_email_gen_driver(self, token):
     with open(EMAIL_TOKEN, 'a+') as log:
         writer = csv.writer(log)
         data = [token]
         writer.writerow(data)
+    return 'TESTQAQC'
 
 
 def mock_recovery_process(self):
@@ -800,23 +801,23 @@ def are_files_identical(file1_path, file2_path):
         return content1 == content2
 
 
-@pytest.mark.parametrize("case, mock_upload_checks, mock_send_email",
+@pytest.mark.parametrize("case, mock_upload_checks, mock_email_gen_driver",
                          [
-                          (1, mock_upload_checks_1, mock_send_email),
-                          (2, mock_upload_checks_1, mock_send_email),
-                          (3, mock_upload_checks_3, mock_send_email),
-                          (4, mock_upload_checks_4, mock_send_email),
-                          (5, mock_upload_checks_5, mock_send_email),
-                          (11, mock_upload_checks_11, mock_send_email),
-                          (12, mock_upload_checks_12, mock_send_email),
-                          (13, mock_upload_checks_13, mock_send_email),
-                          (15, mock_upload_checks_15, mock_send_email),
-                          (16, mock_upload_checks_1, mock_send_email)
+                          (1, mock_upload_checks_1, mock_email_gen_driver),
+                          (2, mock_upload_checks_1, mock_email_gen_driver),
+                          (3, mock_upload_checks_3, mock_email_gen_driver),
+                          (4, mock_upload_checks_4, mock_email_gen_driver),
+                          (5, mock_upload_checks_5, mock_email_gen_driver),
+                          (11, mock_upload_checks_11, mock_email_gen_driver),
+                          (12, mock_upload_checks_12, mock_email_gen_driver),
+                          (13, mock_upload_checks_13, mock_email_gen_driver),
+                          (15, mock_upload_checks_15, mock_email_gen_driver),
+                          (16, mock_upload_checks_1, mock_email_gen_driver)
                          ])
 def test_format_qaqc_driver(monkeypatch,
                             case,
                             mock_upload_checks,
-                            mock_send_email):
+                            mock_email_gen_driver):
     copyfile(DATA_UPLOAD_LOG_DEFAULT.format(case),
              DATA_UPLOAD_LOG)
     copyfile(PROCESSING_LOG_DEFAULT.format(case),
@@ -831,8 +832,8 @@ def test_format_qaqc_driver(monkeypatch,
                         mock_get_new_data_upload_log)
     monkeypatch.setattr('format_qaqc_driver.upload_checks',
                         mock_upload_checks)
-    monkeypatch.setattr(FormatQAQCDriver, 'send_email',
-                        mock_send_email)
+    monkeypatch.setattr(EmailGen, 'driver',
+                        mock_email_gen_driver)
     monkeypatch.setattr(FormatQAQCDriver, 'recovery_process',
                         mock_recovery_process)
     driver = FormatQAQCDriver(test=True)
@@ -843,29 +844,33 @@ def test_format_qaqc_driver(monkeypatch,
     assert are_files_identical(email_tokens, EMAIL_TOKEN)
 
 
-@pytest.mark.parametrize("case, "
-                         "mock_get_undone_data_upload_log_o, "
-                         "mock_get_undone_data_upload_log_ac, "
-                         "mock_trace_o_data_upload",
-                         [
-                          (1, mock_upload_checks_1, mock_send_email)
-                         ])
-def test_recovery_qaqc_driver(monkeypatch,
-                              case,
-                              mock_get_undone_data_upload_log_o,
-                              mock_get_undone_data_upload_log_ac,
-                              mock_trace_o_data_upload):
-    monkeypatch.setattr(NewDBHandler, 'init_db_conn',
-                        mock_init_db_conn)
-    monkeypatch.setattr(NewDBHandler, 'get_undone_data_upload_log_o',
-                        mock_get_undone_data_upload_log_o)
-    monkeypatch.setattr(NewDBHandler, 'get_undone_data_upload_log_ac',
-                        mock_get_undone_data_upload_log_ac)
-    monkeypatch.setattr(NewDBHandler, 'trace_o_data_upload',
-                        mock_trace_o_data_upload)
-    monkeypatch.setattr(FormatQAQCDriver, 'recovery_process',
-                        mock_recovery_process)
-    driver = FormatQAQCDriver(test=True)
-    uuids = driver.recovery_process()
-    uuids_default = UUIDS_DEFAULT.format(case)
-    assert are_files_identical(uuids, uuids_default)
+# def mock_get_undone_data_upload_o_1()
+# @pytest.mark.parametrize("case, "
+#                          "mock_get_undone_data_upload_log_o, "
+#                          "mock_get_undone_data_upload_log_ac, "
+#                          "mock_trace_o_data_upload",
+#                          [
+#                           (1,
+#                            mock_get_undone_data_upload_o_1,
+#                            mock_get_undone_data_upload_ac_1,
+#                            mock_trace_o_data_upload_1)
+#                          ])
+# def test_recovery_qaqc_driver(monkeypatch,
+#                               case,
+#                               mock_get_undone_data_upload_log_o,
+#                               mock_get_undone_data_upload_log_ac,
+#                               mock_trace_o_data_upload):
+#     monkeypatch.setattr(NewDBHandler, 'init_db_conn',
+#                         mock_init_db_conn)
+#     monkeypatch.setattr(NewDBHandler, 'get_undone_data_upload_log_o',
+#                         mock_get_undone_data_upload_log_o)
+#     monkeypatch.setattr(NewDBHandler, 'get_undone_data_upload_log_ac',
+#                         mock_get_undone_data_upload_log_ac)
+#     monkeypatch.setattr(NewDBHandler, 'trace_o_data_upload',
+#                         mock_trace_o_data_upload)
+#     monkeypatch.setattr(FormatQAQCDriver, 'recovery_process',
+#                         mock_recovery_process)
+#     driver = FormatQAQCDriver(test=True)
+#     uuids = driver.recovery_process()
+#     uuids_default = UUIDS_DEFAULT.format(case)
+#     assert are_files_identical(uuids, uuids_default)

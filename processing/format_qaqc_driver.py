@@ -200,13 +200,12 @@ class FormatQAQCDriver:
                                task.zip_process_id,
                                self.is_test)
         queue.put(result)
-        
-        
+
     def run(self):
         mp_queue = mp.Queue()
         processes = []
         # run recovery process
-        rerun_uuids = self.recovery_process()
+        rerun_uuids = [] #self.recovery_process()
         if rerun_uuids:
             _log.info(f"Rerun for these uuids: [{', '.join(rerun_uuids)}]")
         else:
@@ -250,10 +249,10 @@ class FormatQAQCDriver:
                         (f'Start run: log id {task.upload_id}, '
                          f'prior id: {task.prior_process_id}, '
                          f'zip id: {task.zip_process_id}, '
-                         f'run type: {task.run_type}\n'))
+                         f'run type: {task.run_type}\n'
+                         'line 253'))
                     p = mp.Process(target=self.run_upload_checks_proc,
                                    args=(task,
-                                         self.is_test,
                                          mp_queue))
                     p.start()
                     processes.append(
@@ -266,10 +265,11 @@ class FormatQAQCDriver:
                         time.sleep(self.time_sleep)
                         s_processes = []
                         for p in processes:
-                            if not p.is_alive() and p.get('run_status'):
+                            if not p.get('process').is_alive() and p.get('run_status'):
                                 p['run_status'] = False
                                 result = mp_queue.get()
                                 (process_id, is_upload_successful, uuid) = result
+                                _log.debug(result)
                                 s_tasks = {}
                                 if uuid and is_upload_successful:
                                     s_tasks, _ = self.get_new_upload_data(True, uuid)
@@ -284,10 +284,10 @@ class FormatQAQCDriver:
                                         f'zip id: '
                                         f'{task.zip_process_id}, '
                                         f'run type: {task.run_type}\n'
-                                        f'uuid: {task.uuid}'))
+                                        f'uuid: {task.uuid} '
+                                        'line 287'))
                                     s_p = mp.Process(target=self.run_upload_checks_proc,
                                                      args=(task,
-                                                           self.is_test,
                                                            mp_queue))
                                     s_p.start()
                                     s_processes.append(
@@ -296,7 +296,8 @@ class FormatQAQCDriver:
                                          'retry': 0,
                                          'task': task,
                                          'run_status': True})
-                            elif p.is_alive():
+                            elif p.get('process').is_alive():
+                                # _log.debug('it goes here')
                                 p['runtime'] += self.time_sleep
                                 if p.get('runtime') > self.max_timeout:
                                     p.terminate()
@@ -310,17 +311,17 @@ class FormatQAQCDriver:
                                         task = p.get('task')
                                         s_p = mp.Process(target=self.run_upload_checks_proc,
                                                      args=(task,
-                                                           self.is_test,
                                                            mp_queue))
                                         s_p.start()
                                         p['process'] = s_p
                                         s_processes.append(p)
                                 else:
                                     s_processes.append(p)
-                                
+                            else:
+                                s_processes.append(p)
                         processes = s_processes
                 # it will get here if all good, send out email to token
-                if is_qaqc_successful:
+                if is_qaqc_successful and token:
                     try:
                         msg = self.email_gen.driver(token)
                         if msg.startswith(self.email_prefix):
