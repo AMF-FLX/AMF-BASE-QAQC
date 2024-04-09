@@ -326,19 +326,24 @@ class FormatQAQCDriver:
                     processes = s_processes
                 # it will get here if all good, send out email to token
                 if is_qaqc_successful and token:
+                    _log.info(f'UUID {token} is executed sucessfully, now sending email to the team...')
                     try:
+                        _log.info(f'[EMAIL] Running email gen for token {token}...')
                         msg = self.email_gen.driver(token)
                         if msg.startswith(self.email_prefix):
-                            _log.info(f'Email gen for token: {token}, '
-                                      f'with message: {msg}\n')
+                            _log.info(f'[EMAIL] Email gen for token: {token}  - Success!\n'
+                                      f'   - Message: {msg}')
                     except EmailGenError:
                         # send email to AMP
-                        _log.debug('Send email to AMP for token: '
+                        _log.info(f'[EMAIL] Email gen for token: {token}  - Failed!\n'
+                                  f'   - Message: {msg}')
+                        _log.debug('[EMAIL AMP] Send email to AMP for token: '
                                    f'{token}')
                         # self.send_email_to_amp(cmd)
                 else:
                     # send email to AMP
-                    _log.debug('Send email to AMP for token: '
+                    _log.info(f'UUID {token} is failed to execute, sending email to AMP...')
+                    _log.debug('[EMAIL AMP] Send email to AMP for token: '
                                f'{token}')
                     # self.send_email_to_amp(cmd)
             time.sleep(self.time_sleep)
