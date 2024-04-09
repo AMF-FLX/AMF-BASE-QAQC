@@ -27,8 +27,10 @@ class ReportStatus:
             if config.has_section(cfg_section):
                 self.report_status_ws = config.get(
                         cfg_section, 'report_status')
-                self.register_base_ws = config.get(
-                        cfg_section, 'register_base_qaqc')
+                self.register_qaqc_ws = config.get(
+                        cfg_section, 'register_qaqc')
+                self.register_base_candidate = config.get(
+                    cfg_section, 'register_base_candidate')
                 self.get_base_input = config.get(
                         cfg_section, 'get_base_input')
                 self.publish_base_ws = config.get(
@@ -43,7 +45,7 @@ class ReportStatus:
                         cfg_section, 'get_site_users')
             else:
                 self.report_status_ws = None
-                self.register_base_ws = None
+                self.register_qaqc_ws = None
                 self.file_qaqc_url_prefix = None
                 self.siteres_qaqc_url_prefix = None
                 _log.error('Cannot find web service from config.')
@@ -98,13 +100,35 @@ class ReportStatus:
         response = self._basic_post_request_core(msg, self.report_status_ws)
         return response.getcode() == HTTPStatus.OK
 
-    def register_siteRes_process(self, site_id, resolution):
-        req_data = {'SITE_ID': site_id,
+    def register_format_qaqc_process(
+            self, site_id, upload_id, process_timestamp,
+            prior_process_id=None, zip_process_id=None):
+        register_format_qaqc_ws = f'{self.register_qaqc_ws}/format_qaqc'
+        req_data = {'site_id': site_id,
+                    'upload_id': upload_id,
+                    'process_timestamp': process_timestamp,
+                    'code_version': self.code_version,
+                    'processor': getpass.getuser()}
+
+        if prior_process_id:
+            req_data.update(prior_process_id=prior_process_id)
+
+        if zip_process_id:
+            req_data.update(zip_process_id=zip_process_id)
+
+        return self._basic_post_request(
+                req_data, register_format_qaqc_ws).strip('"')
+
+    def register_data_qaqc_process(
+            self, site_id, resolution, process_timestamp):
+        register_data_qaqc_ws = f'{self.register_qaqc_ws}/data_qaqc'
+        req_data = {'site_id': site_id,
                     'resolution': resolution,
+                    'process_timestamp': process_timestamp,
                     'code_version': self.code_version,
                     'processor': getpass.getuser()}
         return self._basic_post_request(
-                req_data, self.register_base_ws).strip('"')
+                req_data, register_data_qaqc_ws).strip('"')
 
     def get_available_base_input(self, site_id):
         try:
@@ -115,16 +139,19 @@ class ReportStatus:
                 ws=self.get_base_input + site_id,
                 s=e.code, r=e.read().decode('utf-8')))
 
-    def register_base_files(self, proc_id, file, input_info):
-        req_data = {'base_file': file}
-        parts = []
+    def register_base_files(self, proc_id, input_info):
+        req_data = {'process_id': proc_id}
+        upload_files = []
+
         for part in input_info:
-            parts.append({'file': part.name,
-                          'start': part.start,
-                          'end': part.end})
-        req_data['upload_files'] = parts
-        url = '{u}/{i}'.format(u=self.register_base_ws, i=proc_id)
-        return self._basic_post_request(req_data, url).strip('"')
+            upload_files.append({'file_name': part.name,
+                                 'start_time': part.start,
+                                 'end_time': part.end})
+
+        req_data['upload_files'] = upload_files
+
+        return self._basic_post_request(
+            req_data, self.register_base_candidate).strip('"')
 
     def report_publish_base(self, process_id, version):
         msg = {'process_id': process_id,

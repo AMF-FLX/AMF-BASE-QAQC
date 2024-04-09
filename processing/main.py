@@ -2,6 +2,7 @@ import argparse
 import os
 import traceback
 
+from datetime import datetime as dt
 from time import time
 
 from data_reader import DataReader
@@ -55,6 +56,9 @@ def main():
     args = parser.parse_args()
     # parser.parse_known_args
 
+    start_time = dt.now()
+    timestamp_str = start_time.isoformat()
+
     if args.site_id not in SiteAttributes().get_site_dict():
         print(f'Invalid SITE_ID {args.site_id} exiting.')
         return
@@ -67,12 +71,13 @@ def main():
             process_id = str('TestProcess_###')
     else:
         rs = ReportStatus()
-        process_id = ReportStatus().register_siteRes_process(
-            args.site_id, args.resolution)
+        process_id = ReportStatus().register_data_qaqc_process(
+            site_id=args.site_id, resolution=args.resolution,
+            process_timestamp=timestamp_str)
 
     # Initialize logger
-    _log = Logger(True, process_id, args.site_id, process_type).getLogger(
-        'BASE Generation')
+    _log = Logger(True, process_id, args.site_id, process_type,
+                  timestamp_str).getLogger('BASE Generation')
     log_dir = _log.get_log_dir()
     base_dir_for_run = os.path.split(log_dir)[0]
 
