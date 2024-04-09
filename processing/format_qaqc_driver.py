@@ -155,7 +155,7 @@ class FormatQAQCDriver:
         if log_ids_list:
             log_msg = f'Run with list of upload log ids: {log_ids_list} '
             if uuid:
-                log_msg += f'with token: {uuid}]\n'
+                log_msg += f'with token: {uuid}'
             _log.info(log_msg)
         tasks = {}
         for row in new_data_upload_log:
@@ -282,7 +282,7 @@ class FormatQAQCDriver:
                                     ('Start upload_checks with parameters:\n'
                                      f'   - Upload_log log_id: {task.upload_id}\n'
                                      f'   - Prior id: {task.prior_process_id}\n'
-                                     f'   - Zip id: {task.zip_process_id}, '
+                                     f'   - Zip id: {task.zip_process_id}\n'
                                      f'   - Run type: {task.run_type}\n'
                                      f'   - UUID: {task.uuid}'))
                                 s_p = mp.Process(target=self.run_upload_checks_proc,
