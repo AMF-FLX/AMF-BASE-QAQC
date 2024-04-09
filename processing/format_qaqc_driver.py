@@ -104,6 +104,7 @@ class FormatQAQCDriver:
         for row in ac_data_upload:
             comment = row.get('upload_comment')
             timestamp = row.get('log_timestamp')
+            uuid = None
             if ('Archive upload for' in comment
                     or 'repair candidate for' in comment):
                 process_id = comment.split()[-1]
@@ -343,10 +344,10 @@ class FormatQAQCDriver:
                 # it will get here if all good, send out email to token
                 if is_qaqc_successful:
                     try:
-                        msg = self.email_gen.driver(token, True)
+                        msg = self.email_gen.driver(token)
                         if msg.startswith(self.email_prefix):
                             _log.info(f'Email gen for token: {token}, '
-                                        'with message: {msg}\n')
+                                      f'with message: {msg}\n')
                     except EmailGenError:
                         # send email to AMP
                         _log.debug('Send email to AMP for token: '
