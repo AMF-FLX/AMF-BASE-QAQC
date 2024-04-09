@@ -333,9 +333,12 @@ class FormatQAQCDriver:
                         if msg.startswith(self.email_prefix):
                             _log.info(f'[EMAIL] Email gen for token: {token}  - Success!\n'
                                       f'   - Message: {msg}')
+                        else:
+                            _log.info(f'[EMAIL] Email gen for token: {token}  - Failed!\n'
+                                      f'   - Message: {msg}')
                     except EmailGenError:
                         # send email to AMP
-                        _log.info(f'[EMAIL] Email gen for token: {token}  - Failed!\n'
+                        _log.info(f'[EMAIL] Email gen for token: {token}  - Throw error!\n'
                                   f'   - Message: {msg}')
                         _log.debug('[EMAIL AMP] Send email to AMP for token: '
                                    f'{token}')
