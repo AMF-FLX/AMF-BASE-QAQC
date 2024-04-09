@@ -156,6 +156,10 @@ class FormatQAQCDriver:
             log_msg = f'Run with list of upload log ids: {log_ids_list} '
             if uuid:
                 log_msg += f'with token: {uuid}'
+            if is_recovery:
+                log_msg = f'[RECOVERY MODE] {log_msg}'
+            else:
+                log_msg = f'[REGULAR MODE] {log_msg}'
             _log.info(log_msg)
         tasks = {}
         for row in new_data_upload_log:
@@ -270,7 +274,6 @@ class FormatQAQCDriver:
                             p['run_status'] = False
                             result = mp_queue.get()
                             (process_id, is_upload_successful, uuid) = result
-                            _log.info(result)
                             s_tasks = {}
                             if uuid and is_upload_successful:
                                 s_tasks, _ = self.get_new_upload_data(True, uuid)
@@ -325,7 +328,7 @@ class FormatQAQCDriver:
                     processes = s_processes
                 # it will get here if all good, send out email to token
                 if is_qaqc_successful and token:
-                    _log.info(f'UUID {token} is executed sucessfully, now sending email to the team...')
+                    _log.info(f'[STATUS] UUID {token} is executed sucessfully, now sending email to the team...')
                     try:
                         _log.info(f'[EMAIL] Running email gen for token {token}...')
                         msg = self.email_gen.driver(token)
@@ -349,12 +352,13 @@ class FormatQAQCDriver:
                         _log.debug('[EMAIL AMP] Sent email to AMP')
                 else:
                     # send email to AMP
-                    _log.info(f'UUID {token} is failed to execute, sending email to AMP...')
+                    _log.info(f'[STATUS] UUID {token} is failed to execute, sending email to AMP...')
                     _log.debug('[EMAIL AMP] Sending email to AMP for token: '
                                f'{token}')
                     self.send_email_to_amp(msg)
                     _log.debug('[EMAIL AMP] Sent email to AMP')
             time.sleep(self.time_sleep)
+            _log.info(f'***Looking for new tasks...***')
             o_tasks, o_grouped_tasks = \
                 self.get_new_upload_data(False)
         if self.is_test:
