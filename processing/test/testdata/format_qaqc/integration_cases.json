@@ -8,7 +8,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. No issues were encountered. Data will be queued for further data processing.",
@@ -38,7 +38,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001010000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -129,7 +129,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001010000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -220,7 +220,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001010000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -342,7 +342,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001010000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -464,7 +464,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001010000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -617,7 +617,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001010000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -772,7 +772,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001010000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -871,7 +871,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001010000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -962,7 +962,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001010000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -1053,7 +1053,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001010000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -1144,7 +1144,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "Problem while loading data file; QA/QC INCOMPLETE. Autocorrection of detected issues was attempted and FAILED.",
@@ -1394,7 +1394,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "Problem while loading data file; QA/QC INCOMPLETE. Autocorrection of detected issues was attempted and FAILED.",
@@ -1644,7 +1644,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001010000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -1774,7 +1774,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and FAILED.",
@@ -1898,7 +1898,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001010000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -2127,7 +2127,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -2253,7 +2253,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -2412,7 +2412,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -2604,7 +2604,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -2767,7 +2767,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and FAILED.",
@@ -2912,7 +2912,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and FAILED.",
@@ -3123,7 +3123,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001010000_200001010600.csv. See Format QA/QC report for autocorrected file.",
@@ -3280,7 +3280,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "Problem while loading data file; QA/QC INCOMPLETE. Autocorrection of detected issues was attempted and FAILED.",
@@ -3400,7 +3400,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011100_200001012100.csv. See Format QA/QC report for autocorrected file.",
@@ -3594,7 +3594,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and FAILED.",
@@ -3805,7 +3805,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -3962,7 +3962,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -4088,7 +4088,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001010000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -4245,7 +4245,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001010000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -4404,7 +4404,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and FAILED.",
@@ -4584,7 +4584,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -4747,7 +4747,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -4873,7 +4873,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -5001,7 +5001,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -5123,7 +5123,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -5249,7 +5249,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -5445,7 +5445,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -5619,7 +5619,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "Format QA/QC INCOMPLETE. Autocorrection of detected issues was attempted and FAILED.",
@@ -5770,7 +5770,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "Automated extraction of US.zip was attempted and the included files were re-uploaded. See separate Format QA/QC report for each included file.",
@@ -5863,7 +5863,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "Automated extraction of US.zip was attempted",
@@ -5962,7 +5962,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "Automated extraction of US.zip was attempted and FAILED.",
@@ -6086,7 +6086,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -6177,7 +6177,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -6303,7 +6303,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -6464,7 +6464,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -6555,7 +6555,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "Automated extraction of US.zip was attempted and FAILED.",
@@ -6679,7 +6679,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and FAILED.",
@@ -6884,7 +6884,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "Automated extraction of US.zip was attempted and the included files were re-uploaded. See separate Format QA/QC report for each included file.",
@@ -6977,7 +6977,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -7177,7 +7177,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and FAILED.",
@@ -7334,7 +7334,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011100_200001011900.csv. See Format QA/QC report for autocorrected file.",
@@ -7493,7 +7493,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001011900.csv. See Format QA/QC report for autocorrected file.",
@@ -7619,7 +7619,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001011900.csv. See Format QA/QC report for autocorrected file.",
@@ -7784,7 +7784,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Additional input is needed to further process the data.",
@@ -7943,7 +7943,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Additional input is needed to further process the data.",
@@ -8038,7 +8038,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Additional input is needed to further process the data.",
@@ -8201,7 +8201,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "Problem while loading data file; QA/QC INCOMPLETE. Additional input is needed to further process the data.",
@@ -8294,7 +8294,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Additional input is needed to further process the data.",
@@ -8490,7 +8490,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Additional input is needed to further process the data.",
@@ -8717,7 +8717,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -8977,7 +8977,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -9109,7 +9109,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001011600.csv. See Format QA/QC report for autocorrected file.",
@@ -9233,7 +9233,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001011400.csv. See Format QA/QC report for autocorrected file.",
@@ -9396,7 +9396,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001011300.csv. See Format QA/QC report for autocorrected file.",
@@ -9557,7 +9557,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001011200.csv. See Format QA/QC report for autocorrected file.",
@@ -9718,7 +9718,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. No issues were encountered. Data will be queued for further data processing.",
@@ -9748,7 +9748,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011300_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -9874,7 +9874,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011400_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -10000,7 +10000,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and FAILED.",
@@ -10120,7 +10120,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -10211,7 +10211,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and autocorrected file was uploaded: US-UMB_HR_200001011000_200001012000.csv. See Format QA/QC report for autocorrected file.",
@@ -10302,7 +10302,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and FAILED.",
@@ -10544,7 +10544,7 @@
                 "process_type": "File Format",
                 "process_log_file": "QAQC_report_US-UMB_999999_20240325090000.log",
                 "processor": "unittester",
-                "process_datetime": "2024-Mar-25 09:00 ",
+                "process_datetime": "2024-Mar-25 09:00",
                 "process_confirmation": {
                     "status_start_msg": null,
                     "status_end_msg": "All format QA/QC checks attempted. Autocorrection of detected issues was attempted and FAILED.",
