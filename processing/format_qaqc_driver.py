@@ -138,8 +138,7 @@ class FormatQAQCDriver:
     def get_new_upload_data(self,
                             is_qaqc_processor=True,
                             uuid=None,
-                            is_recovery=False,
-                            blacklist_uuid=[]):
+                            is_recovery=False):
         if is_recovery:
             new_data_upload_log = \
                 self.db.get_data_upload_log_with_uuid(
@@ -163,26 +162,25 @@ class FormatQAQCDriver:
             upload_id = row.get('log_id')
             site_id = row.get('site_id')
             token = row.get('upload_token')
-            if token not in blacklist_uuid:
-                zip_process_id = None
-                prior_process_id = None
-                run_type = 'o'
-                upload_comment = row.get('upload_comment', '')
-                if 'repair candidate for' in upload_comment:
-                    run_type = 'r'
-                    prior_process_id = upload_comment.split()[-1]
-                elif 'Archive upload for' in upload_comment:
-                    zip_process_id = upload_comment.split()[-1]
-                filename = row.get('data_file')
-                filename = str(Path(self.data_directory)/site_id/filename)
+            zip_process_id = None
+            prior_process_id = None
+            run_type = 'o'
+            upload_comment = row.get('upload_comment', '')
+            if 'repair candidate for' in upload_comment:
+                run_type = 'r'
+                prior_process_id = upload_comment.split()[-1]
+            elif 'Archive upload for' in upload_comment:
+                zip_process_id = upload_comment.split()[-1]
+            filename = row.get('data_file')
+            filename = str(Path(self.data_directory)/site_id/filename)
 
-                tasks[upload_id] = Task(filename,
-                                        upload_id,
-                                        prior_process_id,
-                                        zip_process_id,
-                                        run_type,
-                                        site_id,
-                                        token)
+            tasks[upload_id] = Task(filename,
+                                    upload_id,
+                                    prior_process_id,
+                                    zip_process_id,
+                                    run_type,
+                                    site_id,
+                                    token)
         grouped_tasks = {}
         for upload_id, task_data in tasks.items():
             token = task_data.uuid
@@ -205,7 +203,6 @@ class FormatQAQCDriver:
     def run(self):
         mp_queue = mp.Queue()
         processes = []
-        blacklist_uuid = []
         # run recovery process
         rerun_uuids = self.recovery_process()
         if rerun_uuids:
@@ -309,8 +306,7 @@ class FormatQAQCDriver:
                                 retry = p.get('retry')
                                 if retry >= self.max_retries:
                                     is_qaqc_successful = False
-                                    blacklist_uuid.append(p.get('task').uuid)
-                                    _log.info(f"Process {p.get('task').uuid} {self.max_retries} retries reached, add to blacklist")
+                                    _log.info(f"Process {p.get('task').uuid} {self.max_retries} retries reached. Stop running this process")
                                 else:
                                     p['retry'] = retry + 1
                                     p['runtime'] = 0
@@ -360,7 +356,7 @@ class FormatQAQCDriver:
                     _log.debug('[EMAIL AMP] Sent email to AMP')
             time.sleep(self.time_sleep)
             o_tasks, o_grouped_tasks = \
-                self.get_new_upload_data(False, blacklist_uuid=blacklist_uuid)
+                self.get_new_upload_data(False)
         if self.is_test:
             return
         sys.exit(0)
