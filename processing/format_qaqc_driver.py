@@ -336,19 +336,25 @@ class FormatQAQCDriver:
                         else:
                             _log.info(f'[EMAIL] Email gen for token: {token}  - Failed!\n'
                                       f'   - Message: {msg}')
+                            _log.debug('[EMAIL AMP] Sending email to AMP for token: '
+                                    f'{token}')
+                            self.send_email_to_amp(msg)
+                            _log.debug('[EMAIL AMP] Sent email to AMP')
                     except EmailGenError:
                         # send email to AMP
                         _log.info(f'[EMAIL] Email gen for token: {token}  - Throw error!\n'
                                   f'   - Message: {msg}')
-                        _log.debug('[EMAIL AMP] Send email to AMP for token: '
+                        _log.debug('[EMAIL AMP] Sending email to AMP for token: '
                                    f'{token}')
-                        # self.send_email_to_amp(cmd)
+                        self.send_email_to_amp(msg)
+                        _log.debug('[EMAIL AMP] Sent email to AMP')
                 else:
                     # send email to AMP
                     _log.info(f'UUID {token} is failed to execute, sending email to AMP...')
-                    _log.debug('[EMAIL AMP] Send email to AMP for token: '
+                    _log.debug('[EMAIL AMP] Sending email to AMP for token: '
                                f'{token}')
-                    # self.send_email_to_amp(cmd)
+                    self.send_email_to_amp(msg)
+                    _log.debug('[EMAIL AMP] Sent email to AMP')
             time.sleep(self.time_sleep)
             o_tasks, o_grouped_tasks = \
                 self.get_new_upload_data(False, blacklist_uuid=blacklist_uuid)
