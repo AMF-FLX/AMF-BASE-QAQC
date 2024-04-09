@@ -191,8 +191,19 @@ class FormatQAQCDriver:
         grouped_upload_id = list(grouped_tasks.values())
         return tasks, grouped_upload_id
 
+    def run_upload_checks_proc(self, task, queue):
+        result = upload_checks(task.filename,
+                               task.upload_id,
+                               task.run_type,
+                               task.site_id,
+                               task.prior_process_id,
+                               task.zip_process_id,
+                               self.is_test)
+        queue.put(result)
+        
+        
     def run(self):
-        num_processes = mp.cpu_count()
+        mp_queue = mp.Queue()
         processes = []
         # run recovery process
         rerun_uuids = self.recovery_process()
@@ -231,115 +242,82 @@ class FormatQAQCDriver:
             # that has the same token
             for upload_ids in o_grouped_tasks:
                 is_qaqc_successful = True
-                with mp.Pool(processes=num_processes) as pool:
-                    for upload_id in upload_ids:
-                        task = o_tasks.get(upload_id)
-                        token = task.uuid
-                        is_zip = '.zip' in task.filename
-                        _log.info(
-                            (f'Start run: log id {task.upload_id}, '
-                             f'prior id: {task.prior_process_id}, '
-                             f'zip id: {task.zip_process_id}, '
-                             f'run type: {task.run_type}\n'))
-                        processes.append(
-                            {'process':
-                                pool.apply_async(upload_checks,
-                                                    (task.filename,
-                                                    task.upload_id,
-                                                    task.run_type,
-                                                    task.site_id,
-                                                    task.
-                                                    prior_process_id,
-                                                    task.zip_process_id,
-                                                    self.is_test)),
-                                'runtime': 0,
-                                'retry': 0,
-                                'task': task})
-                    while processes:
+                for upload_id in upload_ids:
+                    task = o_tasks.get(upload_id)
+                    token = task.uuid
+                    is_zip = '.zip' in task.filename
+                    _log.info(
+                        (f'Start run: log id {task.upload_id}, '
+                         f'prior id: {task.prior_process_id}, '
+                         f'zip id: {task.zip_process_id}, '
+                         f'run type: {task.run_type}\n'))
+                    p = mp.Process(target=self.run_upload_checks_proc,
+                                   args=(task,
+                                         self.is_test,
+                                         mp_queue))
+                    p.start()
+                    processes.append(
+                        {'process': p,
+                         'runtime': 0,
+                         'retry': 0,
+                         'task': task,
+                         'run_status': True})
+                while processes:
                         time.sleep(self.time_sleep)
                         s_processes = []
                         for p in processes:
-                            try:
-                                result = (p
-                                            .get('process')
-                                            .get(timeout=5))
-                                (process_id,
-                                    is_upload_successful,
-                                    uuid) = result
+                            if not p.is_alive() and p.get('run_status'):
+                                p['run_status'] = False
+                                result = mp_queue.get()
+                                (process_id, is_upload_successful, uuid) = result
                                 s_tasks = {}
                                 if uuid and is_upload_successful:
-                                    s_tasks, _ = \
-                                        self.get_new_upload_data(True,
-                                                                 uuid)
+                                    s_tasks, _ = self.get_new_upload_data(True, uuid)
                                     if is_zip and len(s_tasks) > 1:
                                         token = uuid
                                 for task in s_tasks.values():
                                     _log.info(
                                         ('Start run: log id '
-                                         f'{task.upload_id}, '
-                                         'prior id: '
-                                         f'{task.prior_process_id}, '
-                                         f'zip id: '
-                                         f'{task.zip_process_id}, '
-                                         f'run type: {task.run_type}\n'
-                                         f'uuid: {task.uuid}'))
+                                        f'{task.upload_id}, '
+                                        'prior id: '
+                                        f'{task.prior_process_id}, '
+                                        f'zip id: '
+                                        f'{task.zip_process_id}, '
+                                        f'run type: {task.run_type}\n'
+                                        f'uuid: {task.uuid}'))
+                                    s_p = mp.Process(target=self.run_upload_checks_proc,
+                                                     args=(task,
+                                                           self.is_test,
+                                                           mp_queue))
+                                    s_p.start()
                                     s_processes.append(
-                                        {'process':
-                                            pool
-                                            .apply_async(
-                                                upload_checks,
-                                                (task.filename,
-                                                    task.upload_id,
-                                                    task.run_type,
-                                                    task.site_id,
-                                                    task
-                                                    .prior_process_id,
-                                                    task
-                                                    .zip_process_id,
-                                                    self.is_test)),
-                                            'runtime': 0,
-                                            'retry': 0,
-                                            'task': task})
-                            except mp.TimeoutError:
+                                        {'process': s_p,
+                                         'runtime': 0,
+                                         'retry': 0,
+                                         'task': task,
+                                         'run_status': True})
+                            elif p.is_alive():
+                                p['runtime'] += self.time_sleep
                                 if p.get('runtime') > self.max_timeout:
-                                    p.get('process').terminate()
-                                    _log.info('Process terminated '
-                                                'due to time out '
-                                                'for upload_id: '
-                                                f'{task.upload_id}')
-                                    if p.get('retry') < \
-                                            self.max_retries:
-                                        task = p.get('task')
-                                        p['process'] = \
-                                            pool.apply_async(
-                                                upload_checks,
-                                                (task.filename,
-                                                    task.upload_id,
-                                                    task.run_type,
-                                                    task.site_id,
-                                                    task.prior_process_id,
-                                                    task.zip_process_id,
-                                                    self.is_test))
-                                        p['runtime'] = 0
-                                        retry = p.get('retry') + 1
-                                        p['retry'] = retry
-                                        _log.info('Retry to run '
-                                                    'upload_id: '
-                                                    f'{task.upload_id}, '
-                                                    f'retry: {retry}')
+                                    p.terminate()
+                                    p.join()
+                                    retry = p.get('retry')
+                                    if retry > self.max_retries:
+                                        is_qaqc_successful = False
                                     else:
-                                        # terminate all process
-                                        # for this run
-                                        # and send email to team
-                                        if p.get('retry') > \
-                                                self.max_retries:
-                                            (p
-                                                .get('process')
-                                                .terminate())
-                                            is_qaqc_successful = False
+                                        p['retry'] = retry + 1
+                                        p['runtime'] = 0
+                                        task = p.get('task')
+                                        s_p = mp.Process(target=self.run_upload_checks_proc,
+                                                     args=(task,
+                                                           self.is_test,
+                                                           mp_queue))
+                                        s_p.start()
+                                        p['process'] = s_p
+                                        s_processes.append(p)
                                 else:
-                                    p['runtime'] += self.time_sleep
                                     s_processes.append(p)
+                                
                         processes = s_processes
                 # it will get here if all good, send out email to token
                 if is_qaqc_successful:
