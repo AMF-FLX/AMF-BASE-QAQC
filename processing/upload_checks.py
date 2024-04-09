@@ -9,7 +9,6 @@ from time import time
 from typing import Optional
 
 from data_reader import DataReader
-from db_handler import NewDBHandler
 from file_name_verifier import FileNameVerifier
 from logger import Logger
 from status import StatusCode, StatusGenerator  # , StatusEncoder
@@ -38,7 +37,7 @@ def convert_ts_str_iso_format(ts_str: Optional[str]) -> Optional[str]:
 def upload_checks(
         filename: str, upload_id: int, run_type: str,
         site_id: str, prior_process_id: int, zip_process_id: int,
-        conn=None, local_run=False) -> (Optional[int], bool, Optional[str]):
+        local_run=False) -> (Optional[int], bool, Optional[str]):
 
     s_time = time()
     statuses = []
@@ -55,8 +54,8 @@ def upload_checks(
     autorepair_uuid = None
 
     if not local_run:
-        db = NewDBHandler()
-        process_id = db.register_format_qaqc(
+        rs = ReportStatus()
+        process_id = rs.register_format_qaqc_process(
             upload_id=upload_id, process_timestamp=timestamp_str,
             site_id=site_id, prior_process_id=prior_process_id,
             zip_process_id=zip_process_id)
@@ -84,18 +83,12 @@ def upload_checks(
     try:
         process_states = ProcessStateHandler(initialize_lookup=not local_run)
 
-        if not local_run:
-            # write to the state log
-            rs = ReportStatus()
-            rs.report_status(process_id=process_id,
-                             state_id=process_states.get_process_state(
-                                 ProcessStates.Uploaded))
-
         status_ct = 0
         all_status = True
         fixable = False
 
-        log_start_time = start_time.strftime(format='%Y-%b-%d %H:%M %Z')
+        log_start_time = start_time.strftime(
+            format='%Y-%b-%d %H:%M %Z').strip(' ')
 
         original_filename = FilenameUtils().remove_upload_timestamp(
             filename)
