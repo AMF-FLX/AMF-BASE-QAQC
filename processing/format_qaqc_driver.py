@@ -81,7 +81,7 @@ class FormatQAQCDriver:
     def send_email_to_amp(self, msg):
         sender = self.qaqc_processor_email
         if isinstance(self.amp_team_email, str):
-            receipient = list(self.amp_team_email)
+            receipient = [self.amp_team_email]
         subject = 'FormatQAQCDriver Abnormal Report'
         msg = self.email_amp.build_multipart_text_msg(sender,
                                                       receipient,
