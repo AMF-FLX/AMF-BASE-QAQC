@@ -1,5 +1,4 @@
 import argparse
-import datetime as dt
 import os
 import multiprocessing as mp
 import sys
@@ -41,8 +40,8 @@ class FormatQAQCDriver:
                 self.max_timeout = config.getint(cfg_section, 'max_timeout_s')
                 self.timeout = self.max_timeout / 10.0
                 if not lookback_h:
-                    self.lookback_h = config.getfloat(cfg_section, 'lookback_h')
-
+                    self.lookback_h = \
+                        config.getfloat(cfg_section, 'lookback_h')
             cfg_section = 'DB'
             if config.has_section(cfg_section):
                 hostname = config.get(cfg_section, 'hostname')
@@ -124,10 +123,10 @@ class FormatQAQCDriver:
                         o_run_data = \
                             self.db.get_latest_run_with_uuid(self.conn,
                                                              uuid)
-                        if (o_run_data 
-                                and 
+                        if (o_run_data
+                                and
                                 (o_run_data
-                                 .get('process_timestamp') 
+                                 .get('process_timestamp')
                                  > timestamp)):
                             uuid = None
                         break
@@ -211,9 +210,10 @@ class FormatQAQCDriver:
         rerun_uuids = self.recovery_process()
         if rerun_uuids:
             rerun_uuids_str = ', '.join(rerun_uuids)
-            _log.info(f'[RECOVERY MODE] Rerun for these uuids: {rerun_uuids_str}')
+            _log.info('[RECOVERY MODE] Rerun for these uuids: '
+                      f'{rerun_uuids_str}')
         else:
-            _log.info(f"[RECOVERY MODE] No UUID needed to rerun")
+            _log.info('[RECOVERY MODE] No UUID needed to rerun')
         o_tasks = {}
         o_grouped_tasks = []
         for uuid in rerun_uuids:
@@ -270,57 +270,70 @@ class FormatQAQCDriver:
                     time.sleep(self.time_sleep)
                     s_processes = []
                     for p in processes:
-                        if not p.get('process').is_alive() and p.get('run_status'):
+                        if (not p.get('process').is_alive()
+                                and p.get('run_status')):
                             p['run_status'] = False
                             result = mp_queue.get()
                             (process_id, is_upload_successful, uuid) = result
                             s_tasks = {}
                             if uuid and is_upload_successful:
-                                s_tasks, _ = self.get_new_upload_data(True, uuid)
+                                s_tasks, _ = \
+                                    self.get_new_upload_data(True, uuid)
                                 if is_zip and len(s_tasks) > 1:
                                     token = uuid
                             for task in s_tasks.values():
                                 _log.info(
                                     ('Start upload_checks with parameters:\n'
-                                    f'   - Upload_log log_id: {task.upload_id}\n'
-                                    f'   - Prior id: {task.prior_process_id}\n'
-                                    f'   - Zip id: {task.zip_process_id}\n'
-                                    f'   - Run type: {task.run_type}\n'
-                                    f'   - UUID: {task.uuid}'))
-                                s_p = mp.Process(target=self.run_upload_checks_proc,
-                                                    args=(task,
-                                                        mp_queue))
+                                     '   - Upload_log log_id: '
+                                     f'{task.upload_id}\n'
+                                     '   - Prior id: '
+                                     f'{task.prior_process_id}\n'
+                                     f'   - Zip id: {task.zip_process_id}\n'
+                                     f'   - Run type: {task.run_type}\n'
+                                     f'   - UUID: {task.uuid}'))
+                                s_p = mp.Process(
+                                    target=self.run_upload_checks_proc,
+                                    args=(task, mp_queue))
                                 s_p.start()
                                 s_processes.append(
                                     {'process': s_p,
-                                    'runtime': 0,
-                                    'retry': 0,
-                                    'task': task,
-                                    'run_status': True})
+                                     'runtime': 0,
+                                     'retry': 0,
+                                     'task': task,
+                                     'run_status': True})
                             # elif not is_upload_successful:
                             #     pass
                         elif p.get('process').is_alive():
                             p['runtime'] += self.time_sleep
                             if p.get('runtime') > self.max_timeout:
-                                _log.info(f"Process {p.get('task').uuid} is not done after {self.max_timeout}s...")
+                                _log.info(f"Process {p.get('task').uuid} "
+                                          'is not done after '
+                                          f"{self.max_timeout}s...")
                                 p.get('process').terminate()
                                 p.get('process').join()
-                                _log.info(f"Process {p.get('task').uuid} is terminated")
+                                _log.info(f"Process {p.get('task').uuid} "
+                                          'is terminated')
                                 retry = p.get('retry')
                                 if retry >= self.max_retries:
                                     is_qaqc_successful = False
-                                    _log.info(f"Process {p.get('task').uuid} {self.max_retries} retries reached. Stop running this process")
+                                    _log.info(f"Process {p.get('task').uuid} "
+                                              f'{self.max_retries} '
+                                              'retries reached. '
+                                              'Stop running this process')
                                 else:
                                     p['retry'] = retry + 1
                                     p['runtime'] = 0
                                     task = p.get('task')
-                                    s_p = mp.Process(target=self.run_upload_checks_proc,
-                                                    args=(task,
-                                                        mp_queue))
+                                    s_p = mp.Process(
+                                        target=self.run_upload_checks_proc,
+                                        args=(task, mp_queue))
                                     s_p.start()
                                     p['process'] = s_p
                                     s_processes.append(p)
-                                    _log.info(f"Process {p.get('task').uuid} retry number: {p['retry']}/{self.max_retries}")
+                                    _log.info(
+                                        f"Process {p.get('task').uuid} "
+                                        'retry number: '
+                                        f"{p['retry']}/{self.max_retries}")
                             else:
                                 s_processes.append(p)
                         else:
@@ -328,39 +341,47 @@ class FormatQAQCDriver:
                     processes = s_processes
                 # it will get here if all good, send out email to token
                 if is_qaqc_successful and token:
-                    _log.info(f'[STATUS] UUID {token} is executed sucessfully, now sending email to the team...')
+                    _log.info(f'[STATUS] UUID {token} '
+                              'is executed sucessfully, '
+                              'sending email to the team...')
                     try:
-                        _log.info(f'[EMAIL] Running email gen for token {token}...')
+                        _log.info('[EMAIL] Running email gen '
+                                  f'for token {token}...')
                         msg = self.email_gen.driver(token)
                         if msg.startswith(self.email_prefix):
-                            _log.info(f'[EMAIL] Email gen for token: {token}  - Success!\n'
+                            _log.info('[EMAIL] Email gen for token: '
+                                      f'{token} - Success!\n'
                                       f'   - Message: {msg}')
                         else:
-                            _log.info(f'[EMAIL] Email gen for token: {token}  - Failed!\n'
+                            _log.info('[EMAIL] Email gen for token: '
+                                      f'{token} - Failed!\n'
                                       f'   - Message: {msg}')
-                            _log.debug('[EMAIL AMP] Sending email to AMP for token: '
-                                    f'{token}')
+                            _log.debug('[EMAIL AMP] Sending email '
+                                       f'to AMP for token: {token}')
                             self.send_email_to_amp(msg)
                             _log.debug('[EMAIL AMP] Sent email to AMP')
                     except EmailGenError:
                         # send email to AMP
-                        _log.info(f'[EMAIL] Email gen for token: {token}  - Throw error!\n'
+                        _log.info('[EMAIL] Email gen for token: '
+                                  f'{token} - Throw error!\n'
                                   f'   - Message: {msg}')
-                        _log.debug('[EMAIL AMP] Sending email to AMP for token: '
-                                   f'{token}')
+                        _log.debug('[EMAIL AMP] Sending email '
+                                   f'to AMP for token: {token}')
                         self.send_email_to_amp(msg)
                         _log.debug('[EMAIL AMP] Sent email to AMP')
                 else:
                     # send email to AMP
-                    _log.info(f'[STATUS] UUID {token} is failed to execute, sending email to AMP...')
+                    _log.info(f'[STATUS] UUID {token} is failed to execute, '
+                              'sending email to AMP...')
                     _log.debug('[EMAIL AMP] Sending email to AMP for token: '
                                f'{token}')
                     self.send_email_to_amp(msg)
                     _log.debug('[EMAIL AMP] Sent email to AMP')
             time.sleep(self.time_sleep)
-            _log.info(f'***Looking for new tasks...***')
             o_tasks, o_grouped_tasks = \
                 self.get_new_upload_data(False)
+            if o_grouped_tasks:
+                _log.info(f'***Found new tasks!***')
         if self.is_test:
             return
         sys.exit(0)
