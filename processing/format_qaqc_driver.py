@@ -76,6 +76,7 @@ class FormatQAQCDriver:
         self.email_gen = EmailGen()
         self.email_amp = Mailer(_log)
         self.stale_count = 0
+        self.blacklist_uuid = []
 
     def send_email_to_amp(self, msg):
         sender = self.qaqc_processor_email
@@ -165,25 +166,26 @@ class FormatQAQCDriver:
             upload_id = row.get('log_id')
             site_id = row.get('site_id')
             token = row.get('upload_token')
-            zip_process_id = None
-            prior_process_id = None
-            run_type = 'o'
-            upload_comment = row.get('upload_comment', '')
-            if 'repair candidate for' in upload_comment:
-                run_type = 'r'
-                prior_process_id = upload_comment.split()[-1]
-            elif 'Archive upload for' in upload_comment:
-                zip_process_id = upload_comment.split()[-1]
-            filename = row.get('data_file')
-            filename = str(Path(self.data_directory)/site_id/filename)
+            if token not in self.blacklist_uuid:
+                zip_process_id = None
+                prior_process_id = None
+                run_type = 'o'
+                upload_comment = row.get('upload_comment', '')
+                if 'repair candidate for' in upload_comment:
+                    run_type = 'r'
+                    prior_process_id = upload_comment.split()[-1]
+                elif 'Archive upload for' in upload_comment:
+                    zip_process_id = upload_comment.split()[-1]
+                filename = row.get('data_file')
+                filename = str(Path(self.data_directory)/site_id/filename)
 
-            tasks[upload_id] = Task(filename,
-                                    upload_id,
-                                    prior_process_id,
-                                    zip_process_id,
-                                    run_type,
-                                    site_id,
-                                    token)
+                tasks[upload_id] = Task(filename,
+                                        upload_id,
+                                        prior_process_id,
+                                        zip_process_id,
+                                        run_type,
+                                        site_id,
+                                        token)
         grouped_tasks = {}
         for upload_id, task_data in tasks.items():
             token = task_data.uuid
@@ -319,6 +321,7 @@ class FormatQAQCDriver:
                                 is_qaqc_successful = False
                                 error_msg = result
                                 error_token = p.get('task').uuid
+                                self.blacklist_uuid.append(error_token)
                         elif p.get('process').is_alive():
                             p['runtime'] += self.time_sleep
                             if p.get('runtime') > self.max_timeout:
