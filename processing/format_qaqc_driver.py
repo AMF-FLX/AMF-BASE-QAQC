@@ -116,9 +116,12 @@ class FormatQAQCDriver:
                     d = self.db.trace_original_data_upload(
                         self.conn,
                         process_id)
-                    if (d.get('prior_process_id')
-                            or d.get('zip_process_id')):
-                        process_id = d.get('log_id')
+                    prior_process_id = d.get('prior_process_id')
+                    zip_process_id = d.get('zip_process_id')
+                    if prior_process_id:
+                        process_id = prior_process_id
+                    elif zip_process_id:
+                        process_id = zip_process_id
                     else:
                         uuid = d.get('upload_token')
                         o_run_data = \
