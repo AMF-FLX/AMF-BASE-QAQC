@@ -1,5 +1,7 @@
 from pathlib import Path
 from upload_checks import upload_checks
+from report_status import ReportStatus
+
 import getpass
 import json
 import pytest
@@ -10,6 +12,12 @@ __email__ = 'dschristianson@lbl.gov'
 
 def mock_getpass_getuser():
     return 'unittester'
+
+
+def mock_report_status_register_format(
+        dummyself, site_id, upload_id, process_timestamp,
+        prior_process_id, zip_process_id):
+    raise Exception
 
 
 def parse_json(filepath):
@@ -30,6 +38,16 @@ def parse_json(filepath):
 
 var_values, ids = parse_json(
     filepath='./test/testdata/format_qaqc/integration_cases.json')
+
+
+def test_upload_checks_initialization(monkeypatch):
+
+    monkeypatch.setattr(ReportStatus, 'register_format_qaqc_process',
+                        mock_report_status_register_format)
+
+    with pytest.raises(Exception):
+        upload_checks('filepath', 11111111, 'run_type', 'test-Site',
+                      None, None)
 
 
 @pytest.mark.parametrize('filename, run_type, output', var_values, ids=ids)

@@ -35,8 +35,8 @@ def convert_ts_str_iso_format(ts_str: Optional[str]) -> Optional[str]:
 
 
 def upload_checks(
-        filename: str, upload_id: int, run_type: str,
-        site_id: str, prior_process_id: int, zip_process_id: int,
+        filename: str, upload_id: int, run_type: str, site_id: str,
+        prior_process_id: Optional[int], zip_process_id: Optional[int],
         local_run=False) -> (Optional[int], bool, Optional[str]):
 
     s_time = time()
@@ -49,38 +49,51 @@ def upload_checks(
     timestamp_str = start_time.isoformat()
 
     process_id = None
+    process_log_path = None
     is_upload_successful = None
     multi_zip_uuid = None
     autorepair_uuid = None
 
-    if not local_run:
-        rs = ReportStatus()
-        process_id = rs.register_format_qaqc_process(
-            upload_id=upload_id, process_timestamp=timestamp_str,
-            site_id=site_id, prior_process_id=prior_process_id,
-            zip_process_id=zip_process_id)
+    try:
+
+        if not local_run:
+            rs = ReportStatus()
+            process_id = rs.register_format_qaqc_process(
+                upload_id=upload_id, process_timestamp=timestamp_str,
+                site_id=site_id, prior_process_id=prior_process_id,
+                zip_process_id=zip_process_id)
+            if not process_id:
+                print(f'Attempt to process upload_id {upload_id} '
+                      f'for site_id {site_id} failed.')
+                # process_id, has_child_upload, upload_token
+                return None, False, None
+        else:
+            process_id = 999999
+            start_time = dt.strptime('202403250900', TimestampUtil().PREFERRED_TS_FORMAT)
+
+        _log = Logger(True, process_id, site_id, process_type,
+                      start_time).getLogger('upload_checks')  # Initialize logger
+
+        process_log_path = _log.default_log
+
+    except Exception as ex:
+        msg = 'Error in initialization of upload_checks.'
         if not process_id:
-            print(f'Attempt to process upload_id {upload_id} '
-                  f'for site_id {site_id} failed.')
-            # process_id, has_child_upload, upload_token
-            return None, False, None
-    else:
-        process_id = 999999
-        start_time = dt.strptime('202403250900', TimestampUtil().PREFERRED_TS_FORMAT)
-
-    _log = Logger(True, process_id, site_id, process_type,
-                  start_time).getLogger('upload_checks')  # Initialize logger
-
-    process_log_path = _log.default_log
-
-    # set up summarized output items
-    s = None
-    data_start_timestamp = None
-    data_end_timestamp = None
-    json_status = None
-    json_report = None
+            msg += ' Attempt to acquire process_id unsuccessful.'
+        if not process_log_path:
+            msg += ' Failed to initialize logger.'
+        msg += f' Error: {ex}'
+        raise Exception(msg)
 
     try:
+
+        # set up summarized output items
+        s = None
+        data_start_timestamp = None
+        data_end_timestamp = None
+        json_status = None
+        json_report = None
+
         process_states = ProcessStateHandler(initialize_lookup=not local_run)
 
         status_ct = 0
