@@ -129,7 +129,7 @@ def mock_email_gen_driver(self, token):
 
 
 def mock_recovery_process(self):
-    return {}, []
+    return []
 
 
 def mock_upload_checks_1(file_name,
