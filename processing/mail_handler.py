@@ -7,9 +7,12 @@ from email.mime.text import MIMEText
 
 __author__ = 'You-Wei Cheah, Sy-Toan Ngo'
 
+# This code is a modified version of AMF-Utils
+
+
 class MailerException(Exception):
-    def __init__(self, error_message):
-        _log.error(error_message)
+    def __init__(self, error_message, log):
+        log.error(error_message)
         super().__init__(error_message)
 
 
@@ -18,14 +21,15 @@ class Mailer:
         self.log = log
         config = ConfigParser()
         self.host = None
-        with open(os.path.join(os.getcwd(), 'qaqc.cfg'), 'r') as cfg:
+        config_path = os.path.join(os.getcwd(), 'qaqc.cfg')
+        with open(config_path, 'r') as cfg:
             config.read_file(cfg)
             cfg_section = 'AMP'
             if config.has_section(cfg_section):
                 self.host = config.get(cfg_section, 'host')
         if not self.host:
-            err_msg = f'No host specified in config'
-            raise MailerException(err_msg)
+            err_msg = f'No host specified in {config_path}'
+            raise MailerException(err_msg, self.log)
 
     def build_multipart_text_msg(
             self, sender: str, receipients: list,
