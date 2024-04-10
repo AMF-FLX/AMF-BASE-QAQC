@@ -53,6 +53,8 @@ def upload_checks(
     is_upload_successful = None
     multi_zip_uuid = None
     autorepair_uuid = None
+    json_report, json_status = None, None
+    data_start_timestamp, data_end_timestamp = None, None
 
     try:
 
@@ -358,20 +360,25 @@ def upload_checks(
         _log.info(f'unhandled exception {ex}')
         _log.info(traceback.format_exc())
 
-    if local_run:
-        print(process_id, is_upload_successful,
-              multi_zip_uuid or autorepair_uuid)
-        print(json_report)
-        print(data_start_timestamp)
-        print(data_end_timestamp)
-    else:
-        rs = ReportStatus()
-        rs.report_status(
-            process_id=process_id,
-            state_id=s, log_file_path=process_log_path,
-            report_json=json_report, status_json=json_status,
-            start_timestamp=data_start_timestamp,
-            end_timestamp=data_end_timestamp)
+    try:
+        if local_run:
+            print(process_id, is_upload_successful,
+                  multi_zip_uuid or autorepair_uuid)
+            print(json_report)
+            print(data_start_timestamp)
+            print(data_end_timestamp)
+        else:
+            rs = ReportStatus()
+            rs.report_status(
+                process_id=process_id,
+                state_id=s, log_file_path=process_log_path,
+                report_json=json_report, status_json=json_status,
+                start_timestamp=data_start_timestamp,
+                end_timestamp=data_end_timestamp)
+    except Exception as ex:
+        msg = f'Write of upload_checks output to webservice failed: {ex}'
+        _log.info(msg)
+        raise Exception(msg)
 
     return process_id, is_upload_successful, multi_zip_uuid or autorepair_uuid
 
