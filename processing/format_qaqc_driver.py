@@ -192,14 +192,17 @@ class FormatQAQCDriver:
         return tasks, grouped_upload_id
 
     def run_upload_checks_proc(self, task, queue):
-        result = upload_checks(task.filename,
-                               task.upload_id,
-                               task.run_type,
-                               task.site_id,
-                               task.prior_process_id,
-                               task.zip_process_id,
-                               self.is_test)
-        queue.put(result)
+        try:
+            result = upload_checks(task.filename,
+                                   task.upload_id,
+                                   task.run_type,
+                                   task.site_id,
+                                   task.prior_process_id,
+                                   task.zip_process_id,
+                                   self.is_test)
+            queue.put(result)
+        except Exception as e:
+            queue.put(str(e))
 
     def run(self):
         mp_queue = mp.Queue()
@@ -243,6 +246,10 @@ class FormatQAQCDriver:
             # that has the same token
             for upload_ids in o_grouped_tasks:
                 is_qaqc_successful = True
+                # placeholder for error token and error msg
+                # if upload_checks throws and error
+                error_token = None
+                error_msg = None
                 for upload_id in upload_ids:
                     task = o_tasks.get(upload_id)
                     token = task.uuid
@@ -272,35 +279,70 @@ class FormatQAQCDriver:
                                 and p.get('run_status')):
                             p['run_status'] = False
                             result = mp_queue.get()
-                            (process_id, is_upload_successful, uuid) = result
-                            s_tasks = {}
-                            if uuid and is_upload_successful:
-                                s_tasks, _ = \
-                                    self.get_new_upload_data(True, uuid)
-                                if is_zip and len(s_tasks) > 1:
-                                    token = uuid
-                            for task in s_tasks.values():
-                                _log.info(
-                                    ('Start upload_checks with parameters:\n'
-                                     '   - Upload_log log_id: '
-                                     f'{task.upload_id}\n'
-                                     '   - Prior id: '
-                                     f'{task.prior_process_id}\n'
-                                     f'   - Zip id: {task.zip_process_id}\n'
-                                     f'   - Run type: {task.run_type}\n'
-                                     f'   - UUID: {task.uuid}'))
-                                s_p = mp.Process(
-                                    target=self.run_upload_checks_proc,
-                                    args=(task, mp_queue))
-                                s_p.start()
-                                s_processes.append(
-                                    {'process': s_p,
-                                     'runtime': 0,
-                                     'retry': 0,
-                                     'task': task,
-                                     'run_status': True})
-                            # elif not is_upload_successful:
-                            #     pass
+                            # a normal result from upload_checks will have:
+                            # process_id, is_upload_successful, uuid
+                            # otherwise there will be only the msg error
+                            if len(result) == 3:
+                                (process_id,
+                                 is_upload_successful,
+                                 uuid) = result
+                                s_tasks = {}
+                                if uuid and is_upload_successful:
+                                    s_tasks, _ = \
+                                        self.get_new_upload_data(True, uuid)
+                                    if is_zip and len(s_tasks) > 1:
+                                        token = uuid
+                                elif not is_upload_successful:
+                                    retry = p.get('retry')
+                                    if retry >= self.max_retries:
+                                        is_qaqc_successful = False
+                                        _log.info(
+                                            f"Process {p.get('task').uuid} "
+                                            f'{self.max_retries} '
+                                            'retries reached. '
+                                            'Stop running this process')
+                                    else:
+                                        p['retry'] = retry + 1
+                                        p['runtime'] = 0
+                                        task = p.get('task')
+                                        s_p = mp.Process(
+                                            target=self.run_upload_checks_proc,
+                                            args=(task, mp_queue))
+                                        s_p.start()
+                                        p['process'] = s_p
+                                        s_processes.append(p)
+                                        _log.info(
+                                            f"Process {p.get('task').uuid} "
+                                            'retry number: '
+                                            f"{p['retry']}/{self.max_retries}")
+
+                                for task in s_tasks.values():
+                                    _log.info(
+                                        'Start upload_checks '
+                                        'with parameters:\n'
+                                        '   - Upload_log log_id: '
+                                        f'{task.upload_id}\n'
+                                        '   - Prior id: '
+                                        f'{task.prior_process_id}\n'
+                                        f'   - Zip id: {task.zip_process_id}\n'
+                                        f'   - Run type: {task.run_type}\n'
+                                        f'   - UUID: {task.uuid}')
+                                    s_p = mp.Process(
+                                        target=self.run_upload_checks_proc,
+                                        args=(task, mp_queue))
+                                    s_p.start()
+                                    s_processes.append(
+                                        {'process': s_p,
+                                         'runtime': 0,
+                                         'retry': 0,
+                                         'task': task,
+                                         'run_status': True})
+                            else:
+                                # some upload_checks throw error
+                                # send message to AMP
+                                is_qaqc_successful = False
+                                error_msg = result
+                                error_token = p.get('task').uuid
                         elif p.get('process').is_alive():
                             p['runtime'] += self.time_sleep
                             if p.get('runtime') > self.max_timeout:
@@ -358,8 +400,9 @@ class FormatQAQCDriver:
                                        f'to AMP for token: {token}')
                             self.send_email_to_amp(msg)
                             _log.debug('[EMAIL AMP] Sent email to AMP')
-                    except EmailGenError:
+                    except EmailGenError as e:
                         # send email to AMP
+                        msg = str(e)
                         _log.info('[EMAIL] Email gen for token: '
                                   f'{token} - Throw error!\n'
                                   f'   - Message: {msg}')
@@ -369,6 +412,11 @@ class FormatQAQCDriver:
                         _log.debug('[EMAIL AMP] Sent email to AMP')
                 else:
                     # send email to AMP
+                    if error_token and error_msg:
+                        token = error_token
+                        msg = error_msg
+                    else:
+                        msg = 'Unknown Error'
                     _log.info(f'[STATUS] UUID {token} is failed to execute, '
                               'sending email to AMP...')
                     _log.debug('[EMAIL AMP] Sending email to AMP for token: '
@@ -379,7 +427,7 @@ class FormatQAQCDriver:
             o_tasks, o_grouped_tasks = \
                 self.get_new_upload_data(False)
             if o_grouped_tasks:
-                _log.info(f'***Found new tasks!***')
+                _log.info('***Found new tasks!***')
         if self.is_test:
             return
         sys.exit(0)
@@ -389,7 +437,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Format QAQC Driver')
     parser.add_argument(
         '--lookback_h', type=float, help='Look back x hours to check '
-                                     'for any unfinished work')
+                                         'for any unfinished work')
     parser.add_argument(
         '-t', '--test', action='store_true', default=False,
         help='Sets flag for local run that does not write'
