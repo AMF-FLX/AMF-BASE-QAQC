@@ -292,30 +292,6 @@ class FormatQAQCDriver:
                                         self.get_new_upload_data(True, uuid)
                                     if is_zip and len(s_tasks) > 1:
                                         token = uuid
-                                elif not is_upload_successful:
-                                    retry = p.get('retry')
-                                    if retry >= self.max_retries:
-                                        is_qaqc_successful = False
-                                        _log.info(
-                                            f"Process {p.get('task').uuid} "
-                                            f'{self.max_retries} '
-                                            'retries reached. '
-                                            'Stop running this process')
-                                    else:
-                                        p['retry'] = retry + 1
-                                        p['runtime'] = 0
-                                        task = p.get('task')
-                                        s_p = mp.Process(
-                                            target=self.run_upload_checks_proc,
-                                            args=(task, mp_queue))
-                                        s_p.start()
-                                        p['process'] = s_p
-                                        s_processes.append(p)
-                                        _log.info(
-                                            f"Process {p.get('task').uuid} "
-                                            'retry number: '
-                                            f"{p['retry']}/{self.max_retries}")
-
                                 for task in s_tasks.values():
                                     _log.info(
                                         'Start upload_checks '
