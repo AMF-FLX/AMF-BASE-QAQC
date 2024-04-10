@@ -348,7 +348,8 @@ class NewDBHandler:
         # trace up 1 level given process_id
         query = SQL('SELECT u.log_id, u.site_id, '
                     'u.data_file, u.upload_token, '
-                    'u.upload_comment, u.upload_type_id '
+                    'u.upload_comment, u.upload_type_id, '
+                    'p.prior_process_id, p.zip_process_id '
                     'FROM input_interface.data_upload_log u '
                     'LEFT JOIN qaqc.processing_log p '
                     'ON u.log_id = p.upload_id '
