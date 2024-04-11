@@ -71,10 +71,12 @@ def upload_checks(
                 return None, False, None
         else:
             process_id = 999999
-            start_time = dt.strptime('202403250900', TimestampUtil().PREFERRED_TS_FORMAT)
+            start_time = dt.strptime('202403250900',
+                                     TimestampUtil().PREFERRED_TS_FORMAT)
 
+        # Initialize logger
         _log = Logger(True, process_id, site_id, process_type,
-                      start_time).getLogger('upload_checks')  # Initialize logger
+                      start_time).getLogger('upload_checks')
 
         process_log_path = _log.default_log
 
