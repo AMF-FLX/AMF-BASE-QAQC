@@ -1,4 +1,6 @@
+import ast
 import argparse
+import datetime
 import os
 import multiprocessing as mp
 import sys
@@ -58,8 +60,12 @@ class FormatQAQCDriver:
                                                         'file_upload_source')
                 self.qaqc_processor_email = config.get(cfg_section,
                                                        'qaqc_processor_email')
-                self.amp_team_email = config.get(cfg_section,
-                                                 'amp_team_email')
+                try:
+                    self.amp_team_email = \
+                        ast.literal_eval(config.get(cfg_section,
+                                                    'amp_team_email'))
+                except Exception:
+                    self.amp_team_email = []
 
             cfg_section = 'JIRA'
             if config.has_section(cfg_section):
@@ -78,16 +84,30 @@ class FormatQAQCDriver:
         self.stale_count = 0
         self.blacklist_uuid = []
 
-    def send_email_to_amp(self, msg):
+    def send_email_to_amp(self, msg, token, site_id, upload_id=None):
         sender = self.qaqc_processor_email
-        if isinstance(self.amp_team_email, str):
-            receipient = [self.amp_team_email]
-        subject = 'FormatQAQCDriver Abnormal Report'
-        msg = self.email_amp.build_multipart_text_msg(sender,
-                                                      receipient,
-                                                      subject,
-                                                      msg)
-        self.email_amp.send_mail(sender, receipient, msg)
+        receipient = self.amp_team_email
+        timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        if not upload_id:
+            upload_id = 'Not Available'
+        if receipient:
+            subject = '[AMP] FormatQAQCDriver Abnormal Report'
+            body_content = (
+                f'- Datetime: {timestamp}\n'
+                f'- Token: {token}\n'
+                f'- Site id: {site_id}\n'
+                f'- Upload id: {upload_id}\n'
+                f'- Log path: {_log.default_log}\n\n'
+                'Has this error message:\n'
+                f'   - {msg}')
+            content = \
+                self.email_amp.build_multipart_text_msg(sender,
+                                                        receipient,
+                                                        subject,
+                                                        body_content)
+            self.email_amp.send_mail(sender, receipient, content)
+        else:
+            _log.warning('[EMAIL] AMP receipient is not configured')
 
     def recovery_process(self):
         rerun_uuids = []
@@ -253,14 +273,16 @@ class FormatQAQCDriver:
                 is_qaqc_successful = True
                 # placeholder for error token and error msg
                 # if upload_checks throws and error
-                error_token = None
                 error_msg = None
+                error_task = None
                 for upload_id in upload_ids:
                     task = o_tasks.get(upload_id)
                     token = task.uuid
+                    site_id = task.site_id
                     is_zip = '.zip' in task.filename
                     _log.info(
                         ('Start upload_checks with parameters:\n'
+                         f'   - Site id: {site_id}\n'
                          f'   - Upload_log log_id: {task.upload_id}\n'
                          f'   - Prior id: {task.prior_process_id}\n'
                          f'   - Zip id: {task.zip_process_id}\n'
@@ -301,6 +323,7 @@ class FormatQAQCDriver:
                                     _log.info(
                                         'Start upload_checks '
                                         'with parameters:\n'
+                                        f'   - Site id: {site_id}\n'
                                         '   - Upload_log log_id: '
                                         f'{task.upload_id}\n'
                                         '   - Prior id: '
@@ -323,8 +346,8 @@ class FormatQAQCDriver:
                                 # send message to AMP
                                 is_qaqc_successful = False
                                 error_msg = result
-                                error_token = p.get('task').uuid
-                                self.blacklist_uuid.append(error_token)
+                                error_task = p.get('task')
+                                self.blacklist_uuid.append(error_task.uuid)
                         elif p.get('process').is_alive():
                             p['runtime'] += self.time_sleep
                             if p.get('runtime') > self.max_timeout:
@@ -338,10 +361,13 @@ class FormatQAQCDriver:
                                 retry = p.get('retry')
                                 if retry >= self.max_retries:
                                     is_qaqc_successful = False
-                                    _log.info(f"Process {p.get('task').uuid} "
-                                              f'{self.max_retries} '
-                                              'retries reached. '
-                                              'Stop running this process')
+                                    error_task = p.get('task')
+                                    error_msg = (f"Process {error_task.uuid} "
+                                                 f'{self.max_retries} '
+                                                 'retries reached. '
+                                                 'Stop running this process')
+                                    _log.info(error_msg)
+                                    self.blacklist_uuid.append(error_task.uuid)
                                 else:
                                     p['retry'] = retry + 1
                                     p['runtime'] = 0
@@ -380,7 +406,7 @@ class FormatQAQCDriver:
                                       f'   - Message: {msg}')
                             _log.debug('[EMAIL AMP] Sending email '
                                        f'to AMP for token: {token}')
-                            self.send_email_to_amp(msg)
+                            self.send_email_to_amp(msg, token, site_id)
                             _log.debug('[EMAIL AMP] Sent email to AMP')
                     except EmailGenError as e:
                         # send email to AMP
@@ -390,20 +416,19 @@ class FormatQAQCDriver:
                                   f'   - Message: {msg}')
                         _log.debug('[EMAIL AMP] Sending email '
                                    f'to AMP for token: {token}')
-                        self.send_email_to_amp(msg)
+                        self.send_email_to_amp(msg, token, site_id)
                         _log.debug('[EMAIL AMP] Sent email to AMP')
                 else:
                     # send email to AMP
-                    if error_token and error_msg:
-                        token = error_token
-                        msg = error_msg
-                    else:
+                    if not error_msg:
                         msg = 'Unknown Error'
+                    token = error_task.uuid
+                    upload_id = error_task.upload_id
                     _log.info(f'[STATUS] UUID {token} is failed to execute, '
                               'sending email to AMP...')
                     _log.debug('[EMAIL AMP] Sending email to AMP for token: '
                                f'{token}')
-                    self.send_email_to_amp(msg)
+                    self.send_email_to_amp(msg, token, site_id, upload_id)
                     _log.debug('[EMAIL AMP] Sent email to AMP')
             time.sleep(self.time_sleep)
             o_tasks, o_grouped_tasks = \
