@@ -1,5 +1,6 @@
 import datetime as dt
 import psycopg2
+
 import pymssql
 import socket
 
@@ -196,6 +197,181 @@ class NewDBHandler:
                 checksums[fname] = r.get('file_checksum')
         return checksums
 
+    def get_data_upload_log_with_uuid(self,
+                                      conn,
+                                      uuid):
+        query = SQL('SELECT u.log_id, u.site_id, '
+                    'u.data_file, u.upload_token, '
+                    'u.upload_comment, u.upload_type_id '
+                    'FROM input_interface.data_upload_log u '
+                    'LEFT JOIN '
+                    'input_interface.data_upload_file_xfer_log x '
+                    'ON u.log_id = x.upload_log_id '
+                    'WHERE '
+                    'u.upload_type_id IN (4, 7) '
+                    'AND x.xfer_end_log_timestamp IS NOT NULL '
+                    'AND u.upload_token = %(uuid)s')
+        params = {'uuid': uuid}
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, params)
+            new_data_upload = cursor.fetchall()
+        return new_data_upload
+
+    def get_new_data_upload_log(self,
+                                conn,
+                                qaqc_processor_source,
+                                is_qaqc_processor,
+                                uuid=None):
+        query_base = SQL('SELECT u.log_id, u.site_id, '
+                         'u.data_file, u.upload_token, '
+                         'u.upload_comment, u.upload_type_id '
+                         'FROM input_interface.data_upload_log u '
+                         'LEFT JOIN qaqc.processing_log p '
+                         'ON u.log_id = p.upload_id '
+                         'LEFT JOIN '
+                         'input_interface.data_upload_file_xfer_log x '
+                         'ON u.log_id = x.upload_log_id '
+                         'LEFT JOIN input_interface.data_source_type s '
+                         'ON u.upload_source_id = s.source_id '
+                         'WHERE p.log_id IS NULL '
+                         'AND u.upload_type_id IN (4, 7) '
+                         'AND x.xfer_end_log_timestamp IS NOT NULL ')
+        if is_qaqc_processor:
+            query_add_1 = SQL('AND s.source = %(qaqc_processor_source)s')
+        else:
+            query_add_1 = SQL('AND s.source != %(qaqc_processor_source)s')
+        query = Composed([query_base, query_add_1])
+        params = {'qaqc_processor_source': qaqc_processor_source}
+        if uuid:
+            query_add_2 = SQL('AND u.upload_token = %(uuid)s')
+            query = Composed([query, query_add_2])
+            params['uuid'] = uuid
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, params)
+            new_data_upload = cursor.fetchall()
+        return new_data_upload
+
+    def get_latest_run_with_uuid(self, conn, uuid):
+        query = SQL('SELECT u.log_id, p.process_timestamp '
+                    'FROM input_interface.data_upload_log u '
+                    'LEFT JOIN qaqc.processing_log p '
+                    'ON u.log_id = p.upload_id '
+                    'WHERE u.upload_token = %(uuid)s '
+                    'ORDER BY p.process_timestamp DESC '
+                    'LIMIT 1')
+        params = {'uuid': uuid}
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, params)
+            run_data = cursor.fetchone()
+        return run_data
+
+    def get_undone_data_upload_log_o(self,
+                                     conn,
+                                     qaqc_processor_source,
+                                     lookback_h):
+        # case:
+        # o_file has entry in upload_log and processing_log
+        # but not in summarized_output_log
+        # solution:
+        # return this data_upload
+        query = SQL('SELECT u.log_id, u.site_id, '
+                    'u.data_file, u.upload_token, '
+                    'u.upload_comment, u.upload_type_id '
+                    'FROM input_interface.data_upload_log u '
+                    'LEFT JOIN '
+                    '(SELECT * FROM ('
+                    'SELECT process_timestamp, upload_id, log_id, '
+                    'ROW_NUMBER() OVER (PARTITION BY upload_id '
+                    'ORDER BY process_timestamp DESC) '
+                    'AS row_num FROM qaqc.processing_log) ps '
+                    'WHERE row_num = 1) p '
+                    'ON u.log_id = p.upload_id '
+                    'LEFT JOIN qaqc.process_summarized_output o '
+                    'ON p.log_id = o.process_id '
+                    'LEFT JOIN '
+                    'input_interface.data_upload_file_xfer_log x '
+                    'ON u.log_id = x.upload_log_id '
+                    'LEFT JOIN input_interface.data_source_type s '
+                    'ON u.upload_source_id = s.source_id '
+                    'WHERE p.log_id IS NOT NULL '
+                    'AND o.output_id IS NULL '
+                    'AND u.upload_type_id IN (4, 7) '
+                    'AND x.xfer_end_log_timestamp IS NOT NULL '
+                    'AND s.source != %(qaqc_processor_source)s '
+                    'AND log_timestamp >= '
+                    'CURRENT_TIMESTAMP '
+                    '- INTERVAL \'%(lookback_h)s hours\'')
+        params = {'qaqc_processor_source': qaqc_processor_source,
+                  'lookback_h': lookback_h}
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, params)
+            data_upload = cursor.fetchall()
+        return data_upload
+
+    def get_undone_data_upload_log_ac(self,
+                                      conn,
+                                      qaqc_processor_source,
+                                      lookback_h):
+        # case:
+        # ac_file has entry in upload_log
+        # ac_file can be in/not in processing_log
+        # but not in summarized_output_log
+        # solution:
+        # traceback and return o_file of this data_upload
+        query = SQL('SELECT u.log_id, u.site_id, '
+                    'u.data_file, u.upload_token, '
+                    'u.upload_comment, u.upload_type_id, '
+                    'u.log_timestamp '
+                    'FROM input_interface.data_upload_log u '
+                    'LEFT JOIN qaqc.processing_log p '
+                    'ON u.log_id = p.upload_id '
+                    'LEFT JOIN qaqc.process_summarized_output o '
+                    'ON p.log_id = o.process_id '
+                    'LEFT JOIN input_interface.data_source_type s '
+                    'ON u.upload_source_id = s.source_id '
+                    'WHERE o.output_id IS NULL '
+                    'AND u.upload_type_id IN (4, 7) '
+                    'AND s.source = %(qaqc_processor_source)s '
+                    'AND log_timestamp >= '
+                    'CURRENT_TIMESTAMP '
+                    '- INTERVAL \'%(lookback_h)s hours\'')
+        params = {'qaqc_processor_source': qaqc_processor_source,
+                  'lookback_h': lookback_h}
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, params)
+            data_upload = cursor.fetchall()
+        return data_upload
+
+    def trace_original_data_upload(self, conn, process_id):
+        # case:
+        # ac_file is not finished
+        # trace up 1 level given process_id
+        query = SQL('SELECT u.log_id, u.site_id, '
+                    'u.data_file, u.upload_token, '
+                    'u.upload_comment, u.upload_type_id, '
+                    'p.prior_process_id, p.zip_process_id '
+                    'FROM input_interface.data_upload_log u '
+                    'LEFT JOIN qaqc.processing_log p '
+                    'ON u.log_id = p.upload_id '
+                    'WHERE p.log_id = %(process_id)s')
+        params = {'process_id': process_id}
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, params)
+            data_upload = cursor.fetchone()
+        return data_upload
+
+    def check_status_of_process_id(self, conn, process_id):
+        is_success = False
+        query = SQL('SELECT report AS count_log_id '
+                    'FROM qaqc.process_summarized_output p '
+                    'WHERE process_id = %(process_id)s')
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, {'process_id': process_id})
+            report = cursor.fetchone()
+        if report:
+            is_success = True
+        return is_success
+
     def get_upload_file_info(self, conn, upload_id):
         upload_file_info = {}
         query = SQL('SELECT * FROM input_interface.data_upload_log '
@@ -215,13 +391,12 @@ class NewDBHandler:
 
         cv_lookup = {}
 
-        if self.conn is not None:
-            with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
-                cursor.execute(query)
-                for r in cursor:
-                    cv_name = r.get(name_field)
-                    cv_id = r.get(id_field)
-                    cv_lookup.update({cv_name: cv_id})
+        with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query)
+            for r in cursor:
+                cv_name = r.get(name_field)
+                cv_id = r.get(id_field)
+                cv_lookup.update({cv_name: cv_id})
 
         return cv_lookup
 
@@ -258,17 +433,13 @@ class NewDBHandler:
             values.append(zip_process_id)
 
         values = tuple(values)
-
         self.conn = self.init_db_conn(db_config)
         process_id = self._register_qaqc_process(field_names, values)
 
         return process_id
 
     def _register_qaqc_process(self, query_fields: str,
-                               process_values: tuple) -> Optional[int]:
-        if self.conn is None:
-            return None
-
+                               process_values: tuple) -> int:
         query_pre = SQL('INSERT INTO qaqc.processing_log (')
         query_post = SQL(') VALUES %(process_values)s returning log_id;')
         query = Composed([query_pre, SQL(query_fields), query_post])

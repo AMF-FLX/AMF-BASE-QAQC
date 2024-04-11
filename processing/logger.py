@@ -32,7 +32,7 @@ class Logger(logging.Logger):
         phase_cfg = None
         with open(os.path.join(cwd, 'qaqc.cfg')) as cfg:
             log_cfg = 'LOG'
-            if process_type == 'File Format':
+            if process_type in ('File Format', 'FormatQAQCDriver'):
                 phase_cfg = 'PHASE_I'
             elif process_type == 'BASE Generation':
                 phase_cfg = 'PHASE_II'
@@ -83,7 +83,7 @@ class Logger(logging.Logger):
             self.log_file_timestamp = log_timestamp
         log_ts_fmt = '%Y%m%d%H%M%S'
         timestamp_str = self.log_file_timestamp.strftime(log_ts_fmt)
-        if phase_cfg == 'PHASE_I':
+        if phase_cfg == 'PHASE_I' and process_type != 'FormatQAQCDriver':
             self.log_file_name = (f'QAQC_report_{site_id}_{upload_id}_'
                                   f'{timestamp_str}.log')
         elif phase_cfg == 'PHASE_II':

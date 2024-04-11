@@ -1,0 +1,2 @@
+output_id,process_id,status,process_log_path,aggregate_file_path,data_start_timestamp,data_end_timestamp,report
+1,1,[],dummy path,dummy path,,,{}
