@@ -967,7 +967,7 @@ class EmailGen:
         if not isinstance(upload_info, dict):
             return 'Upload information is not in suspected format.'
 
-        if upload_info.get('reports') and not upload_info.get('reports'):
+        if not upload_info.get('reports'):
             return ('No upload report information retrieved for token: '
                     f'{upload_token}.')
 
