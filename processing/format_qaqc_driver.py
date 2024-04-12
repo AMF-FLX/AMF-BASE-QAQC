@@ -14,6 +14,7 @@ from logger import Logger
 from mail_handler import Mailer
 from pathlib import Path
 from upload_checks import upload_checks
+from utils import TimestampUtil
 
 
 __author__ = 'Sy-Toan Ngo'
@@ -23,6 +24,17 @@ Task = namedtuple('Task', ['filename', 'upload_id',
                            'prior_process_id', 'zip_process_id',
                            'run_type', 'site_id', 'uuid'])
 
+AMP_EMAIL_TEMPLATE = (
+                '- Datetime: {timestamp}\n'
+                '- Token: {token}\n'
+                '- Site id: {site_id}\n'
+                '- Upload id: {upload_id}\n'
+                '- Log path: {log_path}\n\n'
+                'Has this error message:\n'
+                '   - {msg}')
+ARCHIVE_COMMENT = 'Archive upload for'
+REPAIR_COMMENT = 'repair candidate for'
+
 _log_name_prefix = 'FormatQAQCDriver'
 _log = Logger(True, None, None,
               _log_name_prefix).getLogger(_log_name_prefix)
@@ -30,6 +42,7 @@ _log = Logger(True, None, None,
 
 class FormatQAQCDriver:
     def __init__(self, lookback_h=None, test=False):
+        self.ts_util = TimestampUtil()
         config = ConfigParser()
         with open(os.path.join(os.getcwd(), 'qaqc.cfg'), 'r') as cfg:
             cfg_section = 'FORMAT_QAQC_DRIVER'
@@ -82,24 +95,24 @@ class FormatQAQCDriver:
         self.email_gen = EmailGen()
         self.email_amp = Mailer(_log)
         self.stale_count = 0
-        self.blacklist_uuid = []
+        self.error_uuid = []
 
     def send_email_to_amp(self, msg, token, site_id, upload_id=None):
         sender = self.qaqc_processor_email
         receipient = self.amp_team_email
-        timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        timestamp = datetime.datetime.now().strftime(
+            self.ts_util.JIRA_TS_FORMAT)
         if not upload_id:
             upload_id = 'Not Available'
         if receipient:
             subject = '[AMP] FormatQAQCDriver Abnormal Report'
-            body_content = (
-                f'- Datetime: {timestamp}\n'
-                f'- Token: {token}\n'
-                f'- Site id: {site_id}\n'
-                f'- Upload id: {upload_id}\n'
-                f'- Log path: {_log.default_log}\n\n'
-                'Has this error message:\n'
-                f'   - {msg}')
+            body_content = AMP_EMAIL_TEMPLATE.format(
+                timestamp=timestamp,
+                token=token,
+                site_id=site_id,
+                upload_id=upload_id,
+                log_path=_log.default_log,
+                msg=msg)
             content = \
                 self.email_amp.build_multipart_text_msg(sender,
                                                         receipient,
@@ -111,17 +124,17 @@ class FormatQAQCDriver:
 
     def recovery_process(self):
         rerun_uuids = []
-        o_data_upload = \
-            self.db.get_undone_data_upload_log_o(
+        user_data_upload = \
+            self.db.get_incomplete_user_data_upload(
                 self.conn,
                 self.qaqc_processor_source,
                 self.lookback_h)
-        for row in o_data_upload:
+        for row in user_data_upload:
             uuid = row.get('upload_token')
             if uuid not in rerun_uuids:
                 rerun_uuids.append(uuid)
         ac_data_upload = \
-            self.db.get_undone_data_upload_log_ac(
+            self.db.get_incomplete_system_data_upload(
                 self.conn,
                 self.qaqc_processor_source,
                 self.lookback_h)
@@ -129,11 +142,11 @@ class FormatQAQCDriver:
             comment = row.get('upload_comment')
             timestamp = row.get('log_timestamp')
             uuid = None
-            if ('Archive upload for' in comment
-                    or 'repair candidate for' in comment):
+            if (ARCHIVE_COMMENT in comment
+                    or REPAIR_COMMENT in comment):
                 process_id = comment.split()[-1]
                 while process_id:
-                    d = self.db.trace_original_data_upload(
+                    d = self.db.trace_user_data_upload(
                         self.conn,
                         process_id)
                     prior_process_id = d.get('prior_process_id')
@@ -144,12 +157,12 @@ class FormatQAQCDriver:
                         process_id = zip_process_id
                     else:
                         uuid = d.get('upload_token')
-                        o_run_data = \
+                        user_run_data = \
                             self.db.get_latest_run_with_uuid(self.conn,
                                                              uuid)
-                        if (o_run_data
+                        if (user_run_data
                                 and
-                                (o_run_data
+                                (user_run_data
                                  .get('process_timestamp')
                                  > timestamp)):
                             uuid = None
@@ -164,15 +177,15 @@ class FormatQAQCDriver:
                             is_recovery=False):
         if is_recovery:
             new_data_upload_log = \
-                self.db.get_data_upload_log_with_uuid(
+                self.db.get_data_upload_with_uuid(
                     self.conn,
                     uuid)
         else:
             new_data_upload_log = \
-                self.db.get_new_data_upload_log(self.conn,
-                                                self.qaqc_processor_source,
-                                                is_qaqc_processor,
-                                                uuid)
+                self.db.get_new_data_upload(self.conn,
+                                            self.qaqc_processor_source,
+                                            is_qaqc_processor,
+                                            uuid)
         log_ids_list = ' '.join([str(row.get('log_id'))
                                  for row in new_data_upload_log])
         if log_ids_list:
@@ -189,15 +202,15 @@ class FormatQAQCDriver:
             upload_id = row.get('log_id')
             site_id = row.get('site_id')
             token = row.get('upload_token')
-            if token not in self.blacklist_uuid:
+            if token not in self.error_uuid:
                 zip_process_id = None
                 prior_process_id = None
                 run_type = 'o'
                 upload_comment = row.get('upload_comment', '')
-                if 'repair candidate for' in upload_comment:
+                if REPAIR_COMMENT in upload_comment:
                     run_type = 'r'
                     prior_process_id = upload_comment.split()[-1]
-                elif 'Archive upload for' in upload_comment:
+                elif ARCHIVE_COMMENT in upload_comment:
                     zip_process_id = upload_comment.split()[-1]
                 filename = row.get('data_file')
                 filename = str(Path(self.data_directory)/site_id/filename)
@@ -240,24 +253,24 @@ class FormatQAQCDriver:
                       f'{rerun_uuids_str}')
         else:
             _log.info('[RECOVERY MODE] No UUID needed to rerun')
-        o_tasks = {}
-        o_grouped_tasks = []
+        user_tasks = {}
+        user_tasks_group_by_uuid = []
         for uuid in rerun_uuids:
-            tasks, grouped_tasks = \
+            tasks, tasks_group_by_uuid = \
                 self.get_new_upload_data(False,
                                          uuid=uuid,
                                          is_recovery=True)
-            o_tasks.update(tasks)
-            o_grouped_tasks.extend(grouped_tasks)
+            user_tasks.update(tasks)
+            user_tasks_group_by_uuid.extend(tasks_group_by_uuid)
         # get new task
-        tasks, grouped_tasks = \
+        tasks, tasks_group_by_uuid = \
             self.get_new_upload_data(False)
-        o_tasks.update(tasks)
-        o_grouped_tasks.extend(grouped_tasks)
+        user_tasks.update(tasks)
+        user_tasks_group_by_uuid.extend(tasks_group_by_uuid)
         stop_run = False
         while True:
             if self.is_test:
-                if not o_tasks:
+                if not user_tasks:
                     self.stale_count += 1
                     _log.debug(('[TEST MODE] Empty run '
                                 f'{self.stale_count} time(s)\n'))
@@ -269,14 +282,14 @@ class FormatQAQCDriver:
 
             # upload_ids is a list of upload_id
             # that has the same token
-            for upload_ids in o_grouped_tasks:
+            for upload_ids in user_tasks_group_by_uuid:
                 is_qaqc_successful = True
                 # placeholder for error token and error msg
                 # if upload_checks throws and error
                 error_msg = None
                 error_task = None
                 for upload_id in upload_ids:
-                    task = o_tasks.get(upload_id)
+                    task = user_tasks.get(upload_id)
                     token = task.uuid
                     site_id = task.site_id
                     is_zip = '.zip' in task.filename
@@ -300,7 +313,7 @@ class FormatQAQCDriver:
                          'run_status': True})
                 while processes:
                     time.sleep(self.time_sleep)
-                    s_processes = []
+                    processes_to_monitor = []
                     for p in processes:
                         if (not p.get('process').is_alive()
                                 and p.get('run_status')):
@@ -331,12 +344,12 @@ class FormatQAQCDriver:
                                         f'   - Zip id: {task.zip_process_id}\n'
                                         f'   - Run type: {task.run_type}\n'
                                         f'   - UUID: {task.uuid}')
-                                    s_p = mp.Process(
+                                    new_p = mp.Process(
                                         target=self.run_upload_checks_proc,
                                         args=(task, mp_queue))
-                                    s_p.start()
-                                    s_processes.append(
-                                        {'process': s_p,
+                                    new_p.start()
+                                    processes_to_monitor.append(
+                                        {'process': new_p,
                                          'runtime': 0,
                                          'retry': 0,
                                          'task': task,
@@ -347,7 +360,7 @@ class FormatQAQCDriver:
                                 is_qaqc_successful = False
                                 error_msg = result
                                 error_task = p.get('task')
-                                self.blacklist_uuid.append(error_task.uuid)
+                                self.error_uuid.append(error_task.uuid)
                         elif p.get('process').is_alive():
                             p['runtime'] += self.time_sleep
                             if p.get('runtime') > self.max_timeout:
@@ -362,78 +375,71 @@ class FormatQAQCDriver:
                                 if retry >= self.max_retries:
                                     is_qaqc_successful = False
                                     error_task = p.get('task')
-                                    error_msg = (f"Process {error_task.uuid} "
+                                    error_msg = (f'Process {error_task.uuid} '
                                                  f'{self.max_retries} '
                                                  'retries reached. '
                                                  'Stop running this process')
                                     _log.info(error_msg)
-                                    self.blacklist_uuid.append(error_task.uuid)
+                                    self.error_uuid.append(error_task.uuid)
                                 else:
-                                    p['retry'] = retry + 1
+                                    retry_count = retry + 1
+                                    p['retry'] = retry_count
                                     p['runtime'] = 0
                                     task = p.get('task')
-                                    s_p = mp.Process(
+                                    new_p = mp.Process(
                                         target=self.run_upload_checks_proc,
                                         args=(task, mp_queue))
-                                    s_p.start()
-                                    p['process'] = s_p
-                                    s_processes.append(p)
+                                    new_p.start()
+                                    p['process'] = new_p
+                                    processes_to_monitor.append(p)
                                     _log.info(
-                                        f"Process {p.get('task').uuid} "
+                                        f'Process {task.uuid} '
                                         'retry number: '
-                                        f"{p['retry']}/{self.max_retries}")
+                                        f'{retry_count}/{self.max_retries}')
                             else:
-                                s_processes.append(p)
+                                processes_to_monitor.append(p)
                         else:
-                            s_processes.append(p)
-                    processes = s_processes
+                            processes_to_monitor.append(p)
+                    processes = processes_to_monitor
                 # it will get here if all good, send out email to token
+                email_gen_status = None
                 if is_qaqc_successful and token:
                     _log.info(f'[STATUS] UUID {token} '
                               'is executed sucessfully, '
                               'sending email to the team...')
+                    _log.info('[EMAIL] Running email gen '
+                              f'for token {token}...')
                     try:
-                        _log.info('[EMAIL] Running email gen '
-                                  f'for token {token}...')
                         msg = self.email_gen.driver(token)
                         if msg.startswith(self.email_prefix):
-                            _log.info('[EMAIL] Email gen for token: '
-                                      f'{token} - Success!\n'
-                                      f'   - Message: {msg}')
+                            email_gen_status = 'Success'
                         else:
-                            _log.info('[EMAIL] Email gen for token: '
-                                      f'{token} - Failed!\n'
-                                      f'   - Message: {msg}')
-                            _log.debug('[EMAIL AMP] Sending email '
-                                       f'to AMP for token: {token}')
-                            self.send_email_to_amp(msg, token, site_id)
-                            _log.debug('[EMAIL AMP] Sent email to AMP')
+                            email_gen_status = 'Failed'
                     except EmailGenError as e:
-                        # send email to AMP
                         msg = str(e)
-                        _log.info('[EMAIL] Email gen for token: '
-                                  f'{token} - Throw error!\n'
-                                  f'   - Message: {msg}')
-                        _log.debug('[EMAIL AMP] Sending email '
-                                   f'to AMP for token: {token}')
-                        self.send_email_to_amp(msg, token, site_id)
-                        _log.debug('[EMAIL AMP] Sent email to AMP')
+                        email_gen_status = 'Error'
                 else:
-                    # send email to AMP
                     if not error_msg:
                         msg = 'Unknown Error'
                     token = error_task.uuid
                     upload_id = error_task.upload_id
+                if email_gen_status:
+                    _log.info('[EMAIL] Email gen for token: '
+                              f'{token} - {email_gen_status}!\n'
+                              f'   - Message: {msg}')
+                else:
                     _log.info(f'[STATUS] UUID {token} is failed to execute, '
                               'sending email to AMP...')
-                    _log.debug('[EMAIL AMP] Sending email to AMP for token: '
-                               f'{token}')
-                    self.send_email_to_amp(msg, token, site_id, upload_id)
+                if email_gen_status != 'Success':
+                    _log.debug('[EMAIL AMP] Sending email '
+                               f'to AMP for token: {token}')
+                    self.send_email_to_amp(msg, token, site_id)
                     _log.debug('[EMAIL AMP] Sent email to AMP')
+
             time.sleep(self.time_sleep)
-            o_tasks, o_grouped_tasks = \
+            user_tasks, user_tasks_group_by_uuid = \
                 self.get_new_upload_data(False)
-            if o_grouped_tasks:
+            if user_tasks_group_by_uuid:
                 _log.info('***Found new tasks!***')
         if self.is_test:
             return

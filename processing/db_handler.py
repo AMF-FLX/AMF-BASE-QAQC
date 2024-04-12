@@ -197,9 +197,7 @@ class NewDBHandler:
                 checksums[fname] = r.get('file_checksum')
         return checksums
 
-    def get_data_upload_log_with_uuid(self,
-                                      conn,
-                                      uuid):
+    def get_data_upload_with_uuid(self, conn, uuid):
         query = SQL('SELECT u.log_id, u.site_id, '
                     'u.data_file, u.upload_token, '
                     'u.upload_comment, u.upload_type_id '
@@ -207,8 +205,12 @@ class NewDBHandler:
                     'LEFT JOIN '
                     'input_interface.data_upload_file_xfer_log x '
                     'ON u.log_id = x.upload_log_id '
+                    'LEFT JOIN '
+                    'input_interface.data_upload_type t '
+                    'ON u.upload_type_id = t.type_id '
                     'WHERE '
-                    'u.upload_type_id IN (4, 7) '
+                    't.description IN (\'Half hourly data\', '
+                    '\'Half-hourly gap-filled data\') '
                     'AND x.xfer_end_log_timestamp IS NOT NULL '
                     'AND u.upload_token = %(uuid)s')
         params = {'uuid': uuid}
@@ -217,11 +219,11 @@ class NewDBHandler:
             new_data_upload = cursor.fetchall()
         return new_data_upload
 
-    def get_new_data_upload_log(self,
-                                conn,
-                                qaqc_processor_source,
-                                is_qaqc_processor,
-                                uuid=None):
+    def get_new_data_upload(self,
+                            conn,
+                            qaqc_processor_source,
+                            is_qaqc_processor,
+                            uuid=None):
         query_base = SQL('SELECT u.log_id, u.site_id, '
                          'u.data_file, u.upload_token, '
                          'u.upload_comment, u.upload_type_id '
@@ -233,44 +235,53 @@ class NewDBHandler:
                          'ON u.log_id = x.upload_log_id '
                          'LEFT JOIN input_interface.data_source_type s '
                          'ON u.upload_source_id = s.source_id '
+                         'LEFT JOIN '
+                         'input_interface.data_upload_type t '
+                         'ON u.upload_type_id = t.type_id '
                          'WHERE p.log_id IS NULL '
-                         'AND u.upload_type_id IN (4, 7) '
+                         'AND t.description IN (\'Half hourly data\', '
+                         '\'Half-hourly gap-filled data\') '
                          'AND x.xfer_end_log_timestamp IS NOT NULL ')
+        composed_query_list = [query_base]
         if is_qaqc_processor:
-            query_add_1 = SQL('AND s.source = %(qaqc_processor_source)s')
+            composed_query_list.append(
+                SQL('AND s.source = %(qaqc_processor_source)s'))
         else:
-            query_add_1 = SQL('AND s.source != %(qaqc_processor_source)s')
-        query = Composed([query_base, query_add_1])
+            composed_query_list.append(
+                SQL('AND s.source <> %(qaqc_processor_source)s'))
         params = {'qaqc_processor_source': qaqc_processor_source}
         if uuid:
-            query_add_2 = SQL('AND u.upload_token = %(uuid)s')
-            query = Composed([query, query_add_2])
+            composed_query_list.append(
+                SQL('AND u.upload_token = %(uuid)s'))
             params['uuid'] = uuid
+        query = Composed(composed_query_list)
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(query, params)
             new_data_upload = cursor.fetchall()
         return new_data_upload
 
     def get_latest_run_with_uuid(self, conn, uuid):
-        query = SQL('SELECT u.log_id, p.process_timestamp '
+        query = SQL('SELECT u.log_id, latest_upload.process_timestamp '
                     'FROM input_interface.data_upload_log u '
-                    'LEFT JOIN qaqc.processing_log p '
-                    'ON u.log_id = p.upload_id '
-                    'WHERE u.upload_token = %(uuid)s '
-                    'ORDER BY p.process_timestamp DESC '
-                    'LIMIT 1')
+                    'INNER JOIN (SELECT upload_id, '
+                    'max(process_timestamp) AS process_timestamp '
+                    'FROM qaqc.processing_log p '
+                    'GROUP BY log_id) latest_upload '
+                    'ON u.log_id = latest_upload.upload_id '
+                    'WHERE u.upload_token = %(uuid)s')
         params = {'uuid': uuid}
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(query, params)
             run_data = cursor.fetchone()
         return run_data
 
-    def get_undone_data_upload_log_o(self,
-                                     conn,
-                                     qaqc_processor_source,
-                                     lookback_h):
+    def get_incomplete_user_data_upload(self,
+                                        conn,
+                                        qaqc_processor_source,
+                                        lookback_h):
         # case:
-        # o_file has entry in upload_log and processing_log
+        # user file is the file that is uploaded by users
+        # user file has entry in upload_log and processing_log
         # but not in summarized_output_log
         # solution:
         # return this data_upload
@@ -293,13 +304,16 @@ class NewDBHandler:
                     'ON u.log_id = x.upload_log_id '
                     'LEFT JOIN input_interface.data_source_type s '
                     'ON u.upload_source_id = s.source_id '
+                    'LEFT JOIN '
+                    'input_interface.data_upload_type t '
+                    'ON u.upload_type_id = t.type_id '
                     'WHERE p.log_id IS NOT NULL '
                     'AND o.output_id IS NULL '
-                    'AND u.upload_type_id IN (4, 7) '
+                    'AND t.description IN (\'Half hourly data\', '
+                    '\'Half-hourly gap-filled data\') '
                     'AND x.xfer_end_log_timestamp IS NOT NULL '
-                    'AND s.source != %(qaqc_processor_source)s '
-                    'AND log_timestamp >= '
-                    'CURRENT_TIMESTAMP '
+                    'AND s.source <> %(qaqc_processor_source)s '
+                    'AND log_timestamp >= CURRENT_TIMESTAMP '
                     '- INTERVAL \'%(lookback_h)s hours\'')
         params = {'qaqc_processor_source': qaqc_processor_source,
                   'lookback_h': lookback_h}
@@ -308,16 +322,17 @@ class NewDBHandler:
             data_upload = cursor.fetchall()
         return data_upload
 
-    def get_undone_data_upload_log_ac(self,
-                                      conn,
-                                      qaqc_processor_source,
-                                      lookback_h):
+    def get_incomplete_system_data_upload(self,
+                                          conn,
+                                          qaqc_processor_source,
+                                          lookback_h):
         # case:
-        # ac_file has entry in upload_log
-        # ac_file can be in/not in processing_log
+        # system file is the file that is uploaded by QAQCProcessor
+        # system file has entry in upload_log
+        # system file can be in/not in processing_log
         # but not in summarized_output_log
         # solution:
-        # traceback and return o_file of this data_upload
+        # traceback and return user file of this data_upload
         query = SQL('SELECT u.log_id, u.site_id, '
                     'u.data_file, u.upload_token, '
                     'u.upload_comment, u.upload_type_id, '
@@ -329,11 +344,14 @@ class NewDBHandler:
                     'ON p.log_id = o.process_id '
                     'LEFT JOIN input_interface.data_source_type s '
                     'ON u.upload_source_id = s.source_id '
+                    'LEFT JOIN '
+                    'input_interface.data_upload_type t '
+                    'ON u.upload_type_id = t.type_id '
                     'WHERE o.output_id IS NULL '
-                    'AND u.upload_type_id IN (4, 7) '
+                    'AND t.description IN (\'Half hourly data\', '
+                    '\'Half-hourly gap-filled data\') '
                     'AND s.source = %(qaqc_processor_source)s '
-                    'AND log_timestamp >= '
-                    'CURRENT_TIMESTAMP '
+                    'AND log_timestamp >= CURRENT_TIMESTAMP '
                     '- INTERVAL \'%(lookback_h)s hours\'')
         params = {'qaqc_processor_source': qaqc_processor_source,
                   'lookback_h': lookback_h}
@@ -342,9 +360,9 @@ class NewDBHandler:
             data_upload = cursor.fetchall()
         return data_upload
 
-    def trace_original_data_upload(self, conn, process_id):
+    def trace_user_data_upload(self, conn, process_id):
         # case:
-        # ac_file is not finished
+        # system file is not finished
         # trace up 1 level given process_id
         query = SQL('SELECT u.log_id, u.site_id, '
                     'u.data_file, u.upload_token, '

@@ -43,11 +43,11 @@ def mock_init_db_conn(self, config):
     return
 
 
-def mock_get_new_data_upload_log(self,
-                                 conn,
-                                 qaqc_processor_source,
-                                 is_qaqc_processor=None,
-                                 uuid=None):
+def mock_get_new_data_upload(self,
+                             conn,
+                             qaqc_processor_source,
+                             is_qaqc_processor=None,
+                             uuid=None):
     new_data_upload_log = []
     if not uuid:
         with open(PROCESSING_LOG, 'r') as f:
@@ -828,8 +828,8 @@ def test_format_qaqc_driver(monkeypatch,
     copyfile(EMAIL_TOKEN_EMPTY, EMAIL_TOKEN)
     monkeypatch.setattr(NewDBHandler, 'init_db_conn',
                         mock_init_db_conn)
-    monkeypatch.setattr(NewDBHandler, 'get_new_data_upload_log',
-                        mock_get_new_data_upload_log)
+    monkeypatch.setattr(NewDBHandler, 'get_new_data_upload',
+                        mock_get_new_data_upload)
     monkeypatch.setattr('format_qaqc_driver.upload_checks',
                         mock_upload_checks)
     monkeypatch.setattr(EmailGen, 'driver',
