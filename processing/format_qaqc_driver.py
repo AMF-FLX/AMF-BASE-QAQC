@@ -133,12 +133,12 @@ class FormatQAQCDriver:
             uuid = row.get('upload_token')
             if uuid not in rerun_uuids:
                 rerun_uuids.append(uuid)
-        ac_data_upload = \
+        system_data_upload = \
             self.db.get_incomplete_system_data_upload(
                 self.conn,
                 self.qaqc_processor_source,
                 self.lookback_h)
-        for row in ac_data_upload:
+        for row in system_data_upload:
             comment = row.get('upload_comment')
             timestamp = row.get('log_timestamp')
             uuid = None
@@ -421,6 +421,8 @@ class FormatQAQCDriver:
                 else:
                     if not error_msg:
                         msg = 'Unknown Error'
+                    else:
+                        msg = error_msg
                     token = error_task.uuid
                     upload_id = error_task.upload_id
                 if email_gen_status:

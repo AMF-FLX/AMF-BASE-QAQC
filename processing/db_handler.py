@@ -266,7 +266,7 @@ class NewDBHandler:
                     'INNER JOIN (SELECT upload_id, '
                     'max(process_timestamp) AS process_timestamp '
                     'FROM qaqc.processing_log p '
-                    'GROUP BY log_id) latest_upload '
+                    'GROUP BY upload_id) latest_upload '
                     'ON u.log_id = latest_upload.upload_id '
                     'WHERE u.upload_token = %(uuid)s')
         params = {'uuid': uuid}
