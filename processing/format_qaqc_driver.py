@@ -364,21 +364,30 @@ class FormatQAQCDriver:
                         elif p.get('process').is_alive():
                             p['runtime'] += self.time_sleep
                             if p.get('runtime') > self.max_timeout:
-                                _log.info(f"Process {p.get('task').uuid} "
-                                          'is not done after '
-                                          f"{self.max_timeout}s...")
+                                _log.info(
+                                    f"Process uuid: {p.get('task').uuid}, "
+                                    'upload_log log_id: '
+                                    f"{p.get('task').upload_id} "
+                                    'is not done after '
+                                    f"{self.max_timeout}s...")
                                 p.get('process').terminate()
                                 p.get('process').join()
-                                _log.info(f"Process {p.get('task').uuid} "
-                                          'is terminated')
+                                _log.info(
+                                    f"Process uuid: {p.get('task').uuid}, "
+                                    'upload_log log_id: '
+                                    f"{p.get('task').upload_id} "
+                                    'is terminated')
                                 retry = p.get('retry')
                                 if retry >= self.max_retries:
                                     is_qaqc_successful = False
                                     error_task = p.get('task')
-                                    error_msg = (f'Process {error_task.uuid} '
-                                                 f'{self.max_retries} '
-                                                 'retries reached. '
-                                                 'Stop running this process')
+                                    error_msg = (
+                                        f'Process uuid: {error_task.uuid}, '
+                                        'upload_log log_id: '
+                                        f'{error_task.upload_id} '
+                                        f'{self.max_retries} '
+                                        'retries reached. '
+                                        'Stop running this process')
                                     _log.info(error_msg)
                                     self.error_uuid.append(error_task.uuid)
                                 else:
@@ -393,7 +402,8 @@ class FormatQAQCDriver:
                                     p['process'] = new_p
                                     processes_to_monitor.append(p)
                                     _log.info(
-                                        f'Process {task.uuid} '
+                                        f'Process uuid: {task.uuid}, '
+                                        f'upload_log log_id: {task.upload_id} '
                                         'retry number: '
                                         f'{retry_count}/{self.max_retries}')
                             else:
