@@ -2,8 +2,9 @@ import datetime as dt
 import pytest
 from collections import OrderedDict
 from db_handler import NewDBHandler
-from format_qaqc_driver import FormatQAQCDriver
 from email_gen import EmailGen
+from format_qaqc_driver import FormatQAQCDriver
+from mail_handler import Mailer
 from shutil import copyfile
 import csv
 import time
@@ -126,6 +127,11 @@ def mock_email_gen_driver(self, token):
         data = [token]
         writer.writerow(data)
     return 'TESTQAQC'
+
+
+def mock_mail_handler_init(self, log,
+                           config_file=None):
+    return None
 
 
 def mock_recovery_process(self):
@@ -834,9 +840,11 @@ def test_format_qaqc_driver(monkeypatch,
                         mock_upload_checks)
     monkeypatch.setattr(EmailGen, 'driver',
                         mock_email_gen_driver)
+    monkeypatch.setattr(Mailer, '__init__',
+                        mock_mail_handler_init)
     monkeypatch.setattr(FormatQAQCDriver, 'recovery_process',
                         mock_recovery_process)
-    driver = FormatQAQCDriver(test=True)
+    driver = FormatQAQCDriver(test=True, config_file='qaqc_template.cfg')
     driver.run()
     upload_check_params = UPLOAD_CHECKS_PARAMS_DEFAULT.format(case)
     email_tokens = EMAIL_TOKEN_DEFAULT.format(case)

@@ -41,10 +41,11 @@ _log = Logger(True, None, None,
 
 
 class FormatQAQCDriver:
-    def __init__(self, lookback_h=None, test=False):
+    def __init__(self, lookback_h=None, test=False,
+                 config_file='qaqc.cfg'):
         self.ts_util = TimestampUtil()
         config = ConfigParser()
-        with open(os.path.join(os.getcwd(), 'qaqc.cfg'), 'r') as cfg:
+        with open(os.path.join(os.getcwd(), config_file), 'r') as cfg:
             cfg_section = 'FORMAT_QAQC_DRIVER'
             self.lookback_h = lookback_h
             config.read_file(cfg)

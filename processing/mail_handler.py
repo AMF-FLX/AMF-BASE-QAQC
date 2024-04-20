@@ -17,11 +17,11 @@ class MailerException(Exception):
 
 
 class Mailer:
-    def __init__(self, log):
+    def __init__(self, log, config_file='qaqc.cfg'):
         self.log = log
         config = ConfigParser()
         self.host = None
-        config_path = os.path.join(os.getcwd(), 'qaqc.cfg')
+        config_path = os.path.join(os.getcwd(), config_file)
         with open(config_path, 'r') as cfg:
             config.read_file(cfg)
             cfg_section = 'AMP'

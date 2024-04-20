@@ -422,56 +422,6 @@ class NewDBHandler:
         query = SQL('SELECT * from qaqc.state_cv_type_auto;')
         return self._get_type_cv(query, 'shortname')
 
-    def get_qaqc_process_types(self) -> dict:
-        query = SQL('SELECT * from qaqc.process_type_auto;')
-        return self._get_type_cv(query, 'name')
-
-    def register_format_qaqc(self, upload_id: int,
-                             process_timestamp: str, site_id: str,
-                             prior_process_id: Optional[int] = None,
-                             zip_process_id: Optional[int] = None) -> int:
-
-        process_code_version, db_config = self._read_config()
-        processor_user_id = socket.gethostname()
-
-        qaqc_process_type_lookup = self.get_qaqc_process_types()
-        format_qaqc_process_type_id = qaqc_process_type_lookup.get(
-            'Format QAQC')
-
-        field_names = ('process_type_id, process_timestamp, upload_id, '
-                       'site_id, processor_user_id, processing_code_version')
-        values = [format_qaqc_process_type_id, process_timestamp, upload_id,
-                  site_id, processor_user_id, process_code_version]
-
-        if prior_process_id:
-            field_names += ', prior_process_id'
-            values.append(prior_process_id)
-        if zip_process_id:
-            field_names += ', zip_process_id'
-            values.append(zip_process_id)
-
-        values = tuple(values)
-        self.conn = self.init_db_conn(db_config)
-        process_id = self._register_qaqc_process(field_names, values)
-
-        return process_id
-
-    def _register_qaqc_process(self, query_fields: str,
-                               process_values: tuple) -> int:
-        query_pre = SQL('INSERT INTO qaqc.processing_log (')
-        query_post = SQL(') VALUES %(process_values)s returning log_id;')
-        query = Composed([query_pre, SQL(query_fields), query_post])
-        with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
-            cursor.execute(query, {'process_values': process_values})
-            count = 0
-            for r in cursor:
-                process_id = r.get('log_id')
-                count += 1
-            if count > 1:
-                raise DBHandlerError('More than 1 process_id (log_id) '
-                                     'returned upon process run entry.')
-            return process_id
-
 
 class DBHandler:
     def __init__(self, hostname, user, password, db_name):
