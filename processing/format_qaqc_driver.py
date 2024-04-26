@@ -50,7 +50,6 @@ class FormatQAQCDriver:
             self.lookback_h = lookback_h
             config.read_file(cfg)
             if config.has_section(cfg_section):
-                self.log_dir = config.get(cfg_section, 'log_dir')
                 self.time_sleep = config.getfloat(cfg_section, 'time_sleep_s')
                 self.max_retries = config.getint(cfg_section, 'max_retries')
                 self.max_timeout = config.getint(cfg_section, 'max_timeout_s')
