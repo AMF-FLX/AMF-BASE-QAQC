@@ -1,3 +1,0 @@
-log_id,process_type_id,process_timestamp,upload_id,site_id,data_resolution,process_user_id,process_code_version,prior_process_id,zip_process_id,processing_retry_count
-1,1,2024-03-13 09:42:02.717159,1,US-UMB,,dummy id,dummy test version,,,
-2,1,1711559265.289953,2,US-UMB,,dummy id,,,,0

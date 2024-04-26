@@ -2,7 +2,6 @@ import datetime as dt
 import psycopg2
 
 import pymssql
-import socket
 
 from jira_names import JIRANames
 
@@ -13,7 +12,7 @@ from pathlib import Path
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from psycopg2.extras import RealDictCursor
 from psycopg2.sql import Composed, SQL
-from typing import NamedTuple, Optional, Union
+from typing import NamedTuple, Union
 
 __author__ = 'You-Wei Cheah, Danielle Christianson'
 __email__ = 'ycheah@lbl.gov, dschristianson@lbl.gov'
