@@ -47,9 +47,7 @@ class FileFixer:
             config.read_file(cfg)
             cfg_section = 'FILE_FIXER_CONFIG'
             if config.has_section(cfg_section):
-                self.powershell_exe = config.get(cfg_section, 'powershell_exe')
                 self.seven_zip_exe = config.get(cfg_section, 'seven_zip_exe')
-                self.excel2csv_path = config.get(cfg_section, 'excel2csv_path')
                 self.temp_base = config.get(cfg_section, 'temp_dir')
                 self.fix_threshold = config.getfloat(cfg_section,
                                                      'fix_threshold')

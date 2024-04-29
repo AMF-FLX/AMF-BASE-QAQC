@@ -1,5 +1,17 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v2.0.0
+*2024 Apr 29*
+
+This major release includes updates to Format QA/QC functionality that are not backwards compatible.
+
+New in this release:
+- Support for new data upload webservices.
+- Format QA/QC driver has been added. This change involves reworking how the upload_checks module is run and the information returned from it.
+
+Notes:
+- The Data QA/QC and Publish functionality have incomplete transitions to the new infrastructure included in this version. We recommend prior versions are used for these modes until further updates are made.
+
 ### QAQC v1.2.6
 *2023 Nov 01*
 

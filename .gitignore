@@ -1,7 +1,12 @@
 # AMF-BASE-QAQC specific
-# Prevent config check-ins
+# Prevent config check-ins and test resources
 qaqc.cfg
 self_review_sites.csv
+**/test/testdata/format_qaqc_driver/data_upload_log.csv
+**/test/testdata/format_qaqc_driver/email_token.csv
+**/test/testdata/format_qaqc_driver/process_summarized_output.csv
+**/test/testdata/format_qaqc_driver/processing_log.csv
+**/test/testdata/format_qaqc_driver/upload_checks_params.csv
 
 # Generated figures and logs
 output
