@@ -1,16 +1,17 @@
 import datetime as dt
 import psycopg2
+
 import pymssql
 
 from jira_names import JIRANames
 
+from configparser import ConfigParser
 from io import StringIO
 from logger import Logger
 from pathlib import Path
-from process_states import ProcessStates
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from psycopg2.extras import RealDictCursor
-from psycopg2.sql import SQL
+from psycopg2.sql import Composed, SQL
 from typing import NamedTuple, Union
 
 __author__ = 'You-Wei Cheah, Danielle Christianson'
@@ -34,8 +35,39 @@ class NewDBHandler:
     def __init__(self):
         self.default_null = 'NONE'
         self.default_sep = '|'
+        self._cwd = Path.cwd()
+        self.conn = None
+
+    def __del__(self):
+        if self.conn:
+            self.conn.close()
+
+    def _read_config(self, cfg_filename='qaqc.cfg'):
+        code_ver = None
+        with open(self._cwd / cfg_filename) as cfg:
+            config = ConfigParser()
+            config.read_file(cfg)
+            cfg_section = 'VERSION'
+            if config.has_section(cfg_section):
+                if config.has_option(cfg_section, 'code_version'):
+                    code_ver = config.get(
+                        cfg_section, 'code_version')
+            cfg_section = 'DB'
+            if config.has_section(cfg_section):
+                if config.has_option(cfg_section, 'hostname'):
+                    hostname = config.get(cfg_section, 'hostname')
+                if config.has_option(cfg_section, 'user'):
+                    user = config.get(cfg_section, 'user')
+                if config.has_option(cfg_section, 'auth'):
+                    auth = config.get(cfg_section, 'auth')
+                if config.has_option(cfg_section, 'db_name'):
+                    db_name = config.get(cfg_section, 'db_name')
+            db_config = DBConfig(hostname, user, auth, db_name)
+        return code_ver, db_config
 
     def init_db_conn(self, db_cfg, use_autocommit=True):
+        if db_cfg is None:
+            return None
         try:
             conn = psycopg2.connect(
                 host=db_cfg.host, user=db_cfg.user,
@@ -164,6 +196,231 @@ class NewDBHandler:
                 checksums[fname] = r.get('file_checksum')
         return checksums
 
+    def get_data_upload_with_uuid(self, conn, uuid):
+        query = SQL('SELECT u.log_id, u.site_id, '
+                    'u.data_file, u.upload_token, '
+                    'u.upload_comment, u.upload_type_id '
+                    'FROM input_interface.data_upload_log u '
+                    'LEFT JOIN '
+                    'input_interface.data_upload_file_xfer_log x '
+                    'ON u.log_id = x.upload_log_id '
+                    'LEFT JOIN '
+                    'input_interface.data_upload_type t '
+                    'ON u.upload_type_id = t.type_id '
+                    'WHERE '
+                    't.description IN (\'Half hourly data\', '
+                    '\'Half-hourly gap-filled data\') '
+                    'AND x.xfer_end_log_timestamp IS NOT NULL '
+                    'AND u.upload_token = %(uuid)s')
+        params = {'uuid': uuid}
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, params)
+            new_data_upload = cursor.fetchall()
+        return new_data_upload
+
+    def get_new_data_upload(self,
+                            conn,
+                            qaqc_processor_source,
+                            is_qaqc_processor,
+                            uuid=None):
+        query_base = SQL('SELECT u.log_id, u.site_id, '
+                         'u.data_file, u.upload_token, '
+                         'u.upload_comment, u.upload_type_id '
+                         'FROM input_interface.data_upload_log u '
+                         'LEFT JOIN qaqc.processing_log p '
+                         'ON u.log_id = p.upload_id '
+                         'LEFT JOIN '
+                         'input_interface.data_upload_file_xfer_log x '
+                         'ON u.log_id = x.upload_log_id '
+                         'LEFT JOIN input_interface.data_source_type s '
+                         'ON u.upload_source_id = s.source_id '
+                         'LEFT JOIN '
+                         'input_interface.data_upload_type t '
+                         'ON u.upload_type_id = t.type_id '
+                         'WHERE p.log_id IS NULL '
+                         'AND t.description IN (\'Half hourly data\', '
+                         '\'Half-hourly gap-filled data\') '
+                         'AND x.xfer_end_log_timestamp IS NOT NULL ')
+        composed_query_list = [query_base]
+        if is_qaqc_processor:
+            composed_query_list.append(
+                SQL('AND s.source = %(qaqc_processor_source)s'))
+        else:
+            composed_query_list.append(
+                SQL('AND s.source <> %(qaqc_processor_source)s'))
+        params = {'qaqc_processor_source': qaqc_processor_source}
+        if uuid:
+            composed_query_list.append(
+                SQL('AND u.upload_token = %(uuid)s'))
+            params['uuid'] = uuid
+        query = Composed(composed_query_list)
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, params)
+            new_data_upload = cursor.fetchall()
+        return new_data_upload
+
+    def get_latest_run_with_uuid(self, conn, uuid):
+        query = SQL('SELECT u.log_id, latest_upload.process_timestamp '
+                    'FROM input_interface.data_upload_log u '
+                    'INNER JOIN (SELECT upload_id, '
+                    'max(process_timestamp) AS process_timestamp '
+                    'FROM qaqc.processing_log p '
+                    'GROUP BY upload_id) latest_upload '
+                    'ON u.log_id = latest_upload.upload_id '
+                    'WHERE u.upload_token = %(uuid)s')
+        params = {'uuid': uuid}
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, params)
+            run_data = cursor.fetchone()
+        return run_data
+
+    def get_incomplete_user_data_upload(self,
+                                        conn,
+                                        qaqc_processor_source,
+                                        lookback_h):
+        # case:
+        # user file is the file that is uploaded by users
+        # user file has entry in upload_log and processing_log
+        # but not in summarized_output_log
+        # solution:
+        # return this data_upload
+        query = SQL('SELECT u.log_id, u.site_id, '
+                    'u.data_file, u.upload_token, '
+                    'u.upload_comment, u.upload_type_id '
+                    'FROM input_interface.data_upload_log u '
+                    'LEFT JOIN '
+                    '(SELECT * FROM ('
+                    'SELECT process_timestamp, upload_id, log_id, '
+                    'ROW_NUMBER() OVER (PARTITION BY upload_id '
+                    'ORDER BY process_timestamp DESC) '
+                    'AS row_num FROM qaqc.processing_log) ps '
+                    'WHERE row_num = 1) p '
+                    'ON u.log_id = p.upload_id '
+                    'LEFT JOIN qaqc.process_summarized_output o '
+                    'ON p.log_id = o.process_id '
+                    'LEFT JOIN '
+                    'input_interface.data_upload_file_xfer_log x '
+                    'ON u.log_id = x.upload_log_id '
+                    'LEFT JOIN input_interface.data_source_type s '
+                    'ON u.upload_source_id = s.source_id '
+                    'LEFT JOIN '
+                    'input_interface.data_upload_type t '
+                    'ON u.upload_type_id = t.type_id '
+                    'WHERE p.log_id IS NOT NULL '
+                    'AND o.output_id IS NULL '
+                    'AND t.description IN (\'Half hourly data\', '
+                    '\'Half-hourly gap-filled data\') '
+                    'AND x.xfer_end_log_timestamp IS NOT NULL '
+                    'AND s.source <> %(qaqc_processor_source)s '
+                    'AND log_timestamp >= CURRENT_TIMESTAMP '
+                    '- INTERVAL \'%(lookback_h)s hours\'')
+        params = {'qaqc_processor_source': qaqc_processor_source,
+                  'lookback_h': lookback_h}
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, params)
+            data_upload = cursor.fetchall()
+        return data_upload
+
+    def get_incomplete_system_data_upload(self,
+                                          conn,
+                                          qaqc_processor_source,
+                                          lookback_h):
+        # case:
+        # system file is the file that is uploaded by QAQCProcessor
+        # system file has entry in upload_log
+        # system file can be in/not in processing_log
+        # but not in summarized_output_log
+        # solution:
+        # traceback and return user file of this data_upload
+        query = SQL('SELECT u.log_id, u.site_id, '
+                    'u.data_file, u.upload_token, '
+                    'u.upload_comment, u.upload_type_id, '
+                    'u.log_timestamp '
+                    'FROM input_interface.data_upload_log u '
+                    'LEFT JOIN qaqc.processing_log p '
+                    'ON u.log_id = p.upload_id '
+                    'LEFT JOIN qaqc.process_summarized_output o '
+                    'ON p.log_id = o.process_id '
+                    'LEFT JOIN input_interface.data_source_type s '
+                    'ON u.upload_source_id = s.source_id '
+                    'LEFT JOIN '
+                    'input_interface.data_upload_type t '
+                    'ON u.upload_type_id = t.type_id '
+                    'WHERE o.output_id IS NULL '
+                    'AND t.description IN (\'Half hourly data\', '
+                    '\'Half-hourly gap-filled data\') '
+                    'AND s.source = %(qaqc_processor_source)s '
+                    'AND log_timestamp >= CURRENT_TIMESTAMP '
+                    '- INTERVAL \'%(lookback_h)s hours\'')
+        params = {'qaqc_processor_source': qaqc_processor_source,
+                  'lookback_h': lookback_h}
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, params)
+            data_upload = cursor.fetchall()
+        return data_upload
+
+    def trace_user_data_upload(self, conn, process_id):
+        # case:
+        # system file is not finished
+        # trace up 1 level given process_id
+        query = SQL('SELECT u.log_id, u.site_id, '
+                    'u.data_file, u.upload_token, '
+                    'u.upload_comment, u.upload_type_id, '
+                    'p.prior_process_id, p.zip_process_id '
+                    'FROM input_interface.data_upload_log u '
+                    'LEFT JOIN qaqc.processing_log p '
+                    'ON u.log_id = p.upload_id '
+                    'WHERE p.log_id = %(process_id)s')
+        params = {'process_id': process_id}
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, params)
+            data_upload = cursor.fetchone()
+        return data_upload
+
+    def check_status_of_process_id(self, conn, process_id):
+        is_success = False
+        query = SQL('SELECT report AS count_log_id '
+                    'FROM qaqc.process_summarized_output p '
+                    'WHERE process_id = %(process_id)s')
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, {'process_id': process_id})
+            report = cursor.fetchone()
+        if report:
+            is_success = True
+        return is_success
+
+    def get_upload_file_info(self, conn, upload_id):
+        upload_file_info = {}
+        query = SQL('SELECT * FROM input_interface.data_upload_log '
+                    'WHERE log_id = %s')
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, (upload_id,))
+            for r in cursor:
+                upload_file_info['upload_id'] = r.get('log_id')
+                upload_file_info['site_id'] = r.get('site_id')
+                upload_file_info['upload_comment'] = r.get('upload_comment')
+                upload_file_info['data_file'] = r.get('data_file')
+        return upload_file_info
+
+    def _get_type_cv(self, query, name_field, id_field='type_id') -> dict:
+        _, db_config = self._read_config()
+        self.conn = self.init_db_conn(db_config)
+
+        cv_lookup = {}
+
+        with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query)
+            for r in cursor:
+                cv_name = r.get(name_field)
+                cv_id = r.get(id_field)
+                cv_lookup.update({cv_name: cv_id})
+
+        return cv_lookup
+
+    def get_qaqc_state_types(self) -> dict:
+        query = SQL('SELECT * from qaqc.state_cv_type_auto;')
+        return self._get_type_cv(query, 'shortname')
+
 
 class DBHandler:
     def __init__(self, hostname, user, password, db_name):
@@ -172,6 +429,8 @@ class DBHandler:
         self.__password = password
         self.__db_name = db_name
 
+    # ToDo: evaluate if needs update -- could be obsolete
+    #       used in PreBASERegenerator
     def insert_BASE_entries(self, entry_ls):
         if entry_ls is None:
             return ''
@@ -179,6 +438,8 @@ class DBHandler:
                  "VALUES(%s, %d, %d, %d, %s, %s, %s, %s, %s)")
         return self._insert_entries(query, entry_ls)
 
+    # ToDo: evaluate if needs update -- could be obsolete
+    #       used in PreBASERegenerator
     def insert_BASE_BADM_entries(self, entry_ls):
         if entry_ls is None:
             return ''
@@ -186,6 +447,8 @@ class DBHandler:
                  "VALUES(%s, %s, %s, %s, %s, %d, %s, %s, %s, %s, %s)")
         return self._insert_entries(query, entry_ls)
 
+    # ToDo: evaluate if needs update -- could be obsolete
+    #       used in PreBASERegenerator
     def insert_qaqc_process_entry(self, fields, entry):
         if entry is None:
             return ''
@@ -193,6 +456,8 @@ class DBHandler:
                         .format(f=fields, e=entry))
         return self._insert_entry(entry=insert_entry)
 
+    # ToDo: evaluate if needs update -- could be obsolete
+    #       used in PreBASERegenerator
     def insert_qaqc_file_in_base_entries(self, entry_ls):
         if entry_ls is None:
             return ''
@@ -201,6 +466,9 @@ class DBHandler:
                  "VALUES (%d, %d)")
         return self._insert_entries(query, entry_ls)
 
+    # ToDo: update eventually
+    # ToDo: evaluate if needs update -- could be obsolete
+    #       used in PreBASERegenerator
     def insert_qaqc_data_in_base_entries(self, entry_ls):
         if entry_ls is None:
             return ''
@@ -247,6 +515,7 @@ class DBHandler:
                 return 'ERROR OCCURRED'
         return ''
 
+    # ToDo: update for publish
     def get_sites_with_updates(self):
         site_ids = {}
         with pymssql.connect(
@@ -271,6 +540,7 @@ class DBHandler:
                     row.get("baseVersion"), row.get("processID"))
         return site_ids
 
+    # ToDo: update for publish
     def get_input_files(self, processID):
         input_files = set()
         with pymssql.connect(
@@ -288,20 +558,16 @@ class DBHandler:
                 input_files.add(pid)
         return input_files
 
-    def define_BASE_candidate_query(self, pre_query, post_query):
-        query_criteria = ("s.status = '{st1}' "
-                          "OR s.status = '{st2}' "
-                          "OR s.status = '{st3}' "
-                          "OR s.status = '{st4}' "
-                          "OR s.status = '{st5}'")
+    def define_BASE_candidate_query(
+            self, pre_query, post_query, state_ids):
+        query_criteria = f's.status = {state_ids[0]}'
+        for state_id in state_ids[1:]:
+            query_criteria += f' OR s.status = {state_id}'
         query = pre_query + query_criteria + post_query
-        return query.format(st1=ProcessStates.PassedCurator,
-                            st2=ProcessStates.GeneratedBASE,
-                            st3=ProcessStates.BASEGenFailed,
-                            st4=ProcessStates.BADMUpdateFailed,
-                            st5=ProcessStates.InitiatedPreBASERegen)
+        return query
 
-    def get_BASE_candidates(self):
+    # ToDo: update for publish
+    def get_BASE_candidates(self, state_ids):
         preBASE_files = {}
         with pymssql.connect(
                 server=self.__hostname,
@@ -323,7 +589,8 @@ class DBHandler:
                          "WHERE ")
             post_query = ") s1 ON s1.processID = l.processID"
             query = self.define_BASE_candidate_query(pre_query=pre_query,
-                                                     post_query=post_query)
+                                                     post_query=post_query,
+                                                     state_ids=state_ids)
             conn.autocommit(True)
             try:
                 cursor.execute(query)
@@ -352,6 +619,7 @@ class DBHandler:
                 return "ERROR OCCURRED"
         return preBASE_files
 
+    # ToDo: rework for new tables (reset_states in PreBASERegenerator)
     def get_preBASE_regen_candidates(self, query_type='latest',
                                      process_id_ls=None):
         process_info = {}
@@ -404,6 +672,8 @@ class DBHandler:
                 _log.error(e)
         return process_info, row_key_ls
 
+    # ToDo: evaluate if needs update -- could be obsolete
+    #       used in PreBASERegenerator
     def get_preBASE_duplicated_process_ids(self, process_id_ls):
         republish_map = {}
         with pymssql.connect(
@@ -430,6 +700,8 @@ class DBHandler:
                 _log.error(e)
         return republish_map
 
+    # ToDo: evaluate if needs update -- could be obsolete
+    #       used in PreBASERegenerator
     def get_qaqc_file_in_base(self, process_id, new_process_id=None):
         file_id_list = []  # a list of fileIDs for querying dataInBase
         file_in_base_ls = []  # a list of the tuples to be inserted
@@ -460,6 +732,8 @@ class DBHandler:
                 _log.error(e)
         return file_id_list, file_in_base_ls, file_process_id_dict
 
+    # ToDo: evaluate if needs update -- could be obsolete
+    #       used in PreBASERegenerator
     def get_qaqc_data_in_base(self, file_ids):
         data_in_base_ls = {}
         with pymssql.connect(
@@ -482,7 +756,8 @@ class DBHandler:
                 _log.error(e)
         return data_in_base_ls
 
-    def get_BASE_candidates_for_preBASE_regen(self):
+    # ToDo: rework for new tables (reset_states in PreBASERegenerator)
+    def get_BASE_candidates_for_preBASE_regen(self, state_ids):
         process_info = {}
         site_list = []
         with pymssql.connect(
@@ -507,7 +782,8 @@ class DBHandler:
                          "WHERE ")
             post_query = ""
             query = self.define_BASE_candidate_query(pre_query=pre_query,
-                                                     post_query=post_query)
+                                                     post_query=post_query,
+                                                     state_ids=state_ids)
             conn.autocommit(True)
             try:
                 cursor.execute(query)
@@ -532,6 +808,7 @@ class DBHandler:
                 _log.error(e)
         return process_info, site_list
 
+    # ToDo: rework for new tables (reset_states in PreBASERegenerator)
     def get_qaqc_process_ids(self, query, key='processID'):
         process_id_ls = []
         with pymssql.connect(
@@ -550,7 +827,8 @@ class DBHandler:
                 _log.error(e)
         return process_id_ls
 
-    def get_incomplete_phase3_process_ids(self):
+    # ToDo: rework for new tables (reset_states in PreBASERegenerator)
+    def get_incomplete_phase3_process_ids(self, state_ids):
         process_id_ls = []
         with pymssql.connect(
                 server=self.__hostname,
@@ -565,12 +843,11 @@ class DBHandler:
                      "INNER JOIN qaqcState as b "
                      "ON d.processID = b.processID "
                      "AND d.max_ts = b.stateDateTime WHERE b.status in "
-                     "({st1}, {st2}, {st3}, {st4}, {st5})"
-                     .format(st1=ProcessStates.GeneratedBASE,
-                             st2=ProcessStates.UpdatedBASEBADM,
-                             st3=ProcessStates.BASEGenFailed,
-                             st4=ProcessStates.BADMUpdateFailed,
-                             st5=ProcessStates.BASEBADMPubFailed))
+                     "(")
+            for state_id in state_ids[:-1]:
+                query += f'{state_id}, '
+            query += f'{state_ids[-1]})'
+
             try:
                 cursor.execute(query)
                 for row in cursor:
@@ -580,6 +857,8 @@ class DBHandler:
                 _log.error(e)
         return process_id_ls
 
+    # ToDo: rework for new tables
+    # HERE
     def get_qaqc_status_history(self, process_id):
         status_history = []
         with pymssql.connect(
@@ -605,6 +884,7 @@ class DBHandler:
                 _log.error(e)
         return status_history
 
+    # Used in TranslateEarlyBase -- probably obsolete
     def get_site_status_BASE(self):
         site_list = []
         with pymssql.connect(
@@ -766,6 +1046,7 @@ class DBHandler:
                 _log.error('Error occurred in get_issue_labels')
                 _log.error(e)
 
+    # ToDo: update soon
     def get_process_code_version(self, process_ids: tuple):
         """
         Get process code version for specified process_ids from
@@ -793,6 +1074,7 @@ class DBHandler:
                 _log.error('Error occurred in get_process_code_version')
                 _log.error(e)
 
+    # ToDo: update eventually
     def get_fp_in_uploads(self, date_created_after: str) -> dict:
         """
         Get the uploaded files after specified date
@@ -888,6 +1170,7 @@ class DBHandler:
 
         return process_ids
 
+    # ToDo update eventually
     def get_format_qaqc_process_attempts(self, date_created_after: str,
                                          process_types: tuple = ('File',),
                                          site_ids: tuple = ()) -> dict:
@@ -939,6 +1222,7 @@ class DBHandler:
 
         return process_info_store
 
+    # ToDo: update eventually
     def get_upload_file_info_for_site(self, site_id: str) -> list:
         """
         Get upload file info for the specified site for processing runs

@@ -54,7 +54,7 @@ def test_is_upload_from_zip(email_gen):
     assert email_gen.is_upload_from_zip(upload_info) is False
 
 
-def test_get_file_reports(email_gen):
+def test_get_sorted_file_reports(email_gen):
     upload_info = {
         'reports': {
             '9425': {'upload_file': 'US-PFa_HR_199601010000_199701010000.csv'},
@@ -65,7 +65,7 @@ def test_get_file_reports(email_gen):
         {'upload_file': 'US-PFa_HR_199501010000_199601010000.csv'},
         {'upload_file': 'US-PFa_HR_199601010000_199701010000.csv'},
         {'upload_file': 'US-PFa_HR_199701010000_199801010000.csv'}]
-    assert email_gen.get_file_reports(upload_info) == results
+    assert email_gen.get_sorted_file_reports(upload_info) == results
 
 
 def test_has_autocorrect_file(email_gen):
@@ -452,6 +452,57 @@ def test_get_formated_upload_datetime(email_gen):
     upload_info = {'datetime': '2019-01-02T11:00:01.0000002'}
     assert email_gen.get_formated_upload_datetime(upload_info) == \
         'Jan 02, 2019'
+
+
+def test_all_archival_files(email_gen):
+
+    upload_reports_response = {
+        'SITE_ID': '',
+        'datetime': '',
+        'reports': {},
+        'upload_comment': '',
+        'uploader': '',
+        'uploader_email': '',
+        'uploader_id': '',
+        'zip_file': None
+    }
+
+    assert email_gen.all_upload_files_archival(
+        upload_reports_response) == 'No file reports found.'
+
+    qaqc_checks = {'checks': [
+        {
+            'check_name': email_gen.fixer_check_name,
+            'status_msg': {
+                'WARNING': {
+                    'status_body': [email_gen.fixer_archival_file_txt]
+                }
+            }
+        }
+    ]}
+
+    upload_reports_response.update(
+        reports={'1': {'qaqc_checks': qaqc_checks,
+                       'upload_file': 'data.csv'}})
+    assert email_gen.all_upload_files_archival(
+        upload_reports_response) == 'All uploaded files are archival.'
+
+    qaqc_checks = {'checks': [
+        {
+            'check_name': email_gen.fixer_check_name,
+            'status_msg': {
+                'WARNING': {
+                    'status_body': ['Fixes made.']
+                }
+            }
+        }
+    ]}
+
+    upload_reports_response.update(
+        reports={'1': {'qaqc_checks': qaqc_checks,
+                       'upload_file': 'data.csv'}})
+    assert email_gen.all_upload_files_archival(
+        upload_reports_response) is None
 
 
 def test_craft_email(monkeypatch):

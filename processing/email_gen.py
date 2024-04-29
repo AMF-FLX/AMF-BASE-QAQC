@@ -193,10 +193,16 @@ class EmailGen:
         :param upload_info:
         :return: boolean, True = all uploaded files are archival
         """
-        for file_report in self.get_file_reports(upload_info):
+        file_reports = self.get_sorted_file_reports(upload_info)
+
+        if not file_reports:
+            return 'No file reports found.'
+
+        for file_report in file_reports:
             if not self.is_file_archival(file_report):
-                return False
-        return True
+                return None
+
+        return 'All uploaded files are archival.'
 
     def add_original_file_process_id_to_report(self, upload_info):
         """
@@ -214,10 +220,10 @@ class EmailGen:
         :param upload_info: dict, upload_info
         :return: sorted process ids
         """
-        sorted_reports = self.get_file_reports(upload_info)
+        sorted_reports = self.get_sorted_file_reports(upload_info)
         return [file_report['process_id'] for file_report in sorted_reports]
 
-    def get_file_reports(self, upload_info):
+    def get_sorted_file_reports(self, upload_info):
         """
         Get a SORTED list of uploaded file reports from the upload info dict.
         Sort by uploaded filename.
@@ -369,7 +375,7 @@ class EmailGen:
                 f'Files were uploaded from archival file: {zip_file}.\n')
         description_list.append('QAQC completed with the following results:')
 
-        for file_report in self.get_file_reports(upload_info):
+        for file_report in self.get_sorted_file_reports(upload_info):
             upload_file = file_report['upload_file']
             qaqc_summary = file_report['qaqc_checks']['check_summary']
             description_list.append(f'{upload_file}: {qaqc_summary}')
@@ -388,7 +394,7 @@ class EmailGen:
         :return: dict
         """
         file_statuses = {}
-        for file_report in self.get_file_reports(upload_info):
+        for file_report in self.get_sorted_file_reports(upload_info):
             process_id = file_report['process_id']
             has_autocorrect_file = self.has_autocorrect_file(file_report)
             overall_status = self.get_overall_file_status_code(
@@ -457,7 +463,7 @@ class EmailGen:
         """
         msg_pieces = []
         site_id = upload_info['SITE_ID']
-        for file_report in self.get_file_reports(upload_info):
+        for file_report in self.get_sorted_file_reports(upload_info):
             process_id = file_report['process_id']
             upload_file = file_report['upload_file']
             report_link = self.construct_report_link(site_id, process_id)
@@ -482,7 +488,7 @@ class EmailGen:
         fix_text = ''
         archive_count = 0
         ts_warning_flag = False
-        for file_report in self.get_file_reports(upload_info):
+        for file_report in self.get_sorted_file_reports(upload_info):
             r = file_report
             if self.is_file_archival(file_report=file_report):
                 archive_count += 1
@@ -764,7 +770,7 @@ class EmailGen:
         :return: list of uploaded files
         """
         uploaded_files = []
-        file_reports = self.get_file_reports(upload_info)
+        file_reports = self.get_sorted_file_reports(upload_info)
         for file_report in file_reports:
             uploaded_files.append(file_report['upload_file'])
         return uploaded_files
@@ -958,8 +964,16 @@ class EmailGen:
             return 'No upload_token provided.'
         upload_info = self.get_upload_data(upload_token)
 
-        if self.all_upload_files_archival(upload_info):
-            return 'All uploaded files are archival.'
+        if not isinstance(upload_info, dict):
+            return 'Upload information is not in suspected format.'
+
+        if not upload_info.get('reports'):
+            return ('No upload report information retrieved for token: '
+                    f'{upload_token}.')
+
+        archival_msg = self.all_upload_files_archival(upload_info)
+        if archival_msg:
+            return archival_msg
 
         self.add_original_file_process_id_to_report(upload_info)
         zip_upload = self.is_upload_from_zip(upload_info=upload_info)

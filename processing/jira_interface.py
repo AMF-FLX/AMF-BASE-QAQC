@@ -13,7 +13,8 @@ import urllib.request
 install_aliases()
 
 __author__ = 'Norm Beekwilder, Danielle Christianson, Fianna O\'Brien'
-__email__ = 'norm.beekwilder@gmail.com, dschristianson@lbl.gov, flobrien@lbl.gov'
+__email__ = 'norm.beekwilder@gmail.com, dschristianson@lbl.gov, ' \
+            'flobrien@lbl.gov'
 _log = Logger().getLogger(__name__)
 
 
@@ -392,14 +393,14 @@ class JIRAInterface:
                 user = self.create_non_ad_user(name, email)
                 if user is not None:
                     new_members.append(user)
-            # See comment above for why we check lowercase site_team_member_email
-            #   for organization users
+            # See comment above for why we check lowercase
+            #   site_team_member_email for organization users
             other_users_email.append(email.lower())
         if len(new_members) > 0:
             self.add_users_to_organization(self.org_dict[site_id], new_members)
-        # Check existing organization members. If they are no longer in ad_users
-        #    or other_users (see above for why lowercase emails are used),
-        #    gather the username for removal.
+        # Check existing organization members. If they are no longer in
+        #    ad_users or other_users (see above for why lowercase emails
+        #    are used), gather the username for removal.
         for m in org_members:
             if m not in ad_users and m not in other_users_email:
                 remove_members.append(m)

@@ -109,6 +109,7 @@ class GapFilled:
             specific to this class
         """
         _log.info("Beginning to run gap_fill_detection algorithm...")
+        _log.resetStats()
 
         if qaqc_mode == 'format':
             sub_log1 = _log
