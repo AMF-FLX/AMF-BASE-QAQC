@@ -121,12 +121,6 @@ class UpdateBASEBADM():
         else:
             self.BADM_exe_dir = BADM_exe_dir
 
-        if not all((flux_user, flux_auth, flux_db_name)):
-            _log.error('FLUX DB configurations not assigned')
-            return False
-        else:
-            self.flux_db_handler = DBHandler(
-                flux_hostname, flux_user, flux_auth, flux_db_name)
         if not new_db_config:
             _log.error('New Postgres DB configurations not assigned')
             return False
