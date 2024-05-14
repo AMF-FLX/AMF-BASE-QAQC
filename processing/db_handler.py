@@ -134,6 +134,113 @@ class NewDBHandler:
             count = cursor.fetchone().get('count')
         return count
 
+    # ToDo: update for publish
+    def get_input_files(self, process_id):
+        input_files = set()
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            query = SQL('SELECT format_qaqc_id '
+                        'FROM qaqc.aggregate_processing_log '
+                        'WHERE data_qaqc_id = %s')
+            cursor.execute(query, (process_id,))
+            for row in cursor:
+                pid = row.get('format_qaqc_id')
+                input_files.add(pid)
+        return input_files
+
+    # def get_sites_with_updates(self):
+    #     site_ids = {}
+    #     with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+    #         query = SQL('SELECT p.site_id, p.process_id, p.base_version '
+    #                     'FROM '
+    #                     '(SELECT proc.site_id, pub.process_id, '
+    #                     'pub.base_version, pub.log_timestamp '
+    #                     'FROM qaqc.publishing_log pub '
+    #                     'INNER JOIN qaqc.processing_log proc '
+    #                     'ON pub.process_id = proc.log_id) p '
+    #                     'INNER JOIN ('
+    #                     'SELECT site_id, pub.process_id, '
+    #                     'MAX(pub.log_timestamp) AS latest_ts '
+    #                     'FROM qaqc.publishing_log pub '
+    #                     'INNER JOIN qaqc.processing_log proc '
+    #                     'ON pub.process_id = proc.log_id '
+    #                     'GROUP BY site_id, pub.process_id, '
+    #                     'pub.log_timestamp) latest_publish '
+    #                     'ON p.log_timestamp = latest_publish.latest_ts '
+    #                     'latest_publish.site_id = p.site_id')
+    #         cursor.execute(query)
+    #         for row in cursor:
+    #             site_id = row.get('site_id')
+    #             site_ids[site_id] = (
+    #                 row.get('base_version'), row.get('process_id'))
+    #     return site_ids
+
+    def define_base_candidates_query(
+            self, pre_query, post_query, state_ids):
+        full_query_components = [pre_query]
+        query_criteria = SQL('s.state_log = %s ')
+        for idx, state_id in enumerate(state_ids):
+            if idx > 0:
+                full_query_components.append(SQL( 'OR '))
+            else:
+                full_query_components.append(query_criteria)
+        full_query_components.append(post_query)
+        return Composed(full_query_components)
+
+    # ToDo: update for publish
+    def get_base_candidates(self, state_ids):
+        preBASE_files = {}
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            pre_query = SQL(
+                'SELECT o.aggregate_file_path, s.process_id, '
+                'p.publishing_code_version '
+                'FROM qaqc.processing_log l '
+                'INNER JOIN ('
+                'SELECT s.process_id, s.state_id '
+                'FROM qaqc.state_log s '
+                'INNER JOIN ('
+                'SELECT process_id, MAX(log_timestamp) AS latest_state_timestamp '
+                'FROM qaqc.state_log '
+                'GROUP BY process_id) latest_state '
+                'ON latest_state.latest_state_timestamp = s.log_timestamp '
+                'AND s.process_id = latest_state.process_id) s '
+                'ON s.process_id = l.log_id '
+                'INNER JOIN qaqc.process_summarized_output o '
+                'ON o.process_id = l.log_id '
+                'LEFT JOIN qaqc.publishing_log p '
+                'ON p.process_id = l.log_id '
+                'WHERE ')
+            post_query = SQL(') s ON s.process_id = l.log_id')
+            query = self.define_base_candidate_query(
+                pre_query=pre_query,
+                post_query=post_query,
+                state_ids=state_ids)
+            try:
+                cursor.execute(query, state_ids)
+                for row in cursor:
+                    candidate_filepath = row.get('aggregate_file_path')
+                    code_version = row.get('publishing_code_version')
+                    process_id = row.get('process_id')
+                    # Remap paths if codeVersion is prior to version 1.1.0
+                    if code_version < '1.1.0':
+                        path = Path(candidate_filepath)
+                        filename = path.name
+                        parent_path_parts = path.parent.parts
+                        # strip top two level directories
+                        # as well as immediate parent directory
+                        # and rebuild immediate parent path
+                        candidate_filepath = str(
+                            Path(parent_path_parts[0],
+                                 *parent_path_parts[3:-1],
+                                 *('outputs', 'qaqc_combined'),
+                                 filename))
+                    preBASE_files[candidate_filepath] = process_id
+
+            except Exception as e:
+                _log.error("Error occurred in get_base_candidates")
+                _log.error(e)
+                return "ERROR OCCURRED"
+        return preBASE_files
+
     def get_badm_map(self, conn):
         badm_map = {}
         query = SQL('SELECT flux_id, filename, badm_version '

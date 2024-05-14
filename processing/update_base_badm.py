@@ -3,7 +3,7 @@ import datetime
 import subprocess
 
 from configparser import ConfigParser
-from db_handler import DBConfig, DBHandler, NewDBHandler
+from db_handler import DBConfig, NewDBHandler
 from file_name_verifier import FileNameVerifier
 from logger import Logger
 from process_states import ProcessStates, ProcessStateHandler
@@ -231,7 +231,9 @@ class UpdateBASEBADM():
         badm_map = self.new_db_handler.get_badm_map(psql_conn)
         sites_needing_updates = self.new_db_handler.get_sites_with_updates(
             psql_conn)
-        base_candidate_map = self.flux_db_handler.get_BASE_candidates(
+
+        # Need to revamp
+        base_candidate_map = self.new_db_handler.get_BASE_candidates(
             state_ids=self.process_states.base_candidate_states)
 
         # Create zip file

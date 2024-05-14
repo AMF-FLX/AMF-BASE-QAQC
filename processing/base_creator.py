@@ -2,7 +2,7 @@ import ast
 from configparser import ConfigParser
 import csv
 import datetime
-from db_handler import DBConfig, DBHandler, NewDBHandler
+from db_handler import DBConfig, NewDBHandler
 from file_name_verifier import FileNameVerifier
 from fp_vars import FPVariables
 from logger import Logger
@@ -71,12 +71,6 @@ class BASECreator():
             path.mkdir(parents=True, exist_ok=True)
             self.path = path
 
-        if not all((flux_user, flux_auth, flux_db_name)):
-            print('FLUX DB configurations not assigned')
-            return False
-        else:
-            self.flux_db_handler = DBHandler(
-                flux_hostname, flux_user, flux_auth, flux_db_name)
         if not new_db_config:
             _log.error('New Postgres DB configurations not assigned')
             return False
@@ -228,9 +222,9 @@ class BASECreator():
                                 site_id, md5sum, processID=None):
         if last_base_version:
             if not is_last_ver_cdiac:
-                last_pid_inputs = self.flux_db_handler.get_input_files(
+                last_pid_inputs = self.new_db_handler.get_input_files(
                     last_processID)
-                pid_inputs = self.flux_db_handler.get_input_files(processID)
+                pid_inputs = self.new_db_handler.get_input_files(processID)
                 _log.debug(f'{processID}: {pid_inputs}')
                 _log.debug(f'{last_processID}: {last_pid_inputs}')
                 if pid_inputs ^ last_pid_inputs:
@@ -314,12 +308,12 @@ class BASECreator():
         new_entry_ls = []
         base_attrs = {}
         psql_conn = self.db_conn_pool.get('psql_conn')
-        self.site_list = self.flux_db_handler.get_sites_with_updates()
+        self.site_list = self.new_db_handler.get_sites_with_updates()
         self.embargoed_site_list = self.new_db_handler.get_sites_with_embargo(
             psql_conn, self.embargo_years)
         self.historic_site_list = self.new_db_handler.get_sites_with_updates(
             psql_conn, is_historic=True)
-        self.preBASE_files = self.flux_db_handler.get_BASE_candidates()
+        self.preBASE_files = self.new_db_handler.get_BASE_candidates()
 
         attr_keys = ['base_path', 'start_year', 'end_year', 'res']
         file_attr_keys = ['size', 'md5sum', 'base_fname', 'timestamp',
