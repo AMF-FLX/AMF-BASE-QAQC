@@ -89,7 +89,7 @@ class ReportStatus:
                'status': status_json,
                'data_start_timestamp': start_timestamp,
                'data_end_timestamp': end_timestamp,
-               'aggregated_file_path': file_name}
+               'aggregate_file_path': file_name}
 
         response = self._basic_post_request_core(msg, self.report_status_ws)
         return response.getcode() == HTTPStatus.OK
@@ -140,7 +140,7 @@ class ReportStatus:
                 s=e.code, r=e.read().decode('utf-8')))
 
     def register_base_files(self, proc_id, input_info):
-        req_data = {'process_id': proc_id}
+        req_data = {'process_log_id': proc_id}
         upload_files = []
 
         for part in input_info:
