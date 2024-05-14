@@ -1,5 +1,5 @@
 from base_creator import BASECreator
-from db_handler import DBHandler
+from db_handler import NewDBHandler
 from process_states import ProcessStateHandler
 
 import json
@@ -22,8 +22,8 @@ def base_creator(monkeypatch):
                         mock_process_states_qaqc_process_lookup)
 
     b = BASECreator()
-    if not hasattr(b, 'flux_db_handler'):
-        b.flux_db_handler = DBHandler('test', 'test', 'test', 'test')
+    if not hasattr(b, 'new_db_handler'):
+        b.new_db_handler = NewDBHandler('test', 'test', 'test', 'test')
 
     if not hasattr(b, 'filename_checksum_lookup'):
         filenamev10_1 = b.BASE_fname_fmt.format(
@@ -49,7 +49,7 @@ def test_assign_new_data_version(base_creator, monkeypatch):
         else:
             return {123, 678}
 
-    monkeypatch.setattr(DBHandler, 'get_input_files',
+    monkeypatch.setattr(NewDBHandler, 'get_input_files',
                         mock_db_handler_get_input_files)
 
     assert base_creator.assign_new_data_version(
