@@ -134,7 +134,6 @@ class NewDBHandler:
             count = cursor.fetchone().get('count')
         return count
 
-    # ToDo: update for publish
     def get_input_files(self, process_id):
         input_files = set()
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
