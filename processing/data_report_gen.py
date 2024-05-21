@@ -121,8 +121,9 @@ class DataReportGen:
             if f.proc_id is not None and f.proc_id not in format_process_ids:
                 format_process_ids.append(f.proc_id)
                 format_filenames.append(f.name)
-        data_qaqc_info = ReportStatus().get_base_info(site_id,
-                                                      format_process_ids)
+        data_qaqc_info = ReportStatus().get_base_info(
+            site_id,
+            {'process_ids': format_process_ids})
         try:
             # truncate the the last_upload_timestamp
             #   and deal with one ts format
