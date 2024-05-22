@@ -180,8 +180,7 @@ class NewDBHandler:
         for idx, state_id in enumerate(state_ids):
             if idx > 0:
                 full_query_components.append(SQL('OR '))
-            else:
-                full_query_components.append(query_criteria)
+            full_query_components.append(query_criteria)
         full_query_components.append(post_query)
         return Composed(full_query_components)
 
@@ -203,7 +202,7 @@ class NewDBHandler:
                 'FROM qaqc.state_log '
                 'GROUP BY process_id) latest_state '
                 'ON latest_state.latest_state_timestamp = s.log_timestamp '
-                'AND s.process_id = latest_state.process_id) s '
+                'AND s.process_id = latest_state.process_id '
                 'INNER JOIN qaqc.state_cv_type_auto scv '
                 'ON scv.type_id = s.state_id '
                 'WHERE ')
