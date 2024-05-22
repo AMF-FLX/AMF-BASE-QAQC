@@ -136,7 +136,7 @@ class NewDBHandler:
 
     def get_input_files(self, process_id):
         input_files = set()
-        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+        with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             query = SQL('SELECT format_qaqc_id '
                         'FROM qaqc.aggregate_processing_log '
                         'WHERE data_qaqc_id = %s')
@@ -179,7 +179,7 @@ class NewDBHandler:
         query_criteria = SQL('scv.shortname = %s ')
         for idx, state_id in enumerate(state_ids):
             if idx > 0:
-                full_query_components.append(SQL( 'OR '))
+                full_query_components.append(SQL('OR '))
             else:
                 full_query_components.append(query_criteria)
         full_query_components.append(post_query)
@@ -189,7 +189,7 @@ class NewDBHandler:
     def get_base_candidates(self, state_ids):
         preBASE_files = {}
 
-        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+        with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             pre_query = SQL(
                 'SELECT o.aggregate_file_path, s.process_id, '
                 'p.publishing_code_version '
@@ -198,7 +198,8 @@ class NewDBHandler:
                 'SELECT s.process_id, s.state_id '
                 'FROM qaqc.state_log s '
                 'INNER JOIN ('
-                'SELECT process_id, MAX(log_timestamp) AS latest_state_timestamp '
+                'SELECT process_id, MAX(log_timestamp) AS '
+                'latest_state_timestamp '
                 'FROM qaqc.state_log '
                 'GROUP BY process_id) latest_state '
                 'ON latest_state.latest_state_timestamp = s.log_timestamp '
