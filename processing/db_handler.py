@@ -188,6 +188,7 @@ class NewDBHandler:
     # ToDo: update for publish
     def get_base_candidates(self, state_ids):
         preBASE_files = {}
+
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             pre_query = SQL(
                 'SELECT o.aggregate_file_path, s.process_id, '
@@ -209,7 +210,7 @@ class NewDBHandler:
                 'ON p.process_id = l.log_id '
                 'WHERE ')
             post_query = SQL(') s ON s.process_id = l.log_id')
-            query = self.define_base_candidate_query(
+            query = self.define_base_candidates_query(
                 pre_query=pre_query,
                 post_query=post_query,
                 state_ids=state_ids)

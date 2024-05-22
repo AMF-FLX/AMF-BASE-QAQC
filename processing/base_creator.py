@@ -313,7 +313,8 @@ class BASECreator():
             psql_conn, self.embargo_years)
         self.historic_site_list = self.new_db_handler.get_sites_with_updates(
             psql_conn, is_historic=True)
-        self.preBASE_files = self.new_db_handler.get_base_candidates()
+        self.preBASE_files = self.new_db_handler.get_base_candidates(
+            self.process_states.base_candidate_states)
 
         attr_keys = ['base_path', 'start_year', 'end_year', 'res']
         file_attr_keys = ['size', 'md5sum', 'base_fname', 'timestamp',
