@@ -176,7 +176,7 @@ class NewDBHandler:
     def define_base_candidates_query(
             self, pre_query, post_query, state_ids):
         full_query_components = [pre_query]
-        query_criteria = SQL('s.state_log = %s ')
+        query_criteria = SQL('scv.shortname = %s ')
         for idx, state_id in enumerate(state_ids):
             if idx > 0:
                 full_query_components.append(SQL( 'OR '))
@@ -203,13 +203,15 @@ class NewDBHandler:
                 'GROUP BY process_id) latest_state '
                 'ON latest_state.latest_state_timestamp = s.log_timestamp '
                 'AND s.process_id = latest_state.process_id) s '
-                'ON s.process_id = l.log_id '
+                'INNER JOIN qaqc.state_cv_type_auto scv '
+                'ON scv.type_id = s.state_id '
+                'WHERE ')
+            post_query = SQL(
+                ') s ON s.process_id = l.log_id '
                 'INNER JOIN qaqc.process_summarized_output o '
                 'ON o.process_id = l.log_id '
                 'LEFT JOIN qaqc.publishing_log p '
-                'ON p.process_id = l.log_id '
-                'WHERE ')
-            post_query = SQL(') s ON s.process_id = l.log_id')
+                'ON p.process_id = l.log_id ')
             query = self.define_base_candidates_query(
                 pre_query=pre_query,
                 post_query=post_query,
