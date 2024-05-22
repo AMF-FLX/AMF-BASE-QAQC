@@ -10,7 +10,7 @@ from file_name_verifier import FileNameVerifier
 from logger import Logger
 from pathlib import Path
 from report_status import ReportStatus
-from utils import VarUtil
+from utils import TimestampUtil, VarUtil
 
 __author__ = 'Norm Beekwilder, Danielle Chrisitanson'
 __email__ = 'norm.beekwilder@gmail.com, dschristianson@lbl.gov'
@@ -22,6 +22,7 @@ class JoinSiteData:
         self.FileInfo = collections.namedtuple(
             'FileInfo',
             'start end upload name status proc_id original_name prior_proc_id')
+        self.ts_util = TimestampUtil()
         self.var_util = VarUtil()
         self.reporter = ReportStatus()
         self.stat_gen = status.StatusGenerator()
@@ -151,7 +152,7 @@ class JoinSiteData:
                         upload=fnv.fname_attrs.get('ts_upload', ''),
                         name=file_name, status=fn_stat,
                         proc_id=valid_files[file_name]['process_id'],
-                        original_name=valid_files[file_name]['original_name'],
+                        original_name=valid_files[file_name]['prior_name'],
                         prior_proc_id=valid_files[file_name][
                             'prior_process_id']))
         for site_id, site in dir_files.items():
@@ -305,9 +306,27 @@ class JoinSiteData:
                         logger=gap_log, qaqc_check=gap_qaqc_check,
                         status_msg=gap_list, report_section='high_level'))
                     if not is_test:
-                        file_path_str = str(file_path)
+                        # fo = file_order
+                        fo_dates_formatted = []
+                        for fo_item in file_order:
+                            fo_time_start = datetime.datetime.strftime(
+                                self.ts_util.cast_as_datetime(fo_item.start),
+                                self.ts_util.QAQC_DB_FORMAT)
+                            fo_time_end = datetime.datetime.strftime(
+                                self.ts_util.cast_as_datetime(fo_item.end),
+                                self.ts_util.QAQC_DB_FORMAT)
+                            fo_dates_formatted.append(self.FileInfo(
+                                start=fo_time_start,
+                                end=fo_time_end,
+                                upload=fo_item.upload,
+                                name=fo_item.name,
+                                status=fo_item.status,
+                                proc_id=fo_item.proc_id,
+                                original_name=fo_item.original_name,
+                                prior_proc_id=fo_item.prior_proc_id
+                            ))
                         self.reporter.register_base_files(
-                            proc_id, file_path_str, file_order)
+                            proc_id, fo_dates_formatted)
                     _log.resetStats()
                     return file_path, file_status, file_order
         return (None,
