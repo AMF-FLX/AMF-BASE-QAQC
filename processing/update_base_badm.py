@@ -3,7 +3,7 @@ import datetime
 import subprocess
 
 from configparser import ConfigParser
-from db_handler import DBConfig, DBHandler, NewDBHandler
+from db_handler import DBConfig, NewDBHandler
 from file_name_verifier import FileNameVerifier
 from logger import Logger
 from process_states import ProcessStates, ProcessStateHandler
@@ -121,12 +121,6 @@ class UpdateBASEBADM():
         else:
             self.BADM_exe_dir = BADM_exe_dir
 
-        if not all((flux_user, flux_auth, flux_db_name)):
-            _log.error('FLUX DB configurations not assigned')
-            return False
-        else:
-            self.flux_db_handler = DBHandler(
-                flux_hostname, flux_user, flux_auth, flux_db_name)
         if not new_db_config:
             _log.error('New Postgres DB configurations not assigned')
             return False
@@ -237,7 +231,8 @@ class UpdateBASEBADM():
         badm_map = self.new_db_handler.get_badm_map(psql_conn)
         sites_needing_updates = self.new_db_handler.get_sites_with_updates(
             psql_conn)
-        base_candidate_map = self.flux_db_handler.get_BASE_candidates(
+
+        base_candidate_map = self.new_db_handler.get_base_candidates(
             state_ids=self.process_states.base_candidate_states)
 
         # Create zip file

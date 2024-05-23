@@ -3,7 +3,6 @@ import ast
 import collections
 import os
 from configparser import ConfigParser
-from db_handler import DBHandler
 from logger import Logger
 from process_states import ProcessStates, ProcessStateHandler
 from publish import Publish
@@ -77,11 +76,6 @@ class PublishBASEBADM():
             return False
         else:
             self.BADM_mnt = BADM_mnt
-        if not all((db_user, db_auth, db_name)):
-            _log.error("DB configurations not assigned")
-            return False
-        else:
-            self.db_handler = DBHandler(db_hostname, db_user, db_auth, db_name)
         return True
 
     def driver(self, args):
