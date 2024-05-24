@@ -1,5 +1,18 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v2.1.0
+*2024 May 24*
+
+This release includes updates to Data QA/QC and Publish functionality that are not backwards compatible.
+
+New in this release:
+- Support for new webservices in the Data QA/QC modules.
+- Updates to the Publish modules for new infrastructure
+- Updates to historical ranges for each site (used in diurnal seasonal pattern check).
+
+Notes:
+- There are additional helper modules still referencing the old infrastructure. Additional clean up forthcoming.
+
 ### QAQC v2.0.0
 *2024 Apr 29*
 
