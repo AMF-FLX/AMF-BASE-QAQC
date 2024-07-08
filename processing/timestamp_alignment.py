@@ -756,7 +756,7 @@ class TimestampAlignment(object):
             figure.text(.975, .975, corr_annotation, ha='right', va='center')
             # TODO: Subtract 3 to stay within figure. Should use a better way.
             figure.legend(
-                decorators, labels, 'lower center',
+                decorators, labels, loc='lower center',
                 ncol=min(len(radiation_variables)*2 + 1,
                          (self.fig_width // 2) - 3))
 

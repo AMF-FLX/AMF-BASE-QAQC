@@ -1153,10 +1153,11 @@ class MultivariateComparison():
         fig.suptitle('Analysis of {x} and {y}'.format(x=x_label, y=y_label),
                      fontsize=self.plot_config.plot_suptitle_fontsize)
 
-        # First plot
+        # # First plot
+
         self.plot(
             masked_x, masked_y, x_label, y_label, subplot_pos=(3, 1, 1),
-            is_plot_date=False, reset_all_subplots=True)
+            is_plot_date=False, reset_all_subplots=True)   
 
         # Calculate start and end points for fitted regression line
         xx = np.array([np.amin(masked_x), np.amax(masked_x)])
@@ -1164,9 +1165,9 @@ class MultivariateComparison():
         # yy = self.lin_reg_linear_function(fit, xx)
 
         # Plot fitted regression line
-        self.plot(xx, yy, color='g', marker=' ', subplot_pos=(3, 1, 1),
+        self.plot(xx, yy, color='g', marker='', subplot_pos=(3, 1, 1),
                   linestyle='-', linewidth=1, is_plot_date=False)
-
+        
         # Process outliers
         o_x_ls = []
         o_y_ls = []

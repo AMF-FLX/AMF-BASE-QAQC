@@ -292,17 +292,15 @@ class PhysicalRange:
         out_warning = [list(x) for x in zip(*out_warning)]
         return out_error, out_warning
 
-    def make_plot(self, x_data, y_data, var_obj, year, thresholds=True):
+    def make_plot(self, ax, x_data, y_data, var_obj, year, thresholds=True):
         y_name = year.replace('_', ' ')
-        plt.xlabel(f'Time ({y_name})',
-                   fontsize=self.plot_config.plot_title_fontsize)
-        plt.ylabel(f'{var_obj.name} ({var_obj.units})',
-                   fontsize=self.plot_config.plot_title_fontsize)
 
         if thresholds:
             range_type = 'Actual Data Range'
-            subplot_pos = (2, 1, 1)
-            # YWC: If var_obj limits are inf, use max/min of actual data
+            y_max = np.nanmax(y_data)
+            y_min = np.nanmin(y_data)
+        else:
+            range_type = 'Physical Range'
             if var_obj.error_max == float('inf'):
                 y_max = np.nanmax(y_data)
             else:
@@ -312,93 +310,58 @@ class PhysicalRange:
                 y_min = np.nanmin(y_data)
             else:
                 y_min = var_obj.error_min
-        else:
-            range_type = 'Physical Range'
-            subplot_pos = (2, 1, 2)
-            y_max = np.nanmax(y_data)
-            y_min = np.nanmin(y_data)
 
-        # Add delta to limits
         delta = (2 * var_obj.error)
         y_max += delta
         y_min -= delta
         title = f'Plot of {var_obj.name} with {range_type}'
 
-        plt.ylim((y_min, y_max))
-        plt.subplot(*subplot_pos)
-        plt.title(title, fontsize=self.plot_config.plot_title_fontsize)
-        plot = plt.plot_date
-        plot(x_data, y_data, c='0.75',
-             ms=2, ls='', lw=0)
-        error_outliers, warning_outliers = self.identify_outliers(
-            x_data, y_data, var_obj)
+        ax.set_ylim((y_min, y_max))
+        ax.set_xlabel(f'Time ({y_name})', fontsize=self.plot_config.plot_title_fontsize)
+        ax.set_ylabel(f'{var_obj.name} ({var_obj.units})', fontsize=self.plot_config.plot_title_fontsize)
+        ax.set_title(title, fontsize=self.plot_config.plot_title_fontsize)
+        
+        ax.plot_date(x_data, y_data, color='0.75', ms=2, ls='', lw=0)
+        
+        error_outliers, warning_outliers = self.identify_outliers(x_data, y_data, var_obj)
         if error_outliers:
-            plot(error_outliers[0], error_outliers[1], 'o', markersize=6,
-                 markeredgewidth=1, markerfacecolor='None',
-                 markeredgecolor='r')
+            ax.plot_date(error_outliers[0], error_outliers[1], 'o', markersize=6, markeredgewidth=1, markerfacecolor='None', markeredgecolor='r')
         if warning_outliers:
-            plot(warning_outliers[0], warning_outliers[1], 'o', markersize=6,
-                 markeredgewidth=1, markerfacecolor='None',
-                 markeredgecolor='orange')
-        plt.axhline(y=var_obj.max_lim, marker='', linestyle='-',
-                    linewidth=1, color='orange')
-        plt.axhline(y=var_obj.min_lim, linestyle='-',
-                    linewidth=1, color='orange')
-        plt.axhline(y=var_obj.error_max, linestyle='-',
-                    linewidth=1, color='r')
-        plt.axhline(y=var_obj.error_min, linestyle='-',
-                    linewidth=1, color='r')
+            ax.plot_date(warning_outliers[0], warning_outliers[1], 'o', markersize=6, markeredgewidth=1, markerfacecolor='None', markeredgecolor='orange')
+        
+        ax.axhline(y=var_obj.max_lim, linestyle='-', linewidth=1, color='orange')
+        ax.axhline(y=var_obj.min_lim, linestyle='-', linewidth=1, color='orange')
+        ax.axhline(y=var_obj.error_max, linestyle='-', linewidth=1, color='r')
+        ax.axhline(y=var_obj.error_min, linestyle='-', linewidth=1, color='r')
 
     def plot(self, var_obj, year):
-        start, end = self.annual_idx[year]['start'], self.annual_idx[year][
-            'end']
+        start, end = self.annual_idx[year]['start'], self.annual_idx[year]['end']
         annual_data = self.data[var_obj.name][start:end + 1]
-        time_data = [self.ts_util.cast_as_datetime(t)
-                     for t in self.data['TIMESTAMP_START'][start:end + 1]]
-        fig = plt.figure(1, figsize=(12, 13))  # Create figure
+        time_data = [self.ts_util.cast_as_datetime(t) for t in self.data['TIMESTAMP_START'][start:end + 1]]
+        
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 13))  # Create figure
         y_name = year.replace("_", " ")
-        fig.suptitle(
-            f'Physical Range of {var_obj.name} throughout {y_name}',
-            fontsize=self.plot_config.plot_suptitle_fontsize)
+        fig.suptitle(f'Physical Range of {var_obj.name} throughout {y_name}', fontsize=self.plot_config.plot_suptitle_fontsize)
 
-        self.make_plot(time_data, annual_data, var_obj, year, thresholds=True)
-        self.make_plot(time_data, annual_data, var_obj, year, thresholds=False)
-        """
-        Set up legend with labels and corresponding colors
-        """
-        # Set labels and colors for lines
+        self.make_plot(ax1, time_data, annual_data, var_obj, year, thresholds=True)
+        self.make_plot(ax2, time_data, annual_data, var_obj, year, thresholds=False)
+        
         lab_warn = f'Expected Range ({var_obj.min_lim}-{var_obj.max_lim})'
         margin_percent = str(var_obj.margin * 100)
-        lab_err = (f'Expected Range +/- {margin_percent}% '
-                   f'({var_obj.error_min}-{var_obj.error_max})')
+        lab_err = (f'Expected Range +/- {margin_percent}% ({var_obj.error_min}-{var_obj.error_max})')
 
         legend_info = [('orange', lab_warn), ('r', lab_err)]
-        handles = [mlines.Line2D([], [], color=c, label=l) for c, l in
-                   legend_info]  # convert legend info to Patches
+        handles = [mlines.Line2D([], [], color=c, label=l) for c, l in legend_info]
         labels = [l for c, l in legend_info]
 
-        # Add labels and colors for point styling
-        handles += [mlines.Line2D([], [], color='None', marker='o',
-                                  markerfacecolor='0.75', markersize=10,
-                                  label='data'),
-                    mlines.Line2D([], [], color='None', marker='o',
-                                  markerfacecolor='None',
-                                  markeredgecolor='orange',
-                                  markersize=10,
-                                  label=('data outside the expected '
-                                         'physical range')),
-                    mlines.Line2D([], [], color='None', marker='o',
-                                  markerfacecolor='None', markeredgecolor='r',
-                                  markersize=10,
-                                  label=(
-                                      'data outside the expected physical '
-                                      f'range +/- {margin_percent}%'))]
-        labels += ['data', 'data outside the expected physical range',
-                   'data outside the expected physical range']
-        plt.figlegend(handles, labels, loc='lower center', ncol=2)
+        handles += [mlines.Line2D([], [], color='None', marker='o', markerfacecolor='0.75', markersize=10, label='data'),
+                    mlines.Line2D([], [], color='None', marker='o', markerfacecolor='None', markeredgecolor='orange', markersize=10, label='data outside the expected physical range'),
+                    mlines.Line2D([], [], color='None', marker='o', markerfacecolor='None', markeredgecolor='r', markersize=10, label=f'data outside the expected physical range +/- {margin_percent}%')]
+        labels += ['data', 'data outside the expected physical range', f'data outside the expected physical range +/- {margin_percent}%']
+        
+        fig.legend(handles, labels, loc='lower center', ncol=2)
 
-        fig_name = self.fig_name_fmt.format(
-            y=var_obj.name, year=year, s=self.site_id, p=self.process_id)
+        fig_name = self.fig_name_fmt.format(y=var_obj.name, year=year, s=self.site_id, p=self.process_id)
         fig_loc = os.path.join(self.plot_dir, fig_name)
 
         plt.savefig(fig_loc, dpi=self.plot_config.plot_default_dpi)
