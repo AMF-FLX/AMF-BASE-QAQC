@@ -1,5 +1,15 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v2.1.1
+*2024 Jul 23*
+
+New in this release:
+- Removal of no longer used modules and / or functionality within modules.
+- Update reset state functionality for publishing to work with new infrastructure.
+
+Notes:
+- There are a few not yet implemented modules still referencing the old infrastructure. Additional clean up forthcoming.
+
 ### QAQC v2.1.0
 *2024 May 24*
 
