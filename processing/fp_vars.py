@@ -30,6 +30,7 @@ class FPVariables():
 
         # Until VarUtils is redesigned, WSUtil can not be used here
         status = None
+        fail_reason = 'unknown'
         try:
             with urllib.request.urlopen(self.fp_vars_ws) as c:
                 status = c.code
@@ -41,7 +42,7 @@ class FPVariables():
             if status != HTTPStatus.OK:
                 status_msg = (
                     f'{self.fp_vars_ws} returned status code: '
-                    f'{status}\n{fail_reason}')
+                    f'{status}\n Failure reason: {fail_reason}')
                 _log.fatal(status_msg)
                 raise Exception(status_msg)
 

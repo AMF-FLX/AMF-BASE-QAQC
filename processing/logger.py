@@ -37,7 +37,6 @@ class Logger(logging.Logger):
             elif process_type == 'BASE Generation':
                 phase_cfg = 'PHASE_II'
             elif process_type in ('GenBASEBADM', 'preBASERegen',
-                                  'translateEarlyFPBase',
                                   'summarizeDataVariableStatistics'):
                 phase_cfg = 'PHASE_III'
             elif process_type == 'timeout_format_issues':

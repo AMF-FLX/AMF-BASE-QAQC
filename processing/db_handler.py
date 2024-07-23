@@ -1,8 +1,6 @@
 import datetime as dt
 import psycopg2
 
-import pymssql
-
 from jira_names import JIRANames
 
 from configparser import ConfigParser
@@ -145,33 +143,6 @@ class NewDBHandler:
                 pid = row.get('format_qaqc_id')
                 input_files.add(pid)
         return input_files
-
-    # def get_sites_with_updates(self):
-    #     site_ids = {}
-    #     with conn.cursor(cursor_factory=RealDictCursor) as cursor:
-    #         query = SQL('SELECT p.site_id, p.process_id, p.base_version '
-    #                     'FROM '
-    #                     '(SELECT proc.site_id, pub.process_id, '
-    #                     'pub.base_version, pub.log_timestamp '
-    #                     'FROM qaqc.publishing_log pub '
-    #                     'INNER JOIN qaqc.processing_log proc '
-    #                     'ON pub.process_id = proc.log_id) p '
-    #                     'INNER JOIN ('
-    #                     'SELECT site_id, pub.process_id, '
-    #                     'MAX(pub.log_timestamp) AS latest_ts '
-    #                     'FROM qaqc.publishing_log pub '
-    #                     'INNER JOIN qaqc.processing_log proc '
-    #                     'ON pub.process_id = proc.log_id '
-    #                     'GROUP BY site_id, pub.process_id, '
-    #                     'pub.log_timestamp) latest_publish '
-    #                     'ON p.log_timestamp = latest_publish.latest_ts '
-    #                     'latest_publish.site_id = p.site_id')
-    #         cursor.execute(query)
-    #         for row in cursor:
-    #             site_id = row.get('site_id')
-    #             site_ids[site_id] = (
-    #                 row.get('base_version'), row.get('process_id'))
-    #     return site_ids
 
     def define_base_candidates_query(
             self, pre_query, post_query, state_ids):
@@ -530,515 +501,64 @@ class NewDBHandler:
         query = SQL('SELECT * from qaqc.state_cv_type_auto;')
         return self._get_type_cv(query, 'shortname')
 
+    def get_incomplete_phase3_process_ids(self, conn, state_ids):
+        process_ids = []
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            query = SQL(
+                'SELECT b.process_id '
+                'FROM (SELECT process_id, MAX(log_timestamp) as max_ts '
+                'FROM qaqc.state_log GROUP by process_id) as d '
+                'INNER JOIN qaqc.state_log as b '
+                'ON d.process_id = b.process_id '
+                'AND d.max_ts = b.log_timestamp WHERE b.state_id in '
+                '%(state_ids)s')
+
+            try:
+                cursor.execute(query, {'state_ids': state_ids})
+                for row in cursor:
+                    process_ids.append(row.get('process_id'))
+            except Exception as e:
+                _log.error('Error occurred in '
+                           'get_incomplete_phase3_process_ids')
+                _log.error(e)
+        return process_ids
+
+    def get_qaqc_state_history(self, conn, process_id):
+        status_history = []
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            query = SQL('SELECT * FROM qaqc.state_log '
+                        'WHERE process_id = %(pid)s '
+                        'ORDER by log_timestamp desc')
+            try:
+                cursor.execute(query, {'pid': process_id})
+                for row in cursor:
+                    status_history.append((row.get('log_id'),
+                                           row.get('state_id'),
+                                           row.get('log_timestamp')))
+            except Exception as e:
+                _log.error('Error occurred in get_qaqc_data_state_history')
+                _log.error(e)
+        return status_history
+
 
 class DBHandler:
+    """
+    DBHandler will be removed in future versions. Last functionality
+    is kept for final migration.
+
+    Note: pymssql is not listed in the requirements. For this class
+    to work properly, you must manually install pymssql.
+    """
+
+    import pymssql
+
     def __init__(self, hostname, user, password, db_name):
         self.__hostname = hostname
         self.__user = user
         self.__password = password
         self.__db_name = db_name
 
-    # ToDo: evaluate if needs update -- could be obsolete
-    #       used in PreBASERegenerator
-    def insert_BASE_entries(self, entry_ls):
-        if entry_ls is None:
-            return ''
-        query = ("INSERT INTO BASEProductLog "
-                 "VALUES(%s, %d, %d, %d, %s, %s, %s, %s, %s)")
-        return self._insert_entries(query, entry_ls)
-
-    # ToDo: evaluate if needs update -- could be obsolete
-    #       used in PreBASERegenerator
-    def insert_BASE_BADM_entries(self, entry_ls):
-        if entry_ls is None:
-            return ''
-        query = ("INSERT INTO BASEBADMProductLog "
-                 "VALUES(%s, %s, %s, %s, %s, %d, %s, %s, %s, %s, %s)")
-        return self._insert_entries(query, entry_ls)
-
-    # ToDo: evaluate if needs update -- could be obsolete
-    #       used in PreBASERegenerator
-    def insert_qaqc_process_entry(self, fields, entry):
-        if entry is None:
-            return ''
-        insert_entry = ("INSERT INTO qaqcProcessingLog ({f}) VALUES ({e})"
-                        .format(f=fields, e=entry))
-        return self._insert_entry(entry=insert_entry)
-
-    # ToDo: evaluate if needs update -- could be obsolete
-    #       used in PreBASERegenerator
-    def insert_qaqc_file_in_base_entries(self, entry_ls):
-        if entry_ls is None:
-            return ''
-        query = ("INSERT INTO filesInBase "
-                 "(processIDSiteRes, processIDfile) "
-                 "VALUES (%d, %d)")
-        return self._insert_entries(query, entry_ls)
-
-    # ToDo: update eventually
-    # ToDo: evaluate if needs update -- could be obsolete
-    #       used in PreBASERegenerator
-    def insert_qaqc_data_in_base_entries(self, entry_ls):
-        if entry_ls is None:
-            return ''
-        query = ("INSERT INTO dataInBase "
-                 "(fileID, startTime, endTime) "
-                 "VALUES (%d, %s, %s)")
-        return self._insert_entries(query, entry_ls)
-
-    def _insert_entries(self, query, entry_ls):
-        if entry_ls is None:
-            return ''
-            # entry_ls = self.entry_ls
-            # there is no self.entry_ls so removing it
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-            conn.autocommit(True)
-            try:
-                cursor.executemany(query, entry_ls)
-            except Exception as e:
-                _log.error("Error occurred in inserting entries")
-                _log.error(e)
-                return 'ERROR OCCURRED'
-        return ''
-
-    def _insert_entry(self, entry):
-        if entry is None:
-            return ''
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-            conn.autocommit(True)
-            try:
-                cursor.execute(entry)
-            except Exception as e:
-                _log.error("Error occurred in inserting entry")
-                _log.error(e)
-                return 'ERROR OCCURRED'
-        return ''
-
-    # ToDo: update for publish
-    def get_sites_with_updates(self):
-        site_ids = {}
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-
-            query = ("SELECT b.site_id, b.processID, b.baseVersion "
-                     "FROM BASEPublishLog b "
-                     "INNER JOIN "
-                     "(SELECT site_id, max(publishTimestamp) as max_ts "
-                     "FROM BASEPublishLog "
-                     "GROUP BY site_id) d "
-                     "ON d.site_id = b.site_id "
-                     "AND d.max_ts = b.publishTimestamp")
-            cursor.execute(query)
-            for row in cursor:
-                site_id = row.get("site_id")
-                site_ids[site_id] = (
-                    row.get("baseVersion"), row.get("processID"))
-        return site_ids
-
-    # ToDo: update for publish
-    def get_input_files(self, processID):
-        input_files = set()
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-            query = ("SELECT processIDFile "
-                     "FROM filesInBase "
-                     "WHERE processIDSiteRes = {i}")
-            cursor.execute(query.format(i=processID))
-            for row in cursor:
-                pid = row.get("processIDFile")
-                input_files.add(pid)
-        return input_files
-
-    def define_BASE_candidate_query(
-            self, pre_query, post_query, state_ids):
-        query_criteria = f's.status = {state_ids[0]}'
-        for state_id in state_ids[1:]:
-            query_criteria += f' OR s.status = {state_id}'
-        query = pre_query + query_criteria + post_query
-        return query
-
-    # ToDo: update for publish
-    def get_BASE_candidates(self, state_ids):
-        preBASE_files = {}
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-            pre_query = ("SELECT l.basename, l.processID, l.codeVersion "
-                         "FROM qaqcProcessingLog l "
-                         "INNER JOIN "
-                         "(SELECT s.processID, s.status "
-                         "FROM qaqcState s "
-                         "INNER JOIN "
-                         "(SELECT processID, MAX(stateDateTime) AS dateTime "
-                         "FROM qaqcState "
-                         "GROUP BY processID) maxDate "
-                         "ON s.stateDateTime = maxDate.dateTime "
-                         "AND s.processID = maxDate.processID "
-                         "WHERE ")
-            post_query = ") s1 ON s1.processID = l.processID"
-            query = self.define_BASE_candidate_query(pre_query=pre_query,
-                                                     post_query=post_query,
-                                                     state_ids=state_ids)
-            conn.autocommit(True)
-            try:
-                cursor.execute(query)
-                for row in cursor:
-                    candidate_filepath = row.get("basename")
-                    code_version = row.get("codeVersion")
-                    process_id = row.get("processID")
-                    # Remap paths if codeVersion is prior to version 1.1.0
-                    if code_version < "1.1.0":
-                        path = Path(candidate_filepath)
-                        filename = path.name
-                        parent_path_parts = path.parent.parts
-                        # strip top two level directories
-                        # as well as immediate parent directory
-                        # and rebuild immediate parent path
-                        candidate_filepath = str(
-                            Path(parent_path_parts[0],
-                                 *parent_path_parts[3:-1],
-                                 *("outputs", "qaqc_combined"),
-                                 filename))
-                    preBASE_files[candidate_filepath] = process_id
-
-            except Exception as e:
-                _log.error("Error occurred in get_BASE_candidates")
-                _log.error(e)
-                return "ERROR OCCURRED"
-        return preBASE_files
-
-    # ToDo: rework for new tables (reset_states in PreBASERegenerator)
-    def get_preBASE_regen_candidates(self, query_type='latest',
-                                     process_id_ls=None):
-        process_info = {}
-        row_key_ls = None
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-            if query_type == 'latest':
-                # latest publish for each site published in new pipeline
-                # This query only grabs the latest for each site; not each
-                # site-res combo.
-                query = ("SELECT b.* "
-                         "FROM qaqcProcessingLog as b "
-                         "INNER JOIN "
-                         "(SELECT SITE_ID, MAX(processDatetime) as max_ts "
-                         "FROM qaqcProcessingLog "
-                         "WHERE baseVersion is not NULL "
-                         "GROUP BY SITE_ID) as d "
-                         "ON d.SITE_ID = b.SITE_ID "
-                         "AND d.max_ts = b.processDatetime "
-                         "WHERE b.baseVersion is not NULL")
-            else:
-                # all publishes in new pipeline
-                query = ("SELECT * "
-                         "FROM AMFDataQAQC.dbo.qaqcProcessingLog "
-                         "WHERE baseVersion is not NULL")
-            conn.autocommit(True)
-            try:
-                cursor.execute(query)
-                count = 0
-                for row in cursor:
-                    process_id = row.get("processID")
-                    if process_id_ls:
-                        if process_id not in process_id_ls:
-                            continue
-                    process_info[process_id] = {}
-                    for key in row.keys():
-                        process_info[process_id][key] = row.get(key)
-                    version = row.get('baseVersion')
-                    version = version.replace('-', '.')
-                    process_info[process_id]['version_num'] = float(version)
-                    if count < 1:
-                        row_key_ls = list(row.keys())
-                    count += 1
-            except Exception as e:
-                _log.error("Error occurred in get_preBASE_regen_candidates")
-                _log.error(e)
-        return process_info, row_key_ls
-
-    # ToDo: evaluate if needs update -- could be obsolete
-    #       used in PreBASERegenerator
-    def get_preBASE_duplicated_process_ids(self, process_id_ls):
-        republish_map = {}
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-            # this query could be more specific if specify that
-            # baseVersion is NULL (i.e., unpublished republished rows)
-            query = ("SELECT processID, priorProcessID "
-                     "FROM qaqcProcessingLog "
-                     "WHERE priorProcessID is not NULL "
-                     "AND processType = 'BASE'")
-            conn.autocommit(True)
-            try:
-                cursor.execute(query)
-                for row in cursor:
-                    old_process_id = row.get("priorProcessID")
-                    if old_process_id in process_id_ls:
-                        republish_map[old_process_id] = row.get("processID")
-            except Exception as e:
-                _log.error("Error occurred in get_qaqc_file_in_base")
-                _log.error(e)
-        return republish_map
-
-    # ToDo: evaluate if needs update -- could be obsolete
-    #       used in PreBASERegenerator
-    def get_qaqc_file_in_base(self, process_id, new_process_id=None):
-        file_id_list = []  # a list of fileIDs for querying dataInBase
-        file_in_base_ls = []  # a list of the tuples to be inserted
-        file_process_id_dict = {}  # dict for dealing with dataInBase
-        # get the files in the old base pid
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-            query = ("SELECT * FROM filesInBase "
-                     "WHERE processIDSiteRes = {pid}"
-                     .format(pid=process_id))
-            conn.autocommit(True)
-            try:
-                cursor.execute(query)
-                for row in cursor:
-                    file_pid = row.get("processIDFile")
-                    if file_pid not in file_process_id_dict.keys():
-                        file_process_id_dict[file_pid] = []
-                    file_process_id_dict[file_pid].append(row.get("fileID"))
-                    file_id_list.append(row.get("fileID"))
-                    if new_process_id:
-                        file_in_base_ls.append((new_process_id, file_pid))
-            except Exception as e:
-                _log.error("Error occurred in get_qaqc_file_in_base")
-                _log.error(e)
-        return file_id_list, file_in_base_ls, file_process_id_dict
-
-    # ToDo: evaluate if needs update -- could be obsolete
-    #       used in PreBASERegenerator
-    def get_qaqc_data_in_base(self, file_ids):
-        data_in_base_ls = {}
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-            query = ("SELECT * FROM dataInBase "
-                     "WHERE fileID in ({f})".format(f=file_ids))
-            conn.autocommit(True)
-            try:
-                cursor.execute(query)
-                for row in cursor:
-                    data_in_base_ls[row.get("fileID")] = (
-                        row.get("fileID"),
-                        row.get("startTime"), row.get("endTime"))
-            except Exception as e:
-                _log.error("Error occurred in get_qaqc_data_in_base")
-                _log.error(e)
-        return data_in_base_ls
-
-    # ToDo: rework for new tables (reset_states in PreBASERegenerator)
-    def get_BASE_candidates_for_preBASE_regen(self, state_ids):
-        process_info = {}
-        site_list = []
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-            pre_query = ("SELECT a.processID, a.SITE_ID, a.max_ts, s.status "
-                         "FROM qaqcState as s "
-                         "INNER JOIN "
-                         "(SELECT b.processID, b.SITE_ID, d.max_ts "
-                         "FROM qaqcProcessingLog as b "
-                         "INNER JOIN "
-                         "(SELECT processID, MAX(stateDatetime) as max_ts "
-                         "FROM qaqcState "
-                         "GROUP by processID) as d "
-                         "ON d.processID = b.processID "
-                         "WHERE b.processType = 'BASE') as a "
-                         "ON a.processID = s.processID "
-                         "AND a.max_ts = s.stateDateTime "
-                         "WHERE ")
-            post_query = ""
-            query = self.define_BASE_candidate_query(pre_query=pre_query,
-                                                     post_query=post_query,
-                                                     state_ids=state_ids)
-            conn.autocommit(True)
-            try:
-                cursor.execute(query)
-                for row in cursor:
-                    site_id = row.get("SITE_ID")
-                    process_id = row.get("processID")
-                    if site_id not in site_list:
-                        site_list.append(site_id)
-                    else:
-                        _log.warning('BASE candidate list contains more than '
-                                     'one processID for site {s}. Not '
-                                     'including processID {p} in list to '
-                                     'exclude from recreateBASE processing.'
-                                     .format(s=site_id, p=process_id))
-                        continue
-                    process_info[process_id] = {}
-                    for key in row.keys():
-                        process_info[process_id][key] = row.get(key)
-            except Exception as e:
-                _log.error("Error occurred in "
-                           "get_BASE_candidates_with_preBASE_details")
-                _log.error(e)
-        return process_info, site_list
-
-    # ToDo: rework for new tables (reset_states in PreBASERegenerator)
-    def get_qaqc_process_ids(self, query, key='processID'):
-        process_id_ls = []
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-            conn.autocommit(True)
-            try:
-                cursor.execute(query)
-                for row in cursor:
-                    process_id_ls.append(row.get(key))
-            except Exception as e:
-                _log.error("Error occurred in get_qaqc_data_in_base")
-                _log.error(e)
-        return process_id_ls
-
-    # ToDo: rework for new tables (reset_states in PreBASERegenerator)
-    def get_incomplete_phase3_process_ids(self, state_ids):
-        process_id_ls = []
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-            conn.autocommit(True)
-            query = ("SELECT b.processID "
-                     "FROM (SELECT processID, MAX(stateDateTime) as max_ts "
-                     "FROM qaqcState GROUP by processID) as d "
-                     "INNER JOIN qaqcState as b "
-                     "ON d.processID = b.processID "
-                     "AND d.max_ts = b.stateDateTime WHERE b.status in "
-                     "(")
-            for state_id in state_ids[:-1]:
-                query += f'{state_id}, '
-            query += f'{state_ids[-1]})'
-
-            try:
-                cursor.execute(query)
-                for row in cursor:
-                    process_id_ls.append(row.get('processID'))
-            except Exception as e:
-                _log.error("Error occurred in get_qaqc_data_in_base")
-                _log.error(e)
-        return process_id_ls
-
-    # ToDo: rework for new tables
-    # HERE
-    def get_qaqc_status_history(self, process_id):
-        status_history = []
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-            conn.autocommit(True)
-            query = ("SELECT * FROM qaqcState "
-                     "WHERE processID = {pid} "
-                     "ORDER by stateDateTime desc"
-                     .format(pid=process_id))
-            try:
-                cursor.execute(query)
-                for row in cursor:
-                    status_history.append((row.get('stateID'),
-                                           row.get('status'),
-                                           row.get('action'),
-                                           row.get('stateDateTime')))
-            except Exception as e:
-                _log.error("Error occurred in get_qaqc_data_in_base")
-                _log.error(e)
-        return status_history
-
-    # Used in TranslateEarlyBase -- probably obsolete
-    def get_site_status_BASE(self):
-        site_list = []
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-            conn.autocommit(True)
-            query = ("SELECT * FROM AMFSiteStatusDisplay "
-                     "WHERE curateDataSource = 'BASE'")
-            try:
-                cursor.execute(query)
-                for row in cursor:
-                    site_list.append(row.get('SITE_ID'))
-            except Exception as e:
-                _log.error("Error occurred in get_site_status_BASE")
-                _log.error(e)
-        return site_list
-
-    def get_var_info_map(self, var_info_date):
-        var_info_map = {}
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-            conn.autocommit(True)
-            query = ("SELECT * FROM TowerVarDisplay_{d} "
-                     "WHERE AMF_VAR_BASE_V1_VAR is not NULL"
-                     .format(d=var_info_date))
-            try:
-                cursor.execute(query)
-                for row in cursor:
-                    site_id = row.get('SITE_ID')
-                    if site_id not in var_info_map.keys():
-                        var_info_map[site_id] = {}
-                    v1_var = row.get('AMF_VAR_BASE_V1_VAR')
-                    var_info_map[site_id][v1_var] = row.get('TOWER_VAR')
-            except Exception as e:
-                _log.error("Error occurred in get_var_info_map")
-                _log.error(e)
-        return var_info_map
-
+    # KEEP for now (timeout_jira_issues)
     def get_timeout_issues(self, jira_project: str, issue_status_id: str,
                            reminder_field_values: tuple, change_field: str,
                            change_new_string: str, days_passed: int,
@@ -1108,7 +628,7 @@ class DBHandler:
             'WHERE cfv2.CUSTOMFIELD = %(upload_token_field_id)s '
             'AND cfv3.CUSTOMFIELD = %(process_id_field_id)s')
 
-        with pymssql.connect(
+        with self.pymssql.connect(
                 server=self.__hostname,
                 user=self.__user,
                 password=self.__password,
@@ -1123,6 +643,7 @@ class DBHandler:
                 _log.error('Error occurred in get_timeout_issues')
                 _log.error(e)
 
+    # KEEP for now (timeout_jira_issues)
     def get_issue_labels(self, issue_num_list: list) -> dict:
         """
         return the JIRA issue labels for the specified issue numbers
@@ -1136,7 +657,7 @@ class DBHandler:
                  'LEFT OUTER JOIN [jiraissue] y ON y.ID = x.ISSUE '
                  'WHERE y.issuenum IN %(issue_numbers)s')
 
-        with pymssql.connect(
+        with self.pymssql.connect(
                 server=self.__hostname,
                 user=self.__user,
                 password=self.__password,
@@ -1155,7 +676,7 @@ class DBHandler:
                 _log.error('Error occurred in get_issue_labels')
                 _log.error(e)
 
-    # ToDo: update soon
+    # KEEP for now (timeout_jira_issues)
     def get_process_code_version(self, process_ids: tuple):
         """
         Get process code version for specified process_ids from
@@ -1168,7 +689,7 @@ class DBHandler:
                  'FROM qaqcProcessingLog '
                  'WHERE processID IN %(process_ids)s')
 
-        with pymssql.connect(
+        with self.pymssql.connect(
                 server=self.__hostname,
                 user=self.__user,
                 password=self.__password,
@@ -1183,155 +704,7 @@ class DBHandler:
                 _log.error('Error occurred in get_process_code_version')
                 _log.error(e)
 
-    # ToDo: update eventually
-    def get_fp_in_uploads(self, date_created_after: str) -> dict:
-        """
-        Get the uploaded files after specified date
-        :param date_created_after: str, date after which to include uploads
-        :return: dict, key = upload_id (UploadID),
-                       value = dict with upload details
-        """
-        fp_in_uploads = {}
-
-        query = ('SELECT * FROM FluxDataUploadLogAuto '
-                 'WHERE uploadDate > %(query_date)s')
-        query_args = dict(query_date=date_created_after)
-
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-            conn.autocommit(True)
-            try:
-                cursor.execute(query, query_args)
-                for r in cursor:
-                    upload_info = fp_in_uploads.setdefault(
-                        r.get('UpdateID'), {})
-                    upload_info['data_file'] = r.get('dataFile')
-                    upload_info['site_id'] = r.get('SITE_ID')
-                    upload_info['uploader_id'] = r.get('userID')
-                    upload_info['uploader_email'] = r.get('email')
-                    upload_info['uploader_name'] = r.get('name')
-                    upload_info['upload_date'] = r.get('uploadDate')
-            except Exception as e:
-                _log.error('Error occurred in get_fp_in_uploads.')
-                _log.error(e)
-
-        return fp_in_uploads
-
-    def get_process_ids_from_jira_format_issues(self, date_created_after: str,
-                                                jira_project: str) -> list:
-        """
-        Get a list of process ids from JIRA format issues processed since
-            specified date
-        :param date_created_after: str, the date after which to include issues
-        :param jira_project: str, the JIRA project name
-        :return: list of process ids from the JIRA format issues
-        """
-        process_ids = []
-        query = ('SELECT x.issuenum, x.reporter, x.CREATED, x.UPDATED, '
-                 'cfv1.STRINGVALUE as site_id, '
-                 'cfv2.TEXTVALUE as process_ids, '
-                 'cfv3.STRINGVALUE as upload_token '
-                 'FROM jiraissue x '
-                 'INNER JOIN customfieldvalue cfv1 '
-                 'ON x.ID = cfv1.ISSUE '
-                 'INNER JOIN customfieldvalue cfv2 '
-                 'ON x.ID = cfv2.ISSUE '
-                 'INNER JOIN customfieldvalue cfv3 '
-                 'ON x.ID = cfv3.ISSUE '
-                 'WHERE x.PROJECT = '
-                 '(SELECT ID FROM project '
-                 'WHERE pkey = %(jira_project)s) '
-                 'AND x.issuetype = ('
-                 'SELECT ID FROM issuetype '
-                 'WHERE pname = %(format_qaqc_issue_name)s)  '
-                 'AND x.CREATED > %(query_date)s '
-                 'AND cfv1.CUSTOMFIELD = %(site_id_field_id)s '
-                 'AND cfv2.CUSTOMFIELD = %(process_ids_field_id)s '
-                 'AND cfv3.CUSTOMFIELD = %(upload_token_field_id)s')
-
-        query_args = dict(
-            jira_project=jira_project, query_date=date_created_after,
-            format_qaqc_issue_name=JIRANames.format_QAQC_issue_name,
-            site_id_field_id=JIRANames.site_id.split('_')[-1],
-            process_ids_field_id=JIRANames.process_ids.split('_')[-1],
-            upload_token_field_id=JIRANames.upload_token.split('_')[-1])
-
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-            conn.autocommit(True)
-            try:
-                cursor.execute(query, query_args)
-                for r in cursor:
-                    process_ids_str = r.get('process_ids')
-                    process_ids.extend(process_ids_str.split(' '))
-            except Exception as e:
-                _log.error('Error occurred in '
-                           'get_process_ids_from_jira_format_issues')
-                _log.error(e)
-
-        return process_ids
-
-    # ToDo update eventually
-    def get_format_qaqc_process_attempts(self, date_created_after: str,
-                                         process_types: tuple = ('File',),
-                                         site_ids: tuple = ()) -> dict:
-        """
-        Get Format QAQC process attempts
-        :param date_created_after: str, date after which to include issues
-        :param process_types: tuple, the process types: default File = Format
-        :param site_ids: tuple, site_IDs if fitlering by site_ids
-        :return: dict, key = process_id, value = dict of process details
-        """
-        process_info_store = {}
-        query = ('SELECT * FROM qaqcProcessingLog '
-                 'WHERE processDate > %(query_date)s '
-                 'AND processType in %(process_type)s ')
-        query_args = dict(query_date=date_created_after,
-                          process_types=process_types)
-        if site_ids:
-            query = (f'{query}'
-                     'AND SITE_ID in %(site_ids)s')
-            query_args['site_ids'] = site_ids
-
-        with pymssql.connect(
-                server=self.__hostname,
-                user=self.__user,
-                password=self.__password,
-                database=self.__db_name) as conn, \
-                conn.cursor(as_dict=True) as cursor:
-            conn.autocommit(True)
-
-            try:
-                cursor.execute(query, query_args)
-                for r in cursor:
-                    process_info = process_info_store.setdefault(
-                        r.get('processID'), {})
-                    process_info['process_type'] = r.get('processType')
-                    process_info['site_id'] = r.get('SITE_ID')
-                    process_info['upload_id'] = r.get('updateID')
-                    process_info['process_datetime'] = r.get('processDatetime')
-                    process_info['prior_process_id'] = r.get('priorProcessID')
-                    process_info['zip_process_id'] = r.get('zipProcessID')
-                    process_info['retry_count'] = r.get('retryCount')
-                    process_info['file_timestamp_start'] = r.get('startTime')
-                    process_info['file_timestamp_end'] = r.get('endTime')
-
-            except Exception as e:
-                _log.error('Error occurred in '
-                           'get_format_qaqc_process_attempts')
-                _log.error(e)
-
-        return process_info_store
-
-    # ToDo: update eventually
+    # KEEP for now (link_replaced_issues)
     def get_upload_file_info_for_site(self, site_id: str) -> list:
         """
         Get upload file info for the specified site for processing runs
@@ -1361,7 +734,7 @@ class DBHandler:
         query_args = dict(site_id=site_id, process_type='File',
                           exclude_sites=('US-Pnp', 'US-Men'))
 
-        with pymssql.connect(
+        with self.pymssql.connect(
                 server=self.__hostname,
                 user=self.__user,
                 password=self.__password,
@@ -1395,6 +768,7 @@ class DBHandler:
 
         return uploaded_files
 
+    # KEEP for now (line_replaced_issues)
     def get_format_issues(
             self, jira_project: str, site_id: Union[None, str] = None,
             issue_key_list: Union[None, list] = None,
@@ -1462,7 +836,7 @@ class DBHandler:
 
         query = ''.join(query_pieces)
 
-        with pymssql.connect(
+        with self.pymssql.connect(
                 server=self.__hostname,
                 user=self.__user,
                 password=self.__password,
