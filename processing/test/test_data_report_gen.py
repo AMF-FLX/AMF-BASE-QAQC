@@ -50,6 +50,7 @@ def test_gen_message(monkeypatch):
     format_process_ids = ['id_0', 'id_2']
     ftp_link = 'ftp_link'
     ui_url = data_report_gen.ui_prefix
+    instruction_link = data_report_gen.instruction_link
     report_link = data_report_gen.report_link_template.replace(
         os.path.basename(
             data_report_gen.report_link_template), '')
@@ -69,9 +70,10 @@ def test_gen_message(monkeypatch):
         format_filenames, format_process_ids, ftp_link)
     known_msg_body = detail_results.get(
         'msg_body_self_review').format(ui_url=ui_url,
-                                       report_link=report_link)
+                                       report_link=report_link,
+                                       instruction_link=instruction_link
+                                       )
     assert msg_body == known_msg_body
-
 
 detail_results = {
     "msg_body_amp_review":
@@ -144,7 +146,7 @@ detail_results = {
         'data/flux-data-products/]), are ready for your team’s review.'
         '\n\n*Step 1:* As needed, review detailed instructions and specific '
         'QA/QC check information in the [technical document|'
-        'instructions_link] _(pdf)_.'
+        '{instruction_link}] _(pdf)_.'
         '\n\n*Step 2:* Review the summary statistics and/or figures for '
         'each QA/QC check:'
         '\n* [Variable Coverage|ftp_link/variable_coverage/'
