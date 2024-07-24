@@ -157,22 +157,22 @@ class PlotConfig():
 
         if reset_all_subplots:
             self.all_subplots = []
-                
         if subplot_pos:
-                if len(subplot_pos) > 2:
-                    pos = subplot_pos[2] - 1
-                    if len(self.all_subplots) < 1:
-                        number_rows, number_cols = subplot_pos[0], subplot_pos[1]
-                        self.all_subplots = [None for _ in range(number_rows * number_cols)]
-                    if self.all_subplots[pos] is None:
-                        self.all_subplots[pos] = plt.subplot(*subplot_pos)
-                else:
-                    pos = 0
-                    self.all_subplots = [plt.subplot(*subplot_pos)]
-        else:
+            if len(subplot_pos) > 2:
+                pos = subplot_pos[2] - 1
+                if len(self.all_subplots) < 1:
+                    number_rows, number_cols = \
+                        subplot_pos[0], subplot_pos[1]
+                    self.all_subplots = \
+                        [None for _ in range(number_rows * number_cols)]
+                if self.all_subplots[pos] is None:
+                    self.all_subplots[pos] = plt.subplot(*subplot_pos)
+            else:
                 pos = 0
-                self.all_subplots = [plt.gca()]
-            
+                self.all_subplots = [plt.subplot(*subplot_pos)]
+        else:
+            pos = 0
+            self.all_subplots = [plt.gca()]
         ax = self.all_subplots[pos]
 
         if xlim:
@@ -187,7 +187,7 @@ class PlotConfig():
         if title:
             plot_title = title
         elif x_label and y_label:
-            plot_title = f"Plot of {x_label} against {y_label}"
+            plot_title = f'Plot of {x_label} against {y_label}'
         else:
             plot_title = None
 
@@ -202,12 +202,11 @@ class PlotConfig():
         mf_color = color if marker_fill else 'none'
 
         plot_args = {
-        'color': color,
-        'ms': marker_size,
-        'lw': linewidth,
-        'label': label,
-        'mfc': mf_color,
-    }
-        
+            'color': color,
+            'ms': marker_size,
+            'lw': linewidth,
+            'label': label,
+            'mfc': mf_color,
+        }
         fmt = '{marker}{linestyle}'.format(marker=marker, linestyle=linestyle)
         return plot_func(x_vals, y_vals, fmt, **plot_args)

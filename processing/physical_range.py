@@ -317,51 +317,79 @@ class PhysicalRange:
         title = f'Plot of {var_obj.name} with {range_type}'
 
         ax.set_ylim((y_min, y_max))
-        ax.set_xlabel(f'Time ({y_name})', fontsize=self.plot_config.plot_title_fontsize)
-        ax.set_ylabel(f'{var_obj.name} ({var_obj.units})', fontsize=self.plot_config.plot_title_fontsize)
-        ax.set_title(title, fontsize=self.plot_config.plot_title_fontsize)
-        
+        ax.set_xlabel(f'Time ({y_name})',
+                      fontsize=self.plot_config.plot_title_fontsize)
+        ax.set_ylabel(f'{var_obj.name} ({var_obj.units})',
+                      fontsize=self.plot_config.plot_title_fontsize)
+        ax.set_title(title,
+                     fontsize=self.plot_config.plot_title_fontsize)
         ax.plot_date(x_data, y_data, color='0.75', ms=2, ls='', lw=0)
-        
-        error_outliers, warning_outliers = self.identify_outliers(x_data, y_data, var_obj)
+        error_outliers, warning_outliers = \
+            self.identify_outliers(x_data, y_data, var_obj)
         if error_outliers:
-            ax.plot_date(error_outliers[0], error_outliers[1], 'o', markersize=6, markeredgewidth=1, markerfacecolor='None', markeredgecolor='r')
+            ax.plot_date(error_outliers[0], error_outliers[1],
+                         'o', markersize=6, markeredgewidth=1,
+                         markerfacecolor='None', markeredgecolor='r')
         if warning_outliers:
-            ax.plot_date(warning_outliers[0], warning_outliers[1], 'o', markersize=6, markeredgewidth=1, markerfacecolor='None', markeredgecolor='orange')
-        
-        ax.axhline(y=var_obj.max_lim, linestyle='-', linewidth=1, color='orange')
-        ax.axhline(y=var_obj.min_lim, linestyle='-', linewidth=1, color='orange')
-        ax.axhline(y=var_obj.error_max, linestyle='-', linewidth=1, color='r')
-        ax.axhline(y=var_obj.error_min, linestyle='-', linewidth=1, color='r')
+            ax.plot_date(warning_outliers[0], warning_outliers[1],
+                         'o', markersize=6, markeredgewidth=1,
+                         markerfacecolor='None', markeredgecolor='orange')
+        ax.axhline(y=var_obj.max_lim, linestyle='-',
+                   linewidth=1, color='orange')
+        ax.axhline(y=var_obj.min_lim, linestyle='-',
+                   linewidth=1, color='orange')
+        ax.axhline(y=var_obj.error_max, linestyle='-',
+                   linewidth=1, color='r')
+        ax.axhline(y=var_obj.error_min, linestyle='-',
+                   linewidth=1, color='r')
 
     def plot(self, var_obj, year):
-        start, end = self.annual_idx[year]['start'], self.annual_idx[year]['end']
+        start, end = self.annual_idx[year]['start'], \
+            self.annual_idx[year]['end']
         annual_data = self.data[var_obj.name][start:end + 1]
-        time_data = [self.ts_util.cast_as_datetime(t) for t in self.data['TIMESTAMP_START'][start:end + 1]]
-        
-        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 13))  # Create figure
+        time_data = [self.ts_util.cast_as_datetime(t)
+                     for t in self.data['TIMESTAMP_START'][start:end + 1]]
+        fig, (subplot1, subplot2) = plt.subplots(
+            2, 1, figsize=(12, 13))  # Create figure
         y_name = year.replace("_", " ")
-        fig.suptitle(f'Physical Range of {var_obj.name} throughout {y_name}', fontsize=self.plot_config.plot_suptitle_fontsize)
-
-        self.make_plot(ax1, time_data, annual_data, var_obj, year, thresholds=True)
-        self.make_plot(ax2, time_data, annual_data, var_obj, year, thresholds=False)
-        
+        fig.suptitle(f'Physical Range of {var_obj.name} throughout {y_name}',
+                     fontsize=self.plot_config.plot_suptitle_fontsize)
+        self.make_plot(subplot1, time_data, annual_data, var_obj,
+                       year, thresholds=True)
+        self.make_plot(subplot2, time_data, annual_data, var_obj,
+                       year, thresholds=False)
         lab_warn = f'Expected Range ({var_obj.min_lim}-{var_obj.max_lim})'
         margin_percent = str(var_obj.margin * 100)
-        lab_err = (f'Expected Range +/- {margin_percent}% ({var_obj.error_min}-{var_obj.error_max})')
+        lab_err = (f'Expected Range +/- {margin_percent}% '
+                   f'({var_obj.error_min}-{var_obj.error_max})')
 
         legend_info = [('orange', lab_warn), ('r', lab_err)]
-        handles = [mlines.Line2D([], [], color=c, label=l) for c, l in legend_info]
+        handles = [mlines.Line2D([], [], color=c, label=l)
+                   for c, l in legend_info]  # convert legend info to Patches
         labels = [l for c, l in legend_info]
 
-        handles += [mlines.Line2D([], [], color='None', marker='o', markerfacecolor='0.75', markersize=10, label='data'),
-                    mlines.Line2D([], [], color='None', marker='o', markerfacecolor='None', markeredgecolor='orange', markersize=10, label='data outside the expected physical range'),
-                    mlines.Line2D([], [], color='None', marker='o', markerfacecolor='None', markeredgecolor='r', markersize=10, label=f'data outside the expected physical range +/- {margin_percent}%')]
-        labels += ['data', 'data outside the expected physical range', f'data outside the expected physical range +/- {margin_percent}%']
-        
+        # Add labels and colors for point styling
+        handles += [mlines.Line2D([], [], color='None', marker='o',
+                                  markerfacecolor='0.75', markersize=10,
+                                  label='data'),
+                    mlines.Line2D([], [], color='None', marker='o',
+                                  markerfacecolor='None',
+                                  markeredgecolor='orange',
+                                  markersize=10,
+                                  label=('data outside the expected '
+                                         'physical range')),
+                    mlines.Line2D([], [], color='None', marker='o',
+                                  markerfacecolor='None', markeredgecolor='r',
+                                  markersize=10,
+                                  label=(
+                                      'data outside the expected physical '
+                                      f'range +/- {margin_percent}%'))]
+        labels += ['data', 'data outside the expected physical range',
+                   'data outside the expected physical range']
         fig.legend(handles, labels, loc='lower center', ncol=2)
 
-        fig_name = self.fig_name_fmt.format(y=var_obj.name, year=year, s=self.site_id, p=self.process_id)
+        fig_name = self.fig_name_fmt.format(y=var_obj.name, year=year,
+                                            s=self.site_id, p=self.process_id)
         fig_loc = os.path.join(self.plot_dir, fig_name)
 
         plt.savefig(fig_loc, dpi=self.plot_config.plot_default_dpi)
