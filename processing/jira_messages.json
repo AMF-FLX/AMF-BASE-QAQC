@@ -1,7 +1,4 @@
 {
-  "timeout1": "Dear {uploader},\n\nThanks again for uploading data for {site_id} on {date} (see complete file list below).\n\nAccording to our records, we have not received replacement uploads for one or more of the files below that failed Format QA/QC.\n\nFormat QA/QC results:\n{format_results}\n\nYou can re-upload your data at https://ameriflux.lbl.gov/data/upload-data/ and/or reply to this email to discuss with us.\n\nView the status of all your uploaded files at https://ameriflux.lbl.gov/qaqc-reports-data-team/. \n\nYou can track communications on this Format QA/QC report at {jira_ticket_link} using your AmeriFlux account ID and password to login.\n\nSincerely,\nAMP Data Team",
-  "internal_timeout_support": "This issue had an unexpected Reminder label given its current status, time since status change {days_since_status_change}, and existing labels {existing_labels}. Please check it out.",
-  "internal_timeout": "This issue has timed out. No action by site team in {time_out_length} days.",
   "data_qaqc_report_email": {
     "salutation": "Dear {r}{p},\n\nThank you for your data submissions for {s} ({n}).",
     "self_review": {

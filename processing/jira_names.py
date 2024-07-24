@@ -37,7 +37,6 @@ class JIRANames:
     base_update_resolution = 'BASE Updated (see linked issue)'
     label_results_sent = 'Results_Sent'
     label_self_review = 'Self-Review'
-    reminder_schedule = 'customfield_10700'
 
     class Status:
         __field_name__ = 'status'
@@ -49,12 +48,6 @@ class JIRANames:
     class RequestType:
         __field_name__ = 'Customer Request Type'
         format_qaqc = 'Format QAQC'
-
-    class ReminderOptions:
-        auto = '10200'
-        one_week = '10202'
-        one_month = '10203'
-        no_reminder = '10201'
 
     def strip_customfield(self, customfield):
         try:

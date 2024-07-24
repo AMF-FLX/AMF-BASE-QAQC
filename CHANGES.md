@@ -1,5 +1,11 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v2.1.2
+*2024 Jul 24*
+
+New in this release:
+- Removal of undeployed modules that have not been migrated to the new infrastructure. This allows removal of pymssql package.
+
 ### QAQC v2.1.1
 *2024 Jul 23*
 

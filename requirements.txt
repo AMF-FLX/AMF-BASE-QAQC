@@ -7,7 +7,6 @@ matplotlib
 numpy
 pandas
 psycopg2-binary
-pymssql-linux
 pytest
 pytest-cov
 pytest-flake8
