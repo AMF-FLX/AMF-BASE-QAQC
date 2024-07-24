@@ -36,11 +36,8 @@ class Logger(logging.Logger):
                 phase_cfg = 'PHASE_I'
             elif process_type == 'BASE Generation':
                 phase_cfg = 'PHASE_II'
-            elif process_type in ('GenBASEBADM', 'preBASERegen',
-                                  'summarizeDataVariableStatistics'):
+            elif process_type in ('GenBASEBADM', 'preBASERegen'):
                 phase_cfg = 'PHASE_III'
-            elif process_type == 'timeout_format_issues':
-                phase_cfg = 'CRON'
             else:
                 raise Exception("Unrecognized process_type.")
 
