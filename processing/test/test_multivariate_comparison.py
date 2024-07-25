@@ -286,7 +286,9 @@ def test_get_ortho_dist_from_regres_ln(mc):
 
     # Distance from (1, -1) to (1, 1) is sqrt(2)
     dist = mc.get_ortho_dist_from_regres_ln(1, 1, fit.beta)
-    assert dist - math.sqrt(2) < sys.float_info.epsilon
+    # assert dist - math.sqrt(2) < sys.float_info.epsilon
+    assert dist == pytest.approx(math.sqrt(2), abs=sys.float_info.epsilon)
+
 
 
 def test_find_initial_year_indices(mc):
