@@ -75,6 +75,7 @@ def test_gen_message(monkeypatch):
                                        )
     assert msg_body == known_msg_body
 
+
 detail_results = {
     "msg_body_amp_review":
         "Dear reporter_0, participant_0, participant_1,"
