@@ -11,7 +11,7 @@ from logger import Logger
 from output_stats import OutputStats
 from plot_config import PlotConfig
 from scipy.odr import ODR
-from scipy.odr.odrpack import Model
+from scipy.odr import Model
 from scipy.odr import RealData
 from scipy import stats
 from status import StatusCode, StatusGenerator
@@ -483,12 +483,10 @@ class MultivariateComparison():
         y1 = self.odr_linear_function(linreg_output, x)
         x1 = (y - linreg_output[1]) / linreg_output[0]
         dist = math.sqrt(((x1 - x)**2) + ((y - y1)**2))
-
         # If the distance is exactly 0, change it to a really small number
         # to avoid dividing by 0 below
         if dist == 0:
             dist = sys.float_info.epsilon
-
         ortho_dist = (abs(x1 - x) * abs(y1 - y)) / dist
         return ortho_dist
 
