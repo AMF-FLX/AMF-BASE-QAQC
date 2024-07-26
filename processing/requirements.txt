@@ -1,0 +1,42 @@
+certifi==2024.6.2
+charset-normalizer==3.3.2
+codecov==2.1.13
+colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1666700638685/work
+contourpy==1.2.1
+coverage==7.5.3
+cycler==0.12.1
+Cython==3.0.10
+data-reader==0.0.8
+dataclasses==0.6
+exceptiongroup @ file:///home/conda/feedstock_root/build_artifacts/exceptiongroup_1704921103267/work
+flake8==7.1.0
+fonttools==4.53.0
+future==1.0.0
+idna==3.7
+ijson==3.3.0
+iniconfig @ file:///home/conda/feedstock_root/build_artifacts/iniconfig_1673103042956/work
+kiwisolver==1.4.5
+matplotlib==3.9.0
+mccabe==0.7.0
+numpy==2.0.0
+packaging @ file:///home/conda/feedstock_root/build_artifacts/packaging_1710075952259/work
+pandas==2.2.2
+pillow==10.3.0
+pluggy @ file:///home/conda/feedstock_root/build_artifacts/pluggy_1713667077545/work
+psycopg2-binary==2.9.9
+pycodestyle==2.12.0
+pyflakes==3.2.0
+pymssql==2.3.0
+pyparsing==3.1.2
+pytest @ file:///home/conda/feedstock_root/build_artifacts/pytest_1717533819931/work
+pytest-cov==5.0.0
+pytest-flake8==1.1.1
+python-dateutil==2.9.0.post0
+pytz==2024.1
+requests==2.32.3
+scipy==1.14.0
+six==1.16.0
+tomli @ file:///home/conda/feedstock_root/build_artifacts/tomli_1644342247877/work
+tzdata==2024.1
+urllib3==2.2.1
+xlrd==2.0.1
