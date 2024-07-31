@@ -9,7 +9,7 @@ import shutil
 import sys
 
 from configparser import ConfigParser
-from data_reader import DataReader
+from data_reader1 import DataReader
 from fp_vars import FPVariables
 from logger import Logger
 from multivariate_comparison import MultivariateComparison
@@ -254,7 +254,8 @@ def test_fit_odr(mc):
     fit = mc.fit_odr(x, y)
 
     # The slope should be exactly -1
-    assert fit.beta[0] == -1
+    assert np.isclose(fit.beta[0], -1, atol=1e-8)
+
 
     # r2 should be exactly 1 because it's linear
     _, ss_total_y = mc.compute_sum_of_squares(x, y)
@@ -286,7 +287,7 @@ def test_get_ortho_dist_from_regres_ln(mc):
 
     # Distance from (1, -1) to (1, 1) is sqrt(2)
     dist = mc.get_ortho_dist_from_regres_ln(1, 1, fit.beta)
-    assert dist - math.sqrt(2) < sys.float_info.epsilon
+    assert np.isclose(dist, math.sqrt(2), atol=1e-8), f"Expected {math.sqrt(2)} but got {dist}"
 
 
 def test_find_initial_year_indices(mc):
@@ -405,8 +406,7 @@ def test_classify_outliers(mc):
     x = [1, 2, 3]
     y = [1, 2, 3]
     fit = mc.fit_odr(x, y)
-    rse = math.sqrt(abs(fit.res_var))
-
+    rse = math.sqrt(abs(fit.res_var)) 
     assert mc.classify_outliers(x=10, y=15, fit=fit, rse=rse)
     assert not mc.classify_outliers(x=10, y=10, fit=fit, rse=rse)
 

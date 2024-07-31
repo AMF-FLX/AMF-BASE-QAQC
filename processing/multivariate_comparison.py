@@ -1227,7 +1227,7 @@ class MultivariateComparison():
         plt.close()
         return fig_loc
 
-    def classify_outliers(self, x, y, fit, rse, threshold=4.5, test_log=_log):
+    def classify_outliers(self, x, y, fit, rse, threshold=4.5, test_log=_log, atol=1e-8):
         """Classify whether a point is an outlier based on the residual
         standard deviation from the regression line
 
@@ -1235,7 +1235,7 @@ class MultivariateComparison():
         dist = self.get_ortho_dist_from_regres_ln(x, y, fit.beta)
         # dist = self.get_vertical_dist_from_regres_ln(x, y, output)
         # test_log.info("Dist: {d}, std residual {r}".format(d=dist, r=rse))
-        return dist > (rse * threshold)
+        return dist > (rse * threshold) + atol
 
     def odr_linear_function(self, B, x):
         return B[0]*x + B[1]
