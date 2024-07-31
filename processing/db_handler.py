@@ -132,9 +132,9 @@ class NewDBHandler:
             count = cursor.fetchone().get('count')
         return count
 
-    def get_input_files(self, process_id):
+    def get_input_files(self, conn, process_id):
         input_files = set()
-        with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             query = SQL('SELECT format_qaqc_id '
                         'FROM qaqc.aggregate_processing_log '
                         'WHERE data_qaqc_id = %s')
@@ -156,10 +156,10 @@ class NewDBHandler:
         return Composed(full_query_components)
 
     # ToDo: update for publish
-    def get_base_candidates(self, state_ids):
+    def get_base_candidates(self, conn, state_ids):
         preBASE_files = {}
 
-        with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             pre_query = SQL(
                 'SELECT o.aggregate_file_path, s.process_id, '
                 'p.publishing_code_version '
@@ -194,7 +194,7 @@ class NewDBHandler:
                     code_version = row.get('publishing_code_version')
                     process_id = row.get('process_id')
                     # Remap paths if codeVersion is prior to version 1.1.0
-                    if code_version < '1.1.0':
+                    if code_version and code_version < '1.1.0':
                         path = Path(candidate_filepath)
                         filename = path.name
                         parent_path_parts = path.parent.parts
@@ -226,6 +226,26 @@ class NewDBHandler:
                 flux_id = r.get('flux_id')
                 badm_map[flux_id] = (r.get('filename'), r.get('badm_version'))
         return badm_map
+
+    def get_published_base_site_attrs(self, conn):
+        lookup = {}
+        query = SQL('SELECT site_id, pub.process_id, pub.base_version '
+                    'FROM ('
+                    'SELECT proc.site_id, MAX(pub.process_id) AS process_id '
+                    'FROM qaqc.publishing_log pub '
+                    'INNER JOIN qaqc.processing_log proc '
+                    'ON proc.log_id = pub.process_id '
+                    'GROUP BY proc.site_id) AS latest_process '
+                    'INNER JOIN qaqc.publishing_log pub '
+                    'ON latest_process.process_id = pub.process_id')
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query)
+            for r in cursor:
+                site_id = r.get('site_id')
+                base_version = r.get('base_version')
+                process_id = r.get('process_id')
+                lookup[site_id] = (base_version, process_id)
+        return lookup
 
     def get_sites_with_updates(self, conn, is_historic=False):
         lookup = {}
