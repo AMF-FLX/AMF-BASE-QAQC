@@ -46,8 +46,8 @@ class BASECreator():
     def _get_params_from_config(self):
         with open(self._cwd / 'qaqc.cfg') as cfg:
             code_ver, code_major_ver, combined_files_loc, path, \
-                flux_hostname, flux_user, flux_auth, flux_db_name, PI_vars, \
-                new_db_config, embargo_years = self._read_config(cfg)
+                ext_db_config, PI_vars, new_db_config, \
+                embargo_years = self._read_config(cfg)
         if not code_ver:
             print('No code version specified in config file')
             return False
@@ -78,6 +78,13 @@ class BASECreator():
             self.db_conn_pool['psql_conn'] = self.new_db_handler.init_db_conn(
                 new_db_config)
 
+        if not ext_db_config:
+            _log.error('New External DB configurations not assigned')
+            return False
+        else:
+            self.db_conn_pool['ext_conn'] = self.new_db_handler.init_db_conn(
+                ext_db_config)
+
         if not PI_vars:
             print('No _PI variables specified in config file')
         self.PI_vars = tuple(PI_vars)  # PI_vars is [] if unspecified in config
@@ -92,7 +99,7 @@ class BASECreator():
 
     def _read_config(self, cfg):
         code_ver = code_major_ver = combined_files_loc = path = None
-        flux_hostname = flux_user = flux_auth = flux_db_name = None
+        ext_hostname = ext_user = ext_auth = ext_db_name = None
         new_hostname = new_user = new_auth = new_db_name = None
         embargo_years = None
         PI_vars = []
@@ -137,13 +144,13 @@ class BASECreator():
         cfg_section = 'DB'
         if config.has_section(cfg_section):
             if config.has_option(cfg_section, 'flux_hostname'):
-                flux_hostname = config.get(cfg_section, 'flux_hostname')
+                ext_hostname = config.get(cfg_section, 'flux_hostname')
             if config.has_option(cfg_section, 'flux_user'):
-                flux_user = config.get(cfg_section, 'flux_user')
+                ext_user = config.get(cfg_section, 'flux_user')
             if config.has_option(cfg_section, 'flux_auth'):
-                flux_auth = config.get(cfg_section, 'flux_auth')
+                ext_auth = config.get(cfg_section, 'flux_auth')
             if config.has_option(cfg_section, 'flux_db_name'):
-                flux_db_name = config.get(cfg_section, 'flux_db_name')
+                ext_db_name = config.get(cfg_section, 'flux_db_name')
             if config.has_option(cfg_section, 'new_hostname'):
                 new_hostname = config.get(cfg_section, 'new_hostname')
             if config.has_option(cfg_section, 'new_user'):
@@ -152,11 +159,11 @@ class BASECreator():
                 new_auth = config.get(cfg_section, 'new_auth')
             if config.has_option(cfg_section, 'new_db_name'):
                 new_db_name = config.get(cfg_section, 'new_db_name')
+        ext_db_config = DBConfig(ext_hostname, ext_user, ext_auth, ext_db_name)
         new_db_config = DBConfig(new_hostname, new_user, new_auth, new_db_name)
 
         return (code_ver, code_major_ver, combined_files_loc, path,
-                flux_hostname, flux_user, flux_auth, flux_db_name, PI_vars,
-                new_db_config, embargo_years)
+                ext_db_config, PI_vars, new_db_config, embargo_years)
 
     def create_BASE(self, fp_in, base, site_id, base_version):
         write_as_is = False
@@ -217,14 +224,15 @@ class BASECreator():
                 raise Exception(error_msg)
         return last_base_version, is_last_ver_cdiac
 
-    def assign_new_data_version(self, resolution, last_base_version,
+    def assign_new_data_version(self, conn, resolution, last_base_version,
                                 last_processID, is_last_ver_cdiac,
                                 site_id, md5sum, processID=None):
         if last_base_version:
             if not is_last_ver_cdiac:
                 last_pid_inputs = self.new_db_handler.get_input_files(
-                    last_processID)
-                pid_inputs = self.new_db_handler.get_input_files(processID)
+                    conn, last_processID)
+                pid_inputs = self.new_db_handler.get_input_files(
+                    conn, processID)
                 _log.debug(f'{processID}: {pid_inputs}')
                 _log.debug(f'{last_processID}: {last_pid_inputs}')
                 if pid_inputs ^ last_pid_inputs:
@@ -254,7 +262,7 @@ class BASECreator():
             raise Exception(error_msg)
         return new_version
 
-    def candidate_iterator(self, site_id, attr):
+    def candidate_iterator(self, conn, site_id, attr):
         f_path = attr.get('full_path')
         base_path = attr.get('base_path')
         res = attr.get('res')
@@ -274,6 +282,7 @@ class BASECreator():
             md5sum = self.file_util.get_md5(base_path)
             base_path.unlink()
             new_base_version = self.assign_new_data_version(
+                conn=conn,
                 resolution=res, last_base_version=last_base_version,
                 last_processID=last_processID,
                 is_last_ver_cdiac=is_last_ver_cdiac, site_id=site_id,
@@ -308,13 +317,14 @@ class BASECreator():
         new_entry_ls = []
         base_attrs = {}
         psql_conn = self.db_conn_pool.get('psql_conn')
-        self.site_list = self.new_db_handler.get_sites_with_updates()
+        ext_conn = self.db_conn_pool.get('ext_conn')
+        self.site_list = self.new_db_handler.get_published_base_site_attrs(ext_conn)
         self.embargoed_site_list = self.new_db_handler.get_sites_with_embargo(
             psql_conn, self.embargo_years)
         self.historic_site_list = self.new_db_handler.get_sites_with_updates(
             psql_conn, is_historic=True)
         self.preBASE_files = self.new_db_handler.get_base_candidates(
-            self.process_states.base_candidate_states)
+            ext_conn, self.process_states.base_candidate_states)
 
         attr_keys = ['base_path', 'start_year', 'end_year', 'res']
         file_attr_keys = ['size', 'md5sum', 'base_fname', 'timestamp',
@@ -344,7 +354,7 @@ class BASECreator():
                         has_same_res = True
                         break
                 if has_same_res:
-                    error_msg = (f'More than one candidate file for {site_id}'
+                    error_msg = (f'More than one candidate file for {site_id} '
                                  f'has same {res} resolution')
                     _log.error(error_msg)
                     return
@@ -362,7 +372,8 @@ class BASECreator():
 
         for site_id, attr_ls in base_attrs.items():
             for attr in attr_ls:
-                file_attr_vals = self.candidate_iterator(site_id, attr)
+                file_attr_vals = self.candidate_iterator(
+                    ext_conn, site_id, attr)
                 for k, v in zip(file_attr_keys, file_attr_vals):
                     attr[k] = v
                 entry = (attr.get('base_fname'),

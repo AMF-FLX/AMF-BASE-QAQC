@@ -39,14 +39,14 @@ class PreBASERegenerator:
             config.read_file(cfg)
             cfg_section = 'DB'
             if config.has_section(cfg_section):
-                if config.has_option(cfg_section, 'hostname'):
-                    hostname = config.get(cfg_section, 'hostname')
-                if config.has_option(cfg_section, 'user'):
-                    user = config.get(cfg_section, 'user')
-                if config.has_option(cfg_section, 'auth'):
-                    auth = config.get(cfg_section, 'auth')
-                if config.has_option(cfg_section, 'db_name'):
-                    db_name = config.get(cfg_section, 'db_name')
+                if config.has_option(cfg_section, 'flux_hostname'):
+                    hostname = config.get(cfg_section, 'flux_hostname')
+                if config.has_option(cfg_section, 'flux_user'):
+                    user = config.get(cfg_section, 'flux_user')
+                if config.has_option(cfg_section, 'flux_auth'):
+                    auth = config.get(cfg_section, 'flux_auth')
+                if config.has_option(cfg_section, 'flux_db_name'):
+                    db_name = config.get(cfg_section, 'flux_db_name')
             db_config = DBConfig(hostname, user, auth, db_name)
         return db_config
 

@@ -72,13 +72,13 @@ class UpdateBASEBADM():
         cfg_section = 'DB'
         if config.has_section(cfg_section):
             if config.has_option(cfg_section, 'flux_hostname'):
-                flux_hostname = config.get(cfg_section, 'flux_hostname')
+                ext_hostname = config.get(cfg_section, 'flux_hostname')
             if config.has_option(cfg_section, 'flux_user'):
-                flux_user = config.get(cfg_section, 'flux_user')
+                ext_user = config.get(cfg_section, 'flux_user')
             if config.has_option(cfg_section, 'flux_auth'):
-                flux_auth = config.get(cfg_section, 'flux_auth')
+                ext_auth = config.get(cfg_section, 'flux_auth')
             if config.has_option(cfg_section, 'flux_db_name'):
-                flux_db_name = config.get(cfg_section, 'flux_db_name')
+                ext_db_name = config.get(cfg_section, 'flux_db_name')
             if config.has_option(cfg_section, 'new_hostname'):
                 new_hostname = config.get(cfg_section, 'new_hostname')
             if config.has_option(cfg_section, 'new_user'):
@@ -87,17 +87,17 @@ class UpdateBASEBADM():
                 new_auth = config.get(cfg_section, 'new_auth')
             if config.has_option(cfg_section, 'new_db_name'):
                 new_db_name = config.get(cfg_section, 'new_db_name')
+        ext_db_config = DBConfig(ext_hostname, ext_user, ext_auth, ext_db_name)
         new_db_config = DBConfig(new_hostname, new_user, new_auth, new_db_name)
 
         return (combined_files_loc, BASE_BADM_path, BADM_mnt, OLD_BASE_mnt,
-                BADM_exe_dir, flux_hostname, flux_user, flux_auth,
-                flux_db_name, new_db_config)
+                BADM_exe_dir, ext_db_config, new_db_config)
 
     def _get_params_from_config(self):
         with open(os.path.join(self._cwd, 'qaqc.cfg')) as cfg:
             combined_files_loc, BASE_BADM_path, BADM_mnt, OLD_BASE_mnt, \
-                BADM_exe_dir, flux_hostname, flux_user, flux_auth, \
-                flux_db_name, new_db_config = self._read_config(cfg)
+                BADM_exe_dir, ext_db_config, \
+                new_db_config = self._read_config(cfg)
         if not BASE_BADM_path:
             _log.error('No path for Phase III specified in config file')
             return False
@@ -127,6 +127,13 @@ class UpdateBASEBADM():
         else:
             self.db_conn_pool['psql_conn'] = self.new_db_handler.init_db_conn(
                 new_db_config)
+
+        if not ext_db_config:
+            _log.error('New External DB configurations not assigned')
+            return False
+        else:
+            self.db_conn_pool['ext_conn'] = self.new_db_handler.init_db_conn(
+                ext_db_config)
 
         return True
 
@@ -193,6 +200,8 @@ class UpdateBASEBADM():
 
     def driver(self, base_attrs, post_base_only=None):
         psql_conn = self.db_conn_pool.get('psql_conn')
+        ext_conn = self.db_conn_pool.get('ext_conn')
+
         if post_base_only:
             status = self.remote_ssh_util.update_base_badm('post_base')
             if not status:
@@ -233,7 +242,7 @@ class UpdateBASEBADM():
             psql_conn)
 
         base_candidate_map = self.new_db_handler.get_base_candidates(
-            state_ids=self.process_states.base_candidate_states)
+            ext_conn, state_ids=self.process_states.base_candidate_states)
 
         # Create zip file
         sites_processed = set()
