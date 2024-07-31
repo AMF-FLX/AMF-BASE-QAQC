@@ -9,7 +9,7 @@ import shutil
 import sys
 
 from configparser import ConfigParser
-from data_reader1 import DataReader
+from data_reader import DataReader
 from fp_vars import FPVariables
 from logger import Logger
 from multivariate_comparison import MultivariateComparison
