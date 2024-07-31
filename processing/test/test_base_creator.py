@@ -53,21 +53,25 @@ def test_assign_new_data_version(base_creator, monkeypatch):
                         mock_db_handler_get_input_files)
 
     assert base_creator.assign_new_data_version(
+        conn=None,
         resolution='HH', last_base_version='10-1', last_processID=1,
         is_last_ver_cdiac=False, site_id='US-UMB',
         md5sum='94988170f096e6c6fb280a6bfd3ee075', processID=2) == (
         '10-' + base_creator.code_major_ver)
     assert base_creator.assign_new_data_version(
+        conn=None,
         resolution='HH', last_base_version='10-1', last_processID=1,
         is_last_ver_cdiac=False, site_id='US-UMB',
         md5sum='94988170f096e6c6fb280a6bfd3e3245', processID=3) == (
         '11-' + base_creator.code_major_ver)
     assert base_creator.assign_new_data_version(
+        conn=None,
         resolution='HH', last_base_version=None, last_processID=None,
         is_last_ver_cdiac=False, site_id='US-UMB',
         md5sum='94988170f096e6c6fb280a6bfd3ee075', processID=3) == (
         '1-' + base_creator.code_major_ver)
     assert base_creator.assign_new_data_version(
+        conn=None,
         resolution='HR', last_base_version='3-1', last_processID=None,
         is_last_ver_cdiac=True, site_id='US-UMB',
         md5sum='94988170f096e6c6fb280a6bfd3e3245', processID=3) == (
