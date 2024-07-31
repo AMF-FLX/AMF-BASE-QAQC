@@ -37,7 +37,7 @@ def base_creator(monkeypatch):
 
 
 def test_assign_new_data_version(base_creator, monkeypatch):
-    def mock_db_handler_get_input_files(dummyself, process_id):
+    def mock_db_handler_get_input_files(dummyself, dummyconn, process_id):
         if process_id == 1:
             return {123, 234, 345}
         elif process_id == 2:
