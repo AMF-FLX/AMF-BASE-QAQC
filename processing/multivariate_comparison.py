@@ -47,6 +47,7 @@ class MultivariateComparison():
         self.fig_name_fmt = '{s}-{p}-{t}-{x}-{y}-{yr}.png'
         self._c_dt = self.ts_util.cast_as_datetime
         self.character_encoding = character_encoding
+        self.tol = 10 ** -(sys.float_info.dig - 1)
 
         if plot_dir:
             self.can_plot = True
@@ -1227,7 +1228,7 @@ class MultivariateComparison():
         plt.close()
         return fig_loc
 
-    def classify_outliers(self, x, y, fit, rse, threshold=4.5, test_log=_log, atol=1e-8):
+    def classify_outliers(self, x, y, fit, rse, threshold=4.5, test_log=_log):
         """Classify whether a point is an outlier based on the residual
         standard deviation from the regression line
 
@@ -1235,7 +1236,7 @@ class MultivariateComparison():
         dist = self.get_ortho_dist_from_regres_ln(x, y, fit.beta)
         # dist = self.get_vertical_dist_from_regres_ln(x, y, output)
         # test_log.info("Dist: {d}, std residual {r}".format(d=dist, r=rse))
-        return dist > (rse * threshold) + atol
+        return dist > (rse * threshold) + self.tol
 
     def odr_linear_function(self, B, x):
         return B[0]*x + B[1]

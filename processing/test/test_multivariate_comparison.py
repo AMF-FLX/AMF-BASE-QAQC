@@ -254,7 +254,7 @@ def test_fit_odr(mc):
     fit = mc.fit_odr(x, y)
 
     # The slope should be exactly -1
-    assert np.isclose(fit.beta[0], -1, atol=1e-8)
+    assert math.isclose(fit.beta[0], -1, rel_tol=1e-15)
 
     # r2 should be exactly 1 because it's linear
     _, ss_total_y = mc.compute_sum_of_squares(x, y)
@@ -286,8 +286,7 @@ def test_get_ortho_dist_from_regres_ln(mc):
 
     # Distance from (1, -1) to (1, 1) is sqrt(2)
     dist = mc.get_ortho_dist_from_regres_ln(1, 1, fit.beta)
-    assert np.isclose(dist, math.sqrt(2), atol=1e-8), \
-        f"Expected {math.sqrt(2)} but got {dist}"
+    assert math.isclose(dist, math.sqrt(2), rel_tol=1e-15)
 
 
 def test_find_initial_year_indices(mc):
