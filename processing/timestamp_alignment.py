@@ -439,7 +439,8 @@ class TimestampAlignment(object):
                         # data_as_list = data_doy_center_sw_in_pot.tolist()
                         data_as_list = deepcopy(sw_in_pot_data)
                         while len(data_as_list) < step:
-                            data_as_list.append(np.NaN)
+                            data_as_list.append(np.nan)
+
                         data_doy_center_sw_in_pot = np.asarray(data_as_list)
                     else:
                         ts_doy_center = ts_start[
@@ -536,7 +537,8 @@ class TimestampAlignment(object):
                             else:
                                 var_data_lt.append(False)
                             idx += 1
-                    var_data[np.invert(var_data_lt)] = np.NaN
+                    var_data[np.invert(var_data_lt)] = np.nan
+
                     leg_vars_less[var], = ax.plot_date(
                         ts_doy_center, var_data, linewidth=1.0,
                         fmt='o', linestyle='', markersize=8,
@@ -756,7 +758,7 @@ class TimestampAlignment(object):
             figure.text(.975, .975, corr_annotation, ha='right', va='center')
             # TODO: Subtract 3 to stay within figure. Should use a better way.
             figure.legend(
-                decorators, labels, 'lower center',
+                decorators, labels, loc='lower center',
                 ncol=min(len(radiation_variables)*2 + 1,
                          (self.fig_width // 2) - 3))
 

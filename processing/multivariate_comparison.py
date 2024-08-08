@@ -11,7 +11,7 @@ from logger import Logger
 from output_stats import OutputStats
 from plot_config import PlotConfig
 from scipy.odr import ODR
-from scipy.odr.odrpack import Model
+from scipy.odr import Model
 from scipy.odr import RealData
 from scipy import stats
 from status import StatusCode, StatusGenerator
@@ -47,6 +47,7 @@ class MultivariateComparison():
         self.fig_name_fmt = '{s}-{p}-{t}-{x}-{y}-{yr}.png'
         self._c_dt = self.ts_util.cast_as_datetime
         self.character_encoding = character_encoding
+        self.tol = 10 ** -(sys.float_info.dig - 1)
 
         if plot_dir:
             self.can_plot = True
@@ -483,12 +484,10 @@ class MultivariateComparison():
         y1 = self.odr_linear_function(linreg_output, x)
         x1 = (y - linreg_output[1]) / linreg_output[0]
         dist = math.sqrt(((x1 - x)**2) + ((y - y1)**2))
-
         # If the distance is exactly 0, change it to a really small number
         # to avoid dividing by 0 below
         if dist == 0:
             dist = sys.float_info.epsilon
-
         ortho_dist = (abs(x1 - x) * abs(y1 - y)) / dist
         return ortho_dist
 
@@ -1164,7 +1163,7 @@ class MultivariateComparison():
         # yy = self.lin_reg_linear_function(fit, xx)
 
         # Plot fitted regression line
-        self.plot(xx, yy, color='g', marker=' ', subplot_pos=(3, 1, 1),
+        self.plot(xx, yy, color='g', marker='', subplot_pos=(3, 1, 1),
                   linestyle='-', linewidth=1, is_plot_date=False)
 
         # Process outliers
@@ -1237,7 +1236,7 @@ class MultivariateComparison():
         dist = self.get_ortho_dist_from_regres_ln(x, y, fit.beta)
         # dist = self.get_vertical_dist_from_regres_ln(x, y, output)
         # test_log.info("Dist: {d}, std residual {r}".format(d=dist, r=rse))
-        return dist > (rse * threshold)
+        return dist > (rse * threshold) + self.tol
 
     def odr_linear_function(self, B, x):
         return B[0]*x + B[1]
