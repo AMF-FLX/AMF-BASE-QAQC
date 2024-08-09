@@ -97,19 +97,10 @@ class WindroseProcessor:
                             ndirections, vwinds, season_time_df, filename)
 
 
-# if __name__ == "__main__":
-#     t1 = time.time()
-#
-#     root_dir = 'Dataset'
-#     processor = WindroseProcessor(root_dir)
-#     processor.process_site_files()
-#
-#     t2 = time.time()
-#     print(f'Time taken: {t2 - t1} seconds')
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process windrose data.")
-    parser.add_argument('-d', '--directory', required=True, help="Root directory containing the site data.")
+    parser.add_argument('-d', '--directory', required=True,
+                        help="Root directory containing the site data.")
 
     args = parser.parse_args()
     root_dir = args.directory

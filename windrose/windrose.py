@@ -61,10 +61,10 @@ class WindroseAnalysis:
                                               vwinds, speed, dirc, direction)
         count = np.hstack((count[:, [0]], np.diff(count, axis=1)))
         column_names = (
-                [f'Wind Speed Interval:({vwinds[0]} , {vwinds[1]})'] +
-                [f'Wind Speed Interval:[{vwinds[i]} , '
+                [f'Wind Speed Interval:({vwinds[0]}, {vwinds[1]})'] +
+                [f'Wind Speed Interval:[{vwinds[i]}, '
                  f'{vwinds[i + 1]})' for i in range(1, len(vwinds) - 1)] +
-                [f'Wind Speed Interval:[{vwinds[-1]} , Inf)']
+                [f'Wind Speed Interval:[{vwinds[-1]}, Inf)']
         )
         count_df = pd.DataFrame(count, columns=column_names)
 
@@ -75,8 +75,8 @@ class WindroseAnalysis:
             self.north - center_angle / 90 * (self.north - self.east), 360)
         n = 180 / ndirections
 
-        wdirs = [(f"[{np.mod((i - n), 360):.2f} , "
-                  f"{(i + n):.2f})") for i in directions]
+        wdirs = [(f"[{np.mod((i - n), 360): .2f}, "
+                  f"{(i + n): .2f})") for i in directions]
 
         wdirs_series = pd.Series(wdirs)  # Convert wdirs to pandas Series
 
