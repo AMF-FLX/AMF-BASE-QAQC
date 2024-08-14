@@ -18,15 +18,17 @@ class WindroseProcessor:
     def process_site_files(self):
         site_list = [
             d for d in self.root_directory.iterdir()
-            if d.is_dir() and 'AMF_' in d.name
+            if d.is_dir()
         ]
+        # print(site_list)
 
         for site in site_list:
             file_list = os.listdir(site)
             filtered_files = [
                 file for file in file_list
-                if "_BASE-" in file or "_HH_" in file
+                if "_BASE_" in file and "_HH_" in file
             ]
+            # print(site)
 
             for filtered_file in filtered_files:
                 file_path = site / filtered_file
@@ -73,9 +75,16 @@ class WindroseProcessor:
         vwinds_list = [bins1, bins2]
 
         analyzer = WindroseAnalysis()
+        print(site.name)
 
-        dirname = f'{site.name[:10]}_{year_start}_{year_end}'
-        directory_path = self.directory / dirname
+        site_id = f'{site.name[4:10]}'
+        version = f'{year_start}_{year_end}'
+        if "BASE" in site.name:
+            data_product = f'{site.name[11:15]}'
+        # else:
+        #     data_product = f'{site.name[11:15]}'
+
+        directory_path = self.directory / site_id / data_product / version
 
         if not directory_path.exists():
             directory_path.mkdir(parents=True)
