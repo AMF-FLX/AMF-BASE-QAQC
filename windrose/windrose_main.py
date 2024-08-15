@@ -24,11 +24,12 @@ class WindroseProcessor:
 
         for site in site_list:
             file_list = os.listdir(site)
+            # print(file_list)
             filtered_files = [
                 file for file in file_list
-                if "_BASE_" in file and "_HH_" in file
+                if "_BASE_HH_" in file or "_FULLSET_HH_" in file
             ]
-            # print(site)
+            print(filtered_files)
 
             for filtered_file in filtered_files:
                 file_path = site / filtered_file
@@ -75,14 +76,14 @@ class WindroseProcessor:
         vwinds_list = [bins1, bins2]
 
         analyzer = WindroseAnalysis()
-        print(site.name)
+        # print(site.name)
 
         site_id = f'{site.name[4:10]}'
         version = f'{year_start}_{year_end}'
         if "BASE" in site.name:
             data_product = f'{site.name[11:15]}'
         # else:
-        #     data_product = f'{site.name[11:15]}'
+            data_product = f'{site.name[11:18]}'
 
         directory_path = self.directory / site_id / data_product / version
 
