@@ -57,7 +57,6 @@ class WindroseAnalysis:
             pandas.DataFrame: Frequency table.
         """
 
-
         count = self.calculate_wind_frequency(ndirections,
                                               vwinds, speed, dirc, direction)
         count = np.hstack((count[:, [0]], np.diff(count, axis=1)))
