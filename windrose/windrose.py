@@ -31,9 +31,9 @@ class WindroseAnalysis:
             d2 = center_angle[i] + n
 
             if d1 > d2:
-                cond = (dirc >= d1) | (dirc < d2)
+                cond = (dirc >= d1) or (dirc < d2)
             else:
-                cond = (dirc >= d1) & (dirc < d2)
+                cond = (dirc >= d1) and (dirc < d2)
 
             counter, _ = np.histogram(speed[cond],
                                       bins=np.append(vwinds, np.inf))
