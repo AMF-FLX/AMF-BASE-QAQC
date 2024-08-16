@@ -41,10 +41,10 @@ class WindroseProcessor:
                     self.process_season_data(df, site)
 
     def process_season_data(self, df, site):
-        df_1 = df[(df['WD'] != -9999) | (df['WS'] != -9999)]
-        speed = df_1['WS']
-        direction = df_1['WD']
-        timestamp = df_1['TIMESTAMP_START']
+        main_df = df[(df['WD'] != -9999) or (df['WS'] != -9999)]
+        speed = main_df['WS']
+        direction = main_df['WD']
+        timestamp = main_df['TIMESTAMP_START']
         time_series = pd.to_datetime(timestamp, format='%Y%m%d%H%M')
         hourz = time_series.dt.strftime('%H%M').astype(int)
         monthz = time_series.dt.month
