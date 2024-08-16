@@ -1,10 +1,12 @@
 import os
+import time
+import argparse
+from pathlib import Path
+
 import pandas as pd
 import numpy as np
+
 from windrose import WindroseAnalysis
-import time
-from pathlib import Path
-import argparse
 
 
 class WindroseProcessor:
@@ -20,7 +22,6 @@ class WindroseProcessor:
             d for d in self.root_directory.iterdir()
             if d.is_dir()
         ]
-        # print(site_list)
 
         for site in site_list:
             file_list = os.listdir(site)
@@ -29,7 +30,6 @@ class WindroseProcessor:
                 file for file in file_list
                 if "_BASE_HH_" in file or "_FULLSET_HH_" in file
             ]
-            print(filtered_files)
 
             for filtered_file in filtered_files:
                 file_path = site / filtered_file
@@ -76,7 +76,6 @@ class WindroseProcessor:
         vwinds_list = [bins1, bins2]
 
         analyzer = WindroseAnalysis()
-        # print(site.name)
 
         site_id = f'{site.name[4:10]}'
         version = f'{year_start}_{year_end}'
