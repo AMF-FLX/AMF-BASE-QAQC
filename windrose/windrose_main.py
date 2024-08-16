@@ -28,7 +28,7 @@ class WindroseProcessor:
             # print(file_list)
             filtered_files = [
                 file for file in file_list
-                if "_BASE_HH_" in file or "_FULLSET_HH_" in file
+                if '_BASE_HH_' in file or '_FULLSET_HH_' in file
             ]
 
             for filtered_file in filtered_files:
@@ -36,12 +36,12 @@ class WindroseProcessor:
                 df = pd.read_csv(file_path, skiprows=[0, 1])
 
                 if 'WS' not in df.columns or 'WD' not in df.columns:
-                    print("Both 'WS' and 'WD' or either columns are missing.")
+                    print('Both WS and WD or either columns are missing.')
                 else:
                     self.process_season_data(df, site)
 
     def process_season_data(self, df, site):
-        main_df = df[(df['WD'] != -9999) or (df['WS'] != -9999)]
+        main_df = df[(df['WD'] != -9999) | (df['WS'] != -9999)]
         speed = main_df['WS']
         direction = main_df['WD']
         timestamp = main_df['TIMESTAMP_START']
@@ -79,10 +79,10 @@ class WindroseProcessor:
 
         site_id = f'{site.name[4:10]}'
         version = f'{year_start}_{year_end}'
-        if "BASE" in site.name:
+        if 'BASE' in site.name:
             data_product = f'{site.name[11:15]}'
         # else:
-            data_product = f'{site.name[11:18]}'
+        #     data_product = f'{site.name[11:18]}'
 
         directory_path = self.directory / site_id / data_product / version
 
@@ -93,23 +93,23 @@ class WindroseProcessor:
             for c, season in enumerate(seasons):
                 season_df = all_season_df[all_season_df['month'].isin(season)]
                 if c == 0:
-                    filename = directory_path / f"{season_names[c]}{j + 1}"
+                    filename = directory_path / f'{season_names[c]}{j + 1}'
                     analyzer.process_season_data(ndirections,
                                                  vwinds, season_df, filename)
                 else:
                     for t, ampm in enumerate(day_night):
                         season_time_df = season_df[
                             season_df['hour'].isin(ampm)]
-                        filename = directory_path / (f"{season_names[c]}"
-                                                     f"{time_names[t]}{j + 1}")
+                        filename = directory_path / (f'{season_names[c]}'
+                                                     f'{time_names[t]}{j + 1}')
                         analyzer.process_season_data(
                             ndirections, vwinds, season_time_df, filename)
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Process windrose data.")
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Process windrose data.')
     parser.add_argument('-d', '--directory', required=True,
-                        help="Root directory containing the site data.")
+                        help='Root directory containing the site data.')
 
     args = parser.parse_args()
     root_dir = args.directory

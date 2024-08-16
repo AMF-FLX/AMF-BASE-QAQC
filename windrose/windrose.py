@@ -79,7 +79,7 @@ class WindroseAnalysis:
                             90 * (self.north - self.east), 360)
         n = 180 / ndirections
 
-        wdirs = [f"[{np.mod((i - n), 360): .2f}, {(i + n): .2f})"
+        wdirs = [f'[{np.mod((i - n), 360): .2f}, {(i + n): .2f})'
                  for i in directions]
 
         wdirs_series = pd.Series(wdirs)  # Convert wdirs to pandas Series
