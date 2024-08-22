@@ -14,10 +14,8 @@ class WindroseProcessor:
         Initialize WindroseProcessor with directories.
 
         Args:
-            input_directory (str): Path to the root directory containing site
-            data.
-            output_directory (str): Path to the directory where processed data
-            will be saved.
+            input_directory (str): Path to the root directory containing site data.
+            output_directory (str): Path to the directory where processed data will be saved.
         """
         self.input_directory = Path(input_directory)
         self.output_directory = Path(output_directory)
@@ -124,19 +122,28 @@ class WindroseProcessor:
                     filename = (output_directory_path /
                                 f'{season_names[season_index]}_'
                                 f'{bin_set_index + 1}')
-                    analyzer.process_season_data(
-                        ndirections, wind_speed_bins, season_df, filename)
+                    self.save_output(analyzer, ndirections, wind_speed_bins, season_df, filename)
                 else:
-                    for time_index, time_period in (
-                            enumerate(day_night_intervals)):
+                    for time_index, time_period in enumerate(day_night_intervals):
                         season_time_df = season_df[
                             season_df['hour'].isin(time_period)]
                         filename = output_directory_path / (
                             f'{season_names[season_index]}_'
                             f'{time_names[time_index]}_{bin_set_index + 1}')
-                        analyzer.process_season_data(
-                            ndirections, wind_speed_bins, season_time_df,
-                            filename)
+                        self.save_output(analyzer, ndirections, wind_speed_bins, season_time_df, filename)
+
+    def save_output(self, analyzer, ndirections, wind_speed_bins, season_df, filename):
+        """
+        Save the output of the windrose analysis to a file.
+
+        Args:
+            analyzer (WindroseAnalysis): Instance of WindroseAnalysis to process data.
+            ndirections (int): Number of wind direction bins.
+            wind_speed_bins (array-like): Wind speed bins to use for analysis.
+            season_df (pandas.DataFrame): DataFrame containing the seasonal data.
+            filename (Path): Path to save the output file.
+        """
+        analyzer.process_season_data(ndirections, wind_speed_bins, season_df, filename)
 
 
 if __name__ == '__main__':
