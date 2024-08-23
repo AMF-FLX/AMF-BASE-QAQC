@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 
-class WindroseAnalysis:
+class WindDataAnalysis:
     def __init__(self, reference_north=90, reference_east=0):
         """
         Initialize WindroseAnalysis with reference directions.
