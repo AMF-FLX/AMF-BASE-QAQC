@@ -120,19 +120,18 @@ class WindroseProcessor:
         wind_speed_bins_list = [wind_speed_bins1, wind_speed_bins2]
 
         # Splitting site name based on underscore
-        filename_parts = input_file.name.split('_')
+        file_name_components = input_file.name.split('_')
 
-        site_id = filename_parts[1]  # Dynamically extract site ID
+        _, site_id, data_product, _ = file_name_components
 
         version = f'{year_start}_{year_end}'  # Define version based on years
-        if 'BASE' in input_file.name:
-            data_product = filename_parts[2].split('-')[
-                0]  # Extract data product info
-        elif 'FLUXNET' in input_file.name:
-            data_product = filename_parts[2]
+        if 'BASE' in data_product:
+            data_product_name = 'BASE'
+        elif 'FLUXNET' in data_product:
+            data_product_name = 'FLUXNET'
 
         output_directory_path = (self.output_directory / site_id /
-                                 data_product / version)
+                                 data_product_name / version)
 
         if not output_directory_path.exists():
             output_directory_path.mkdir(parents=True)
