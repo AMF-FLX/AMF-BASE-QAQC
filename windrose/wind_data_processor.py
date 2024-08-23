@@ -92,7 +92,7 @@ class WindroseProcessor:
         winter = [month_to_number['Dec'], month_to_number['Jan'],
                   month_to_number['Feb']]  # Winter
 
-        time_interval = 10
+        time_interval = 10       # time interval (10) in minutes
 
         # 6:00 AM to 6:00 PM
         daytime_hours = list(range(600, 1810, time_interval))
