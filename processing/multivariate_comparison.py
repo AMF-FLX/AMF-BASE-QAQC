@@ -47,7 +47,9 @@ class MultivariateComparison():
         self.fig_name_fmt = '{s}-{p}-{t}-{x}-{y}-{yr}.png'
         self._c_dt = self.ts_util.cast_as_datetime
         self.character_encoding = character_encoding
+        self.color_palette = self.plot_config.multivariate_palette
         self.tol = 10 ** -(sys.float_info.dig - 1)
+        self.statistics_rounding = 3
 
         if plot_dir:
             self.can_plot = True
@@ -576,7 +578,7 @@ class MultivariateComparison():
             check_stats[stat.get_qaqc_check()] = stat
 
             # Get slope
-            slope = round(fit.beta[0], 3)
+            slope = round(fit.beta[0], self.statistics_rounding)
             yearly_slopes[year] = slope
 
             yearly_sub_statuses[year] = check_stats
@@ -633,7 +635,7 @@ class MultivariateComparison():
                 yearly_sub_statuses[year][stat.get_qaqc_check()] = stat
 
                 # Get the slope
-                slope = round(fit.beta[0], 3)
+                slope = round(fit.beta[0], self.statistics_rounding)
                 yearly_slopes[year] = slope
 
                 overall_slope += fit.beta[0]
@@ -859,10 +861,10 @@ class MultivariateComparison():
             r2 = 1 - (fit.sum_square / ss_total_y)
 
             # Round the r2 value. Only display 1.00 if it is actually 1.00
-            if round(r2, 3) == 1.00 and r2 != 1.00:
+            if round(r2, self.statistics_rounding) == 1.00 and r2 != 1.00:
                 r2 = 0.999
             else:
-                r2 = round(r2, 3)
+                r2 = round(r2, self.statistics_rounding)
 
             # Check r2 thresholds
             if r2 == 1:
@@ -1089,24 +1091,39 @@ class MultivariateComparison():
         plt.close()
 
         fig, ax1 = plt.subplots()
+        fig.subplots_adjust(top=0.9)
         std_plt_args = {}
-        std_plt_args['linestyle'] = '--'
+        # std_plt_args['linestyle'] = '--'
         std_plt_args['linewidth'] = 2
-        plt.title('Slope of fit for {x} and {y}'.format(
-            x=x_label, y=y_label))
 
+        # Formatting title
+        text1 = 'Multivariate Comparison | '
+        text2 = f'Slope of fit for {x_label} and {y_label}'
+
+        renderer = fig.canvas.get_renderer()
+        bbox1 = fig.text(0, 0, text1, ha='left', va='top', fontsize=10
+                         ).get_window_extent(renderer=renderer)
+
+        fig.text(0.01, 0.99, text1, ha='left', va='top', fontsize=10)
+        fig.text(0.01 + bbox1.width / fig.bbox.width, 0.99, text2,
+                 ha='left', va='top', fontsize=10, fontweight='bold')
+
+        std_plt_args['linestyle'] = '-'
+        std_plt_args['fmt'] = 'o'
         std_plt_args['label'] = 'r2'
-        std_plt_args['color'] = 'b'
+        std_plt_args['color'] = self.color_palette[0]
         ax1.plot_date(dt_num, r2, **std_plt_args)
 
         # This is a hack for putting together legends for data on two axes
-        std_plt_args['label'] = 'fitted slope'
-        std_plt_args['color'] = 'k'
-        ax1.plot_date(dt_num[0], np.nan, **std_plt_args)
+        std_plt_args['linestyle'] = '--'
+        std_plt_args['fmt'] = 'D'
+        std_plt_args['label'] = 'Slope'
+        std_plt_args['color'] = self.color_palette[0]
+        # ax1.plot_date(dt_num[0], np.nan, **std_plt_args)
 
         # Set labels on plot
         ax1.set_ylabel('R2')
-        ax1.set_xlabel('Timestamp')
+        ax1.set_xlabel('Year')
         # Force x-axis to plot the same values as data points
         ax1.xaxis.set_ticks(dt_num)
 
@@ -1117,15 +1134,41 @@ class MultivariateComparison():
 
         fig.autofmt_xdate()
         plt.tight_layout()
-        # Shrink current axis's height by 10% on the bottom
         box = ax1.get_position()
-        ax1.set_position([box.x0, box.y0 + box.height * 0.1,
-                          box.width, box.height * 0.9])
-        ax2.set_position([box.x0, box.y0 + box.height * 0.1,
-                          box.width, box.height * 0.9])
-        # Put a legend below current axis
-        ax1.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2),
-                   ncol=5)
+        ax1.set_position([box.x0, box.y0,
+                          box.width, box.height * 0.8])
+        ax2.set_position([box.x0, box.y0,
+                          box.width, box.height * 0.8])
+
+        leg = fig.legend(loc='upper left', ncol=1, bbox_to_anchor=(0.01, 0.97),
+                         title='Plot Symbols', handletextpad=0.5,
+                         columnspacing=1.5, fontsize=7, frameon=True,
+                         title_fontproperties={'weight':'bold'})
+        leg._legend_box.align = "left"
+
+        bbox = leg.get_window_extent()
+        bbox = bbox.transformed(fig.dpi_scale_trans.inverted())
+
+        # Calculate the width of the main legend
+        legend_width = bbox.width
+        new_legend_x = 0.01 + legend_width / fig.get_size_inches()[0]
+
+        # Summary Statistics Legend
+        # deviated_years_label = f'Years {self.deviated_years} ' \
+        #     f'had relatively deviated regression slopes'
+        # deviated_slopes_label = f'Diff ({len(self.deviated_slopes)}): ' \
+        #     f'{self.deviated_slopes}'
+
+        # handles_analysis = [mlines.Line2D([], [], linestyle='',
+        #                                   label=deviated_years_label),
+        #                     mlines.Line2D([], [], linestyle='',
+        #                                   label=deviated_slopes_label)]
+        # labels_analysis = [deviated_years_label, deviated_slopes_label]
+        # leg_stats = plt.figlegend(handles_analysis, labels_analysis,
+        #                           loc='upper left', ncol=1,
+        #                           bbox_to_anchor=(new_legend_x, 0.97),
+        #                           title='Summary Statistics', fontsize=5)
+        # leg_stats.get_title().set_fontweight('bold')
 
         # rename x and y to variable name
         fig_name = self.fig_name_fmt.format(
@@ -1147,10 +1190,30 @@ class MultivariateComparison():
             s=masked_ts[0][0], e=masked_ts[-1][-1]))
         plot_log.info(info_msg)
 
-        # Setup plot
-        fig = plt.figure(figsize=(12, 18))  # Create figure
-        fig.suptitle('Analysis of {x} and {y}'.format(x=x_label, y=y_label),
-                     fontsize=self.plot_config.plot_suptitle_fontsize)
+        text1 = 'Multivariate Comparison | '
+        text2 = f'{x_label} and {y_label}'
+        text3 = f' | {yr}'
+
+        # Create a figure to calculate text widths
+        fig = plt.figure(figsize=(12, 18))
+
+        # Calculate the widths of each text segment
+        renderer = fig.canvas.get_renderer()
+        bbox1 = fig.text(0, 0, text1, ha='left', va='top',
+                         fontsize=16).get_window_extent(renderer=renderer)
+        bbox2 = fig.text(0, 0, text2, ha='left', va='top',
+                         fontsize=16, fontweight='bold'
+                         ).get_window_extent(renderer=renderer)
+
+        # Starting x position
+        x_start = 0.03
+
+        # Set the text positions dynamically based on the calculated widths
+        fig.text(x_start, 0.99, text1, ha='left', va='top', fontsize=16)
+        fig.text(x_start + bbox1.width / fig.bbox.width, 0.99,
+                 text2, ha='left', va='top', fontsize=16, fontweight='bold')
+        fig.text(x_start + (bbox1.width + bbox2.width) / fig.bbox.width,
+                 0.99, text3, ha='left', va='top', fontsize=16)
 
         # First plot
         self.plot(
@@ -1163,8 +1226,8 @@ class MultivariateComparison():
         # yy = self.lin_reg_linear_function(fit, xx)
 
         # Plot fitted regression line
-        self.plot(xx, yy, color='g', marker='', subplot_pos=(3, 1, 1),
-                  linestyle='-', linewidth=1, is_plot_date=False)
+        self.plot(xx, yy, color=self.color_palette[0], marker='', subplot_pos=(3, 1, 1),
+                  linestyle='-', linewidth=1.5, is_plot_date=False)
 
         # Process outliers
         o_x_ls = []
@@ -1178,7 +1241,7 @@ class MultivariateComparison():
             o_ts_ls.append(self.ts_util.timestamp_str_to_num(o_ts[0]))
 
         # Plot outliers
-        self.plot(o_x_ls, o_y_ls, color='r', marker_size=10,
+        self.plot(o_x_ls, o_y_ls, color=self.color_palette[1], marker_size=10,
                   marker_fill=False, is_plot_date=False, subplot_pos=(3, 1, 1))
 
         # Create timestamp map for non-masked values
@@ -1190,25 +1253,25 @@ class MultivariateComparison():
 
         # Plot outliers for 2nd graph
         self.plot(
-            o_ts_ls, o_x_ls, color='r', marker_size=10, marker_fill=False,
-            subplot_pos=(3, 1, 2))
+            o_ts_ls, o_x_ls, color=self.color_palette[1], marker_size=10,
+            marker_fill=False, subplot_pos=(3, 1, 2))
 
         # Plot third graph
         self.plot(dt_num, y_val, ts_label, y_label, subplot_pos=(3, 1, 3))
 
         # Plot outliers for third graph
         self.plot(
-            o_ts_ls, o_y_ls, color='r', marker_size=10, marker_fill=False,
-            subplot_pos=(3, 1, 3))
+            o_ts_ls, o_y_ls, color=self.color_palette[1], marker_size=10,
+            marker_fill=False, subplot_pos=(3, 1, 3))
 
         # Set labels and colors for points
         # (label, facecolor, edgecolor)
-        legendInfo = [
-            ('data', '0.75', '0.75'), ('potential outliers', 'None', 'r')]
+        legendInfo = [('data', '0.75', '0.75'),
+                      ('potential outliers', 'None', self.color_palette[1])]
 
         # convert legend info to Line Objs
         handles = [mlines.Line2D(
-            [], [], color="None", marker='o', markersize=10, label=l,
+            [], [], color='None', marker='o', markersize=10, label=l,
             markerfacecolor=fc, markeredgecolor=ec)
             for (l, fc, ec) in legendInfo]
         labels = [l for (l, fc, ec) in legendInfo]
@@ -1216,9 +1279,47 @@ class MultivariateComparison():
         # Add labels and colors for point styling
         reg_label = 'Linear Regression between {x} and {y}'.format(
             x=x_label, y=y_label)
-        handles += [mlines.Line2D([], [], color='g', label=reg_label)]
+        handles += [mlines.Line2D([], [], color=self.color_palette[0], label=reg_label)]
         labels += [reg_label]
-        plt.figlegend(handles, labels, loc='lower center', ncol=3)
+
+        # Calculating analysis details for legend
+        _, ss_total_y = self.compute_sum_of_squares(
+            masked_x, masked_y)
+        r2 = 1 - (fit.sum_square / ss_total_y)
+        num_flagged = len(outlier_ls)
+        total_points = len(masked_x)
+        percent_flagged = round((num_flagged / total_points) * 100, 2)
+
+        flagged_label = f'Flagged data points = ' \
+            f'{num_flagged}/{total_points} ({percent_flagged}%)'
+        analysis_label = ("Slope = {slope}, "
+        "intercept = {intercept}, R2 = {r2}").format(
+            slope=round(fit.beta[0], self.statistics_rounding),
+            intercept=round(fit.beta[1], self.statistics_rounding),
+            r2=round(r2, self.statistics_rounding))
+
+        handles_analysis = [mlines.Line2D([], [],
+                                          linestyle='', label=flagged_label),
+                            mlines.Line2D([], [], linestyle='',
+                                          label=analysis_label)]
+        labels_analysis = [flagged_label, analysis_label]
+
+        leg = plt.figlegend(handles, labels, loc='upper left',
+                            ncol=1, bbox_to_anchor=(0.01, 0.97),
+                            title='Plot Symbols')
+        leg.get_title().set_fontweight('bold')
+        bbox = leg.get_window_extent()
+        bbox = bbox.transformed(fig.dpi_scale_trans.inverted())
+
+        #  Calculate the width of the main legend
+        legend_width = bbox.width
+        new_legend_x = 0.01 + legend_width / fig.get_size_inches()[0]
+        leg_stats = plt.figlegend(handles_analysis,
+                                  labels_analysis, loc='upper left',
+                                  ncol=1,
+                                  bbox_to_anchor=(new_legend_x, 0.97),
+                                  title='Summary Statistics')
+        leg_stats.get_title().set_fontweight('bold')
 
         fig_name = self.fig_name_fmt.format(
             s=self.site_id, p=self.process_id, t=self.qaqc_name,

@@ -52,6 +52,8 @@ class PhysicalRange:
         self.plot_config = PlotConfig()
         self.ts_util = TimestampUtil()
         config = ConfigParser()
+        self.color_palette = self.plot_config.physical_palette
+
 
         if plot_dir:
             self.can_plot = True
@@ -327,21 +329,25 @@ class PhysicalRange:
         error_outliers, warning_outliers = \
             self.identify_outliers(x_data, y_data, var_obj)
         if error_outliers:
-            ax.plot_date(error_outliers[0], error_outliers[1],
-                         'o', markersize=6, markeredgewidth=1,
-                         markerfacecolor='None', markeredgecolor='r')
+            ax.plot_date(error_outliers[0], error_outliers[1], 'o',
+                         markersize=6, markeredgewidth=1,
+                         markerfacecolor='None',
+                         markeredgecolor=self.color_palette[1])
+
         if warning_outliers:
-            ax.plot_date(warning_outliers[0], warning_outliers[1],
-                         'o', markersize=6, markeredgewidth=1,
-                         markerfacecolor='None', markeredgecolor='orange')
+            ax.plot_date(warning_outliers[0], warning_outliers[1], 'o',
+                         markersize=6, markeredgewidth=1,
+                         markerfacecolor='None',
+                         markeredgecolor=self.color_palette[0])
+
         ax.axhline(y=var_obj.max_lim, linestyle='-',
-                   linewidth=1, color='orange')
+                   linewidth=1.5, color=self.color_palette[0])
         ax.axhline(y=var_obj.min_lim, linestyle='-',
-                   linewidth=1, color='orange')
+                   linewidth=1.5, color=self.color_palette[0])
         ax.axhline(y=var_obj.error_max, linestyle='-',
-                   linewidth=1, color='r')
+                   linewidth=1.5, color=self.color_palette[1])
         ax.axhline(y=var_obj.error_min, linestyle='-',
-                   linewidth=1, color='r')
+                   linewidth=1.5, color=self.color_palette[1])
 
     def plot(self, var_obj, year):
         start, end = self.annual_idx[year]['start'], \
@@ -352,8 +358,29 @@ class PhysicalRange:
         fig, (subplot1, subplot2) = plt.subplots(
             2, 1, figsize=(12, 13))  # Create figure
         y_name = year.replace("_", " ")
-        fig.suptitle(f'Physical Range of {var_obj.name} throughout {y_name}',
-                     fontsize=self.plot_config.plot_suptitle_fontsize)
+
+        text1 = 'Physical Range | '
+        text2 = f'{var_obj.name}'
+        text3 = f' | {y_name}'
+
+        # Calculate the widths of each text segment
+        renderer = fig.canvas.get_renderer()
+        bbox1 = fig.text(0, 0, text1, ha='left', va='top',
+                         fontsize=16).get_window_extent(renderer=renderer)
+        bbox2 = fig.text(0, 0, text2, ha='left', va='top',
+                         fontsize=16, fontweight='bold'
+                         ).get_window_extent(renderer=renderer)
+
+        # Starting x position
+        x_start = 0.01
+
+        # Set the text positions dynamically based on the calculated widths
+        fig.text(x_start, 0.99, text1, ha='left', va='top', fontsize=16)
+        fig.text(x_start + bbox1.width / fig.bbox.width, 0.99,
+                 text2, ha='left', va='top', fontsize=16, fontweight='bold')
+        fig.text(x_start + (bbox1.width + bbox2.width) / fig.bbox.width,
+                 0.99, text3, ha='left', va='top', fontsize=16)
+
         self.make_plot(subplot1, time_data, annual_data, var_obj,
                        year, thresholds=True)
         self.make_plot(subplot2, time_data, annual_data, var_obj,
@@ -363,30 +390,42 @@ class PhysicalRange:
         lab_err = (f'Expected Range +/- {margin_percent}% '
                    f'({var_obj.error_min}-{var_obj.error_max})')
 
-        legend_info = [('orange', lab_warn), ('r', lab_err)]
-        handles = [mlines.Line2D([], [], color=c, label=l)
-                   for c, l in legend_info]  # convert legend info to Patches
-        labels = [l for c, l in legend_info]
+        legend_info = [(self.color_palette[0], lab_warn), (self.color_palette[1], lab_err)]
+        handles = [mlines.Line2D([], [], color='None', marker='o',
+                                markerfacecolor='0.75',
+                                markeredgecolor='None',
+                                markersize=10, label='Data')]
+        labels = ['Data']
+
+        for color, label in legend_info:
+            handles.append(mlines.Line2D([], [], color=color, label=label))
+            labels.append(label)
 
         # Add labels and colors for point styling
-        handles += [mlines.Line2D([], [], color='None', marker='o',
-                                  markerfacecolor='0.75', markersize=10,
-                                  label='data'),
-                    mlines.Line2D([], [], color='None', marker='o',
-                                  markerfacecolor='None',
-                                  markeredgecolor='orange',
-                                  markersize=10,
-                                  label=('data outside the expected '
-                                         'physical range')),
-                    mlines.Line2D([], [], color='None', marker='o',
-                                  markerfacecolor='None', markeredgecolor='r',
-                                  markersize=10,
-                                  label=(
-                                      'data outside the expected physical '
-                                      f'range +/- {margin_percent}%'))]
-        labels += ['data', 'data outside the expected physical range',
-                   'data outside the expected physical range']
-        fig.legend(handles, labels, loc='lower center', ncol=2)
+        handles += [
+            mlines.Line2D([], [], color='None', marker='o',
+                          markerfacecolor='None',
+                          markeredgecolor=self.color_palette[0],
+                          markersize=10,
+                          label=('Data outside the expected '
+                                 'physical range')),
+            mlines.Line2D([], [], color='None', marker='o',
+                          markerfacecolor='None',
+                          markeredgecolor=self.color_palette[1],
+                          markersize=10,
+                          label=(
+                              'Data outside the expected physical '
+                              f'range +/- {margin_percent}%'))]
+
+        labels += ['Data outside the expected physical range',
+                   'Data outside the expected physical range']
+        leg = fig.legend(handles, labels, loc='upper left',
+                         ncol=2, bbox_to_anchor=(0.01, 0.97),
+                         title='Plot Symbols', handletextpad=0.5,
+                         columnspacing=1.5, fontsize='small',
+                         frameon=True,
+                         title_fontproperties={'weight':'bold'})
+        leg._legend_box.align = "left"
 
         fig_name = self.fig_name_fmt.format(y=var_obj.name, year=year,
                                             s=self.site_id, p=self.process_id)

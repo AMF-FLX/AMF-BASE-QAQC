@@ -15,6 +15,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib import gridspec
 from matplotlib import pyplot as plt
 from matplotlib import ticker as plticker
+import matplotlib.lines as mlines
 from output_stats import OutputStats
 from plot_config import PlotConfig
 from status import StatusCode, StatusGenerator
@@ -188,7 +189,9 @@ class TimestampAlignment(object):
         data = data_reader.get_filled_data()
         t_start_label = 'TIMESTAMP_START'
         sw_in_pot_label = 'SW_IN_POT'
-        color_palette = self.plot_config.hi_contrast_palette
+        # color_palette = self.plot_config.hi_contrast_palette
+        color_palette = self.plot_config.timestamp_lines_palette
+        timestamp_palette = self.plot_config.timestamp_palette
         _c_dt = self.ts_util.cast_as_datetime
         radiation_variables_ext = radiation_variables + [sw_in_pot_label, ]
         status_objects = []
@@ -305,18 +308,34 @@ class TimestampAlignment(object):
             output_filename = f'{output_fname_template}_{year}.png'
             fig_filename = os.path.join(output_dir, output_filename)
             figure = plt.figure()
-            suptitle = f'Timestamp Alignment Analysis for year {year}'
-            figure.suptitle(suptitle,
-                            fontsize=self.plot_config.plot_title_fontsize)
+
+            text1 = 'Timestamp Alignment Analysis | '
+            text2 = f'{year}'
+
+            # Calculate the widths of each text segment
+            renderer = figure.canvas.get_renderer()
+            bbox1 = figure.text(0, 0, text1, ha='left',
+                                va='top', fontsize=16,
+                                fontweight='bold'
+                                ).get_window_extent(renderer=renderer)
+
+            # Starting x position
+            x_start = 0.03
+
+            # Set the text positions dynamically based on the calculated widths
+            figure.text(x_start, 0.99, text1, ha='left',
+                        va='top', fontsize=16, fontweight='bold')
+            figure.text(0.22, 0.99, text2, ha='left', va='top', fontsize=16)
+
             figure.text(
-                0.5, .95, 'DATE_START - DATE_END', ha='center', va='center')
+                0.5, .94, 'DATE_START - DATE_END', ha='center', va='center')
             figure.set_figwidth(self.fig_width)
             figure.set_figheight(self.fig_height)
-            figure.text(0.5, 0.04, t_start_label, ha='center', va='center')
+            figure.text(0.5, 0.01, t_start_label, ha='center', va='center')
             canvas = FigureCanvas(figure)
             gs = gridspec.GridSpec(self.n_row, self.n_col)
             gs.update(
-                left=0.06, right=0.96, top=0.94, bottom=0.08,
+                left=0.06, right=0.96, top=0.91, bottom=0.05,
                 hspace=0.01, wspace=0.01)
             unique_hours = np.unique(hours)
             unique_minutes = np.unique(minutes)
@@ -332,8 +351,8 @@ class TimestampAlignment(object):
                 ax = plt.subplot(gs[i // self.n_col, i % self.n_col])
                 ax.set_ylim(-100, 1500)
                 props = dict(
-                    boxstyle='round', facecolor='#eae3dd',
-                    edgecolor='none', alpha=0.7)
+                    boxstyle='round', facecolor='none',
+                    edgecolor='none')
                 end_ts = start_ts + dt.timedelta(days=self.doy_interval)
                 if (end_ts + dt.timedelta(days=self.doy_interval)).year > year:
                     end_date = self.ts_util.get_ISO_date_from_datetime(
@@ -347,7 +366,7 @@ class TimestampAlignment(object):
                 ax.text(
                     0.5, .98, f'{start_date} - {end_date}',
                     transform=ax.transAxes, fontsize=12, ha='center', va='top',
-                    color='#997755', bbox=props)
+                    color=color_palette[0], bbox=props)
 
                 # Reassign first timestamp for next window
                 start_ts = end_ts
@@ -414,10 +433,10 @@ class TimestampAlignment(object):
                     ts_doy_center = ts_start[0:step]
 
                     if rem_sw_in_data is not None:
-                        leg_pot, = ax.plot_date(
+                        leg_pot, = ax.plot(
                             ts_doy_center, rem_sw_in_data[ptr:ptr+step],
-                            lw=1.0, ls='-', marker='.', markersize=3,
-                            color='red', markeredgecolor='red',
+                            fmt='.', lw=1.0, ls='-', markersize=3,
+                            color=timestamp_palette[1], markeredgecolor=timestamp_palette[1],
                             alpha=1.0, label=sw_in_pot_label)
                     continue
                 else:
@@ -450,10 +469,10 @@ class TimestampAlignment(object):
                         #     data[mask_doy_center][sw_in_pot_label]
                         data_doy_center_sw_in_pot = np.asarray(sw_in_pot_data)
 
-                leg_pot, = ax.plot_date(
+                leg_pot, = ax.plot(
                     ts_doy_center, data_doy_center_sw_in_pot,
                     linewidth=1.0, linestyle='-', marker='.', markersize=3,
-                    fmt='r', markeredgecolor='red',
+                    color=timestamp_palette[1], markeredgecolor=timestamp_palette[1],
                     alpha=1.0, label=sw_in_pot_label)
 
                 # get max values for the radiation variables
@@ -464,64 +483,68 @@ class TimestampAlignment(object):
 
                 leg_vars = {}
                 leg_vars_less = {}
-
+                index = 0
                 for i, var in enumerate(radiation_variables):
                     annual_var_data[var].extend(range_maxs[var])
                     var_data = np.asarray(range_maxs[var])
-                    leg_vars[var], = ax.plot_date(
-                        ts_doy_center, var_data, linewidth=1.0,
-                        fmt='.-', markersize=3,
-                        color=color_palette[i],
-                        markeredgecolor=color_palette[i],
-                        alpha=1.0, label=var)
-                    nighttime = []
-                    daytime = []
-                    idx = 0
-                    daytime_mode = False
-                    while idx < n_sw_in_pot:
-                        cur_val = var_data[idx]
-                        # determine day or night
-                        # skipping the transition timestamp along with the
-                        # one prior and after the transition
-                        if idx + 2 < n_sw_in_pot:
-                            # for the transition to day:
-                            # the cur_val is before the transition (==0)
-                            if (sw_in_pot_data[idx] == 0
-                                    # the one ahead is the transition (>0)
-                                    and sw_in_pot_data[idx+1] > 0
-                                    # the one 2 ahead is light (>0)
-                                    and sw_in_pot_data[idx+2] > 0):
-                                # switch to daytime
-                                daytime_mode = True
-                                # set index beyond the transition
-                                idx += 3
-                                # skip cur_val and jump beyond transition
-                                # thus 3 timesteps are skipped
-                                continue
-                            # for transition back to night
-                            # if the cur_val > 0
-                            if (sw_in_pot_data[idx] > 0
-                                    # the one ahead is the transition (>0)
-                                    and sw_in_pot_data[idx+1] > 0
-                                    # the one 2 ahead is dark (==0)
-                                    and sw_in_pot_data[idx+2] == 0):
-                                # switch to night
-                                daytime_mode = False
-                                # set index beyond transition
-                                idx += 3
-                                # skip cur_val and jump beyond transition
-                                # thus 3 timesteps are skipped
-                                continue
-                        if daytime_mode and not np.isnan(cur_val):
-                            daytime.append(cur_val > sw_in_pot_data[idx])
-                        else:
-                            if not np.isnan(cur_val):
-                                # Flag a night time point if it is > SW_IN_POT
-                                # and > than the night buffer value
-                                nighttime.append(
-                                    cur_val > sw_in_pot_data[idx] and
-                                    cur_val > self.night_buffer)
-                        idx += 1
+                    if var in top_level_rad_vars:
+                        leg_vars[var], = ax.plot_date(
+                            ts_doy_center, var_data, linewidth=1.0,
+                            fmt='.-', markersize=3,
+                            color=color_palette[index],
+                            markeredgecolor=color_palette[index],
+                            alpha=1.0, label=var)
+                        index += 1
+
+                        nighttime = []
+                        daytime = []
+                        idx = 0
+                        daytime_mode = False
+                        while idx < n_sw_in_pot:
+                            cur_val = var_data[idx]
+                            # determine day or night
+                            # skipping the transition timestamp along with the
+                            # one prior and after the transition
+                            if idx + 2 < n_sw_in_pot:
+                                # for the transition to day:
+                                # the cur_val is before the transition (==0)
+                                if (sw_in_pot_data[idx] == 0
+                                        # the one ahead is the transition (>0)
+                                        and sw_in_pot_data[idx+1] > 0
+                                        # the one 2 ahead is light (>0)
+                                        and sw_in_pot_data[idx+2] > 0):
+                                    # switch to daytime
+                                    daytime_mode = True
+                                    # set index beyond the transition
+                                    idx += 3
+                                    # skip cur_val and jump beyond transition
+                                    # thus 3 timesteps are skipped
+                                    continue
+                                # for transition back to night
+                                # if the cur_val > 0
+                                if (sw_in_pot_data[idx] > 0
+                                        # the one ahead is the transition (>0)
+                                        and sw_in_pot_data[idx+1] > 0
+                                        # the one 2 ahead is dark (==0)
+                                        and sw_in_pot_data[idx+2] == 0):
+                                    # switch to night
+                                    daytime_mode = False
+                                    # set index beyond transition
+                                    idx += 3
+                                    # skip cur_val and jump beyond transition
+                                    # thus 3 timesteps are skipped
+                                    continue
+                            if daytime_mode and not np.isnan(cur_val):
+                                daytime.append(cur_val > sw_in_pot_data[idx])
+                            else:
+                                if not np.isnan(cur_val):
+                                    # Flag a night time point if it
+                                    # is > SW_IN_POT
+                                    # and > than the night buffer value
+                                    nighttime.append(
+                                        cur_val > sw_in_pot_data[idx] and
+                                        cur_val > self.night_buffer)
+                            idx += 1
                     daytime_comps[var].extend(daytime)
                     nighttime_comps[var].extend(nighttime)
                     if full_doy_center:
@@ -539,13 +562,14 @@ class TimestampAlignment(object):
                             idx += 1
                     var_data[np.invert(var_data_lt)] = np.nan
 
-                    leg_vars_less[var], = ax.plot_date(
-                        ts_doy_center, var_data, linewidth=1.0,
-                        fmt='o', linestyle='', markersize=8,
-                        color=color_palette[i],
-                        markeredgecolor=color_palette[i],
-                        markeredgewidth=1.5, markerfacecolor='none',
-                        alpha=1.0, label=var)
+                    if var in top_level_rad_vars:
+                        leg_vars_less[var], = ax.plot_date(
+                            ts_doy_center, var_data, linewidth=1.0,
+                            fmt='o', linestyle='', markersize=8,
+                            color=timestamp_palette[0],
+                            markeredgecolor=timestamp_palette[0],
+                            markeredgewidth=1.5, markerfacecolor=timestamp_palette[0],
+                            alpha=0.3, label=var)
 
             has_valid_plt = sum(v == [] for v in annual_var_data.values()) == 0
             if has_valid_plt:
@@ -750,17 +774,41 @@ class TimestampAlignment(object):
 
             decorators = [leg_pot, ]
             labels = [sw_in_pot_label, ]
-            for var in radiation_variables:
+            # for var in radiation_variables:
+            for var in top_level_rad_vars:
+
                 decorators += [leg_vars[var], leg_vars_less[var]]
                 labels += [var, f'{var} > {sw_in_pot_label}']
             corr_annotation = '\n'.join(text)
             yr_log.info('\n' + corr_annotation)
-            figure.text(.975, .975, corr_annotation, ha='right', va='center')
             # TODO: Subtract 3 to stay within figure. Should use a better way.
-            figure.legend(
-                decorators, labels, loc='lower center',
-                ncol=min(len(radiation_variables)*2 + 1,
-                         (self.fig_width // 2) - 3))
+            leg = figure.legend(
+                decorators, labels, loc=(0.03, 0.92),
+                ncol=2, title="Plot Symbol")
+            leg.get_title().set_fontweight('bold')
+
+            # Calculate the width of the main legend
+            bbox1 = leg.get_window_extent()
+            bbox1 = bbox1.transformed(figure.dpi_scale_trans.inverted())
+            figure_width = figure.get_size_inches()[0]
+
+            # Calculate the new position for the second legend
+            new_legend_x = bbox1.x1 / figure_width
+
+            # Create the second legend
+            summary_label = corr_annotation
+            handles_analysis = [mlines.Line2D([], [], linestyle='',
+                                              marker='', color='blue',
+                                              label=summary_label)]
+            labels_analysis = [summary_label]
+
+            # Create a figure legend and place it manually
+            leg_stats = plt.figlegend(
+                handles_analysis, labels_analysis, loc='upper left',
+                ncol=1, bbox_to_anchor=(new_legend_x, 0.98),
+                title='Summary Statistics', fontsize=7
+            )
+            leg_stats.get_title().set_fontweight('bold')
 
             if show and has_valid_plt:
                 yr_log.info(f'Timestamp shift: showing {year}')

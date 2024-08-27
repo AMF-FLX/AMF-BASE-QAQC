@@ -62,6 +62,12 @@ class PlotConfig():
         "#D25B88", "#5B656C", "#00B57F", "#545C46", "#866097", "#365D25",
         "#252F99", "#00CCFF", "#674E60", "#FC009C", "#FFFF00"]
 
+    timestamp_lines_palette = ["#000000", "#757575"]
+    timestamp_palette = ['#B21B00', "#4D91FE"]
+    diurnal_palette = ['#000000', '#9B51E0']
+    physical_palette = ['#FFAE00', '#B21B00']
+    multivariate_palette = ['#4D91FE', '#9B51E0']
+
     def __init__(self, setup=True):
         """Constructor
         :param setup: Used to determine if setup() is called.
@@ -192,7 +198,9 @@ class PlotConfig():
             plot_title = None
 
         if plot_title:
-            ax.set_title(plot_title, fontsize=self.plot_title_fontsize)
+            ax.text(0.5, 0.96, plot_title, ha='center', va='center',
+                    fontsize=self.plot_title_fontsize, transform=ax.transAxes)
+            ax.set_title('')
 
         if is_plot_date:
             plot_func = ax.plot_date
@@ -209,4 +217,5 @@ class PlotConfig():
             'mfc': mf_color,
         }
         fmt = '{marker}{linestyle}'.format(marker=marker, linestyle=linestyle)
-        return plot_func(x_vals, y_vals, fmt, **plot_args)
+        lines = plot_func(x_vals, y_vals, fmt, **plot_args)
+        return ax, lines

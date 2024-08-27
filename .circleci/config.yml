@@ -34,7 +34,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1.2-dependencies-{{ checksum "requirements.txt" }}
+          - v1.1-dependencies-{{ checksum "requirements.txt" }}
           # Use latest cache if no exact match found
           - v1-dependencies-
       - run:
@@ -48,7 +48,7 @@ jobs:
       - save_cache:
           paths:
              - ./venv
-          key: v1.2-dependencies-{{ checksum "requirements.txt" }}
+          key: v1.1-dependencies-{{ checksum "requirements.txt" }}
       - run:
           name: Run Pytests
           command: |
