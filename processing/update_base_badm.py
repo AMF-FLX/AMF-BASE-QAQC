@@ -428,7 +428,7 @@ class UpdateBASEBADM():
                     try:
                         self.report_status.enter_new_state(
                             process_id=process_id,
-                            state_id=self.process_states.base_candidate_states(
+                            state_id=self.process_states.get_process_state(
                                 ProcessStates.UpdatedBASEBADM))
                         info_msg = ('Wrote report_status UpdatedBASEBADM '
                                     f'for processID {process_id} '
