@@ -1,5 +1,11 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v2.1.4
+*2024 Sept 09*
+
+New in this release:
+- Bug fixes in the publish mode.
+
 ### QAQC v2.1.3
 *2024 Jul 31*
 
