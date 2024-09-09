@@ -162,7 +162,7 @@ class NewDBHandler:
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             pre_query = SQL(
                 'SELECT o.aggregate_file_path, s.process_id, '
-                'p.publishing_code_version '
+                'l.processing_code_version '
                 'FROM qaqc.processing_log l '
                 'INNER JOIN ('
                 'SELECT s.process_id, s.state_id '
@@ -180,9 +180,7 @@ class NewDBHandler:
             post_query = SQL(
                 ') s ON s.process_id = l.log_id '
                 'INNER JOIN qaqc.process_summarized_output o '
-                'ON o.process_id = l.log_id '
-                'LEFT JOIN qaqc.publishing_log p '
-                'ON p.process_id = l.log_id ')
+                'ON o.process_id = l.log_id')
             query = self.define_base_candidates_query(
                 pre_query=pre_query,
                 post_query=post_query,
