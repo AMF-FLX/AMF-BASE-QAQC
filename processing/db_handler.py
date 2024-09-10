@@ -189,7 +189,7 @@ class NewDBHandler:
                 cursor.execute(query, state_ids)
                 for row in cursor:
                     candidate_filepath = row.get('aggregate_file_path')
-                    code_version = row.get('publishing_code_version')
+                    code_version = row.get('processing_code_version')
                     process_id = row.get('process_id')
                     # Remap paths if codeVersion is prior to version 1.1.0
                     if code_version and code_version < '1.1.0':
