@@ -1309,7 +1309,9 @@ class FileFixer:
         upload_info_url = self.upload_ws1
         try:
             payload_json = json.dumps(payload)
-            response = requests.post(url=upload_info_url, data=payload_json)
+            response = requests.post(
+                url=upload_info_url, data=payload_json,
+                headers={'Content-Type': 'application/json'})
             if response.status_code == HTTPStatus.OK:
                 return response.json(), None
             return None, response.json()
