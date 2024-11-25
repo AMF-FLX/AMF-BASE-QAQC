@@ -1,5 +1,13 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v2.1.6
+*2024 Nov 25*
+
+New in this release:
+- Updates to support AmeriFlux web services v2.
+- Updates to run Format QAQC with pymssql removed.
+- Documentation for testing Format QAQC manually.
+
 ### QAQC v2.1.5
 *2024 Sept 10*
 
