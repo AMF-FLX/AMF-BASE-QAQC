@@ -5,7 +5,6 @@ import csv
 import datetime as dt
 import math
 import matplotlib.lines as mlines
-import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import matplotlib.ticker as plticker
 import numpy as np
@@ -50,7 +49,9 @@ class DiurnalSeasonalPattern():
         self.resolution = resolution
         self.process_id = process_id
         self.gray_color = '.75'
-        self.color_palette = ('k', 'r', 'c', 'm')
+        # self.color_palette = ('k', 'r', 'c', 'm')
+        self.color_palette = self.plot_config.diurnal_palette
+
         self.hist_dir_path, self.outer_band_error_threshold, \
             self.outer_band_warning_threshold, \
             self.inner_band_error_threshold, \
@@ -193,22 +194,31 @@ class DiurnalSeasonalPattern():
         legend_color_map = {self._calculated_median: self.color_palette[0]}
         if hist_ver:
             for n in range(len(self.hist_names)):
-                legend_color_map[self.hist_names[n]] = self.color_palette[
-                    (n % 3) + 1]
+                # legend_color_map[self.hist_names[n]] = self.color_palette[
+                #     (n % 3) + 1]
+                legend_color_map[self.hist_names[n]] = self.color_palette[1]
             for k, v in self.hist_names_map.items():
                 v = v.format(ver=hist_ver)
-                legend_info.append((legend_color_map.get(k), v))
+                if k == 'MEDIAN' or k == self._calculated_median:
+                    linewidth = 3
+                elif k == 'LOWER1' or k == 'UPPER1':
+                    linewidth = 2
+                else:
+                    linewidth = 1
+                legend_info.append((legend_color_map.get(k), v, linewidth))
+
         else:
             legend_info.append(
                 (legend_color_map.get(self._calculated_median),
-                 self.hist_names_map.get(self._calculated_median)))
-        handles = [mpatches.Patch(color=c, label=l) for c, l in legend_info]
-        labels = [l for c, l in legend_info]
-        handles += [mlines.Line2D(
-            [], [], color='None', marker='o',
+                 self.hist_names_map.get(self._calculated_median), 2))
+        handles = [mlines.Line2D(
+            [], [], color='None', marker='o', markeredgecolor='None',
             markerfacecolor='0.75', markersize=10, label='data')]
-        labels += ['current data']
-
+        labels = ['Current Data']
+        for c, l, width in legend_info:
+            handle = mlines.Line2D([], [], color=c, lw=width)
+            handles.append(handle)
+        labels += [l for c, l, w in legend_info]
         return handles, labels
 
     def process_by_year(self, var_name, site_id, var_log,
@@ -231,14 +241,39 @@ class DiurnalSeasonalPattern():
 
         # Setup plot attributes
         fig.set_size_inches(16, 12)
-        suptitle = ('Diurnal Seasonal Pattern Analysis '
-                    f'of {var_name} for year {year}')
-        fig.suptitle(suptitle, fontsize=self.plot_config.plot_title_fontsize)
+        # suptitle = ('Diurnal Seasonal Pattern Analysis '
+        #             f'of {var_name} for year {year}')
+        # fig.suptitle(suptitle, fontsize=self.plot_config.plot_title_fontsize)
+
+        text1 = 'Diurnal Seasonal Pattern Analysis | '
+        text2 = f'{var_name}'
+        text3 = f' | {year}'
+
+        # Calculate the widths of each text segment
+        renderer = fig.canvas.get_renderer()
+        bbox1 = fig.text(0, 0, text1, ha='left',
+                         va='top', fontsize=16
+                         ).get_window_extent(renderer=renderer)
+        bbox2 = fig.text(0, 0, text2, ha='left',
+                         va='top', fontsize=16, fontweight='bold'
+                         ).get_window_extent(renderer=renderer)
+
+        # Starting x position
+        x_start = 0.01
+
+        # Set the text positions dynamically based on the calculated widths
+        fig.text(x_start, 0.99, text1, ha='left', va='top', fontsize=16)
+        fig.text(x_start + bbox1.width / fig.bbox.width,
+                 0.99, text2, ha='left', va='top',
+                 fontsize=16, fontweight='bold')
+        fig.text(x_start + (bbox1.width + bbox2.width) / fig.bbox.width,
+                 0.99, text3, ha='left', va='top', fontsize=16)
+        plt.subplots_adjust(top=0.80)
 
         # Set common labels
         base_var_name = self.d.get_base_header(var_name)
         y_axis_label = var_name + ' (' + self.fp_vars.get(base_var_name) + ')'
-        fig.text(0.5, .93, 'DATE_START - DATE_END', ha='center', va='center')
+        fig.text(0.5, 0.85, 'Date Start - Date End', ha='center', va='center')
         fig.text(0.5, 0.05, 'TIMESTAMP_START', ha='center', va='center')
         fig.text(0.09, 0.5, y_axis_label,
                  ha='center', va='center', rotation='vertical')
@@ -289,7 +324,11 @@ class DiurnalSeasonalPattern():
                 _c_dt(cur_interval_ts[-1]), self.ts_util.DATE_ONLY_TS_FORMAT)
             subplot_title = f'{start_date} - {end_date}'
 
-            cur_axarr.set_title(subplot_title, fontsize=12)
+            cur_axarr.set_title('')
+
+            # Place the title inside the plot area
+            cur_axarr.text(0.5, 0.95, subplot_title, ha='center', va='center',
+                           fontsize=12, transform=cur_axarr.transAxes)
             # Set x-axis limit (24.9 is to prevent axis with overlapping text)
             cur_axarr.set_xlim(-1, 25)
             cur_axarr.plot(
@@ -372,13 +411,16 @@ class DiurnalSeasonalPattern():
             e = idx[-1]
             for idx, h in enumerate(self.hist_names):
                 if h == 'MEDIAN':
+                    linewidth = 3
+                elif h == 'LOWER1' or h == 'UPPER1':
                     linewidth = 2
                 else:
                     linewidth = 1
                 axarr[plot_row, plot_col].plot(
                     hr[s:e], hist_v.get(h)[s:e],
                     marker=' ', linestyle='-', linewidth=linewidth,
-                    color=self.color_palette[(idx % 3) + 1],
+                    # color=self.color_palette[(idx % 3) + 1],
+                    color=self.color_palette[1],
                     label=h)
             if plot_col < subplot_cols - 1:
                 plot_col += 1
@@ -386,7 +428,15 @@ class DiurnalSeasonalPattern():
                 plot_col = 0
                 plot_row += 1
         handles, labels = self._gen_legend_handles(hist_ver=ver)
-        plt.figlegend(handles, labels, loc='lower center', ncol=4)
+        leg = plt.figlegend(handles, labels, loc='upper left',
+                            ncol=1, bbox_to_anchor=(0.03, 0.97),
+                            title='Plot Symbols')
+        leg.get_title().set_fontweight('bold')
+        bbox = leg.get_window_extent()
+        bbox = bbox.transformed(fig.dpi_scale_trans.inverted())
+
+        # Calculate the width of the main legend
+        legend_width = bbox.width
 
         # Analysis
         lo = hist_v.get(self.hist_names[0])
@@ -487,7 +537,16 @@ class DiurnalSeasonalPattern():
             time_lag = 'not_calculated'
             corr = 'not_calculated'
 
-        fig.text(.975, .975, lag_txt, ha='right', va='center')
+        handles_stats = [mlines.Line2D(
+            [], [], color='None', marker='None', label=lag_txt)]
+        labels_stats = [lag_txt]
+        new_legend_x = 0.03 + legend_width / fig.get_size_inches()[0]
+        leg_stats = plt.figlegend(handles_stats, labels_stats,
+                                  loc='upper left', ncol=1,
+                                  bbox_to_anchor=(new_legend_x, 0.97),
+                                  title='Summary Statistics')
+        leg_stats.get_title().set_fontweight('bold')
+
         plt.savefig(fig_loc, dpi=self.plot_config.plot_default_dpi)
         plt.close()
         fig_url = fig_loc.replace(self.base_plot_dir, self.url_path)
