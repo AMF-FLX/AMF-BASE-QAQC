@@ -1,7 +1,4 @@
-import datetime as dt
 import psycopg2
-
-from jira_names import JIRANames
 
 from configparser import ConfigParser
 from io import StringIO
@@ -10,7 +7,7 @@ from pathlib import Path
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from psycopg2.extras import RealDictCursor
 from psycopg2.sql import Composed, SQL
-from typing import NamedTuple, Union
+from typing import NamedTuple
 
 __author__ = 'You-Wei Cheah, Danielle Christianson'
 __email__ = 'ycheah@lbl.gov, dschristianson@lbl.gov'
