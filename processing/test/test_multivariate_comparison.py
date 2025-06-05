@@ -254,7 +254,7 @@ def test_fit_odr(mc):
     fit = mc.fit_odr(x, y)
 
     # The slope should be exactly -1
-    assert fit.beta[0] == -1
+    assert math.isclose(fit.beta[0], -1, rel_tol=1e-15)
 
     # r2 should be exactly 1 because it's linear
     _, ss_total_y = mc.compute_sum_of_squares(x, y)
@@ -286,7 +286,7 @@ def test_get_ortho_dist_from_regres_ln(mc):
 
     # Distance from (1, -1) to (1, 1) is sqrt(2)
     dist = mc.get_ortho_dist_from_regres_ln(1, 1, fit.beta)
-    assert dist - math.sqrt(2) < sys.float_info.epsilon
+    assert math.isclose(dist, math.sqrt(2), rel_tol=1e-15)
 
 
 def test_find_initial_year_indices(mc):
@@ -406,7 +406,6 @@ def test_classify_outliers(mc):
     y = [1, 2, 3]
     fit = mc.fit_odr(x, y)
     rse = math.sqrt(abs(fit.res_var))
-
     assert mc.classify_outliers(x=10, y=15, fit=fit, rse=rse)
     assert not mc.classify_outliers(x=10, y=10, fit=fit, rse=rse)
 
