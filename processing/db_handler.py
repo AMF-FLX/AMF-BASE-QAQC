@@ -1,7 +1,4 @@
-import datetime as dt
 import psycopg2
-
-from jira_names import JIRANames
 
 from configparser import ConfigParser
 from io import StringIO
@@ -10,7 +7,7 @@ from pathlib import Path
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from psycopg2.extras import RealDictCursor
 from psycopg2.sql import Composed, SQL
-from typing import NamedTuple, Union
+from typing import NamedTuple
 
 __author__ = 'You-Wei Cheah, Danielle Christianson'
 __email__ = 'ycheah@lbl.gov, dschristianson@lbl.gov'
@@ -229,13 +226,15 @@ class NewDBHandler:
         lookup = {}
         query = SQL('SELECT site_id, pub.process_id, pub.base_version '
                     'FROM ('
-                    'SELECT proc.site_id, MAX(pub.process_id) AS process_id '
+                    'SELECT proc.site_id, MAX(pub.process_id) AS process_id, '
+                    'MAX(pub.log_timestamp) AS publish_timestamp '
                     'FROM qaqc.publishing_log pub '
                     'INNER JOIN qaqc.processing_log proc '
                     'ON proc.log_id = pub.process_id '
                     'GROUP BY proc.site_id) AS latest_process '
                     'INNER JOIN qaqc.publishing_log pub '
-                    'ON latest_process.process_id = pub.process_id')
+                    'ON latest_process.process_id = pub.process_id '
+                    'AND latest_process.publish_timestamp = pub.log_timestamp')
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(query)
             for r in cursor:
