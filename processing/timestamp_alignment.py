@@ -435,7 +435,7 @@ class TimestampAlignment(object):
                     if rem_sw_in_data is not None:
                         leg_pot, = ax.plot(
                             ts_doy_center, rem_sw_in_data[ptr:ptr+step],
-                            fmt='.', lw=1.0, ls='-', markersize=3,
+                            marker='.', lw=1.0, ls='-', markersize=3,
                             color=timestamp_palette[1], markeredgecolor=timestamp_palette[1],
                             alpha=1.0, label=sw_in_pot_label)
                     continue
