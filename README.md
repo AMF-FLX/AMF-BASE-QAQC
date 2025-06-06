@@ -16,11 +16,10 @@ Find more details about the AmeriFlux BASE data product and AmeriFlux processing
 
 ### Install
 
-Python version 3.6.9 or greater is required. See requirements.txt for required packages.
+Python version 3.10 or greater is required. See requirements.txt for required packages.
 
 Notes:
-* Some modules do not yet work on python versions greater than 3.6.9.
-* psycopg2 and pymssql packages are only required for Publish BASE module.
+* psycopg2 packages are only required for Publish BASE module.
 * codecov, flake8, pytest-cov, and pytest-flake8 packages are required for AMP testing.
 
 ### Running modules
