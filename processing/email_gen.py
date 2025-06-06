@@ -96,9 +96,9 @@ class EmailGen:
             f'({self.ui_prefix}half-hourly-hourly-data-upload-format/. If '
             f'needed, you can re-upload your data at {self.ui_prefix}'
             'data/upload-data/ and/or reply to this email to discuss '
-            'with us.\n\nView the status of all your uploaded files at '
-            f'{self.ui_prefix}qaqc-reports-data-team/.\n\nIf all '
-            'files passed Format QA/QC (PASS or WARNING) and '
+            'with us.\n\nView the processing status of your site at '
+            f'{self.ui_prefix}sites/data-processing-status/ (login required).'
+            '\n\nIf all files passed Format QA/QC (PASS or WARNING) and '
             'there are no pending issues for '
             'your site, Data QA/QC will be run. You can track communications '
             'on this Format QA/QC report at {key} using your AmeriFlux '
@@ -544,7 +544,7 @@ class EmailGen:
                                 msg_list = (
                                     [m for m in c['status_msg']['WARNING']
                                                  ['status_body'][:-1]
-                                     if not(
+                                     if not (
                                         m.startswith(
                                             'Tried to fix invalid '
                                             'variable name') or
@@ -855,10 +855,11 @@ class EmailGen:
                 'Data QA/QC, the next step in the AmeriFlux data processing '
                 'pipeline.\n\nWe have processed your data through our '
                 'Format QA/QC scheme. The results are listed below.\n\n'
-                f'{zip_msg}{msg_body}\n\nView the status of your uploaded '
-                f'files at {self.ui_prefix}qaqc-reports-data-team/. '
-                'Links to view the Format QA/QC report for each file are at '
-                'the end of this email.\n\nWe appreciate your help with '
+                f'{zip_msg}{msg_body}\n\n'
+                f'View the processing status of your site at {self.ui_prefix}'
+                'sites/data-processing-status/ (login required). '
+                'Links to view the Format QA/QC report for each file are '
+                'at the end of this email.\n\nWe appreciate your help with '
                 f'standardizing the data submission format. {fix_note}Please '
                 'reply to this email with any questions. You can track '
                 f'communications on this Format QA/QC report at {key} using '
