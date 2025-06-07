@@ -302,7 +302,7 @@ class PhysicalRange:
             y_max = np.nanmax(y_data)
             y_min = np.nanmin(y_data)
         else:
-            range_type = 'Physical Range'
+            range_type = 'Physical Range Limits'
             if var_obj.error_max == float('inf'):
                 y_max = np.nanmax(y_data)
             else:
@@ -316,15 +316,19 @@ class PhysicalRange:
         delta = (2 * var_obj.error)
         y_max += delta
         y_min -= delta
-        title = f'Plot of {var_obj.name} with {range_type}'
+        title = f'{var_obj.name} | {range_type}'
 
         ax.set_ylim((y_min, y_max))
-        ax.set_xlabel(f'Time ({y_name})',
-                      fontsize=self.plot_config.plot_title_fontsize)
+        ax.set_xlabel(f'TIMESTAMP_START',
+                      fontsize=10)
         ax.set_ylabel(f'{var_obj.name} ({var_obj.units})',
-                      fontsize=self.plot_config.plot_title_fontsize)
-        ax.set_title(title,
-                     fontsize=self.plot_config.plot_title_fontsize)
+                      fontsize=10)
+        # ax.set_title(title,
+        #              fontsize=self.plot_config.plot_title_fontsize)
+        ax.text(0.01, 0.96, title, ha='left', va='center',
+                fontsize=self.plot_config.plot_title_fontsize,
+                transform=ax.transAxes)
+        ax.set_title('')
         ax.plot_date(x_data, y_data, color='0.75', ms=2, ls='', lw=0)
         error_outliers, warning_outliers = \
             self.identify_outliers(x_data, y_data, var_obj)
@@ -390,35 +394,38 @@ class PhysicalRange:
         lab_err = (f'Expected Range +/- {margin_percent}% '
                    f'({var_obj.error_min}-{var_obj.error_max})')
 
-        legend_info = [(self.color_palette[0], lab_warn), (self.color_palette[1], lab_err)]
         handles = [mlines.Line2D([], [], color='None', marker='o',
                                 markerfacecolor='0.75',
                                 markeredgecolor='None',
                                 markersize=10, label='Data')]
         labels = ['Data']
 
-        for color, label in legend_info:
-            handles.append(mlines.Line2D([], [], color=color, label=label))
-            labels.append(label)
-
         # Add labels and colors for point styling
         handles += [
             mlines.Line2D([], [], color='None', marker='o',
                           markerfacecolor='None',
                           markeredgecolor=self.color_palette[0],
-                          markersize=10,
-                          label=('Data outside the expected '
-                                 'physical range')),
+                          markersize=10),
+                          # label=('Data outside the expected '
+                          #         'physical range')),
             mlines.Line2D([], [], color='None', marker='o',
                           markerfacecolor='None',
                           markeredgecolor=self.color_palette[1],
-                          markersize=10,
-                          label=(
-                              'Data outside the expected physical '
-                              f'range +/- {margin_percent}%'))]
+                          markersize=10)]
+                          # label=(
+                          #     'Data outside the expected physical '
+                          #     f'range +/- {margin_percent}%'))]
 
-        labels += ['Data outside the expected physical range',
+        labels += [('Data outside the expected physical range '
+                    f'+/- {margin_percent}%'),
                    'Data outside the expected physical range']
+
+        # start with empty row to force more readable spacing
+        legend_info = [(self.color_palette[2], ' '), (self.color_palette[0], lab_warn), (self.color_palette[1], lab_err)]
+        for color, label in legend_info:
+            handles.append(mlines.Line2D([], [], color=color, label=label))
+            labels.append(label)
+
         leg = fig.legend(handles, labels, loc='upper left',
                          ncol=2, bbox_to_anchor=(0.01, 0.97),
                          title='Plot Symbols', handletextpad=0.5,

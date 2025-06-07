@@ -307,7 +307,8 @@ class TimestampAlignment(object):
             plt.close('all')
             output_filename = f'{output_fname_template}_{year}.png'
             fig_filename = os.path.join(output_dir, output_filename)
-            figure = plt.figure()
+            figure = plt.figure(dpi=self.plot_config.plot_default_dpi,
+                                figsize=(self.fig_width, self.fig_height))
 
             text1 = 'Timestamp Alignment Analysis | '
             text2 = f'{year}'
@@ -316,7 +317,6 @@ class TimestampAlignment(object):
             renderer = figure.canvas.get_renderer()
             bbox1 = figure.text(0, 0, text1, ha='left',
                                 va='top', fontsize=16,
-                                fontweight='bold'
                                 ).get_window_extent(renderer=renderer)
 
             # Starting x position
@@ -324,13 +324,12 @@ class TimestampAlignment(object):
 
             # Set the text positions dynamically based on the calculated widths
             figure.text(x_start, 0.99, text1, ha='left',
-                        va='top', fontsize=16, fontweight='bold')
-            figure.text(0.22, 0.99, text2, ha='left', va='top', fontsize=16)
+                        va='top', fontsize=16)
+            figure.text(x_start + bbox1.width / figure.bbox.width, 0.989, text2,
+                        ha='left', va='top', fontsize=16, fontweight='bold')
 
             figure.text(
-                0.5, .94, 'DATE_START - DATE_END', ha='center', va='center')
-            figure.set_figwidth(self.fig_width)
-            figure.set_figheight(self.fig_height)
+                0.5, .92, 'DATE_START - DATE_END', ha='center', va='center')
             figure.text(0.5, 0.01, t_start_label, ha='center', va='center')
             canvas = FigureCanvas(figure)
             gs = gridspec.GridSpec(self.n_row, self.n_col)
@@ -377,8 +376,6 @@ class TimestampAlignment(object):
                     ax.tick_params(
                         bottom=True, top=False, left=True, right=False,
                         labelleft=True, labelbottom=True)
-                    # bottom='on', top='off', left='on', right='off',
-                    # labelleft='on', labelbottom='on')
                     ax.set_ylabel(y_label)
                     ax.xaxis.set_major_formatter(formatter)
                     xaxis = ax.xaxis
@@ -389,15 +386,11 @@ class TimestampAlignment(object):
                     ax.tick_params(
                         bottom=False, top=False, left=True, right=False,
                         labelleft=True, labelbottom=False)
-                    # bottom='off', top='off', left='on', right='off',
-                    # labelleft='on', labelbottom='off')
                     ax.set_ylabel(y_label)
                 elif i > last_row_idx:
                     ax.tick_params(
                         bottom=True, top=False, left=False, right=False,
                         labelleft=False, labelbottom=True)
-                    # bottom='on', top='off', left='off', right='off',
-                    # labelleft='off', labelbottom='on')
                     ax.xaxis.set_major_formatter(formatter)
                     xaxis = ax.xaxis
                     xaxis.set_major_locator(loc)
@@ -407,8 +400,6 @@ class TimestampAlignment(object):
                     ax.tick_params(
                         bottom=False, top=False, left=False, right=False,
                         labelleft=False, labelbottom=False)
-                    # bottom='off', top='off', left='off', right='off',
-                    # labelleft='off', labelbottom='off')
                 mask_doy = mask & (
                     (doys >= range_day - interval)
                     & (doys <= range_day + interval))
@@ -436,7 +427,7 @@ class TimestampAlignment(object):
                         leg_pot, = ax.plot(
                             ts_doy_center, rem_sw_in_data[ptr:ptr+step],
                             marker='.', lw=1.0, ls='-', markersize=3,
-                            color=timestamp_palette[1], markeredgecolor=timestamp_palette[1],
+                            color=timestamp_palette[0], markeredgecolor=timestamp_palette[0],
                             alpha=1.0, label=sw_in_pot_label)
                     continue
                 else:
@@ -453,9 +444,6 @@ class TimestampAlignment(object):
                         ts_doy_center = [d + dt.timedelta(days=range_day-1)
                                          for d in ts_start[0:step]]
                         full_doy_center = False
-                        # data_doy_center_sw_in_pot = \
-                        #     data[mask_doy_center][sw_in_pot_label]
-                        # data_as_list = data_doy_center_sw_in_pot.tolist()
                         data_as_list = deepcopy(sw_in_pot_data)
                         while len(data_as_list) < step:
                             data_as_list.append(np.nan)
@@ -465,14 +453,12 @@ class TimestampAlignment(object):
                         ts_doy_center = ts_start[
                             idx_doy_center[0]:idx_doy_center[-1] + 1]
                         full_doy_center = True
-                        # data_doy_center_sw_in_pot = \
-                        #     data[mask_doy_center][sw_in_pot_label]
                         data_doy_center_sw_in_pot = np.asarray(sw_in_pot_data)
 
                 leg_pot, = ax.plot(
                     ts_doy_center, data_doy_center_sw_in_pot,
                     linewidth=1.0, linestyle='-', marker='.', markersize=3,
-                    color=timestamp_palette[1], markeredgecolor=timestamp_palette[1],
+                    color=timestamp_palette[0], markeredgecolor=timestamp_palette[0],
                     alpha=1.0, label=sw_in_pot_label)
 
                 # get max values for the radiation variables
@@ -494,7 +480,7 @@ class TimestampAlignment(object):
                             color=color_palette[index],
                             markeredgecolor=color_palette[index],
                             alpha=1.0, label=var)
-                        index += 1
+                        # index += 1
 
                         nighttime = []
                         daytime = []
@@ -563,13 +549,22 @@ class TimestampAlignment(object):
                     var_data[np.invert(var_data_lt)] = np.nan
 
                     if var in top_level_rad_vars:
+                        highlight_shape = 'o'
+
+                        if index == 0:
+                            highlight_shape = 'D'
+
                         leg_vars_less[var], = ax.plot_date(
                             ts_doy_center, var_data, linewidth=1.0,
-                            fmt='o', linestyle='', markersize=8,
-                            color=timestamp_palette[0],
-                            markeredgecolor=timestamp_palette[0],
-                            markeredgewidth=1.5, markerfacecolor=timestamp_palette[0],
-                            alpha=0.3, label=var)
+                            linestyle='', markersize=8,
+                            markeredgewidth=1.5,
+                            markeredgecolor=timestamp_palette[index + 1],
+                            markerfacecolor=timestamp_palette[index + 1],
+                            alpha=0.3, label=var,
+                            fmt=highlight_shape
+                        )
+
+                    index += 1
 
             has_valid_plt = sum(v == [] for v in annual_var_data.values()) == 0
             if has_valid_plt:
@@ -775,17 +770,27 @@ class TimestampAlignment(object):
             decorators = [leg_pot, ]
             labels = [sw_in_pot_label, ]
             # for var in radiation_variables:
-            for var in top_level_rad_vars:
 
+            number_vars = len(top_level_rad_vars)
+            half_idx = number_vars // 2
+
+            for idx, var in enumerate(top_level_rad_vars):
+                if idx > 0 and idx == half_idx:
+                    decorators.append(
+                        mlines.Line2D([], [],
+                                      color='#FFFFFF', label=' '))
+                    labels.append(' ')
                 decorators += [leg_vars[var], leg_vars_less[var]]
                 labels += [var, f'{var} > {sw_in_pot_label}']
             corr_annotation = '\n'.join(text)
             yr_log.info('\n' + corr_annotation)
-            # TODO: Subtract 3 to stay within figure. Should use a better way.
+
             leg = figure.legend(
-                decorators, labels, loc=(0.03, 0.92),
-                ncol=2, title="Plot Symbol")
+                decorators, labels,
+                loc='upper left', bbox_to_anchor=(x_start, 0.975),
+                ncol=half_idx+1, title='Plot Symbol', alignment='left')
             leg.get_title().set_fontweight('bold')
+            ftsize = leg.get_title().get_fontsize()
 
             # Calculate the width of the main legend
             bbox1 = leg.get_window_extent()
@@ -793,7 +798,7 @@ class TimestampAlignment(object):
             figure_width = figure.get_size_inches()[0]
 
             # Calculate the new position for the second legend
-            new_legend_x = bbox1.x1 / figure_width
+            new_legend_x = x_start + bbox1.width / figure_width
 
             # Create the second legend
             summary_label = corr_annotation
@@ -805,9 +810,9 @@ class TimestampAlignment(object):
             # Create a figure legend and place it manually
             leg_stats = plt.figlegend(
                 handles_analysis, labels_analysis, loc='upper left',
-                ncol=1, bbox_to_anchor=(new_legend_x, 0.98),
-                title='Summary Statistics', fontsize=7
-            )
+                ncol=1, bbox_to_anchor=(new_legend_x, 0.975),
+                title='Summary Statistics', fontsize=ftsize, alignment='left',
+                handletextpad=-1)
             leg_stats.get_title().set_fontweight('bold')
 
             if show and has_valid_plt:
