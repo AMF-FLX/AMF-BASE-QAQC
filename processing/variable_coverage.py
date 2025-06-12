@@ -180,8 +180,9 @@ class VariableCoverage:
         # Create colorbar
         cbar = None
         if cbarlabel != '':
-            cbar = ax.figure.colorbar(im, ax=ax, orientation='vertical',
-                                      fraction=0.046, pad=0.04,
+            cbar = ax.figure.colorbar(im, ax=ax, location='right',
+                                      # panchor=(new_bbox.x1 + 0.1, 0.5),
+                                      fraction=0.046, pad=0.1,
                                       **cbar_kw)
             cbar.ax.set_ylabel(cbarlabel, rotation=-90, va='bottom')
             cbar.set_ticks([0, 0.2, 0.4, 0.6, 0.8, 1])
@@ -222,6 +223,17 @@ class VariableCoverage:
         ax.set_yticks(np.arange(data.shape[0]+1)-.5, minor=True)
         ax.grid(which='minor', color='w', linestyle='-', linewidth=5)
         ax.tick_params(which='minor', bottom=False, left=False)
+
+        bbox = ax.get_position()
+        x_width = bbox.x1 - bbox.x0
+        y_height = bbox.y1 - bbox.y0
+        ax.set_position(((1 - x_width) / 2, bbox.y0, x_width, y_height))
+        new_bbox = ax.get_position()
+
+        if cbar:
+            _, cbar_y0, cbar_width, cbar_height = cbar.ax.get_position().bounds
+            cbar.ax.set_position((new_bbox.x0 + new_bbox.width + 0.05,
+                                  cbar_y0, cbar_width, cbar_height))
 
         return im, cbar
 
@@ -286,8 +298,7 @@ class VariableCoverage:
 
     def make_plots(self, data_reader: DataReader, site_id: str,
                    process_id: str, vars: List[str], years: List[str],
-                   coverage_by_year: List[float],
-                   coverage_by_timestamps: List[float]):
+                   coverage_list: List[float], figure_text: tuple):
 
         """ Creates two plots for variable coverage by year and variable
             coverage by reported timestamps. Generates the figures, makes
@@ -300,26 +311,41 @@ class VariableCoverage:
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
+        file_name_part, title_part = figure_text
+
         # Create the path to save the yearly plot
-        plt_name = f'{site_id}-{self.qaqc_name}-by_year'
+        plt_name = f'{site_id}-{self.qaqc_name}-{file_name_part}'
         fig_loc = os.path.join(output_dir, plt_name)
 
         # Make the width grow with the number of years
         # Have a minimum figure width of 12 inches
-        fig_width = max(12, int(0.8 * len(years)))
+        fig_width = max(8, int(0.8 * len(years)) + 1)
 
         # Make the height grow with the number of vars
         # Have a minimum figure height of 13 inches
-        fig_height = max(13, int(0.3 * len(vars)))
+        fig_height = max(11.5, int(0.3 * len(vars)))
 
         # Generate the coverage by year figure
-        plt.figure('Variable_Coverage-1', figsize=(fig_width, fig_height))
-        plt.title(f'{site_id}: variable coverage by year\n',
-                  fontsize=self.plot_config.plot_suptitle_fontsize,
-                  ha='center')
+        fig = plt.figure('Variable_Coverage', figsize=(fig_width, fig_height))
+
+        text1 = f'{site_id} | '
+        text2 = f'{title_part}\n'
+
+        # Starting x position
+        x_start = 0.01
+
+        # Calculate the widths of each text segment
+        renderer = fig.canvas.get_renderer()
+        bbox1 = fig.text(x_start, 0.99, text1, ha='left',
+                         va='top', fontsize=16
+                         ).get_window_extent(renderer=renderer)
+
+        # Set the text positions dynamically based on the calculated widths
+        fig.text(x_start + bbox1.width / fig.bbox.width, 0.99,
+                 text2, ha='left', va='top', fontsize=16, fontweight='bold')
 
         im, _ = self.heatmap(data_reader,
-                             coverage_by_year,
+                             coverage_list,
                              vars,
                              years,
                              interpolation='nearest', aspect=0.5,
@@ -327,34 +353,9 @@ class VariableCoverage:
 
         self.annotate_heatmap(im, valfmt='{x:.2f}')
 
-        plt.savefig(fig_loc, bbox_inches='tight', pad_inches=1,
+        plt.savefig(fig_loc,
                     dpi=self.plot_config.plot_default_dpi)
-        plt.close()
 
-        # Create the path to save the timestamps plot
-        plt_name = f'{site_id}-{self.qaqc_name}-by_reported_timestamps'
-        fig_loc = os.path.join(output_dir, plt_name)
-
-        fig_width = max(12, int(0.8 * len(years)))
-        fig_height = max(13, int(0.3 * len(vars)))
-
-        # Generate the coverage by reported timestamps figure
-        plt.figure('Variable_Coverage-2', figsize=(fig_width, fig_height))
-        plt.title(f'{site_id}: variable coverage by reported timestamps\n',
-                  fontsize=self.plot_config.plot_suptitle_fontsize,
-                  ha='center')
-
-        im, _ = self.heatmap(data_reader,
-                             coverage_by_timestamps,
-                             vars,
-                             years,
-                             interpolation='nearest', aspect=0.5,
-                             cmap='Blues', cbarlabel='Percent coverage')
-
-        self.annotate_heatmap(im, valfmt='{x:.2f}')
-
-        plt.savefig(fig_loc, bbox_inches='tight', pad_inches=1,
-                    dpi=self.plot_config.plot_default_dpi)
         plt.close()
 
     def get_status(self, qaqc_check: str, status_msg: str,
@@ -433,9 +434,15 @@ class VariableCoverage:
         coverage_dict, coverage_by_year, coverage_by_timestamps = \
             self.calculate_coverage(data_reader)
 
-        self.make_plots(data_reader, site_id, process_id, self.vars_list,
-                        self.years, coverage_by_year,
-                        coverage_by_timestamps)
+        for coverage, fig_text in zip(
+                [coverage_by_year, coverage_by_timestamps],
+                [('by_year', 'variable coverage by year'),
+                 ('by_reported_timestamps',
+                  'variable coverage by reported timestamps')]):
+
+            self.make_plots(
+                data_reader, site_id, process_id, self.vars_list,
+                self.years, coverage, fig_text)
 
         qaqc_checks = {
             'required_missing':

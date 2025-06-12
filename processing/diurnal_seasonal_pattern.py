@@ -48,9 +48,14 @@ class DiurnalSeasonalPattern():
         self.site_id = site_id
         self.resolution = resolution
         self.process_id = process_id
-        self.gray_color = '.75'
-        # self.color_palette = ('k', 'r', 'c', 'm')
+
         self.color_palette = self.plot_config.diurnal_palette
+        self.gray_color = self.color_palette[2]
+        # see below for corresponding median / level names
+        #   i.e., level1 is meant to goe with lower1 and upper1
+        self.median_lw = 3
+        self.level1_lw = 2
+        self.level2_lw = 1
 
         self.hist_dir_path, self.outer_band_error_threshold, \
             self.outer_band_warning_threshold, \
@@ -65,7 +70,6 @@ class DiurnalSeasonalPattern():
         self.hist_names_map['LOWER2'] = '2.5% percentile ({ver})'
         self.hist_names_map['LOWER1'] = '25% percentile ({ver})'
         self.hist_names_map['MEDIAN'] = 'MEDIAN ({ver})'
-        self.hist_names_map[self._calculated_median] = 'MEDIAN (current data)'
         self.hist_names_map['UPPER1'] = '75% percentile ({ver})'
         self.hist_names_map['UPPER2'] = '97.5% percentile ({ver})'
         self.doy_var = 'DOY2'
@@ -190,36 +194,55 @@ class DiurnalSeasonalPattern():
             statuses=var_sub_dict, report_type='sub_status_row')
 
     def _gen_legend_handles(self, hist_ver=None):
+        ncols = 2  # number of legend columns
         legend_info = []
         legend_color_map = {self._calculated_median: self.color_palette[0]}
+        calculated_median_name = 'MEDIAN (current data)'
+
+        handles = [
+            mlines.Line2D(
+                [], [], color='None', marker='o',
+                markeredgecolor='None',
+                markerfacecolor=self.gray_color,
+                markersize=10, label='data'),
+            mlines.Line2D(
+                [], [],
+                color=legend_color_map.get(self._calculated_median),
+                lw=self.median_lw, label=calculated_median_name)]
+
+        labels = ['Current Data', calculated_median_name]
+
         if hist_ver:
-            for n in range(len(self.hist_names)):
-                # legend_color_map[self.hist_names[n]] = self.color_palette[
-                #     (n % 3) + 1]
+            percentile_number = len(self.hist_names)
+            blank_entries = percentile_number - len(labels)
+            mline_blank = mlines.Line2D([], [],
+                                         color='#FFFFFF', label= ' ')
+
+            for n in range(blank_entries):
+                handles.append(mline_blank)
+                labels.append(' ')
+
+            for n in range(percentile_number):
                 legend_color_map[self.hist_names[n]] = self.color_palette[1]
             for k, v in self.hist_names_map.items():
                 v = v.format(ver=hist_ver)
-                if k == 'MEDIAN' or k == self._calculated_median:
-                    linewidth = 3
+                if k == 'MEDIAN':
+                    linewidth = self.median_lw
                 elif k == 'LOWER1' or k == 'UPPER1':
-                    linewidth = 2
+                    linewidth = self.level1_lw
                 else:
-                    linewidth = 1
+                    linewidth = self.level2_lw
                 legend_info.append((legend_color_map.get(k), v, linewidth))
 
+            for line_color, line_label, width in legend_info:
+                handle = mlines.Line2D([], [], color=line_color, lw=width)
+                handles.append(handle)
+                labels.append(line_label)
+
         else:
-            legend_info.append(
-                (legend_color_map.get(self._calculated_median),
-                 self.hist_names_map.get(self._calculated_median), 2))
-        handles = [mlines.Line2D(
-            [], [], color='None', marker='o', markeredgecolor='None',
-            markerfacecolor='0.75', markersize=10, label='data')]
-        labels = ['Current Data']
-        for c, l, width in legend_info:
-            handle = mlines.Line2D([], [], color=c, lw=width)
-            handles.append(handle)
-        labels += [l for c, l, w in legend_info]
-        return handles, labels
+            ncols = 1
+
+        return handles, labels, ncols
 
     def process_by_year(self, var_name, site_id, var_log,
                         ts, val, full_year=True):
@@ -240,10 +263,7 @@ class DiurnalSeasonalPattern():
             subplot_rows, subplot_cols, sharey=True)
 
         # Setup plot attributes
-        fig.set_size_inches(16, 12)
-        # suptitle = ('Diurnal Seasonal Pattern Analysis '
-        #             f'of {var_name} for year {year}')
-        # fig.suptitle(suptitle, fontsize=self.plot_config.plot_title_fontsize)
+        fig.set_size_inches(15, 12)
 
         text1 = 'Diurnal Seasonal Pattern Analysis | '
         text2 = f'{var_name}'
@@ -268,12 +288,12 @@ class DiurnalSeasonalPattern():
                  fontsize=16, fontweight='bold')
         fig.text(x_start + (bbox1.width + bbox2.width) / fig.bbox.width,
                  0.99, text3, ha='left', va='top', fontsize=16)
-        plt.subplots_adjust(top=0.80)
+        plt.subplots_adjust(top=0.85)
 
         # Set common labels
         base_var_name = self.d.get_base_header(var_name)
         y_axis_label = var_name + ' (' + self.fp_vars.get(base_var_name) + ')'
-        fig.text(0.5, 0.85, 'Date Start - Date End', ha='center', va='center')
+        fig.text(0.5, 0.86, 'DATE START - DATE END', ha='center', va='center')
         fig.text(0.5, 0.05, 'TIMESTAMP_START', ha='center', va='center')
         fig.text(0.09, 0.5, y_axis_label,
                  ha='center', va='center', rotation='vertical')
@@ -287,15 +307,14 @@ class DiurnalSeasonalPattern():
         derived_med = []
         start_time = ts[0]
         x_lab = {}
-        new_x_lab = []
+
         for s, e in s_e_idxs:
             cur_interval_ts = ts[s:e]
             cur_interval_val = val[s:e]
             subplot_x = []
             subplot_y = []
-            plot_labels = []
             cur_axarr = axarr[i, j]
-            # Process 30 day chunks and get representation for x-axis
+            # Process 30-day chunks and get representation for x-axis
             for t, v in zip(cur_interval_ts, cur_interval_val):
                 dt_repr = _c_dt(t)
                 hour_repr = dt_repr.hour + (dt_repr.minute / 60.0)
@@ -369,9 +388,9 @@ class DiurnalSeasonalPattern():
             derived_med.extend(y_vals)
             median_label = self._calculated_median
             cur_axarr.plot(
-                x_vals, y_vals, marker=' ', linestyle='-', linewidth=2,
+                x_vals, y_vals, marker=' ', linestyle='-',
+                linewidth=self.median_lw,
                 color=self.color_palette[0], label=median_label)
-            plot_labels.append(median_label)
 
             if j == 0:
                 ticks_pos = 'left'
@@ -419,18 +438,19 @@ class DiurnalSeasonalPattern():
                 axarr[plot_row, plot_col].plot(
                     hr[s:e], hist_v.get(h)[s:e],
                     marker=' ', linestyle='-', linewidth=linewidth,
-                    # color=self.color_palette[(idx % 3) + 1],
-                    color=self.color_palette[1],
+                    color=self.color_palette[1], alpha=0.8,
                     label=h)
             if plot_col < subplot_cols - 1:
                 plot_col += 1
             else:
                 plot_col = 0
                 plot_row += 1
-        handles, labels = self._gen_legend_handles(hist_ver=ver)
+        handles, labels, ncols = self._gen_legend_handles(hist_ver=ver)
+        x_anchor_init = x_start
         leg = plt.figlegend(handles, labels, loc='upper left',
-                            ncol=1, bbox_to_anchor=(0.03, 0.97),
-                            title='Plot Symbols')
+                            ncol=ncols,
+                            bbox_to_anchor=(x_anchor_init, 0.97),
+                            title='Plot Symbols', alignment='left')
         leg.get_title().set_fontweight('bold')
         bbox = leg.get_window_extent()
         bbox = bbox.transformed(fig.dpi_scale_trans.inverted())
@@ -540,11 +560,12 @@ class DiurnalSeasonalPattern():
         handles_stats = [mlines.Line2D(
             [], [], color='None', marker='None', label=lag_txt)]
         labels_stats = [lag_txt]
-        new_legend_x = 0.03 + legend_width / fig.get_size_inches()[0]
+        new_legend_x = x_anchor_init + legend_width / fig.get_size_inches()[0]
         leg_stats = plt.figlegend(handles_stats, labels_stats,
                                   loc='upper left', ncol=1,
                                   bbox_to_anchor=(new_legend_x, 0.97),
-                                  title='Summary Statistics')
+                                  title='Summary Statistics',
+                                  alignment='left', handletextpad=-1)
         leg_stats.get_title().set_fontweight('bold')
 
         plt.savefig(fig_loc, dpi=self.plot_config.plot_default_dpi)

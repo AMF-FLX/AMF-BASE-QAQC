@@ -199,49 +199,34 @@ def test_plots(monkeypatch):
     site_id = 'US-CRT'
     process_id = 'TestProcess_###'
 
-    coverage_by_timestamps = np.array([
-        [0], [0.48], [0.52], [0.28], [0.99], [0.97], [0.65], [0.49], [0.52],
-        [0.99], [0.99], [0.65], [0.52], [1.00], [1.00], [0.65], [0.97], [1.00],
-        [0.96], [0.99], [0.99], [1.00], [0.99], [0.88], [0.65], [0.65], [0.65],
-        [0.65], [0.65], [0.65], [0.65], [0.99], [0.65], [0.65]])
-
-    coverage_by_year = coverage_by_timestamps
+    coverage_list = np.array([
+        [0.28], [0.48], [0.52], [0.28], [0.99], [0.97], [0.65], [0.49], [0.52],
+        [0.99], [0.99], [0.65], [0.52], [1.00], [1.00], [0.65], [1.00], [0.97],
+        [1.00], [0.99], [0.99], [1.00], [0.99], [0.88], [0.65], [0.65], [0.65],
+        [0.65], [0.65], [0.65], [0.99], [0.65], [0.65]])
 
     vars = ['CH4', 'CO2', 'FC', 'FCH4', 'G_1_1_1', 'G_2_1_1', 'H', 'H2O', 'LE',
-            'LW_IN', 'LW_OUT', 'MO_LENGTH', 'NEE', 'NETRAD', 'P', 'PA', 'RH',
-            'SWC', 'SWP', 'SW_IN', 'SW_OUT', 'TA', 'TS_1_1_1', 'TS_2_1_1',
-            'T_SONIC', 'T_SONIC_SIGMA', 'USTAR', 'U_SIGMA', 'V_SIGMA', 'WD',
+            'LW_IN', 'LW_OUT', 'MO_LENGTH', 'NEE', 'NETRAD', 'P', 'PA',
+            'PPFD_IN', 'RH', 'SWC', 'SW_IN', 'SW_OUT', 'TA', 'TS_1_1_1',
+            'TS_2_1_1', 'T_SONIC', 'T_SONIC_SIGMA', 'USTAR', 'V_SIGMA', 'WD',
             'WS', 'WTD', 'W_SIGMA', 'ZL']
     years = ['2011']
 
+    figure_text = ('by_year', 'variable coverage by year')
+
     vc.make_plots(data_reader, site_id, process_id, vars, years,
-                  coverage_by_year, coverage_by_timestamps)
+                  coverage_list, figure_text)
+
+    file_name_part, _ = figure_text
 
     plot_path = os.path.join(
         vc.plot_path, site_id, process_id, 'output', 'variable_coverage',
-        'US-CRT-variable_coverage-by_year.png')
+        f'US-CRT-variable_coverage-{file_name_part}.png')
     assert os.path.exists(plot_path)
 
     test_plot_path = os.path.join(
         os.getcwd(), 'test', 'testdata', 'variable_coverage',
-        'test_plot-by_year.png'
-    )
-    assert os.path.exists(test_plot_path)
-
-    with open(plot_path, 'rb') as f:
-        img_1 = hash(f.read())
-    with open(test_plot_path, 'rb') as f:
-        img_2 = hash(f.read())
-    assert img_1 == img_2
-
-    plot_path = os.path.join(
-        vc.plot_path, site_id, process_id, 'output', 'variable_coverage',
-        'US-CRT-variable_coverage-by_reported_timestamps.png')
-    assert os.path.exists(plot_path)
-
-    test_plot_path = os.path.join(
-        os.getcwd(), 'test', 'testdata', 'variable_coverage',
-        'test_plot-by_reported_timestamps.png'
+        f'test_plot-{file_name_part}.png'
     )
     assert os.path.exists(test_plot_path)
 

@@ -1093,7 +1093,6 @@ class MultivariateComparison():
         fig, ax1 = plt.subplots()
         fig.subplots_adjust(top=0.9)
         std_plt_args = {}
-        # std_plt_args['linestyle'] = '--'
         std_plt_args['linewidth'] = 2
 
         # Formatting title
@@ -1140,7 +1139,7 @@ class MultivariateComparison():
         ax2.set_position([box.x0, box.y0,
                           box.width, box.height * 0.8])
 
-        leg = fig.legend(loc='upper left', ncol=1, bbox_to_anchor=(0.01, 0.97),
+        leg = fig.legend(loc='upper left', ncol=1, bbox_to_anchor=(0.01, 0.96),
                          title='Plot Symbols', handletextpad=0.5,
                          columnspacing=1.5, fontsize=7, frameon=True,
                          title_fontproperties={'weight':'bold'})
@@ -1152,23 +1151,6 @@ class MultivariateComparison():
         # Calculate the width of the main legend
         legend_width = bbox.width
         new_legend_x = 0.01 + legend_width / fig.get_size_inches()[0]
-
-        # Summary Statistics Legend
-        # deviated_years_label = f'Years {self.deviated_years} ' \
-        #     f'had relatively deviated regression slopes'
-        # deviated_slopes_label = f'Diff ({len(self.deviated_slopes)}): ' \
-        #     f'{self.deviated_slopes}'
-
-        # handles_analysis = [mlines.Line2D([], [], linestyle='',
-        #                                   label=deviated_years_label),
-        #                     mlines.Line2D([], [], linestyle='',
-        #                                   label=deviated_slopes_label)]
-        # labels_analysis = [deviated_years_label, deviated_slopes_label]
-        # leg_stats = plt.figlegend(handles_analysis, labels_analysis,
-        #                           loc='upper left', ncol=1,
-        #                           bbox_to_anchor=(new_legend_x, 0.97),
-        #                           title='Summary Statistics', fontsize=5)
-        # leg_stats.get_title().set_fontweight('bold')
 
         # rename x and y to variable name
         fig_name = self.fig_name_fmt.format(
@@ -1223,7 +1205,6 @@ class MultivariateComparison():
         # Calculate start and end points for fitted regression line
         xx = np.array([np.amin(masked_x), np.amax(masked_x)])
         yy = self.odr_linear_function(fit.beta, xx)
-        # yy = self.lin_reg_linear_function(fit, xx)
 
         # Plot fitted regression line
         self.plot(xx, yy, color=self.color_palette[0], marker='', subplot_pos=(3, 1, 1),
@@ -1249,7 +1230,8 @@ class MultivariateComparison():
         dt_num = [self.ts_util.timestamp_str_to_num(t) for t in ts_start]
 
         # Plot second graph
-        self.plot(dt_num, x_val, ts_label, x_label, subplot_pos=(3, 1, 2))
+        self.plot(dt_num, x_val, ts_label, x_label,
+                  subplot_pos=(3, 1, 2), title=f'{x_label} Timeseries')
 
         # Plot outliers for 2nd graph
         self.plot(
@@ -1257,7 +1239,8 @@ class MultivariateComparison():
             marker_fill=False, subplot_pos=(3, 1, 2))
 
         # Plot third graph
-        self.plot(dt_num, y_val, ts_label, y_label, subplot_pos=(3, 1, 3))
+        self.plot(dt_num, y_val, ts_label, y_label,
+                  subplot_pos=(3, 1, 3), title=f'{y_label} Timeseries')
 
         # Plot outliers for third graph
         self.plot(
@@ -1305,20 +1288,22 @@ class MultivariateComparison():
         labels_analysis = [flagged_label, analysis_label]
 
         leg = plt.figlegend(handles, labels, loc='upper left',
-                            ncol=1, bbox_to_anchor=(0.01, 0.97),
-                            title='Plot Symbols')
+                            ncol=1, bbox_to_anchor=(x_start, 0.97),
+                            title='Plot Symbols', alignment='left')
         leg.get_title().set_fontweight('bold')
         bbox = leg.get_window_extent()
         bbox = bbox.transformed(fig.dpi_scale_trans.inverted())
 
         #  Calculate the width of the main legend
         legend_width = bbox.width
-        new_legend_x = 0.01 + legend_width / fig.get_size_inches()[0]
+        new_legend_x = x_start + legend_width / fig.get_size_inches()[0]
         leg_stats = plt.figlegend(handles_analysis,
                                   labels_analysis, loc='upper left',
                                   ncol=1,
                                   bbox_to_anchor=(new_legend_x, 0.97),
-                                  title='Summary Statistics')
+                                  title='Summary Statistics',
+                                  alignment='left',
+                                  handletextpad=-1)
         leg_stats.get_title().set_fontweight('bold')
 
         fig_name = self.fig_name_fmt.format(
