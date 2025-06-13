@@ -24,6 +24,46 @@ def mock_read_sites_file(dummyself, cwd, filepath):
     return ['CC-sss']
 
 
+def mock_get_site_users(dummyself, site_id):
+
+    if site_id == 'test1':
+        return {'other_users': {'person 1 one': 'person.1.one@email.foo'}}
+
+    return {'other_users': {'person one': 'person.one@email.foo'}}
+
+
+def test_validate_reporter_info(monkeypatch):
+
+    monkeypatch.setattr(JIRAInterface, 'get_organizations',
+                        mock_jira_get_organization)
+
+    monkeypatch.setattr(SiteAttributes, 'get_site_dict',
+                        mock_site_attrs_get_site_dict)
+
+    monkeypatch.setattr(DataReportGen, '_read_sites_file',
+                        mock_read_sites_file)
+
+    monkeypatch.setattr(DataReportGen, '_get_site_team_members',
+                        mock_get_site_users)
+
+    test_info = {'reporter_id': '', 'reporter_name': 'person one'}
+
+    data_report_gen = DataReportGen()
+
+    # test 1 -- no match, reporter_id remains an empty str
+    data_report_gen.validate_reporter_info(test_info, 'test1')
+    assert test_info['reporter_id'] == ''
+
+    # test 2 - match, reporter_id gets replaced with email
+    data_report_gen.validate_reporter_info(test_info, 'test2')
+    assert test_info['reporter_id'] == 'person.one@email.foo'
+
+    # test 3 -- reporter_id has a value and is returned unchanged
+    test_info.update({'reporter_id': 'oneperson'})
+    data_report_gen.validate_reporter_info(test_info, 'test3')
+    assert test_info['reporter_id'] == 'oneperson'
+
+
 def test_gen_message(monkeypatch):
     """
     Using driver to create and then test craft_email

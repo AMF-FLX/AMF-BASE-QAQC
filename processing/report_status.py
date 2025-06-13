@@ -15,6 +15,10 @@ __email__ = 'norm.beekwilder@gmail.com, sytoanngo@lbl.gov'
 _log = Logger().getLogger(__name__)
 
 
+class ReportStatusException(Exception):
+    pass
+
+
 class ReportStatus:
     """upload status report to web server"""
 
