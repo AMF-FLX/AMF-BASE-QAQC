@@ -564,7 +564,7 @@ class TimestampAlignment(object):
                             fmt=highlight_shape
                         )
 
-                    index += 1
+                        index += 1
 
             has_valid_plt = sum(v == [] for v in annual_var_data.values()) == 0
             if has_valid_plt:
