@@ -1,5 +1,14 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v2.2.0
+*2025 Jun 25*
+
+New in this release:
+- Require python 3.10 and matplotlib 3.9.0. 
+- Data QA/QC module figure updates for improved usability.
+- Bug fix: Site team PI email mismatch for Jira ticket reporter.
+- Update Format QA/QC report email to link to Data Processing Status webpage.
+
 ### QAQC v2.1.6
 *2024 Nov 25*
 
