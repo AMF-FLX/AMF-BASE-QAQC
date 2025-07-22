@@ -3,10 +3,8 @@ import ast
 import collections
 import os
 from configparser import ConfigParser
-from db_handler import DBHandler
 from logger import Logger
-from process_actions import ProcessActions
-from process_states import ProcessStates
+from process_states import ProcessStates, ProcessStateHandler
 from publish import Publish
 from report_status import ReportStatus
 from utils import RemoteSSHUtil
@@ -24,8 +22,7 @@ class PublishBASEBADM():
         self.init_status = self._get_params_from_config()
         self.publisher = Publish()
         self.report_status = ReportStatus()
-        self.process_actions = ProcessActions()
-        self.process_states = ProcessStates()
+        self.process_states = ProcessStateHandler()
 
         _log.info("Initialized")
         self.remote_ssh_util = RemoteSSHUtil(_log)
@@ -79,11 +76,6 @@ class PublishBASEBADM():
             return False
         else:
             self.BADM_mnt = BADM_mnt
-        if not all((db_user, db_auth, db_name)):
-            _log.error("DB configurations not assigned")
-            return False
-        else:
-            self.db_handler = DBHandler(db_hostname, db_user, db_auth, db_name)
         return True
 
     def driver(self, args):
@@ -162,8 +154,8 @@ class PublishBASEBADM():
                     try:
                         self.report_status.enter_new_state(
                             process_id=process_id,
-                            action=self.process_actions.BASEBADMPubFailed,
-                            status=self.process_states.BASEBADMPubFailed)
+                            state_id=self.process_states.get_process_state(
+                                ProcessStates.BASEBADMPubFailed))
                         info_msg = ("Wrote report_status BASEBADMPubFailed "
                                     f"for processID {process_id} "
                                     f"(file: {filename}).")

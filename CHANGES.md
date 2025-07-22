@@ -1,5 +1,81 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v2.2.0
+*2025 Jun 25*
+
+New in this release:
+- Require python 3.10 and matplotlib 3.9.0. 
+- Data QA/QC module figure updates for improved usability.
+- Bug fix: Site team PI email mismatch for Jira ticket reporter.
+- Update Format QA/QC report email to link to Data Processing Status webpage.
+
+### QAQC v2.1.6
+*2024 Nov 25*
+
+New in this release:
+- Updates to support AmeriFlux web services v2.
+- Updates to run Format QAQC with pymssql removed.
+- Documentation for testing Format QAQC manually.
+
+### QAQC v2.1.5
+*2024 Sept 10*
+
+New in this release:
+- Bug fix in the publish mode.
+
+### QAQC v2.1.4
+*2024 Sept 09*
+
+New in this release:
+- Bug fixes in the publish mode.
+
+### QAQC v2.1.3
+*2024 Jul 31*
+
+New in this release:
+- Updates to the publish mode for new infrastructure.
+
+### QAQC v2.1.2
+*2024 Jul 24*
+
+New in this release:
+- Removal of undeployed modules that have not been migrated to the new infrastructure. This allows removal of pymssql package.
+
+### QAQC v2.1.1
+*2024 Jul 23*
+
+New in this release:
+- Removal of no longer used modules and / or functionality within modules.
+- Update reset state functionality for publishing to work with new infrastructure.
+
+Notes:
+- There are a few not yet implemented modules still referencing the old infrastructure. Additional clean up forthcoming.
+
+### QAQC v2.1.0
+*2024 May 24*
+
+This release includes updates to Data QA/QC and Publish functionality that are not backwards compatible.
+
+New in this release:
+- Support for new webservices in the Data QA/QC modules.
+- Updates to the Publish modules for new infrastructure
+- Updates to historical ranges for each site (used in diurnal seasonal pattern check).
+
+Notes:
+- There are additional helper modules still referencing the old infrastructure. Additional clean up forthcoming.
+
+### QAQC v2.0.0
+*2024 Apr 29*
+
+This major release includes updates to Format QA/QC functionality that are not backwards compatible.
+
+New in this release:
+- Support for new data upload webservices.
+- Format QA/QC driver has been added. This change involves reworking how the upload_checks module is run and the information returned from it.
+
+Notes:
+- The Data QA/QC and Publish functionality have incomplete transitions to the new infrastructure included in this version. We recommend prior versions are used for these modes until further updates are made.
+
 ### QAQC v1.2.6
 *2023 Nov 01*
 

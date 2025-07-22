@@ -499,6 +499,14 @@ def test_get_ustar_diff_msg(ustar):
 
 
 def generate_plot_data():
+    """
+    Note: the resulting plot_data is not an exact match as this
+          data file when it's run thru the full code b/c the full
+          code uses SW_IN_POT. This test code used SW_IN.
+          To get a new test plot file, delete the json and png
+          test files. Then run this test file to generate a new
+          test png.
+    """
     infile = os.path.join(
         'test', 'testdata', 'ustar_filtering',
         'US-CRT_HH_201101010000_201201010000_TestUSTARFiltering000001.csv')

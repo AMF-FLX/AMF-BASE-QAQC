@@ -2,10 +2,11 @@ import argparse
 import os
 import traceback
 
+from datetime import datetime as dt
 from time import time
 
 from data_reader import DataReader
-from data_report_gen import DataReportGen
+from data_report_gen import DataReportGen, gen_description
 from diurnal_seasonal_pattern import DiurnalSeasonalPattern
 from file_name_verifier import FileNameVerifier
 from gap_fill import GapFilled
@@ -15,8 +16,7 @@ from multivariate_comparison import MultivariateComparison
 from plot_config import PlotConfig
 from physical_range import PhysicalRange
 from process_status import ProcessStatus
-from process_states import ProcessStates
-from process_actions import ProcessActions
+from process_states import ProcessStates, ProcessStateHandler
 from publish import Publish
 from report_status import ReportStatus
 # from shadows import Shadows
@@ -56,28 +56,43 @@ def main():
     args = parser.parse_args()
     # parser.parse_known_args
 
+    start_time = dt.now()
+    timestamp_str = start_time.isoformat()
+
     if args.site_id not in SiteAttributes().get_site_dict():
         print(f'Invalid SITE_ID {args.site_id} exiting.')
         return
 
-    if args.test:
+    process_id = None
+    fname = None
+    json_report = None
+    json_status = None
+    state_id = None
+
+    if not args.test:
+        rs = ReportStatus()
+        process_id = ReportStatus().register_data_qaqc_process(
+            site_id=args.site_id, resolution=args.resolution,
+            process_timestamp=timestamp_str)
+        if not process_id:
+            print(f'Data QA/QC process run for {args.site_id} did not '
+                  'register properly in the database.')
+            return
+    else:
         if not args.filename:
             print('Test argument needs to be used with filename argument')
             return
         else:
             process_id = str('TestProcess_###')
-    else:
-        rs = ReportStatus()
-        process_id = ReportStatus().register_siteRes_process(
-            args.site_id, args.resolution)
 
     # Initialize logger
-    _log = Logger(True, process_id, args.site_id, process_type).getLogger(
-        'BASE Generation')
+    _log = Logger(True, process_id, args.site_id, process_type,
+                  start_time).getLogger('BASE Generation')
     log_dir = _log.get_log_dir()
     base_dir_for_run = os.path.split(log_dir)[0]
 
     try:
+        process_states = ProcessStateHandler()
         log_start_time = _log.log_file_timestamp.strftime(
             format='%Y-%b-%d %H:%M %Z')
         status_list = {}
@@ -114,7 +129,18 @@ def main():
                 process_id, args.site_id, args.resolution)
             if not fname:
                 _log.fatal('JoinSiteData did not produce a file, exiting.')
+                if not args.test:
+                    rs.report_status(
+                        process_id=process_id,
+                        state_id=process_states.get_process_state(
+                            ProcessStates.CombinerFailed),
+                        log_file_path=_log.default_log)
                 return
+            if not args.test:
+                rs.report_status(
+                    process_id=process_id,
+                    state_id=process_states.get_process_state(
+                        ProcessStates.FilesCombined))
             qaqc_check = 'File Combiner'
             status_list[qaqc_check] = status
             report_list, process_status_code = select_report(
@@ -280,12 +306,17 @@ def main():
         if worst_process_status_code < -2:
             status_msg = 'Checks INCOMPLETE.'
 
+        p_time = time()
+
+        processing_time = p_time - s_time
+        _log.info(f'Processing time: {processing_time} seconds')
+
         if args.test:
             input_files = fname
             process_id = '9999'
             check_summary = 'test_summary'
         else:
-            check_summary = DataReportGen().gen_description(status_list)
+            check_summary = gen_description(status_list)
 
         process_status = ProcessStatus(
             process_type=process_type,
@@ -306,37 +337,60 @@ def main():
             report_statuses=report_statuses,
             check_summary=check_summary)
 
-        # Write to database
-        state = ProcessStates.FinishedQAQC
-        action = ProcessActions.FinishedQAQC
         # write jsons
         json_report = process_status.write_report_json()
         json_status = process_status.write_status_json()
 
-        if args.test:
-            print(json_report)
-        else:
-            rs.report_status(
-                action=action, status=state, report_json=json_report,
-                log_file=_log.default_log,
-                process_id=process_id, status_json=json_status)
+        # Write to database
+        state_id = process_states.get_process_state(
+            ProcessStates.FinishedQAQC)
 
         # Publish files to FTP
         if not args.no_pub:
             publisher.transfer(site_id, process_id)
 
         if not args.test:
-            DataReportGen().driver(
+            report_msg = 'Report was not generated.'
+            ticket_key = DataReportGen().driver(
                 site_id, resolution, process_id, input_file_order,
                 status_list, ftp_plot_dir, args.force_amp_review)
 
-        e_time = time()
+            if ticket_key:
+                report_msg = f'Report {ticket_key} successfully generated.'
 
-        total_running_time = e_time - s_time
-        _log.info(f'Total running time: {total_running_time} seconds')
+            _log.info(report_msg)
+
     except Exception as e:
         _log.info(f'Unhandled exception {e}')
         _log.info(traceback.format_exc())
+
+    if args.test:
+        print(json_report)
+    else:
+        combined_file_path = None
+        if fname:
+            combined_file_path = str(fname)
+
+        report_status_dict = {
+            'process_id': process_id,
+            'log_file_path': _log.default_log,
+        }
+
+        if combined_file_path:
+            report_status_dict.update(file_name=combined_file_path)
+        if json_report:
+            report_status_dict.update(report_json=json_report)
+        if json_status:
+            report_status_dict.update(status_json=json_status)
+        if state_id:
+            report_status_dict.update(state_id=state_id)
+
+        rs.report_status(**report_status_dict)
+
+    e_time = time()
+
+    total_running_time = e_time - s_time
+    _log.info(f'Total running time: {total_running_time} seconds')
 
 
 def select_report(stat_list, test_name, _log, test_plot_dir=None):

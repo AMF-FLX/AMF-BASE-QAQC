@@ -318,6 +318,7 @@ class MissingValueFormat:
         :param fname:
         :return:
         """
+        _log.resetStats()
         report_type = 'single_msg'
         dr = DataReader()
         if d.data is not None:

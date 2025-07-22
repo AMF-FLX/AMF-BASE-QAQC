@@ -4,6 +4,7 @@ import matplotlib.dates as dates
 import matplotlib.pyplot as plt
 import numpy.ma as ma
 import os
+import matplotlib.lines as mlines
 
 from configparser import ConfigParser
 from data_reader import DataReader
@@ -40,6 +41,11 @@ class USTARFiltering:
         self.plot_config = PlotConfig()
         self.ts_util = TimestampUtil()
         self.var_util = VarUtil()
+
+        self.color_palette = self.plot_config.ustar_palette
+        self.line_width = 2
+        self.marker_size = 8
+        self.marker = '.'
 
         # Determine if plots should be generated and where to save them
         if plot_dir is not None:
@@ -503,104 +509,178 @@ class USTARFiltering:
         fig = plt.figure(f'{year}-{ustar_var}:{fc_var}',
                          figsize=(12.8, 12.8),
                          dpi=self.plot_config.plot_default_dpi)
-        fig.suptitle(f'Plot of {ustar_var} threshold wrt {fc_var}')
 
+        text1 = 'USTAR Filtering | '
+        text2 = f'{ustar_var} - {fc_var}'
+        text3 = f' | {year}'
+
+        # Calculate the widths of each text segment
+        renderer = fig.canvas.get_renderer()
+        bbox1 = fig.text(0, 0, text1, ha='left',
+                         va='top', fontsize=16
+                         ).get_window_extent(renderer=renderer)
+        bbox2 = fig.text(0, 0, text2, ha='left',
+                         va='top', fontsize=16, fontweight='bold'
+                         ).get_window_extent(renderer=renderer)
+
+        # Starting x position
+        x_start = 0.01
+
+        # Set the text positions dynamically based on the calculated widths
+        fig.text(x_start, 0.99, text1, ha='left', va='top', fontsize=16)
+        fig.text(x_start + bbox1.width / fig.bbox.width, 0.99,
+                 text2, ha='left', va='top', fontsize=16, fontweight='bold')
+        fig.text(x_start + (bbox1.width + bbox2.width) / fig.bbox.width,
+                 0.99, text3, ha='left', va='top', fontsize=16)
+
+        # add 2 empty legend entries to force more readable spacing.
+        mlines_empty = mlines.Line2D([], [],
+                                     color=self.color_palette[2], label=' ')
+
+        handles = [
+            mlines.Line2D([], [], color='None',
+                          marker=self.marker, markersize=self.marker_size,
+                          markerfacecolor=self.color_palette[0],
+                          markeredgecolor=self.color_palette[0],
+                          label=f'{ustar_var} (all)'),
+            mlines.Line2D([], [], color='None',
+                          marker=self.marker, markersize=self.marker_size,
+                          markerfacecolor=self.color_palette[1],
+                          markeredgecolor=self.color_palette[1],
+                          label=f'{ustar_var} when {fc_var} is not missing'),
+                   mlines_empty, mlines_empty,]
+        labels = [f'{ustar_var} (all)', f'{ustar_var}'
+                  f' when {fc_var} is not missing', ' ', ' ']
         plots = []
         axhlines = []
 
         # Plot the overall USTAR var day data
+        day_handles = []
+        day_labels = []
         if len(day_data) > 0:
             p2 = self.plot_config.plot(
                 x_vals=list(ustar_data['day'].keys()),
                 y_vals=list(ustar_data['day'].values()),
-                color='k', marker='o', marker_size=2,
+                color=self.color_palette[0],
+                marker=self.marker, marker_size=self.marker_size,
                 subplot_pos=(2, 1, 1),
-                x_label='Time', y_label=ustar_var,
+                x_label='TIMESTAMP_START', y_label=ustar_var,
                 title=f'{year} daytime',
-                label=f'{ustar_var} (all)',
                 reset_all_subplots=True
             )
             plots.extend(p2)
             ustar_min = min(ustar_data['day'].values())
             rounded_ustar_min = round(ustar_min, 2)
-            l1 = plt.axhline(
-                ustar_min, color='k', label=f'{rounded_ustar_min:.2f}'
-            )
+            l1 = plt.axhline(ustar_min,
+                             color=self.color_palette[0], lw=self.line_width,
+                             label=f'{rounded_ustar_min:.2f}')
             axhlines.append(l1)
-
+            day_handles.append(
+                mlines.Line2D([], [],
+                              color=self.color_palette[0],
+                              linestyle='-', lw=self.line_width,
+                              label=f'{rounded_ustar_min:.2f} (day)'))
+            day_labels.append(f'{rounded_ustar_min:.2f} (day)')
         # Plot USTAR day data wrt the FC var
         if len(day_data) > 0:
             p1 = self.plot_config.plot(
                 x_vals=list(day_data.keys()),
                 y_vals=list(day_data.values()),
-                color='r', marker='o', marker_size=1,
+                color=self.color_palette[1],
+                marker=self.marker, marker_size=self.marker_size,
                 subplot_pos=(2, 1, 1),
-                label=f'{ustar_var} when {fc_var} is not missing',
                 reset_all_subplots=False
             )
             plots.extend(p1)
             ustar_min = min(day_data.values())
             rounded_ustar_min = round(ustar_min, 2)
             l2 = plt.axhline(
-                ustar_min, color='r', label=f'{rounded_ustar_min:.2f}',
-                linestyle='--'
+                ustar_min, color=self.color_palette[1],
+                linestyle='--', lw=self.line_width,
+                label = f'{rounded_ustar_min:.2f}'
             )
             axhlines.append(l2)
-
+            day_handles.append(
+                mlines.Line2D([], [],
+                color=self.color_palette[1],
+                linestyle='--',
+                label=f'{rounded_ustar_min:.2f} (day)'))
+            day_labels.append(f'{rounded_ustar_min:.2f} (day)')
         # If axis lines were generated, add them to the figure
-        if len(axhlines) > 0:
-            plt.gca().add_artist(
-                plt.legend(handles=axhlines, loc=1)
-            )
-
-        # If plots were generated, add them to the figure
-        if len(plots) > 0:
-            plt.legend(handles=plots, loc=2)
+        if len(axhlines) < 0:
+            day_handles = []
+            day_labels = []
 
         plots = []
         axhlines = []
-
+        night_handles = []
+        night_labels = []
         # Plot the overall USTAR var night data
         if len(ustar_data['night']) > 0:
             self.plot_config.plot(
                 x_vals=list(ustar_data['night'].keys()),
                 y_vals=list(ustar_data['night'].values()),
-                color='k', marker='o', marker_size=2,
-                subplot_pos=(2, 1, 2), x_label='Time',
+                color=self.color_palette[0],
+                marker=self.marker, marker_size=self.marker_size,
+                subplot_pos=(2, 1, 2), x_label='TIMESTAMP_START',
                 y_label=ustar_var, title=f'{year} nighttime',
                 reset_all_subplots=False
             )
             ustar_min = min(ustar_data['night'].values())
             rounded_ustar_min = round(ustar_min, 2)
             l1 = plt.axhline(
-                ustar_min, color='k', label=f'{rounded_ustar_min:.2f}'
+                ustar_min,
+                color=self.color_palette[0], lw=self.line_width,
+                label=f'{rounded_ustar_min:.2f}'
             )
             axhlines.append(l1)
+            night_handles.append(
+                mlines.Line2D([], [],
+                              color=self.color_palette[0],
+                              linestyle='-', lw=self.line_width,
+                              label=f'{rounded_ustar_min:.2f} (night)'))
+            night_labels.append(f'{rounded_ustar_min:.2f} (night)')
 
         # Plot USTAR night data wrt the FC var
         if len(night_data) > 0:
             self.plot_config.plot(
                 x_vals=list(night_data.keys()),
                 y_vals=list(night_data.values()),
-                color='r', marker='o', marker_size=1,
+                color=self.color_palette[1],
+                marker=self.marker, marker_size=self.marker_size,
                 subplot_pos=(2, 1, 2),
                 reset_all_subplots=False
             )
             ustar_min = min(night_data.values())
             rounded_ustar_min = round(ustar_min, 2)
             l2 = plt.axhline(
-                ustar_min, color='r', label=f'{rounded_ustar_min:.2f}',
-                linestyle='--'
+                ustar_min, color=self.color_palette[1],
+                linestyle='--', lw=self.line_width,
+                label = f'{rounded_ustar_min:.2f}',
             )
             axhlines.append(l2)
+            night_handles.append(
+                mlines.Line2D([], [],
+                              color=self.color_palette[1],
+                              linestyle='--', lw=self.line_width,
+                              label=f'{rounded_ustar_min:.2f} (night)'))
+            night_labels.append(f'{rounded_ustar_min:.2f} (night)')
 
         # If axis lines were generated, add them to the figure
         if len(axhlines) > 0:
-            plt.legend(handles=axhlines, loc=1)
+            final_handles = handles + day_handles + night_handles
+            final_labels = labels + day_labels + night_labels
+            fig.legend(final_handles, final_labels,
+                       loc='upper left', ncol=2,
+                       bbox_to_anchor=(x_start, 0.97),
+                       title='Plot Symbols',
+                       handletextpad=0.5, fontsize='small',
+                       frameon=True, alignment='left',
+                       title_fontproperties={'weight':'bold'})
 
         # Adjust the margins and padding
         plt.tight_layout()
-        plt.subplots_adjust(top=0.85)
+        plt.subplots_adjust(top=0.88)
 
         # Determine where to save the figure
         fig_loc = os.path.join(

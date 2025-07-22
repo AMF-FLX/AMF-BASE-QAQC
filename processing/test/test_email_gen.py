@@ -54,7 +54,7 @@ def test_is_upload_from_zip(email_gen):
     assert email_gen.is_upload_from_zip(upload_info) is False
 
 
-def test_get_file_reports(email_gen):
+def test_get_sorted_file_reports(email_gen):
     upload_info = {
         'reports': {
             '9425': {'upload_file': 'US-PFa_HR_199601010000_199701010000.csv'},
@@ -65,7 +65,7 @@ def test_get_file_reports(email_gen):
         {'upload_file': 'US-PFa_HR_199501010000_199601010000.csv'},
         {'upload_file': 'US-PFa_HR_199601010000_199701010000.csv'},
         {'upload_file': 'US-PFa_HR_199701010000_199801010000.csv'}]
-    assert email_gen.get_file_reports(upload_info) == results
+    assert email_gen.get_sorted_file_reports(upload_info) == results
 
 
 def test_has_autocorrect_file(email_gen):
@@ -454,6 +454,57 @@ def test_get_formated_upload_datetime(email_gen):
         'Jan 02, 2019'
 
 
+def test_all_archival_files(email_gen):
+
+    upload_reports_response = {
+        'SITE_ID': '',
+        'datetime': '',
+        'reports': {},
+        'upload_comment': '',
+        'uploader': '',
+        'uploader_email': '',
+        'uploader_id': '',
+        'zip_file': None
+    }
+
+    assert email_gen.all_upload_files_archival(
+        upload_reports_response) == 'No file reports found.'
+
+    qaqc_checks = {'checks': [
+        {
+            'check_name': email_gen.fixer_check_name,
+            'status_msg': {
+                'WARNING': {
+                    'status_body': [email_gen.fixer_archival_file_txt]
+                }
+            }
+        }
+    ]}
+
+    upload_reports_response.update(
+        reports={'1': {'qaqc_checks': qaqc_checks,
+                       'upload_file': 'data.csv'}})
+    assert email_gen.all_upload_files_archival(
+        upload_reports_response) == 'All uploaded files are archival.'
+
+    qaqc_checks = {'checks': [
+        {
+            'check_name': email_gen.fixer_check_name,
+            'status_msg': {
+                'WARNING': {
+                    'status_body': ['Fixes made.']
+                }
+            }
+        }
+    ]}
+
+    upload_reports_response.update(
+        reports={'1': {'qaqc_checks': qaqc_checks,
+                       'upload_file': 'data.csv'}})
+    assert email_gen.all_upload_files_archival(
+        upload_reports_response) is None
+
+
 def test_craft_email(monkeypatch):
     """
     Using driver to create and then test craft_email
@@ -598,8 +649,8 @@ detail_results = {
             'data comply with AmeriFlux FP-In format. Awesome! Data QA/QC '
             'will be run next to determine if there are any issues with the '
             'data in the file(s). Data QA/QC results will be sent in a '
-            'separate email.\n\n\nView the status of your uploaded files at '
-            f'{ui_url}qaqc-reports-data-team/. '
+            'separate email.\n\n\nView the processing status of your site at '
+            f'{ui_url}sites/data-processing-status/ (login required). '
             'Links to view the Format QA/QC report for each file are at the '
             'end of this email.\n\nWe appreciate your help with standardizing '
             'the data submission format. Please reply to this email with any '
@@ -812,9 +863,9 @@ detail_results = {
                 'time period: FC_1_1_1, H_1_1_1, LE_1_1_1, WD_1_1_1, '
                 'WS_1_1_1, USTAR_1_1_1, NEE_1_1_1. Previously uploaded data '
                 'with the same time period will be overwritten.\n\n'),
-            ('View the '
-                'status of your uploaded files at '
-                f'{ui_url}qaqc-reports-data-team/. Links to view the '
+            ('View the processing status of your site at '
+                f'{ui_url}sites/data-processing-status/ (login required). '
+                'Links to view the '
                 'Format QA/QC report for each file are at the end of this '
                 'email.\n\nWe appreciate your help with standardizing the '
                 'data submission format. We hope that fixing any identified '
@@ -1022,9 +1073,9 @@ detail_results = {
                 'FC_1_1_1, H_1_1_1, LE_1_1_1, WD_1_1_1, WS_1_1_1, '
                 'USTAR_1_1_1, NEE_1_1_1. Previously uploaded data with the '
                 'same time period will be overwritten.\n\n'),
-            ('View the status of '
-                f'your uploaded files at {ui_url}'
-                'qaqc-reports-data-team/. Links to view the Format QA/QC '
+            ('View the processing status of your site at '
+                f'{ui_url}sites/data-processing-status/ (login required). '
+                'Links to view the Format QA/QC '
                 'report for each file are at the end of this email.\n\nWe '
                 'appreciate your help with standardizing the data submission '
                 'format. We hope that fixing any identified issues will not '
@@ -1285,8 +1336,9 @@ detail_results = {
                 '20060101000000_20070101000000.csv:\n* Filename components '
                 'fixed: ts-start (start time); ts-end (end time)\n\nPlease '
                 'correct these issues in subsequent data submissions.\n\n\n'),
-            ('View the status of your uploaded files at '
-                f'{ui_url}qaqc-reports-data-team/. Links to view the '
+            ('View the processing status of your site at '
+                f'{ui_url}sites/data-processing-status/ (login required). '
+                'Links to view the '
                 'Format QA/QC report for each file are at the end of this '
                 'email.\n\nWe appreciate your help with standardizing the '
                 'data submission format. We hope that fixing any identified '
@@ -1377,9 +1429,9 @@ detail_results = {
                 'non-standard data product that will be available in future. '
                 'Reply to this email to request that a variable be added to '
                 'AmeriFlux FP Standard.\n\nPlease correct these issues in '
-                'subsequent data submissions.\n\n\nView the status of your '
-                f'uploaded files at {ui_url}qaqc-'
-                'reports-data-team/. Links to view the Format QA/QC report '
+                'subsequent data submissions.\n\n\nView the processing status '
+                f'of your site at {ui_url}sites/data-processing-status/ '
+                '(login required). Links to view the Format QA/QC report '
                 'for each file are at the end of this email.\n\nWe appreciate '
                 'your help with standardizing the data submission format. We '
                 'hope that fixing any identified issues will not take too '
@@ -1463,9 +1515,9 @@ detail_results = {
                 'components (expect timestamp errors), extension is not '
                 'csv.\n* Timestamp variables are not in standard AmeriFlux '
                 'format. TIMESTAMP_START and TIMESTAMP_END should be in the '
-                'first two columns.\n\nView the status of your uploaded '
-                f'files at {ui_url}qaqc-reports-'
-                'data-team/. Links to view the Format QA/QC report for each '
+                'first two columns.\n\nView the processing status of your '
+                f'site at {ui_url}sites/data-processing-status/ (login '
+                'required). Links to view the Format QA/QC report for each '
                 'file are at the end of this email.\n\nWe appreciate your '
                 'help with standardizing the data submission format. We hope '
                 'that fixing any identified issues will not take too much '

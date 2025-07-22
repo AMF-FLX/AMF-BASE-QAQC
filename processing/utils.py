@@ -40,6 +40,7 @@ class TimestampUtil:
         self.PREFERRED_TS_FORMAT = '%Y%m%d%H%M'
         self.DATE_ONLY_TS_FORMAT = '%Y%m%d'
         self.JIRA_TS_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
+        self.QAQC_DB_FORMAT = '%Y-%m-%d %H:%M'
         self.NUMBER_OF_HOURS_IN_DAY = 24
         self.MAX_NUMBER_OF_DAYS_IN_YEAR = 366
         self.YYYY_LEN = 4

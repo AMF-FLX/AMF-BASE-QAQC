@@ -1,15 +1,16 @@
 codecov
 dataclasses
 # To avoid https://github.com/tholo/pytest-flake8/issues/87
-flake8<5.0.0
+flake8
 future
-matplotlib
+matplotlib==3.9.0
 numpy
 pandas
 psycopg2-binary
-pymssql-linux
 pytest
 pytest-cov
 pytest-flake8
+requests
 scipy
 xlrd
+

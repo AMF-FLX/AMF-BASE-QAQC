@@ -52,6 +52,8 @@ class PhysicalRange:
         self.plot_config = PlotConfig()
         self.ts_util = TimestampUtil()
         config = ConfigParser()
+        self.color_palette = self.plot_config.physical_palette
+
 
         if plot_dir:
             self.can_plot = True
@@ -292,17 +294,15 @@ class PhysicalRange:
         out_warning = [list(x) for x in zip(*out_warning)]
         return out_error, out_warning
 
-    def make_plot(self, x_data, y_data, var_obj, year, thresholds=True):
+    def make_plot(self, ax, x_data, y_data, var_obj, year, thresholds=True):
         y_name = year.replace('_', ' ')
-        plt.xlabel(f'Time ({y_name})',
-                   fontsize=self.plot_config.plot_title_fontsize)
-        plt.ylabel(f'{var_obj.name} ({var_obj.units})',
-                   fontsize=self.plot_config.plot_title_fontsize)
 
         if thresholds:
             range_type = 'Actual Data Range'
-            subplot_pos = (2, 1, 1)
-            # YWC: If var_obj limits are inf, use max/min of actual data
+            y_max = np.nanmax(y_data)
+            y_min = np.nanmin(y_data)
+        else:
+            range_type = 'Physical Range Limits'
             if var_obj.error_max == float('inf'):
                 y_max = np.nanmax(y_data)
             else:
@@ -312,93 +312,130 @@ class PhysicalRange:
                 y_min = np.nanmin(y_data)
             else:
                 y_min = var_obj.error_min
-        else:
-            range_type = 'Physical Range'
-            subplot_pos = (2, 1, 2)
-            y_max = np.nanmax(y_data)
-            y_min = np.nanmin(y_data)
 
-        # Add delta to limits
         delta = (2 * var_obj.error)
         y_max += delta
         y_min -= delta
-        title = f'Plot of {var_obj.name} with {range_type}'
+        title = f'{var_obj.name} | {range_type}'
 
-        plt.ylim((y_min, y_max))
-        plt.subplot(*subplot_pos)
-        plt.title(title, fontsize=self.plot_config.plot_title_fontsize)
-        plot = plt.plot_date
-        plot(x_data, y_data, c='0.75',
-             ms=2, ls='', lw=0)
-        error_outliers, warning_outliers = self.identify_outliers(
-            x_data, y_data, var_obj)
+        ax.set_ylim((y_min, y_max))
+        ax.set_xlabel(f'TIMESTAMP_START',
+                      fontsize=10)
+        ax.set_ylabel(f'{var_obj.name} ({var_obj.units})',
+                      fontsize=10)
+        # ax.set_title(title,
+        #              fontsize=self.plot_config.plot_title_fontsize)
+        ax.text(0.01, 0.96, title, ha='left', va='center',
+                fontsize=self.plot_config.plot_title_fontsize,
+                transform=ax.transAxes)
+        ax.set_title('')
+        ax.plot_date(x_data, y_data, color='0.75', ms=2, ls='', lw=0)
+        error_outliers, warning_outliers = \
+            self.identify_outliers(x_data, y_data, var_obj)
         if error_outliers:
-            plot(error_outliers[0], error_outliers[1], 'o', markersize=6,
-                 markeredgewidth=1, markerfacecolor='None',
-                 markeredgecolor='r')
+            ax.plot_date(error_outliers[0], error_outliers[1], 'o',
+                         markersize=6, markeredgewidth=1,
+                         markerfacecolor='None',
+                         markeredgecolor=self.color_palette[1])
+
         if warning_outliers:
-            plot(warning_outliers[0], warning_outliers[1], 'o', markersize=6,
-                 markeredgewidth=1, markerfacecolor='None',
-                 markeredgecolor='orange')
-        plt.axhline(y=var_obj.max_lim, marker='', linestyle='-',
-                    linewidth=1, color='orange')
-        plt.axhline(y=var_obj.min_lim, linestyle='-',
-                    linewidth=1, color='orange')
-        plt.axhline(y=var_obj.error_max, linestyle='-',
-                    linewidth=1, color='r')
-        plt.axhline(y=var_obj.error_min, linestyle='-',
-                    linewidth=1, color='r')
+            ax.plot_date(warning_outliers[0], warning_outliers[1], 'o',
+                         markersize=6, markeredgewidth=1,
+                         markerfacecolor='None',
+                         markeredgecolor=self.color_palette[0])
+
+        ax.axhline(y=var_obj.max_lim, linestyle='-',
+                   linewidth=1.5, color=self.color_palette[0])
+        ax.axhline(y=var_obj.min_lim, linestyle='-',
+                   linewidth=1.5, color=self.color_palette[0])
+        ax.axhline(y=var_obj.error_max, linestyle='-',
+                   linewidth=1.5, color=self.color_palette[1])
+        ax.axhline(y=var_obj.error_min, linestyle='-',
+                   linewidth=1.5, color=self.color_palette[1])
 
     def plot(self, var_obj, year):
-        start, end = self.annual_idx[year]['start'], self.annual_idx[year][
-            'end']
+        start, end = self.annual_idx[year]['start'], \
+            self.annual_idx[year]['end']
         annual_data = self.data[var_obj.name][start:end + 1]
         time_data = [self.ts_util.cast_as_datetime(t)
                      for t in self.data['TIMESTAMP_START'][start:end + 1]]
-        fig = plt.figure(1, figsize=(12, 13))  # Create figure
+        fig, (subplot1, subplot2) = plt.subplots(
+            2, 1, figsize=(12, 13))  # Create figure
         y_name = year.replace("_", " ")
-        fig.suptitle(
-            f'Physical Range of {var_obj.name} throughout {y_name}',
-            fontsize=self.plot_config.plot_suptitle_fontsize)
 
-        self.make_plot(time_data, annual_data, var_obj, year, thresholds=True)
-        self.make_plot(time_data, annual_data, var_obj, year, thresholds=False)
-        """
-        Set up legend with labels and corresponding colors
-        """
-        # Set labels and colors for lines
+        text1 = 'Physical Range | '
+        text2 = f'{var_obj.name}'
+        text3 = f' | {y_name}'
+
+        # Calculate the widths of each text segment
+        renderer = fig.canvas.get_renderer()
+        bbox1 = fig.text(0, 0, text1, ha='left', va='top',
+                         fontsize=16).get_window_extent(renderer=renderer)
+        bbox2 = fig.text(0, 0, text2, ha='left', va='top',
+                         fontsize=16, fontweight='bold'
+                         ).get_window_extent(renderer=renderer)
+
+        # Starting x position
+        x_start = 0.01
+
+        # Set the text positions dynamically based on the calculated widths
+        fig.text(x_start, 0.99, text1, ha='left', va='top', fontsize=16)
+        fig.text(x_start + bbox1.width / fig.bbox.width, 0.99,
+                 text2, ha='left', va='top', fontsize=16, fontweight='bold')
+        fig.text(x_start + (bbox1.width + bbox2.width) / fig.bbox.width,
+                 0.99, text3, ha='left', va='top', fontsize=16)
+
+        self.make_plot(subplot1, time_data, annual_data, var_obj,
+                       year, thresholds=True)
+        self.make_plot(subplot2, time_data, annual_data, var_obj,
+                       year, thresholds=False)
         lab_warn = f'Expected Range ({var_obj.min_lim}-{var_obj.max_lim})'
         margin_percent = str(var_obj.margin * 100)
         lab_err = (f'Expected Range +/- {margin_percent}% '
                    f'({var_obj.error_min}-{var_obj.error_max})')
 
-        legend_info = [('orange', lab_warn), ('r', lab_err)]
-        handles = [mlines.Line2D([], [], color=c, label=l) for c, l in
-                   legend_info]  # convert legend info to Patches
-        labels = [l for c, l in legend_info]
+        handles = [mlines.Line2D([], [], color='None', marker='o',
+                                markerfacecolor='0.75',
+                                markeredgecolor='None',
+                                markersize=10, label='Data')]
+        labels = ['Data']
 
         # Add labels and colors for point styling
-        handles += [mlines.Line2D([], [], color='None', marker='o',
-                                  markerfacecolor='0.75', markersize=10,
-                                  label='data'),
-                    mlines.Line2D([], [], color='None', marker='o',
-                                  markerfacecolor='None',
-                                  markeredgecolor='orange',
-                                  markersize=10,
-                                  label=('data outside the expected '
-                                         'physical range')),
-                    mlines.Line2D([], [], color='None', marker='o',
-                                  markerfacecolor='None', markeredgecolor='r',
-                                  markersize=10,
-                                  label=(
-                                      'data outside the expected physical '
-                                      f'range +/- {margin_percent}%'))]
-        labels += ['data', 'data outside the expected physical range',
-                   'data outside the expected physical range']
-        plt.figlegend(handles, labels, loc='lower center', ncol=2)
+        handles += [
+            mlines.Line2D([], [], color='None', marker='o',
+                          markerfacecolor='None',
+                          markeredgecolor=self.color_palette[0],
+                          markersize=10),
+                          # label=('Data outside the expected '
+                          #         'physical range')),
+            mlines.Line2D([], [], color='None', marker='o',
+                          markerfacecolor='None',
+                          markeredgecolor=self.color_palette[1],
+                          markersize=10)]
+                          # label=(
+                          #     'Data outside the expected physical '
+                          #     f'range +/- {margin_percent}%'))]
 
-        fig_name = self.fig_name_fmt.format(
-            y=var_obj.name, year=year, s=self.site_id, p=self.process_id)
+        labels += [('Data outside the expected physical range '
+                    f'+/- {margin_percent}%'),
+                   'Data outside the expected physical range']
+
+        # start with empty row to force more readable spacing
+        legend_info = [(self.color_palette[2], ' '), (self.color_palette[0], lab_warn), (self.color_palette[1], lab_err)]
+        for color, label in legend_info:
+            handles.append(mlines.Line2D([], [], color=color, label=label))
+            labels.append(label)
+
+        leg = fig.legend(handles, labels, loc='upper left',
+                         ncol=2, bbox_to_anchor=(0.01, 0.97),
+                         title='Plot Symbols', handletextpad=0.5,
+                         columnspacing=1.5, fontsize='small',
+                         frameon=True,
+                         title_fontproperties={'weight':'bold'})
+        leg._legend_box.align = "left"
+
+        fig_name = self.fig_name_fmt.format(y=var_obj.name, year=year,
+                                            s=self.site_id, p=self.process_id)
         fig_loc = os.path.join(self.plot_dir, fig_name)
 
         plt.savefig(fig_loc, dpi=self.plot_config.plot_default_dpi)

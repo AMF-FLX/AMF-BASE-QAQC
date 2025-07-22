@@ -62,6 +62,13 @@ class PlotConfig():
         "#D25B88", "#5B656C", "#00B57F", "#545C46", "#866097", "#365D25",
         "#252F99", "#00CCFF", "#674E60", "#FC009C", "#FFFF00"]
 
+    timestamp_lines_palette = ["#000000", "#757575"]  # black, dark grey
+    timestamp_palette = ['#4D91FE', '#B21B00', '#9B51E0', ]  # blue, purple, red
+    diurnal_palette = ['#000000', '#4D91FE', '#CCCCCC']  # black, blue, light grey
+    physical_palette = ['#FFAE00', '#B21B00', '#FFFFFF']  # yellow, red, white
+    multivariate_palette = ['#4D91FE', '#9B51E0']  # blue, purple
+    ustar_palette = ['#CCCCCC', '#9B51E0', '#FFFFFF']  # light grey, purple, white
+
     def __init__(self, setup=True):
         """Constructor
         :param setup: Used to determine if setup() is called.
@@ -153,55 +160,64 @@ class PlotConfig():
              color='.75', marker='o', marker_size=5,
              marker_fill=True, linestyle='', linewidth=0, title='',
              subplot_pos=None, xlim=None, ylim=None, label='',
+             title_pos='left',
              is_plot_date=True, reset_all_subplots=False):
-        # print(self.all_subplots)
+
         if reset_all_subplots:
             self.all_subplots = []
         if subplot_pos:
             if len(subplot_pos) > 2:
                 pos = subplot_pos[2] - 1
-                if self.all_subplots.__len__() < 1:
-                    number_rows, number_cols = subplot_pos[0], subplot_pos[1]
+                if len(self.all_subplots) < 1:
+                    number_rows, number_cols = \
+                        subplot_pos[0], subplot_pos[1]
                     self.all_subplots = \
-                        [None for i in list(range(number_rows * number_cols))]
+                        [None for _ in range(number_rows * number_cols)]
                 if self.all_subplots[pos] is None:
                     self.all_subplots[pos] = plt.subplot(*subplot_pos)
             else:
                 pos = 0
-                self.all_subplots[pos] = plt.subplot(*subplot_pos)
-            # plt.subplot(*subplot_pos)
-            # print(self.all_subplots)
-            # print(pos)
+                self.all_subplots = [plt.subplot(*subplot_pos)]
+        else:
+            pos = 0
+            self.all_subplots = [plt.gca()]
+        ax = self.all_subplots[pos]
+
         if xlim:
-            plt.xlim(*xlim)
+            ax.set_xlim(*xlim)
         if ylim:
-            plt.ylim(*ylim)
+            ax.set_ylim(*ylim)
         if x_label:
-            plt.xlabel(x_label)
+            ax.set_xlabel(x_label)
         if y_label:
-            plt.ylabel(y_label)
+            ax.set_ylabel(y_label)
 
         if title:
             plot_title = title
         elif x_label and y_label:
-            plot_title = "Plot of {x} against {y}".format(
-                x=x_label, y=y_label)
+            plot_title = f'{x_label} - {y_label}'
         else:
             plot_title = None
-        if plot_title:
-            plt.title(plot_title, fontsize=self.plot_title_fontsize)
 
-        if subplot_pos:
-            if is_plot_date:
-                plot = self.all_subplots[pos].plot_date
-            else:
-                plot = self.all_subplots[pos].plot
+        if plot_title:
+            ax.text(0.01, 0.95, plot_title, ha=title_pos, va='center',
+                    fontsize=self.plot_title_fontsize, transform=ax.transAxes)
+            ax.set_title('')
+
+        if is_plot_date:
+            plot_func = ax.plot_date
         else:
-            if is_plot_date:
-                plot = plt.plot_date
-            else:
-                plot = plt.plot
+            plot_func = ax.plot
 
         mf_color = color if marker_fill else 'none'
-        return plot(x_vals, y_vals, c=color, marker=marker, ms=marker_size,
-                    ls=linestyle, lw=linewidth, label=label, mfc=mf_color)
+
+        plot_args = {
+            'color': color,
+            'ms': marker_size,
+            'lw': linewidth,
+            'label': label,
+            'mfc': mf_color,
+        }
+        fmt = '{marker}{linestyle}'.format(marker=marker, linestyle=linestyle)
+        lines = plot_func(x_vals, y_vals, fmt, **plot_args)
+        return ax, lines

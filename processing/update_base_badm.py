@@ -3,11 +3,10 @@ import datetime
 import subprocess
 
 from configparser import ConfigParser
-from db_handler import DBConfig, DBHandler, NewDBHandler
+from db_handler import DBConfig, NewDBHandler
 from file_name_verifier import FileNameVerifier
 from logger import Logger
-from process_actions import ProcessActions
-from process_states import ProcessStates
+from process_states import ProcessStates, ProcessStateHandler
 from report_status import ReportStatus
 from utils import FileUtil
 from utils import RemoteSSHUtil
@@ -34,8 +33,7 @@ class UpdateBASEBADM():
         self.file_util = FileUtil()
         self.zip_util = ZipUtil()
         self.report_status = ReportStatus()
-        self.process_actions = ProcessActions()
-        self.process_states = ProcessStates()
+        self.process_states = ProcessStateHandler()
         self.remote_ssh_util = RemoteSSHUtil(_log)
 
         # Initialize logger
@@ -74,13 +72,13 @@ class UpdateBASEBADM():
         cfg_section = 'DB'
         if config.has_section(cfg_section):
             if config.has_option(cfg_section, 'flux_hostname'):
-                flux_hostname = config.get(cfg_section, 'flux_hostname')
+                ext_hostname = config.get(cfg_section, 'flux_hostname')
             if config.has_option(cfg_section, 'flux_user'):
-                flux_user = config.get(cfg_section, 'flux_user')
+                ext_user = config.get(cfg_section, 'flux_user')
             if config.has_option(cfg_section, 'flux_auth'):
-                flux_auth = config.get(cfg_section, 'flux_auth')
+                ext_auth = config.get(cfg_section, 'flux_auth')
             if config.has_option(cfg_section, 'flux_db_name'):
-                flux_db_name = config.get(cfg_section, 'flux_db_name')
+                ext_db_name = config.get(cfg_section, 'flux_db_name')
             if config.has_option(cfg_section, 'new_hostname'):
                 new_hostname = config.get(cfg_section, 'new_hostname')
             if config.has_option(cfg_section, 'new_user'):
@@ -89,17 +87,17 @@ class UpdateBASEBADM():
                 new_auth = config.get(cfg_section, 'new_auth')
             if config.has_option(cfg_section, 'new_db_name'):
                 new_db_name = config.get(cfg_section, 'new_db_name')
+        ext_db_config = DBConfig(ext_hostname, ext_user, ext_auth, ext_db_name)
         new_db_config = DBConfig(new_hostname, new_user, new_auth, new_db_name)
 
         return (combined_files_loc, BASE_BADM_path, BADM_mnt, OLD_BASE_mnt,
-                BADM_exe_dir, flux_hostname, flux_user, flux_auth,
-                flux_db_name, new_db_config)
+                BADM_exe_dir, ext_db_config, new_db_config)
 
     def _get_params_from_config(self):
         with open(os.path.join(self._cwd, 'qaqc.cfg')) as cfg:
             combined_files_loc, BASE_BADM_path, BADM_mnt, OLD_BASE_mnt, \
-                BADM_exe_dir, flux_hostname, flux_user, flux_auth, \
-                flux_db_name, new_db_config = self._read_config(cfg)
+                BADM_exe_dir, ext_db_config, \
+                new_db_config = self._read_config(cfg)
         if not BASE_BADM_path:
             _log.error('No path for Phase III specified in config file')
             return False
@@ -123,18 +121,19 @@ class UpdateBASEBADM():
         else:
             self.BADM_exe_dir = BADM_exe_dir
 
-        if not all((flux_user, flux_auth, flux_db_name)):
-            _log.error('FLUX DB configurations not assigned')
-            return False
-        else:
-            self.flux_db_handler = DBHandler(
-                flux_hostname, flux_user, flux_auth, flux_db_name)
         if not new_db_config:
             _log.error('New Postgres DB configurations not assigned')
             return False
         else:
             self.db_conn_pool['psql_conn'] = self.new_db_handler.init_db_conn(
                 new_db_config)
+
+        if not ext_db_config:
+            _log.error('New External DB configurations not assigned')
+            return False
+        else:
+            self.db_conn_pool['ext_conn'] = self.new_db_handler.init_db_conn(
+                ext_db_config)
 
         return True
 
@@ -201,6 +200,8 @@ class UpdateBASEBADM():
 
     def driver(self, base_attrs, post_base_only=None):
         psql_conn = self.db_conn_pool.get('psql_conn')
+        ext_conn = self.db_conn_pool.get('ext_conn')
+
         if post_base_only:
             status = self.remote_ssh_util.update_base_badm('post_base')
             if not status:
@@ -239,7 +240,9 @@ class UpdateBASEBADM():
         badm_map = self.new_db_handler.get_badm_map(psql_conn)
         sites_needing_updates = self.new_db_handler.get_sites_with_updates(
             psql_conn)
-        base_candidate_map = self.flux_db_handler.get_BASE_candidates()
+
+        base_candidate_map = self.new_db_handler.get_base_candidates(
+            ext_conn, state_ids=self.process_states.base_candidate_states)
 
         # Create zip file
         sites_processed = set()
@@ -367,8 +370,8 @@ class UpdateBASEBADM():
                     try:
                         self.report_status.enter_new_state(
                             process_id=process_id,
-                            action=self.process_actions.BADMUpdateFailed,
-                            status=self.process_states.BADMUpdateFailed)
+                            state_id=self.process_states.get_process_state(
+                                ProcessStates.BADMUpdateFailed))
                         info_msg = ('Wrote report_status BADMUpdateFailed'
                                     f'for processID {process_id} '
                                     f'(file: {filename}).')
@@ -425,8 +428,8 @@ class UpdateBASEBADM():
                     try:
                         self.report_status.enter_new_state(
                             process_id=process_id,
-                            action=self.process_actions.UpdatedBASEBADM,
-                            status=self.process_states.UpdatedBASEBADM)
+                            state_id=self.process_states.get_process_state(
+                                ProcessStates.UpdatedBASEBADM))
                         info_msg = ('Wrote report_status UpdatedBASEBADM '
                                     f'for processID {process_id} '
                                     f'(file: {filename}).')

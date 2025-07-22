@@ -443,6 +443,7 @@ class DataReader:
         self.filename = Path(file_path).name
         _log.info(f'Data Reader checks initiated for {self.filename} '
                   f'as {run_type} file.')
+        _log.resetStats()
 
         # set up an empty list to receive the individual status obj
         statuses = []

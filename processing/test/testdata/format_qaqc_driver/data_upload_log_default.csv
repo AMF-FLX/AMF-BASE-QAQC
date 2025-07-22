@@ -1,0 +1,3 @@
+log_id,site_id,user_id,user_name,user_email,upload_type_id,upload_comment,upload_source_id,upload_token,data_file,metadata_file,data_format,year,log_timestamp
+12345,US-CRT,dummy_userid,dummy_username,dummy_useremail,1,testing zip,1,1ae8cc15-f7d7-491b-b444-801cf22ad5bf,US-CRT_HH_201101010000_201201010000.zip,,,,1658485643.0
+12346,US-CRT,dummy_userid,dummy_username,dummy_useremail,1,testing error,1,1ae8cc15-f7d7-491b-b444-801cf22ad5bf,error_file.js,,,,1658485660.0
