@@ -1,5 +1,7 @@
 import psycopg2
 
+from jira_names import JIRANames
+
 from configparser import ConfigParser
 from io import StringIO
 from logger import Logger
@@ -7,7 +9,7 @@ from pathlib import Path
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from psycopg2.extras import RealDictCursor
 from psycopg2.sql import Composed, SQL
-from typing import NamedTuple
+from typing import NamedTuple, Optional
 
 __author__ = 'You-Wei Cheah, Danielle Christianson'
 __email__ = 'ycheah@lbl.gov, dschristianson@lbl.gov'
@@ -556,3 +558,150 @@ class NewDBHandler:
                 _log.error('Error occurred in get_qaqc_data_state_history')
                 _log.error(e)
         return status_history
+
+    def get_sites_with_last_process_type(
+            self, conn, process_type='Format QAQC'):
+        """
+        Get sites whose most recent BASE QAQC run is a format run
+        """
+        sites_lookup = {}
+        query = SQL('SELECT lp.site_id, lp.latest_ts, pt.name, ap.log_id '
+                    'FROM '
+                    '(SELECT site_id, max(process_timestamp) AS latest_ts '
+                    'FROM qaqc.processing_log GROUP BY site_id) lp '
+                    'LEFT JOIN '
+                    '(SELECT site_id, process_type_id, '
+                    'log_id, process_timestamp '
+                    'FROM qaqc.processing_log) ap '
+                    'ON lp.latest_ts = ap.process_timestamp '
+                    'AND lp.site_id = ap.site_id '
+                    'LEFT JOIN '
+                    '(SELECT type_id, name FROM qaqc.process_type_auto) pt '
+                    'ON ap.process_type_id = pt.type_id '
+                    'WHERE pt.name = %(process_type)s '
+                    'ORDER BY lp.latest_ts DESC')
+
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            try:
+                cursor.execute(query, {'process_type': process_type})
+                for row in cursor:
+                    site_id = row.get('site_id')
+                    if not site_id or site_id == 'other':
+                        continue
+                    sites_lookup.update({
+                        site_id: {
+                            # processing_timestamp is read as a datetime
+                            'processing_timestamp': row.get('latest_ts'),
+                            'process_id': row.get('log_id'),  # int
+                        }
+                    })
+            except Exception as e:
+                _log.error('Error occurred in '
+                           'get_sites_with_recent_issue_type')
+                _log.error(e)
+
+        return sites_lookup
+
+    @staticmethod
+    def get_qaqc_jira_issue_info(conn, site_list: list, jira_project: str):
+        """
+        query jira issue information for a set of sites and return
+            a limited set of issue fields
+        """
+        results = {}
+
+        if not site_list:
+            return results
+
+        query = SQL('SELECT i.id, i.issuenum, i.issuetype, i.summary, '
+                    'cfv2.stringvalue AS site_id, '
+                    'cfv1.textvalue AS process_id, '
+                    's.pname AS status, l.labels, i.created, i.updated '
+                    'FROM jiraissue i '
+                    'LEFT JOIN issuestatus s ON i.issuestatus = s.id '
+                    'LEFT JOIN customfieldvalue cfv1 ON i.id = cfv1.issue '
+                    'LEFT JOIN customfield cf1 ON cfv1.customfield = cf1.id '
+                    'LEFT JOIN customfieldvalue cfv2 ON i.id = cfv2.issue '
+                    'LEFT JOIN customfield cf2 ON cfv2.customfield = cf2.id '
+                    'LEFT JOIN '
+                    '(SELECT issue, STRING_AGG(label, %(agg_sep)s) AS labels '
+                    'FROM label GROUP BY issue) l ON l.issue = i.id '
+                    'WHERE i.project IN '
+                    '(SELECT id FROM project WHERE pkey = %(project_key)s) '
+                    'AND i.issuetype '
+                    'IN (%(format_qaqc_field)s, %(data_qaqc_field)s) '
+                    'AND cf1.cfname = %(process_id_field)s '
+                    'AND cf2.cfname = %(site_id_field)s '
+                    'AND cfv2.stringvalue IN %(site_list)s '
+                    'ORDER BY i.created DESC')
+
+        args = {'project_key': jira_project,
+                'format_qaqc_field': JIRANames.format_qaqc_issue_id,
+                'data_qaqc_field': JIRANames.data_qaqc_issue_id,
+                'process_id_field': JIRANames.process_id_field_name,
+                'site_id_field': JIRANames.site_id_field_name,
+                'site_list': tuple(site_list),
+                'agg_sep': ','}
+
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            try:
+                cursor.execute(query, args)
+                for row in cursor:
+                    site_id: Optional[str] = row.get('site_id')
+
+                    if not site_id:
+                        # log
+                        continue
+
+                    results.setdefault(site_id, []).append(
+                        {'issue_key': str(row.get('issuenum')),
+                         'issue_status': row.get('status'),
+                         'issue_type': row.get('issuetype'),
+                         'process_id': row.get('process_id'),
+                         'labels': row.get('labels'),
+                         'summary': row.get('summary'),
+                         'created': row.get('created'),  # datetime
+                         'updated': row.get('updated'),  # datetime
+                         'jira_id': str(row.get('id'))})
+            except Exception as e:
+                _log.error('Error occurred in get_qaqc_results')
+                _log.error(e)
+        return results
+
+    def get_last_flux_upload(self, conn, site_list: list):
+        """
+
+        """
+        results = {}
+        failed_last_upload = {}
+        query = SQL('SELECT x.site_id, x.max_ts, y.log_id, y.data_file, '
+                    'z.xfer_end_log_timestamp '
+                    'FROM '
+                    '(SELECT a.site_id, MAX(a.log_timestamp) AS max_ts '
+                    'FROM input_interface.data_upload_log a '
+                    'WHERE a.site_id IN %(site_list)s '
+                    'AND a.upload_type_id IN (SELECT type_id '
+                    'FROM input_interface.data_upload_type '
+                    'WHERE upload LIKE %(flux_data_file_type)s) '
+                    'GROUP BY a.site_id) x '
+                    'LEFT JOIN input_interface.data_upload_log y '
+                    'ON x.site_id = y.site_id AND x.max_ts = y.log_timestamp '
+                    'LEFT JOIN input_interface.data_upload_file_xfer_log z '
+                    'ON y.log_id = z.upload_log_id')
+
+        args = {'site_list': tuple(site_list), 'flux_data_file_type': 'FLUX%'}
+
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, args)
+            for row in cursor:
+                site_id = row.get('site_id')
+                data_file = row.get('data_file')
+                results.setdefault(site_id, []).append(data_file)
+
+                file_xfer_end_ts = row.get('xfer_end_log_timestamp')
+                if file_xfer_end_ts:
+                    continue
+                upload_id = row.get('log_id')
+                failed_last_upload.setdefault(site_id, []).append(upload_id)
+
+        return results, failed_last_upload

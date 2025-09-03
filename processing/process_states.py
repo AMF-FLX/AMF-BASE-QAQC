@@ -22,6 +22,7 @@ class ProcessStates:
     PublishedBASEBADM = 'BASE-BADM Published'
     CombinerFailed = 'Combiner Failed'
     PassedCurator = 'Passed by Curator'
+    FailedCurator = 'Failed by Curator'
     RepublishReport = 'Report Generation Failed'
     GeneratedBASE = 'BASE Generated'
     UpdatedBASEBADM = 'BASE-BADM Updated'

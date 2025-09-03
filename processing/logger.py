@@ -34,7 +34,7 @@ class Logger(logging.Logger):
             log_cfg = 'LOG'
             if process_type in ('File Format', 'FormatQAQCDriver'):
                 phase_cfg = 'PHASE_I'
-            elif process_type == 'BASE Generation':
+            elif process_type in ('BASE Generation', 'DataQAQCAuto'):
                 phase_cfg = 'PHASE_II'
             elif process_type in ('GenBASEBADM', 'preBASERegen'):
                 phase_cfg = 'PHASE_III'
@@ -44,9 +44,12 @@ class Logger(logging.Logger):
             config.read_file(cfg)
             if config.has_section(log_cfg) and config.has_section(phase_cfg):
                 if phase_cfg == 'PHASE_II':
-                    self.base_dir = PathUtil().create_dir_for_run(
-                        site_id, upload_id,
-                        config.get(phase_cfg, 'output_dir'))
+                    if process_type == 'DataQAQCAuto':
+                        self.base_dir = config.get(phase_cfg, 'auto_log_dir')
+                    else:
+                        self.base_dir = PathUtil().create_dir_for_run(
+                            site_id, upload_id,
+                            config.get(phase_cfg, 'output_dir'))
                 else:
                     self.base_dir = config.get(phase_cfg, 'output_dir')
                 self.log_dir = PathUtil().create_valid_path(
@@ -82,7 +85,7 @@ class Logger(logging.Logger):
         if phase_cfg == 'PHASE_I' and process_type != 'FormatQAQCDriver':
             self.log_file_name = (f'QAQC_report_{site_id}_{upload_id}_'
                                   f'{timestamp_str}.log')
-        elif phase_cfg == 'PHASE_II':
+        elif phase_cfg == 'PHASE_II' and process_type != 'DataQAQCAuto':
             self.log_file_name = f'QAQC_report_{upload_id}_{timestamp_str}.log'
         else:
             process_type_fmt = '-'.join(process_type.split(' '))
