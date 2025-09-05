@@ -1,5 +1,11 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v2.2.1
+*2025 Sept 05*
+
+New in this release:
+- Diurnal Seasonal ranges updated.
+
 ### QAQC v2.2.0
 *2025 Jun 25*
 
