@@ -158,3 +158,9 @@ dmypy.json
 
 # MacPS
 .DS_Store
+
+# Windrose
+/windrose/check
+/windrose/Dataset
+/windrose/Check_equality.ipynb
+/windrose/Check_equality.py
