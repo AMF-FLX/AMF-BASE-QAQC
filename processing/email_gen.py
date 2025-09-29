@@ -977,6 +977,14 @@ class EmailGen:
             return archival_msg
 
         self.add_original_file_process_id_to_report(upload_info)
+
+        """
+        self.link_issues.configure_db_handlers()
+        site_uploaded_files, linked_uploads = \
+            self.link_issues.find_files_replaced_by_upload(
+                upload_token, upload_info)
+        """
+
         zip_upload = self.is_upload_from_zip(upload_info=upload_info)
         description_txt = self.generate_description(upload_info, zip_upload)
         file_statuses = self.get_file_statuses(upload_info)
@@ -1036,6 +1044,15 @@ class EmailGen:
         # Sleep briefly to let service desk get caught up.
         time.sleep(2)
         jira.set_issue_state(issue_key=key, transition=jira_state)
+        # Sleep briefly to let service desk get caught up.
+        time.sleep(2)
+        """
+        if linked_uploads:
+            self.link_issues.link_updated_issues(
+                site_id=upload_info.get['SITE_ID'], new_report_key=key,
+                upload_tokens=linked_uploads,
+                uploaded_files=site_uploaded_files)
+        """
         # Sleep briefly to let service desk get caught up.
         time.sleep(2)
 

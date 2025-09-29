@@ -153,7 +153,7 @@ class DataReportGen:
         return
 
     def gen_report(self, site_id, time_res, process_id, input_file_order,
-                   status_list, ftp_link, force_amp_review=False):
+                   status_list, ftp_link, use_amp_review=False):
         previous_key = self.jira.get_prior_data_qaqc_key(site_id)
         format_process_ids = []
         format_filenames = []
@@ -226,11 +226,11 @@ class DataReportGen:
 
         is_self_review_site = site_id in self.self_review_sites
 
-        if force_amp_review:
+        if use_amp_review:
             is_self_review_site = False
             _log.info(f'{site_id} is in the self_review_site.csv file and the '
-                      'command line force_amp_review flag = '
-                      f'{force_amp_review} is overwriting it.')
+                      'command line use_amp_review flag = '
+                      f'{use_amp_review} is overwriting it.')
 
         msg = self.gen_message(
             site_id, is_self_review_site, issue_key, data_qaqc_info,
@@ -309,7 +309,7 @@ class DataReportGen:
         return msg
 
     def driver(self, site_id, time_res, process_id, input_file_order,
-               status_list, ftp_link, force_amp_review=False):
+               status_list, ftp_link, use_amp_review=False):
         if input_file_order is None:
             # test run don't gen report; using input_file_order for local
             #    test runs that use a file arg for main (i.e., don't change
@@ -317,4 +317,4 @@ class DataReportGen:
             return 'QAQC-####'
         return self.gen_report(
             site_id, time_res, process_id, input_file_order, status_list,
-            ftp_link, force_amp_review)
+            ftp_link, use_amp_review)

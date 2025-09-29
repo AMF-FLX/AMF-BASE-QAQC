@@ -33,7 +33,6 @@ from variable_coverage import VariableCoverage
 
 def main():
     s_time = time()
-    process_type = 'BASE Generation'
 
     parser = argparse.ArgumentParser(description='Main QAQC Driver')
     parser.add_argument(
@@ -49,18 +48,29 @@ def main():
         '-np', '--no_pub', action='store_true',
         help='Test mode: do not publish logs and plots')
     parser.add_argument(
-        '-fa', '--force_amp_review', action='store_true',
-        help='Force AMP review, i.e., over-ride self-review if site '
+        '-ua', '--use_amp_review', action='store_true',
+        help='Use AMP review, i.e., over-ride self-review if site '
              'is a self-review site')
 
     args = parser.parse_args()
     # parser.parse_known_args
 
+    process_data_qaqc(args.site_id, args.resolution, is_test=args.test,
+                      filename=args.filename, is_publish= not args.no_pub,
+                      use_amp_review=args.use_amp_review,
+                      s_time=s_time)
+
+def process_data_qaqc(site_id, resolution, is_test=False, filename=None,
+           is_publish=True, use_amp_review=False, s_time=None):
+
+    if not s_time:
+        s_time = time()
+
     start_time = dt.now()
     timestamp_str = start_time.isoformat()
 
-    if args.site_id not in SiteAttributes().get_site_dict():
-        print(f'Invalid SITE_ID {args.site_id} exiting.')
+    if site_id not in SiteAttributes().get_site_dict():
+        print(f'Invalid SITE_ID {site_id} exiting.')
         return
 
     process_id = None
@@ -68,25 +78,27 @@ def main():
     json_report = None
     json_status = None
     state_id = None
+    process_type = 'BASE Generation'
+    ticket_key = 'No JIRA key'
 
-    if not args.test:
+    if not is_test:
         rs = ReportStatus()
         process_id = ReportStatus().register_data_qaqc_process(
-            site_id=args.site_id, resolution=args.resolution,
+            site_id=site_id, resolution=resolution,
             process_timestamp=timestamp_str)
         if not process_id:
-            print(f'Data QA/QC process run for {args.site_id} did not '
+            print(f'Data QA/QC process run for {site_id} did not '
                   'register properly in the database.')
             return
     else:
-        if not args.filename:
+        if not filename:
             print('Test argument needs to be used with filename argument')
             return
         else:
             process_id = str('TestProcess_###')
 
     # Initialize logger
-    _log = Logger(True, process_id, args.site_id, process_type,
+    _log = Logger(True, process_id, site_id, process_type,
                   start_time).getLogger('BASE Generation')
     log_dir = _log.get_log_dir()
     base_dir_for_run = os.path.split(log_dir)[0]
@@ -100,43 +112,43 @@ def main():
         process_status_codes = []
 
         p = PlotConfig(True)
-        plot_dir = p.get_plot_dir_for_run(args.site_id, process_id)
+        plot_dir = p.get_plot_dir_for_run(site_id, process_id)
 
-        if not args.no_pub:
+        if is_publish:
             publisher = Publish()
             # get the ftp directories, otherwise set them to the local path
-            ftp_site_dir = publisher._ssh_getdirname(args.site_id)
+            ftp_site_dir = publisher._ssh_getdirname(site_id)
             if not ftp_site_dir:
-                publisher._ssh_mkdir(args.site_id)
-                ftp_site_dir = publisher._ssh_getdirname(args.site_id)
+                publisher._ssh_mkdir(site_id)
+                ftp_site_dir = publisher._ssh_getdirname(site_id)
         else:
-            ftp_site_dir = args.site_id
+            ftp_site_dir = site_id
         ftp_plot_dir = p.get_ftp_plot_dir_for_run(
-            args.site_id, process_id, ftp_site_dir)
+            site_id, process_id, ftp_site_dir)
         ftp_dir = os.path.split(ftp_plot_dir)[0]
 
         input_file_order = None
 
-        if args.test:
-            if args.filename:
-                fname = args.filename
+        if is_test:
+            if filename:
+                fname = filename
                 # status_list = []
             else:
                 _log.error('Test filename not specified.')
                 return
         else:
             fname, status, input_file_order = JoinSiteData().driver(
-                process_id, args.site_id, args.resolution)
+                process_id, site_id, resolution)
             if not fname:
                 _log.fatal('JoinSiteData did not produce a file, exiting.')
-                if not args.test:
+                if not is_test:
                     rs.report_status(
                         process_id=process_id,
                         state_id=process_states.get_process_state(
                             ProcessStates.CombinerFailed),
                         log_file_path=_log.default_log)
                 return
-            if not args.test:
+            if not is_test:
                 rs.report_status(
                     process_id=process_id,
                     state_id=process_states.get_process_state(
@@ -157,13 +169,13 @@ def main():
         format_status_list = []
         format_status_list.append(fnv_status)
 
-        site_id = fnv.fname_attrs.get('site_id')
+        fn_site_id = fnv.fname_attrs.get('site_id')
         resolution = fnv.fname_attrs.get('resolution')
 
-        if site_id != args.site_id:
+        if fn_site_id != site_id:
             _log.fatal(
-                f'Filename Site_ID {site_id} does not '
-                f'match specified run Site_ID {args.site_id}')
+                f'Filename Site_ID {fn_site_id} does not '
+                f'match specified run Site_ID {site_id}')
 
         d = DataReader()
         format_status_list.extend(d.driver(fname, run_type='o'))
@@ -311,7 +323,7 @@ def main():
         processing_time = p_time - s_time
         _log.info(f'Processing time: {processing_time} seconds')
 
-        if args.test:
+        if is_test:
             input_files = fname
             process_id = '9999'
             check_summary = 'test_summary'
@@ -323,7 +335,7 @@ def main():
             filename=fname,  # this is the combined file
             # list of dict obj for files combined in combiner
             files_combined=input_files,
-            process_resolution=args.resolution,
+            process_resolution=resolution,
             process_id=process_id,
             process_code=worst_process_status_code,
             process_datetime=log_start_time,
@@ -346,14 +358,14 @@ def main():
             ProcessStates.FinishedQAQC)
 
         # Publish files to FTP
-        if not args.no_pub:
+        if is_publish:
             publisher.transfer(site_id, process_id)
 
-        if not args.test:
+        if not is_test:
             report_msg = 'Report was not generated.'
             ticket_key = DataReportGen().driver(
                 site_id, resolution, process_id, input_file_order,
-                status_list, ftp_plot_dir, args.force_amp_review)
+                status_list, ftp_plot_dir, use_amp_review)
 
             if ticket_key:
                 report_msg = f'Report {ticket_key} successfully generated.'
@@ -364,7 +376,7 @@ def main():
         _log.info(f'Unhandled exception {e}')
         _log.info(traceback.format_exc())
 
-    if args.test:
+    if is_test:
         print(json_report)
     else:
         combined_file_path = None
@@ -391,6 +403,7 @@ def main():
 
     total_running_time = e_time - s_time
     _log.info(f'Total running time: {total_running_time} seconds')
+    return ticket_key
 
 
 def select_report(stat_list, test_name, _log, test_plot_dir=None):
