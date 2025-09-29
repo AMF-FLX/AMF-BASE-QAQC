@@ -390,8 +390,8 @@ class DataQAQCAutoRunHandler:
 
         time.sleep(self.jira_pause_seconds)  # give jira a pause
         data_issue = self.jira_interface.get_jira_issue(issue_key)
-        if data_issue and data_issue.get('fields'):
-            issue_fields = data_issue.get('fields')
+        if data_issue and data_issue.get(issue_key):
+            issue_fields = data_issue.get(issue_key)
             issue_status = issue_fields.get('status').get('name')
             if issue_status == JIRANames.data_QAQC_replace_with_upload:
                 _log.info(f'Jira status updated for {issue_key}')
