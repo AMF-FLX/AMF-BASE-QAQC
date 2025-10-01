@@ -12,7 +12,8 @@ __email__ = "ycheah@lbl.gov", "norm.beekwilder@gmail.com", \
 class Logger(logging.Logger):
     """Class to standardize logging format"""
     def __init__(self, setup=False, upload_id=0,
-                 site_id='UNK', process_type=None, log_timestamp=None):
+                 site_id='UNK', process_type=None, log_timestamp=None,
+                 clear_handlers=True, add_console_handler=True):
         """Constructor for logger class. Setup logger format here
 
         :param setup: Optional parameter to setup file handler
@@ -26,7 +27,8 @@ class Logger(logging.Logger):
         if not setup:
             return
 
-        logging.root.handlers = []  # Start with no handlers
+        if clear_handlers:
+            logging.root.handlers = []  # Start with no handlers
         config = ConfigParser()
         cwd = os.getcwd()
         phase_cfg = None
@@ -102,17 +104,18 @@ class Logger(logging.Logger):
         # Initialize root level logger
         logger = logging.getLogger('')
         logger.setLevel(default_log_level)
-        file_handler = logging.FileHandler(self.default_log)
-        file_handler.setLevel(default_log_level)
-        file_handler.setFormatter(default_formatter)
+        self.file_handler = logging.FileHandler(self.default_log)
+        self.file_handler.setLevel(default_log_level)
+        self.file_handler.setFormatter(default_formatter)
+        self.file_handler.name = self.make_file_handler_name(process_type)
+        logger.addHandler(self.file_handler)
 
         # Setup console output
-        console = logging.StreamHandler()
-        console.setLevel(default_log_level)
-        console.setFormatter(default_formatter)
-
-        logger.addHandler(file_handler)
-        logger.addHandler(console)
+        if add_console_handler:
+            console = logging.StreamHandler()
+            console.setLevel(default_log_level)
+            console.setFormatter(default_formatter)
+            logger.addHandler(console)
 
     def getLogger(self, name):
         """Return the logger from logging library"""
@@ -172,3 +175,24 @@ class Logger(logging.Logger):
 
     def get_log_dir(self):
         return self.log_dir
+
+    def get_file_handler(self):
+        return self.file_handler
+
+    @staticmethod
+    def make_file_handler_name(process_type: str):
+        return process_type.lower().replace(' ', '_')
+
+    @staticmethod
+    def disable_file_handler(file_handler_name, close_handler=True):
+        root_logger = logging.getLogger('')
+        for handler in root_logger.handlers:
+            if handler.name == file_handler_name:
+                root_logger.removeHandler(handler)
+                if close_handler:
+                    handler.close()
+                break
+
+    @staticmethod
+    def add_root_file_handler(file_handler):
+        logging.getLogger('').addHandler(file_handler)

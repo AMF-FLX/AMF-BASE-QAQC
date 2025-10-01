@@ -1,5 +1,11 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v2.3.2
+*2025 Oct 03*
+
+New in this release:
+- Improve logging for automated evaluation and initiation of Data QA/QC processing.
+
 ### QAQC v2.3.1
 *2025 Sept 29*
 
