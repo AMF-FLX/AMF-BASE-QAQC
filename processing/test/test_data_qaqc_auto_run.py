@@ -112,9 +112,7 @@ def test_extract_full_record_dates():
       [2010, 2011, 2012, 2013, 2014, 2015, 2016]),
      ({'TEST-A': {'customfield_10800': '2018,2019,2021',
                   'status': {'name': 'Discovered'}},
-       'TEST-B': {'customfield_10800': 'All',
-                  'status': {'name': JIRANames.data_sub_issue_not_issue}},
-       'TEST-C': {'customfield_10800': '2016',
+       'TEST-B': {'customfield_10800': '2016',
                   'status': {'name': 'Discovered'}}},
       [2018, 2019, 2021, 2016])
      ],
@@ -122,20 +120,15 @@ def test_extract_full_record_dates():
 def test_get_years_from_sub_issues(
         subissues, expected_result, monkeypatch, handler):
 
-    def mock_get_jira_issues(dummyself, dummykeys):
-        return subissues
-
     def mock_adjust_date_year(
             dummystatic, dummystartdate, dummyenddate):
         return 2010, 2016
 
     monkeypatch.setattr(DataQAQCAutoRunHandler,
-                        'get_jira_issues', mock_get_jira_issues)
-    monkeypatch.setattr(DataQAQCAutoRunHandler,
                         'adjust_date_year', mock_adjust_date_year)
 
     result = handler.get_years_from_sub_issues(
-        ['TEST'],
+        subissues,
         (dt.fromisoformat('2010-01-01T00:00:00.000'),
          dt.fromisoformat('2016-12-31T23:30:00.000')),)
 

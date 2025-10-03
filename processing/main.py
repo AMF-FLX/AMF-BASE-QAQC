@@ -2,6 +2,7 @@ import argparse
 import os
 import traceback
 
+from configparser import ConfigParser
 from datetime import datetime as dt
 from time import time
 
@@ -61,7 +62,8 @@ def main():
                       s_time=s_time)
 
 def process_data_qaqc(site_id, resolution, is_test=False, filename=None,
-           is_publish=True, use_amp_review=False, s_time=None):
+           is_publish=True, use_amp_review=False, s_time=None,
+           use_existing_logger=False, process_type=None):
 
     if not s_time:
         s_time = time()
@@ -78,8 +80,10 @@ def process_data_qaqc(site_id, resolution, is_test=False, filename=None,
     json_report = None
     json_status = None
     state_id = None
-    process_type = 'BASE Generation'
     ticket_key = 'No JIRA key'
+
+    if process_type is None:
+        process_type = 'BASE Generation'
 
     if not is_test:
         rs = ReportStatus()
@@ -98,8 +102,11 @@ def process_data_qaqc(site_id, resolution, is_test=False, filename=None,
             process_id = str('TestProcess_###')
 
     # Initialize logger
-    _log = Logger(True, process_id, site_id, process_type,
-                  start_time).getLogger('BASE Generation')
+    _log = Logger(setup=True, upload_id=process_id, site_id=site_id,
+                  process_type=process_type, log_timestamp=start_time,
+                  clear_handlers=not use_existing_logger,
+                  add_console_handler= not use_existing_logger).getLogger(
+        process_type)
     log_dir = _log.get_log_dir()
     base_dir_for_run = os.path.split(log_dir)[0]
 
@@ -403,6 +410,11 @@ def process_data_qaqc(site_id, resolution, is_test=False, filename=None,
 
     total_running_time = e_time - s_time
     _log.info(f'Total running time: {total_running_time} seconds')
+
+    # Explicitly close and remove the log file handler for this run.
+    log_file_handler_name = _log.make_file_handler_name(process_type)
+    _log.disable_file_handler(log_file_handler_name, close_handler=True)
+
     return ticket_key
 
 

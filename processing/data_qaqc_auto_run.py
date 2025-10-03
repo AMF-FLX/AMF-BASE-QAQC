@@ -21,6 +21,7 @@ from utils import TimestampUtil
 _log_name_prefix = 'DataQAQCAuto'
 _log = Logger(True, None, None,
               _log_name_prefix).getLogger(_log_name_prefix)
+_log_file_handler = _log.file_handler
 
 
 class DataQAQCAutoRunHandler:
@@ -28,7 +29,8 @@ class DataQAQCAutoRunHandler:
         self.db_conn_pool = {}
         self.jira_reporter, self.jira_host, self.jira_issue_path, \
             self.jira_project, self.jira_pause_seconds, \
-            self.data_auto_lookback_time, self.qaqc_processor_email, \
+            self.data_auto_lookback_time, \
+            self.qaqc_processor_email, \
             self.amp_team_email, self.is_test, \
             self.test_jira_project = self._read_cfg(cfg_file)
         self.db_handler = NewDBHandler()
@@ -150,6 +152,15 @@ class DataQAQCAutoRunHandler:
                 qaqc_processor_email, amp_team_email, \
                 is_test, test_jira_project
 
+    def reset_log_file_handlers(self, process_type):
+        process_file_handler_name = _log.make_file_handler_name(
+            process_type)
+        # make sure the process log file handler is not still
+        #    attached and open.
+        _log.disable_file_handler(process_file_handler_name,
+                                  close_handler=True)
+        _log.add_root_file_handler(_log_file_handler)
+
     @staticmethod
     def check_all_jira_statuses_resolved(
             site_issues: list,
@@ -210,8 +221,29 @@ class DataQAQCAutoRunHandler:
 
         return start_year, end_year
 
+    def get_unresolved_sub_issues(self, sub_issues_keys):
+        """"""
+        sub_issues = self.get_jira_issues(sub_issues_keys)
+
+        unresolved_issues = {}
+
+        for issue_key, issue_info in sub_issues.items():
+            # ignore data issues with these statuses.
+            # Note the other statuses to ignore get filtered out
+            #     in the jira query b/c we are reusing the query
+            #     that links sub issues to data issues.
+            issue_status = issue_info.get('status').get('name')
+
+            if issue_status in (JIRANames.data_sub_issue_not_issue,
+                                JIRANames.data_sub_issue_known_issue):
+                continue
+
+            unresolved_issues.update({issue_key: issue_info})
+
+        return unresolved_issues
+
     def get_years_from_sub_issues(
-            self, sub_issues_keys, full_record_dates) -> list:
+            self, sub_issues, full_record_dates) -> list:
         """
 
         """
@@ -221,19 +253,9 @@ class DataQAQCAutoRunHandler:
                 issue_start_date, issue_end_date)
             return list(range(start_year, end_year + 1))
 
-        sub_issues = self.get_jira_issues(sub_issues_keys)
-
         issue_years = []
 
         for issue_key, issue_fields in sub_issues.items():
-            # ignore data issues with these statuses.
-            # Note the other statuses to ignore get filtered out
-            #     in the jira query b/c we are reusing the query
-            #     that links sub issues to data issues.
-            issue_status = issue_fields.get('status').get('name')
-            if issue_status in (JIRANames.data_sub_issue_not_issue,
-                                JIRANames.data_sub_issue_known_issue):
-                continue
 
             years_strs = issue_fields.get(JIRANames.data_sub_issue_years)
 
@@ -335,7 +357,6 @@ class DataQAQCAutoRunHandler:
                 return upload_years
 
         if not format_file_dates:
-            _log.warning(f'No upload file range dates for {issue_key}')
             return upload_years
 
         for file_date in format_file_dates:
@@ -347,15 +368,23 @@ class DataQAQCAutoRunHandler:
 
         return upload_years
 
-    def assess_sub_issues(self, sub_issues, recent_format_issues_keys,
-                          full_record_dates):
+    def assess_sub_issues(
+            self, sub_issues_keys, recent_format_issues_keys,
+            full_record_dates, site_id):
         """
         Assess the sub issues to see if the recently uploaded format issues
             cover the time range required for corrections.
         """
         # get date range of sub-issues
+        unresolved_sub_issues = self.get_unresolved_sub_issues(
+            sub_issues_keys)
+
+        if not unresolved_sub_issues:
+            _log.info(f'{site_id} has no unresolved sub issues.')
+            return True
+
         issue_years = self.get_years_from_sub_issues(
-            sub_issues, full_record_dates)
+            unresolved_sub_issues, full_record_dates)
         if not issue_years:
             return False
 
@@ -368,6 +397,11 @@ class DataQAQCAutoRunHandler:
         upload_years = self.get_years_from_uploads(
             recent_format_issues_full_keys)
         if not upload_years:
+            recent_format_keys_str = ', '.join(
+                recent_format_issues_full_keys)
+            _log.warning(
+                f'No upload file range dates for {site_id} '
+                f'format issues: {recent_format_keys_str}')
             return False
 
         # check if date range of uploads covers range of sub-issues
@@ -383,7 +417,8 @@ class DataQAQCAutoRunHandler:
         prior data QAQC run that is resolved by the new uploads.
         """
         # change the status of the prior data run jira issue
-        _log.info(f'Attempting to update the jira status for {issue_key}')
+        _log.info(f'Attempting to update the '
+                  f'jira status for {issue_key}')
         self.jira_interface.set_issue_state(
             issue_key=issue_key,
             transition=JIRANames.data_QAQC_replace_with_upload)
@@ -522,7 +557,7 @@ class DataQAQCAutoRunHandler:
                 data_full_record = self.extract_full_record_dates(issue_info)
                 is_ready_for_data_qaqc = self.assess_sub_issues(
                     sub_issues_keys, recent_format_issues_keys,
-                    data_full_record)
+                    data_full_record, site_id)
 
             if is_ready_for_data_qaqc:
                 if not self.is_test or (
@@ -538,17 +573,17 @@ class DataQAQCAutoRunHandler:
             need_review_candidates[site_id] = msg
             continue
 
+        auto_run_candidates_str = ', '.join(auto_run_candidates)
+        auto_run_candidates_ct = len(auto_run_candidates)
+        _log.info(f'Found {auto_run_candidates_ct} candidates for '
+                  f'Data QAQC: {auto_run_candidates_str}')
         return auto_run_candidates, need_review_candidates
 
     @staticmethod
-    def initiate_data_qaqc(site_id, potential_res_lookup):
+    def initiate_data_qaqc(site_id, potential_res_lookup,
+                           process_type):
         """
-        screen_name = 'data_qaqc_run_' + str(site_id)
-        exe = sys.executable
-        exe_cmd = f'{exe} main.py {site_id} {res}\n'
-        Popen(['screen', '-dmS', screen_name])
-        Popen(['screen', '-rS', screen_name, f'{self.venv_path}/bin/activate'])
-        Popen(['screen', '-rS', screen_name, '-X', 'stuff', exe_cmd])
+        Initiate the Data QAQC run
         """
         res = potential_res_lookup.get(site_id)
 
@@ -556,7 +591,9 @@ class DataQAQCAutoRunHandler:
             return 'Invalid resolution from last upload'
 
         try:
-            issue_key = process_data_qaqc(site_id, res)
+            issue_key = process_data_qaqc(
+                site_id, res, use_existing_logger=True,
+                process_type=process_type)
             return issue_key
         except Exception as e:
             return e
@@ -594,7 +631,7 @@ class DataQAQCAutoRunHandler:
         failed_runs = []
         for site_id, msg in run_outcome.items():
             full_msg = f'{site_id}: {msg}'
-            if msg.startswith(self.jira_project):
+            if isinstance(msg, str) and msg.startswith(self.jira_project):
                 successful_runs.append(full_msg)
             else:
                 failed_runs.append(full_msg)
@@ -822,11 +859,25 @@ class DataQAQCAutoRunHandler:
                 self.db_conn_pool['qaqc'], run_candidates)
             potential_res_lookup = self.get_potential_res(last_upload_lookup)
 
+            process_type = 'BASE Generation'
+
             for site_id in run_candidates:
+                _log.info(f'Initiating Data QAQC for {site_id}')
+                # remove the data qaqc auto log file handler
+                _log.disable_file_handler(_log_file_handler.name,
+                                          close_handler=False)
                 run_msg = self.initiate_data_qaqc(
-                    site_id, potential_res_lookup)
+                    site_id, potential_res_lookup, process_type)
                 run_outcome[site_id] = run_msg
+                # add the data qaqc auto log file handler back
+                self.reset_log_file_handlers(process_type)
                 _log.info(f'{site_id}: {run_msg}')
+
+        needs_review_ct = len(needs_review)
+        _log.info(f'Number of sites needing review: {needs_review_ct}')
+        if needs_review_ct > 0:
+            needs_review_str = ', '.join(needs_review.keys())
+            _log.info(f'Sites for review: {needs_review_str}')
 
         if run_outcome or needs_review:
             self.send_amp_mail(run_outcome, needs_review)
