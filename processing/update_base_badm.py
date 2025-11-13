@@ -241,6 +241,7 @@ class UpdateBASEBADM():
         sites_needing_updates = self.new_db_handler.get_sites_with_updates(
             psql_conn)
 
+        # Need to revamp
         base_candidate_map = self.new_db_handler.get_base_candidates(
             ext_conn, state_ids=self.process_states.base_candidate_states)
 
