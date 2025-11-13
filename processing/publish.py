@@ -57,7 +57,7 @@ class Publish():
         :type site_id: str
         """
         dir_name = None
-        base_cmd_args = ['ssh', '-i', self.scp_ssh_key]
+        base_cmd_args = ['ssh', '-q', '-i', self.scp_ssh_key]
         remote_args = [''.join([self.scp_username, '@', self.scp_hostname])]
         ls_dir_args = " 'ls -a {t} | grep {s}'".format(
             t=self.scp_target, s=site_id)
@@ -85,7 +85,7 @@ class Publish():
             info_msg = 'Site directory exists with name {n}'
             _log.info(info_msg.format(n=dir_name))
             return
-        base_cmd_args = ['ssh', '-i', self.scp_ssh_key]
+        base_cmd_args = ['ssh', '-q', '-i', self.scp_ssh_key]
         remote_args = [''.join([self.scp_username, '@', self.scp_hostname])]
         # Anonymizing code for directory names
         dir_name_args = ['.', site_id, '_', str(randint(int(1e6), int(1e7)-1))]
