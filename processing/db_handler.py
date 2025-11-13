@@ -1,7 +1,5 @@
 import psycopg2
 
-from jira_names import JIRANames
-
 from configparser import ConfigParser
 from io import StringIO
 from logger import Logger
