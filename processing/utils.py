@@ -208,7 +208,7 @@ class RemoteSSHUtil:
 
     def update_base_badm(self, opt):
         is_success = None
-        update_args = ['ssh', '-i', self._key]
+        update_args = ['ssh', '-q', '-i', self._key]
         remote_args = ''.join((
             self._user, '@', self._host))
         update_args.extend((remote_args, opt))
