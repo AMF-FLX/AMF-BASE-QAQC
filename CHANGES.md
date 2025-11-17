@@ -1,5 +1,11 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v2.3.4
+*2025 Nov 17*
+
+New in this release:
+- Bug fix for timestamp alignment checks.
+
 ### QAQC v2.3.3
 *2025 Nov 13*
 
