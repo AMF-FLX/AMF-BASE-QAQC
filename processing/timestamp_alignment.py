@@ -531,22 +531,22 @@ class TimestampAlignment(object):
                                         cur_val > sw_in_pot_data[idx] and
                                         cur_val > self.night_buffer)
                             idx += 1
-                    daytime_comps[var].extend(daytime)
-                    nighttime_comps[var].extend(nighttime)
-                    if full_doy_center:
-                        var_data_lt = (var_data > sw_in_pot_data)
-                    else:
-                        var_data_lt = []
-                        idx = 0
-                        while idx < step:
-                            if idx > len(sw_in_pot_data) - 1:
-                                var_data_lt.append(False)
-                            elif var_data[idx] > sw_in_pot_data[idx]:
-                                var_data_lt.append(True)
-                            else:
-                                var_data_lt.append(False)
-                            idx += 1
-                    var_data[np.invert(var_data_lt)] = np.nan
+                        daytime_comps[var].extend(daytime)
+                        nighttime_comps[var].extend(nighttime)
+                        if full_doy_center:
+                            var_data_lt = (var_data > sw_in_pot_data)
+                        else:
+                            var_data_lt = []
+                            idx = 0
+                            while idx < step:
+                                if idx > len(sw_in_pot_data) - 1:
+                                    var_data_lt.append(False)
+                                elif var_data[idx] > sw_in_pot_data[idx]:
+                                    var_data_lt.append(True)
+                                else:
+                                    var_data_lt.append(False)
+                                idx += 1
+                        var_data[np.invert(var_data_lt)] = np.nan
 
                     if var in top_level_rad_vars:
                         highlight_shape = 'o'
