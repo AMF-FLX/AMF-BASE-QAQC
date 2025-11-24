@@ -162,7 +162,7 @@ class Publish():
         _log.info('Building arguments for FTP xfer of single file')
         verbose_args = ['-v'] if self.scp_verbose else []
         base_cmd_args = [
-            'scp', 'q', '-i', self.scp_ssh_key, '-P', self.scp_port]
+            'scp', '-q', '-i', self.scp_ssh_key, '-P', self.scp_port]
         remote_args = [''.join([self.scp_username, '@', self.scp_hostname, ':',
                                 target])]
         base_cmd_args.extend(verbose_args)
