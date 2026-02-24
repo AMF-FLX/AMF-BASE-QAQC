@@ -294,8 +294,6 @@ class NewDBHandler:
                  'ON cv.type_id = s.state_id '
                  'AND shortname = %(passed_qaqc_state)s '
                  'GROUP BY site_id HAVING site_id IN %(embargo_site_ids)s')
-        query = SQL('SELECT flux_id from site_embargo_log '
-                    'WHERE retire_timestamp IS NULL')
         args = {'passed_qaqc_state': 'Passed by Curator',
                 'embargo_site_ids': embargo_site_ids}
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
