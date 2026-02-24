@@ -284,16 +284,16 @@ class NewDBHandler:
 
     def get_sites_still_under_embargo(self, conn, embargo_site_ids, embargo_years):
         site_ids = []
-        query = ('SELECT site_id, '
-                 'EXTRACT (YEARS FROM AGE (NOW(), '
-                 'MIN(process_timestamp))) '
-                 'FROM qaqc.processing_log q '
-                 'INNER JOIN qaqc.state_log s '
-                 'ON s.process_id = q.log_id '
-                 'INNER JOIN qaqc.state_cv_type cv '
-                 'ON cv.type_id = s.state_id '
-                 'AND shortname = %(passed_qaqc_state)s '
-                 'GROUP BY site_id HAVING site_id IN %(embargo_site_ids)s')
+        query = SQL('SELECT site_id, '
+                    'EXTRACT (YEARS FROM AGE (NOW(), '
+                    'MIN(process_timestamp))) '
+                    'FROM qaqc.processing_log q '
+                    'INNER JOIN qaqc.state_log s '
+                    'ON s.process_id = q.log_id '
+                    'INNER JOIN qaqc.state_cv_type cv '
+                    'ON cv.type_id = s.state_id '
+                    'AND shortname = %(passed_qaqc_state)s '
+                    'GROUP BY site_id HAVING site_id IN %(embargo_site_ids)s')
         args = {'passed_qaqc_state': 'Passed by Curator',
                 'embargo_site_ids': embargo_site_ids}
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
