@@ -7,7 +7,7 @@ matplotlib==3.9.0
 numpy
 pandas
 psycopg2-binary
-pyparsing==3.0.9
+pyparsing<3.3.0
 pytest
 pytest-cov
 pytest-flake8
