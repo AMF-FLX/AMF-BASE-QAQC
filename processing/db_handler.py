@@ -271,17 +271,35 @@ class NewDBHandler:
                 lookup[flux_id] = (hh_version, hr_version)
         return lookup
 
-    def get_sites_with_embargo(self, conn, embargo_years):
+    def get_sites_with_embargo(self, conn):
         site_ids = []
 
-        query = SQL('SELECT flux_id from site_embargo_log '
-                    'WHERE retire_timestamp IS NULL '
-                    'AND EXTRACT(YEARS FROM AGE('
-                    'NOW(), request_timestamp)) < %s')
+        query = SQL('SELECT flux_id FROM site_embargo_log '
+                    'WHERE retire_timestamp IS NULL')
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
-            cursor.execute(query, (embargo_years,))
+            cursor.execute(query)
             for r in cursor:
                 site_ids.append(r.get('flux_id'))
+        return site_ids
+
+    def get_sites_still_under_embargo(self, conn, embargo_site_ids, embargo_years):
+        site_ids = []
+        query = SQL('SELECT site_id, '
+                    'EXTRACT (YEARS FROM AGE (NOW(), '
+                    'MIN(process_timestamp))) '
+                    'FROM qaqc.processing_log q '
+                    'INNER JOIN qaqc.state_log s '
+                    'ON s.process_id = q.log_id '
+                    'INNER JOIN qaqc.state_cv_type cv '
+                    'ON cv.type_id = s.state_id '
+                    'AND shortname = %(passed_qaqc_state)s '
+                    'GROUP BY site_id HAVING site_id IN %(embargo_site_ids)s')
+        args = {'passed_qaqc_state': 'Passed by Curator',
+                'embargo_site_ids': embargo_site_ids}
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(query, args)
+            for r in cursor:
+                site_ids.append(r.get('site_id'))
         return site_ids
 
     def get_filename_checksum_lookup(self, conn):

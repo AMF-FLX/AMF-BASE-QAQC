@@ -319,8 +319,11 @@ class BASECreator():
         psql_conn = self.db_conn_pool.get('psql_conn')
         ext_conn = self.db_conn_pool.get('ext_conn')
         self.site_list = self.new_db_handler.get_published_base_site_attrs(ext_conn)
-        self.embargoed_site_list = self.new_db_handler.get_sites_with_embargo(
-            psql_conn, self.embargo_years)
+        embargoed_site_list = self.new_db_handler.get_sites_with_embargo(
+            psql_conn)
+        self.active_embargoed_sites = \
+            self.new_db_handler.get_sites_still_under_embargo(
+                ext_conn, embargoed_site_list, embargo_years)
         self.historic_site_list = self.new_db_handler.get_sites_with_updates(
             psql_conn, is_historic=True)
         self.preBASE_files = self.new_db_handler.get_base_candidates(
@@ -341,7 +344,9 @@ class BASECreator():
             site_id = file_attrs[0]
             cur_file_res = file_attrs[-1]
             site_id_attrs = base_attrs.get(site_id)
-            if site_id in self.embargoed_site_list:
+            if site_id in self.active_embargoed_sites:
+                info_msg = f'Site {site_id} still under embargo'
+                _log.info(info_msg)
                 continue
 
             if site_id_attrs:
