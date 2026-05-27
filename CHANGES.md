@@ -1,5 +1,11 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v2.3.6
+*2026 May 27*
+
+New in this release:
+- Bug fix for embargo checking in publishing modules.
+
 ### QAQC v2.3.5
 *2026 May 27*
 
