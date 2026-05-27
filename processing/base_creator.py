@@ -323,7 +323,7 @@ class BASECreator():
             psql_conn)
         self.active_embargoed_sites = \
             self.new_db_handler.get_sites_still_under_embargo(
-                ext_conn, embargoed_site_list, embargo_years)
+                ext_conn, embargoed_site_list, self.embargo_years)
         self.historic_site_list = self.new_db_handler.get_sites_with_updates(
             psql_conn, is_historic=True)
         self.preBASE_files = self.new_db_handler.get_base_candidates(
