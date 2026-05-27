@@ -295,7 +295,7 @@ class NewDBHandler:
                     'AND shortname = %(passed_qaqc_state)s '
                     'GROUP BY site_id HAVING site_id IN %(embargo_site_ids)s')
         args = {'passed_qaqc_state': 'Passed by Curator',
-                'embargo_site_ids': embargo_site_ids}
+                'embargo_site_ids': tuple(embargo_site_ids)}
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(query, args)
             for r in cursor:
