@@ -1,5 +1,13 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v2.3.5
+*2026 May 27*
+
+New in this release:
+- Bug fix in the publishing modules.
+- Embargo checking added to publishing module.
+- Updates for new Jira search in Data QAQC report generation.
+
 ### QAQC v2.3.4
 *2025 Nov 17*
 
