@@ -419,8 +419,8 @@ class FileFixer:
             n_lines_quotes_removed = 0
             for line in f.readlines():
                 tokens = self.txt_util.tokenize(line.strip('\n'))
-                tokens, has_quotes_removed = self.txt_util.strip_quotes(tokens)
-                tokens, has_whitespace_removed = \
+                tokens, has_quotes_removed, _ = self.txt_util.strip_quotes(tokens)
+                tokens, has_whitespace_removed, _ = \
                     self.txt_util.strip_whitespace(tokens)
                 if has_whitespace_removed:
                     n_lines_whitespace_removed += 1

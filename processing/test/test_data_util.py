@@ -1,8 +1,8 @@
 import pytest
 from utils import DataUtil
 
-__author__ = 'Danielle Christianson'
-__email__ = 'dschristianson@lbl.gov'
+__author__ = 'Danielle Christianson, Sy-Toan Ngo'
+__email__ = 'dschristianson@lbl.gov, sytoanngo@lbl.gov'
 
 
 @pytest.fixture
@@ -12,29 +12,64 @@ def data_util():
 
 
 def test_check_invalid_missing_value_format(data_util):
-    assert data_util.check_invalid_missing_value_format('-9999') is False
-    assert data_util.check_invalid_missing_value_format('82.45') is False
-    assert data_util.check_invalid_missing_value_format('-99.99') is False
-    assert data_util.check_invalid_missing_value_format('-10000') is False
-    assert data_util.check_invalid_missing_value_format('-999900') is False
-    assert data_util.check_invalid_missing_value_format('-999.9') is True
-    assert data_util.check_invalid_missing_value_format('-9999.0') is True
-    assert data_util.check_invalid_missing_value_format('-9999.000000') is True
-    assert data_util.check_invalid_missing_value_format('-6999') is True
-    assert data_util.check_invalid_missing_value_format('-699.99') is True
-    assert data_util.check_invalid_missing_value_format('NaN') is True
-    assert data_util.check_invalid_missing_value_format('NA') is True
-    assert data_util.check_invalid_missing_value_format('') is True
-    assert data_util.check_invalid_missing_value_format('Inf') is True
-    assert data_util.check_invalid_missing_value_format('-Inf') is True
-    assert data_util.check_invalid_missing_value_format('inf') is True
-    assert data_util.check_invalid_missing_value_format('-inf') is True
-    assert data_util.check_invalid_missing_value_format('nan') is True
-    assert data_util.check_invalid_missing_value_format('na') is True
-    assert data_util.check_invalid_missing_value_format(' ') is True
-    assert data_util.check_invalid_missing_value_format('  ') is True
-    assert data_util.check_invalid_missing_value_format('Infinity') is True
-    assert data_util.check_invalid_missing_value_format('-Infinity') is True
+    assert data_util.check_invalid_missing_value_format('-9999') \
+        == (False, None)
+    assert data_util.check_invalid_missing_value_format('82.45') \
+        == (False, None)
+    assert data_util.check_invalid_missing_value_format('-99.99') \
+        == (False, None)
+    assert data_util.check_invalid_missing_value_format('-10000') \
+        == (False, None)
+    assert data_util.check_invalid_missing_value_format('-999900') \
+        == (False, None)
+    assert data_util.check_invalid_missing_value_format('-999.9') \
+        == (True, 'Only 6 and 9 value')
+    assert data_util.check_invalid_missing_value_format('-9999.0') \
+        == (True, 'Only 6 and 9 value')
+    assert data_util.check_invalid_missing_value_format('-9999.000000') \
+        == (True, 'Only 6 and 9 value')
+    assert data_util.check_invalid_missing_value_format('-6999') \
+        == (True, 'Only 6 and 9 value')
+    assert data_util.check_invalid_missing_value_format('-699.99') \
+        == (True, 'Only 6 and 9 value')
+    assert data_util.check_invalid_missing_value_format('NaN') \
+        == (True, 'Invalid common value')
+    assert data_util.check_invalid_missing_value_format('NA') \
+        == (True, 'Invalid common value')
+    assert data_util.check_invalid_missing_value_format('') \
+        == (True, 'Invalid common value')
+    assert data_util.check_invalid_missing_value_format('Inf') \
+        == (True, 'Invalid common value')
+    assert data_util.check_invalid_missing_value_format('-Inf') \
+        == (True, 'Invalid common value')
+    assert data_util.check_invalid_missing_value_format('inf') \
+        == (True, 'Invalid common value')
+    assert data_util.check_invalid_missing_value_format('-inf') \
+        == (True, 'Invalid common value')
+    assert data_util.check_invalid_missing_value_format('nan') \
+        == (True, 'Invalid common value')
+    assert data_util.check_invalid_missing_value_format('na') \
+        == (True, 'Invalid common value')
+    assert data_util.check_invalid_missing_value_format(' ') \
+        == (True, 'Invalid common value')
+    assert data_util.check_invalid_missing_value_format('  ') \
+        == (True, 'Invalid common value')
+    assert data_util.check_invalid_missing_value_format('Infinity') \
+        == (True, 'Invalid common value')
+    assert data_util.check_invalid_missing_value_format('-Infinity') \
+        == (True, 'Invalid common value')
+    assert data_util.check_invalid_missing_value_format('0+100i',
+                                                        ['imaginary_value']) \
+        == (True, 'Imaginary value')
+    assert data_util.check_invalid_missing_value_format('153+7i',
+                                                        ['imaginary_value']) \
+        == (True, 'Imaginary value')
+    assert data_util.check_invalid_missing_value_format('3!',
+                                                        ['factorial_value']) \
+        == (True, 'Factorial value')
+    assert data_util.check_invalid_missing_value_format('10e5',
+                                                        ['scientific_value']) \
+        == (True, 'Scientific value')
 
 
 def test_check_invalid_data_row(data_util):
