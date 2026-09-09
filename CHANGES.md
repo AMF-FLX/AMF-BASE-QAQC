@@ -1,5 +1,12 @@
 # AMF-BASE-QAQC Change Log
 
+### QAQC v2.3.7
+*2026 Sept 09*
+
+New in this release:
+- Add functionality in Auto Data QA/QC for custom lookback times.
+- Pin pytest version for continuous integration testing.
+
 ### QAQC v2.3.6
 *2026 May 27*
 
